@@ -87,13 +87,6 @@ const Header: React.FC = () => {
     ],
     clients: [
       {
-        path: '/owners',
-        label: 'Propriétaires',
-        Icon: UserGroupIcon,
-        category: 'clients',
-        description: 'Solutions sur mesure pour propriétaires'
-      },
-      {
         path: '/confidential',
         label: 'Sélection confidentielle',
         Icon: ShieldCheckIcon,
@@ -116,16 +109,16 @@ const Header: React.FC = () => {
       },
       {
         path: '/dashboard',
-        label: 'Tableau de bord',
+        label: 'Acquéreurs',
         Icon: CogIcon,
         category: 'clients',
-        description: 'Gérez vos propriétés et services'
+        description: 'Gérez vos interactions et achats'
       }
     ],
     company: [
       {
         path: '/agency',
-        label: "L'agence",
+        label: 'Notre histoire',
         Icon: BuildingOfficeIcon,
         category: 'company',
         description: 'Découvrez notre histoire et expertise'
@@ -135,14 +128,7 @@ const Header: React.FC = () => {
         label: 'Nos services',
         Icon: StarIcon,
         category: 'company',
-        description: 'Services et offres pour nos clients'
-      },
-      {
-        path: '/concierge',
-        label: 'Services Conciergerie',
-        Icon: StarIcon,
-        category: 'company',
-        description: 'Services de conciergerie haut de gamme'
+        description: 'Services et offres pour nos clients, y compris conciergerie'
       },
       {
         path: '/careers',
@@ -244,16 +230,8 @@ const Header: React.FC = () => {
                   <div className={`relative ${
                     isScrolled ? 'w-14 h-14' : 'w-20 h-20'
                   } bg-white/60 rounded-2xl shadow-md transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden border border-gray-200 backdrop-blur-sm`}>
-                    <div className="relative z-10 flex flex-col items-center">
-                      <span className={`text-gray-900 font-bold ${
-                        isScrolled ? 'text-2xl' : 'text-3xl'
-                      } tracking-tighter leading-none`}>
-                        M²
-                      </span>
-                      <div className={`${
-                        isScrolled ? 'w-5' : 'w-6'
-                      } h-0.5 bg-gray-300 mt-1 rounded-full transition-all duration-300`} />
-                    </div>
+                    {/* Use the provided logo image. Place the file at `public/logo-m2.png` */}
+                    <img src="/logo-m2.jpg" alt="Square Meter logo" className="w-full h-full object-contain" />
                   </div>
                 </div>
 
@@ -368,13 +346,13 @@ const Header: React.FC = () => {
           <div className="h-full">
             <div className="p-8 space-y-12">
 
-              {/* Properties Section */}
+              {/* Company Section (moved up) */}
               <div>
                 <h3 className="text-gray-800 text-xl font-bold tracking-widest uppercase mb-8">
-                  Propriétés Exclusives
+                  Agence
                 </h3>
                 <div className="grid grid-cols-1 gap-4">
-                  {navigation.properties.map((item, index) => {
+                  {navigation.company.map((item, index) => {
                     const Icon = item.Icon;
                     return (
                       <Link
@@ -468,55 +446,7 @@ const Header: React.FC = () => {
                 </div>
               </div>
 
-              {/* Company Section */}
-              <div>
-                <h3 className="text-gray-800 text-xl font-bold tracking-widest uppercase mb-8">
-                  L'Entreprise
-                </h3>
-                <div className="grid grid-cols-1 gap-4">
-                  {navigation.company.map((item, index) => {
-                    const Icon = item.Icon;
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`group relative p-6 rounded-2xl transition-all duration-500 border-2 ${
-                          isActivePath(item.path)
-                            ? 'bg-gray-50 border-gray-200 shadow-sm'
-                            : 'bg-white/60 border-gray-100 hover:bg-gray-50 hover:border-gray-200 hover:shadow-sm'
-                        }`}
-                        style={{ transitionDelay: `${index * 100 + 400}ms` }}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <div className="flex items-start space-x-4">
-                          <div className={`p-3 rounded-xl transition-all duration-500 ${
-                            isActivePath(item.path)
-                              ? 'bg-gray-100 text-gray-900 shadow-sm'
-                              : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
-                          }`}>
-                            <Icon className="w-6 h-6" />
-                          </div>
-                          <div className="flex-1">
-                            <span className={`text-lg font-semibold transition-all duration-500 ${
-                              isActivePath(item.path)
-                                ? 'text-gray-900'
-                                : 'text-gray-800'
-                            }`}>
-                              {item.label}
-                            </span>
-                            <p className="text-sm text-gray-600 mt-1 transition-colors duration-300">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                          <div className="w-3 h-3 border-r-2 border-t-2 border-gray-400 transform rotate-45" />
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
+              {/* Company section moved earlier; removed duplicate here */}
 
               {/* `Mon Compte` section removed — items moved into Espace Clients */}
             </div>
