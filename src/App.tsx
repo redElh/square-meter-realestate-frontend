@@ -22,7 +22,6 @@ import Markets from './pages/auth/Markets';
 import Privacy from './pages/support/Privacy';
 import Terms from './pages/support/Terms';
 import Help from './pages/support/Help';
-import Investment from './pages/special-pages/Investment';
 import Concierge from './pages/special-pages/Concierge';
 import Success from './pages/special-pages/Success';
 import Careers from './pages/special-pages/Careers';
@@ -53,7 +52,6 @@ function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/help" element={<Help />} />
-            <Route path="/investment" element={<Investment />} />
             <Route path="/concierge" element={<Concierge />} />
             <Route path="/success" element={<Success />} />
             <Route path="/careers" element={<Careers />} />

@@ -1,5 +1,5 @@
 // src/pages/Home.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ChevronLeftIcon, 
@@ -7,26 +7,21 @@ import {
   PlayIcon,
   PauseIcon,
   ArrowRightIcon,
-  ShieldCheckIcon,
   HomeModernIcon,
   BuildingStorefrontIcon,
   SparklesIcon,
   HeartIcon,
   MapPinIcon,
-  CurrencyEuroIcon
+  CurrencyEuroIcon,
+  BuildingOfficeIcon,
+  CalendarDaysIcon
 } from '@heroicons/react/24/outline';
-import {
-  HeartIcon as HeartIconSolid,
-  ShieldCheckIcon as ShieldCheckIconSolid
-} from '@heroicons/react/24/solid';
 
 const Home: React.FC = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Premium property images from Pexels (luxury real estate)
   const heroSlides = [
     {
       image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
@@ -81,24 +76,18 @@ const Home: React.FC = () => {
     }
   ];
 
-  const services = [
+  const clientTestimonials = [
     {
-      icon: HomeModernIcon,
-      title: "Achat & Vente",
-      description: "Acquisition et cession de biens d'exception avec une expertise marché incomparable",
-      features: ["Évaluation premium", "Négociation experte", "Réseau international"]
+      name: "Aïcha, MRE – Paris",
+      text: "Une équipe rare, à l'écoute et d'un professionnalisme exemplaire. Grâce à M² Square Meter, j'ai trouvé bien plus qu'une maison : une expérience humaine.",
     },
     {
-      icon: BuildingStorefrontIcon,
-      title: "Gestion Patrimoniale",
-      description: "Optimisation de vos investissements grâce à notre gestion locative premium",
-      features: ["Gestion locative", "Optimisation fiscale", "Conseil en investissement"]
+      name: "Marc & Hélène, propriétaires à Diabat",
+      text: "Une vraie connaissance du marché d'Essaouira, des conseils justes et une bienveillance sincère.",
     },
     {
-      icon: SparklesIcon,
-      title: "Services Conciergerie",
-      description: "Services sur mesure pour une expérience de vie et de séjour exceptionnelle",
-      features: ["Conciergerie 24/7", "Services premium", "Réseau de prestataires"]
+      name: "Thomas, investisseur – Casablanca",
+      text: "Expertise remarquable et accompagnement sur mesure. Une équipe qui comprend les enjeux de l'investissement immobilier de luxe.",
     }
   ];
 
@@ -129,7 +118,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Enhanced Hero Section with Carousel */}
+      {/* Hero Section - Épurée */}
       <section className="relative h-screen overflow-hidden">
         {/* Background Carousel */}
         <div className="absolute inset-0">
@@ -145,207 +134,271 @@ const Home: React.FC = () => {
                 alt={slide.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
             </div>
           ))}
         </div>
 
-        {/* Hero Content */}
-        <div className="relative z-20 flex items-center justify-center h-full text-ivory">
-          <div className="max-w-6xl mx-auto px-6 w-full">
+        {/* Logo Minimaliste en haut à gauche */}
+        <div className="absolute top-8 left-8 z-30">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-amber-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-xl">M²</span>
+            </div>
+            <div className="text-white">
+              <div className="font-inter uppercase tracking-widest text-sm">SQUARE METER</div>
+              <div className="font-serif text-xs text-gray-300">Excellence immobilière</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contenu Hero - Positionné en bas */}
+        <div className="absolute bottom-20 left-0 right-0 z-20">
+          <div className="container mx-auto px-6">
             <div className={`transform transition-all duration-1000 delay-300 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}>
-              {/* Logo/Brand */}
-              <div className="flex items-center justify-center mb-8">
-                <div className="relative group">
-                  <div className="relative w-16 h-16 bg-gradient-to-br from-gold to-amber-600 rounded-xl shadow-2xl transform group-hover:rotate-6 transition-transform duration-500 flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                    <span className="text-deep-green font-bold text-2xl relative z-10">M²</span>
-                  </div>
-                </div>
-              </div>
-
-              <h1 className="text-7xl md:text-9xl font-inter uppercase tracking-widest mb-6 text-center font-light">
-                M²
-              </h1>
-              <p className="text-3xl md:text-4xl font-didot text-gold text-center mb-8 leading-relaxed">
-                Square Meter — L'excellence immobilière réinventée
-              </p>
               
-              {/* Current Slide Info */}
-              <div className="text-center mb-12">
-                <h2 className="text-2xl md:text-3xl font-inter uppercase mb-2">
-                  {heroSlides[activeSlide].title}
-                </h2>
-                <div className="flex items-center justify-center space-x-4 text-lg">
-                  <MapPinIcon className="w-5 h-5 text-gold" />
-                  <span className="font-didot text-ivory/90">{heroSlides[activeSlide].location}</span>
-                  <CurrencyEuroIcon className="w-5 h-5 text-gold ml-4" />
-                  <span className="font-didot text-gold font-semibold">{heroSlides[activeSlide].price}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-center gap-6 max-w-md mx-auto">
+              {/* Boutons d'action - Nouveau design */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
                 <Link 
                   to="/properties?type=buy" 
-                  className="group relative bg-gold text-deep-green px-12 py-4 font-inter uppercase tracking-wider transition-all duration-300 transform hover:scale-105 overflow-hidden"
+                  className="group relative bg-white text-gray-900 px-10 py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center min-w-[200px]"
                 >
-                  <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  <span className="relative z-10">Acheter</span>
+                  <div className="absolute inset-0 bg-amber-600 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                    Acheter
+                  </span>
                 </Link>
+                
                 <Link 
                   to="/properties?type=rent" 
-                  className="group relative border-2 border-ivory text-ivory px-12 py-4 font-inter uppercase tracking-wider transition-all duration-300 transform hover:scale-105 overflow-hidden"
+                  className="group relative border-2 border-white text-white px-10 py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center min-w-[200px]"
                 >
-                  <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  <span className="relative z-10 group-hover:text-deep-green">Louer</span>
+                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                    Louer
+                  </span>
                 </Link>
+              </div>
+
+              {/* Info de la slide actuelle - Discrète */}
+              <div className="text-center">
+                <div className="inline-flex items-center space-x-6 bg-black/40 backdrop-blur-sm px-6 py-3 rounded-full">
+                  <div className="text-white">
+                    <div className="font-inter uppercase tracking-widest text-sm">{heroSlides[activeSlide].title}</div>
+                    <div className="font-serif text-xs text-gray-300">{heroSlides[activeSlide].location}</div>
+                  </div>
+                  <div className="w-px h-6 bg-white/30"></div>
+                  <div className="font-serif text-amber-300 text-sm font-medium">
+                    {heroSlides[activeSlide].price}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Carousel Controls */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex items-center space-x-6">
-          {/* Play/Pause */}
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="text-ivory hover:text-gold transition-colors duration-300"
-          >
-            {isPlaying ? <PauseIcon className="w-6 h-6" /> : <PlayIcon className="w-6 h-6" />}
-          </button>
+        {/* Contrôles Carousel - Positionné en bas à droite */}
+        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
+          {/* Navigation Arrows */}
+          <div className="flex space-x-2">
+            <button
+              onClick={prevSlide}
+              className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors duration-300"
+            >
+              <ChevronLeftIcon className="w-5 h-5" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors duration-300"
+            >
+              <ChevronRightIcon className="w-5 h-5" />
+            </button>
+          </div>
 
           {/* Slide Indicators */}
-          <div className="flex space-x-3">
+          <div className="flex space-x-2">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-8 h-1 rounded-full transition-all duration-300 ${
                   index === activeSlide 
-                    ? 'bg-gold scale-125' 
-                    : 'bg-ivory/50 hover:bg-ivory'
+                    ? 'bg-amber-600' 
+                    : 'bg-white/50 hover:bg-white/80'
                 }`}
               />
             ))}
           </div>
 
-          {/* Navigation Arrows */}
-          <div className="flex space-x-2">
-            <button
-              onClick={prevSlide}
-              className="text-ivory hover:text-gold transition-colors duration-300"
-            >
-              <ChevronLeftIcon className="w-6 h-6" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="text-ivory hover:text-gold transition-colors duration-300"
-            >
-              <ChevronRightIcon className="w-6 h-6" />
-            </button>
-          </div>
+          {/* Play/Pause */}
+          <button
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors duration-300"
+          >
+            {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
+          </button>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 right-8 animate-bounce">
-          <div className="w-6 h-10 border-2 border-gold rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-gold rounded-full mt-2"></div>
+        {/* Indicateur de scroll */}
+        <div className="absolute bottom-8 left-8 animate-pulse">
+          <div className="text-white text-xs font-inter uppercase tracking-widest rotate-[-90deg] origin-left">
+            Scroll
           </div>
         </div>
       </section>
 
-      {/* Enhanced Featured Properties */}
-      <section className="py-24 bg-gradient-to-br from-ivory to-white relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-repeat" style={{ 
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50 L100 0 L100 100 Z' fill='%23B8860B'/%3E%3C/svg%3E")`,
-            backgroundSize: '100px 100px'
-          }}></div>
+      {/* Notre Essence Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl font-inter uppercase mb-6 text-gray-900 text-center">
+              Notre essence
+            </h2>
+            <div className="w-16 h-0.5 bg-amber-600 mx-auto mb-8"></div>
+            
+            <p className="text-xl font-serif text-gray-700 mb-6 leading-relaxed">
+              La rigueur de la gestion et la passion de la pierre
+            </p>
+            
+            <div className="space-y-4 text-gray-600 mb-8">
+              <p>
+                Née de la rencontre de huit années d'expertise dans l'immobilier et de huit années de direction dans la grande distribution, SQUARE METER conjugue discipline, exigence et sensibilité pour offrir bien plus qu'une simple agence.
+              </p>
+              <p>
+                Deux parcours complémentaires, unis par une même conviction :
+                <span className="text-amber-600 font-medium"> L'immobilier n'est pas qu'une affaire de biens, c'est une histoire de valeurs.</span>
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/properties" 
+                className="bg-amber-600 text-white px-8 py-3 font-inter uppercase tracking-wider transition-all duration-300 hover:bg-amber-700 hover:scale-105 text-center"
+              >
+                Découvrir nos biens exclusifs
+              </Link>
+              <Link 
+                to="/valuation" 
+                className="border border-amber-600 text-amber-600 px-8 py-3 font-inter uppercase tracking-wider transition-all duration-300 hover:bg-amber-50 hover:scale-105 text-center"
+              >
+                Faire estimer mon bien
+              </Link>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-inter uppercase text-deep-green mb-6">
+      {/* Notre Mission Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
+              Sublimer chaque projet, notre mission
+            </h2>
+            <div className="w-16 h-0.5 bg-amber-600 mx-auto mb-6"></div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Chaque propriétaire, chaque bien, chaque histoire mérite une approche sur mesure.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-inter uppercase text-gray-900 text-lg mb-3 font-medium">
+                Transaction Immobilière
+              </h3>
+              <p className="text-gray-600">
+                La transaction immobilière, avec une stratégie de mise en valeur et de diffusion haut de gamme.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-inter uppercase text-gray-900 text-lg mb-3 font-medium">
+                Location Longue Durée
+              </h3>
+              <p className="text-gray-600">
+                La location longue durée, avec une gestion rigoureuse et transparente.
+              </p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+              <h3 className="font-inter uppercase text-gray-900 text-lg mb-3 font-medium">
+                Location Saisonnière
+              </h3>
+              <p className="text-gray-600">
+                La location saisonnière, pensée comme une expérience de séjour complète et harmonieuse.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Properties */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
               Propriétés d'Exception
             </h2>
-            <div className="w-24 h-1 bg-gold mx-auto mb-6"></div>
-            <p className="text-xl font-didot text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <div className="w-16 h-0.5 bg-amber-600 mx-auto mb-6"></div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Découvrez une sélection de biens prestigieux soigneusement choisis pour leur caractère unique, 
               leur architecture remarquable et leur situation exclusive.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
             {featuredProperties.map((property, index) => (
               <div 
                 key={index}
-                className="group relative bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-700 hover:scale-105 hover:shadow-3xl"
-                style={{ 
-                  animationDelay: `${index * 200}ms`,
-                  animation: 'fadeInUp 0.8s ease-out forwards'
-                }}
+                className="bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
               >
-                {/* Property Image */}
-                <div className="relative overflow-hidden h-80">
+                <div className="relative h-64 overflow-hidden">
                   <img 
                     src={property.image}
                     alt={property.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  
-                  {/* Exclusive Badge */}
                   {property.exclusive && (
-                    <div className="absolute top-4 right-4 bg-gold text-deep-green px-4 py-2 font-inter uppercase text-sm font-semibold rounded-full shadow-lg">
+                    <div className="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 font-inter uppercase text-xs font-medium rounded">
                       EXCLUSIF
                     </div>
                   )}
-                  
-                  {/* Favorite Button */}
-                  <button className="absolute top-4 left-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gold">
-                    <HeartIcon className="w-5 h-5 text-ivory" />
-                  </button>
                 </div>
 
-                {/* Property Info */}
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-inter uppercase text-deep-green text-xl font-semibold">
+                    <h3 className="font-inter uppercase text-gray-900 text-lg font-medium">
                       {property.title}
                     </h3>
-                    <span className="font-didot text-gold text-lg font-semibold">
+                    <span className="font-serif text-amber-600 font-semibold">
                       {property.price}
                     </span>
                   </div>
                   
                   <div className="flex items-center text-gray-600 mb-4">
                     <MapPinIcon className="w-4 h-4 mr-1" />
-                    <span className="font-didot">{property.location}</span>
+                    <span className="font-serif">{property.location}</span>
                   </div>
 
-                  {/* Property Features */}
-                  <div className="flex justify-between border-t border-gray-200 pt-4">
+                  <div className="flex justify-between border-t border-gray-100 pt-4 mb-4">
                     <div className="text-center">
-                      <div className="font-inter text-deep-green font-semibold">{property.beds}</div>
-                      <div className="font-didot text-gray-600 text-sm">Chambres</div>
+                      <div className="font-inter text-gray-900 font-medium">{property.beds}</div>
+                      <div className="text-gray-600 text-sm">Chambres</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-inter text-deep-green font-semibold">{property.baths}</div>
-                      <div className="font-didot text-gray-600 text-sm">SDB</div>
+                      <div className="font-inter text-gray-900 font-medium">{property.baths}</div>
+                      <div className="text-gray-600 text-sm">SDB</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-inter text-deep-green font-semibold">{property.area}</div>
-                      <div className="font-didot text-gray-600 text-sm">Surface</div>
+                      <div className="font-inter text-gray-900 font-medium">{property.area}</div>
+                      <div className="text-gray-600 text-sm">Surface</div>
                     </div>
                   </div>
 
-                  {/* View Details Button */}
-                  <button className="w-full mt-4 bg-deep-green text-ivory py-3 rounded-lg font-inter uppercase tracking-wide hover:bg-gold hover:text-deep-green transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
-                    <span>Découvrir</span>
-                    <ArrowRightIcon className="w-4 h-4" />
+                  <button className="w-full bg-gray-900 text-white py-3 rounded font-inter uppercase tracking-wide hover:bg-amber-600 transition-colors duration-300 transform hover:scale-[1.02]">
+                    Découvrir
                   </button>
                 </div>
               </div>
@@ -355,104 +408,165 @@ const Home: React.FC = () => {
           <div className="text-center">
             <Link 
               to="/properties" 
-              className="inline-flex items-center space-x-3 border-2 border-deep-green text-deep-green px-8 py-4 font-inter uppercase tracking-wide hover:bg-deep-green hover:text-ivory transition-all duration-500 transform hover:scale-105 group"
+              className="inline-flex items-center space-x-2 border border-gray-900 text-gray-900 px-8 py-3 font-inter uppercase tracking-wide hover:bg-gray-900 hover:text-white transition-all duration-300"
             >
               <span>Explorer notre collection</span>
-              <ArrowRightIcon className="w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
+              <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Confidential Selection */}
-      <section className="py-24 bg-deep-green text-ivory relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent"></div>
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-ivory/5 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
-        </div>
-
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <ShieldCheckIcon className="w-16 h-16 text-gold mx-auto mb-6" />
-            <h2 className="text-5xl font-inter uppercase mb-8">
-              Sélection Confidentielle
-            </h2>
-            <p className="text-2xl font-didot text-gold mb-8 leading-relaxed">
-              L'excellence se partage dans l'intimité. Certaines de nos propriétés les plus exclusives 
-              ne sont accessibles que sur demande, préservant ainsi la discrétion de nos clients les plus exigeants.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Link 
-                to="/confidential" 
-                className="group relative bg-gold text-deep-green px-12 py-4 font-inter uppercase tracking-wider transition-all duration-300 transform hover:scale-105 overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <span className="relative z-10">Accéder à la sélection</span>
-              </Link>
-              <Link 
-                to="/contact" 
-                className="group relative border-2 border-gold text-gold px-12 py-4 font-inter uppercase tracking-wider transition-all duration-300 transform hover:scale-105 overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                <span className="relative z-10 group-hover:text-deep-green">Devenir client</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Enhanced Services Section */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      {/* Client Testimonials */}
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-inter uppercase text-deep-green mb-6">
-              Prestations Sur Mesure
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
+              Ce que nos clients disent de nous
             </h2>
-            <div className="w-24 h-1 bg-gold mx-auto mb-6"></div>
-            <p className="text-xl font-didot text-gray-600 max-w-3xl mx-auto">
-              Un accompagnement personnalisé pour chaque étape de votre projet immobilier
-            </p>
+            <div className="w-16 h-0.5 bg-amber-600 mx-auto mb-6"></div>
+            <p className="text-gray-600">Reprendre nos avis sur Google</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {clientTestimonials.map((testimonial, index) => (
               <div 
                 key={index}
-                className="group text-center p-8 hover:bg-gradient-to-br from-ivory to-white transition-all duration-500 rounded-3xl border border-gray-100 hover:border-gold/30 hover:shadow-2xl transform hover:-translate-y-4"
+                className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <div className="relative inline-block mb-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-gold to-amber-600 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
-                    <service.icon className="w-10 h-10 text-deep-green" />
-                  </div>
-                  <div className="absolute inset-0 border-2 border-gold rounded-2xl transform rotate-6 scale-105 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </div>
-                
-                <h3 className="font-inter uppercase text-deep-green text-xl mb-4 font-semibold">
-                  {service.title}
-                </h3>
-                
-                <p className="font-didot text-gray-600 mb-6 leading-relaxed">
-                  {service.description}
+                <div className="text-amber-600 text-5xl mb-4">"</div>
+                <p className="text-gray-600 italic mb-6 leading-relaxed text-lg">
+                  {testimonial.text}
                 </p>
-
-                <ul className="space-y-2 text-left">
-                  {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center font-didot text-gray-700">
-                      <div className="w-2 h-2 bg-gold rounded-full mr-3"></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                <p className="font-inter text-gray-900 font-medium border-t border-gray-100 pt-4">
+                  {testimonial.name}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* Nos Valeurs Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
+              Nos valeurs, nos racines, notre vision
+            </h2>
+            <div className="w-16 h-0.5 bg-amber-600 mx-auto mb-6"></div>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-6 border border-gray-100 rounded-lg hover:border-amber-600 transition-colors duration-300">
+                <h3 className="font-inter uppercase text-gray-900 text-lg mb-2 font-medium">
+                  Exigence
+                </h3>
+                <p className="text-gray-600">
+                  Offrir une qualité de service irréprochable.
+                </p>
+              </div>
+              
+              <div className="p-6 border border-gray-100 rounded-lg hover:border-amber-600 transition-colors duration-300">
+                <h3 className="font-inter uppercase text-gray-900 text-lg mb-2 font-medium">
+                  Humanité
+                </h3>
+                <p className="text-gray-600">
+                  Placer la relation au centre de chaque mission.
+                </p>
+              </div>
+              
+              <div className="p-6 border border-gray-100 rounded-lg hover:border-amber-600 transition-colors duration-300">
+                <h3 className="font-inter uppercase text-gray-900 text-lg mb-2 font-medium">
+                  Innovation
+                </h3>
+                <p className="text-gray-600">
+                  Mettre la technologie au service de l'expérience.
+                </p>
+              </div>
+              
+              <div className="p-6 border border-gray-100 rounded-lg hover:border-amber-600 transition-colors duration-300">
+                <h3 className="font-inter uppercase text-gray-900 text-lg mb-2 font-medium">
+                  Responsabilité
+                </h3>
+                <p className="text-gray-600">
+                  Redonner à Essaouira ce qu'elle nous inspire.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
+              Prêt à concrétiser votre projet ?
+            </h2>
+            <div className="w-16 h-0.5 bg-amber-600 mx-auto mb-6"></div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Que vous soyez propriétaire, acquéreur ou investisseur,
+              nous serons ravis de vous accompagner à Essaouira et dans sa province.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-2xl font-inter uppercase text-gray-900 mb-6">
+                  Notre agence
+                </h3>
+                
+                <div className="space-y-4">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">Adresse</h4>
+                    <p className="text-gray-600">Essaouira – Maroc</p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">Horaires</h4>
+                    <p className="text-gray-600">Sur rendez-vous</p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">Email</h4>
+                    <p className="text-gray-600">essaouira@m2squaremeter.com</p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">Téléphone</h4>
+                    <p className="text-gray-600">+212 (0)7 00 000 644</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex flex-col justify-center">
+                <div className="mb-8">
+                  <h3 className="text-2xl font-inter uppercase text-gray-900 mb-2">
+                    SQUARE METER
+                  </h3>
+                  <p className="text-amber-600 italic">
+                    La rigueur de la gestion. La passion de la pierre. Et la noblesse du nécessaire.
+                  </p>
+                </div>
+                
+                <Link 
+                  to="/contact" 
+                  className="bg-gray-900 text-white py-4 rounded font-inter uppercase tracking-wide hover:bg-amber-600 transition-all duration-300 transform hover:scale-[1.02] text-center text-lg"
+                >
+                  Prendre rendez-vous
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Statistics Section */}
-      <section className="py-20 bg-deep-green text-ivory">
+      <section className="py-16 bg-white border-t border-gray-100">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
@@ -462,10 +576,10 @@ const Home: React.FC = () => {
               { number: "12", label: "Pays desservis" }
             ].map((stat, index) => (
               <div key={index} className="group">
-                <div className="text-4xl lg:text-5xl font-inter text-gold font-light mb-2 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="text-4xl font-inter text-amber-600 font-light mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.number}
                 </div>
-                <div className="font-didot text-ivory/80 text-lg">
+                <div className="text-gray-600 font-medium">
                   {stat.label}
                 </div>
               </div>

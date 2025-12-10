@@ -9,7 +9,6 @@ import {
   NewspaperIcon,
   PaperAirplaneIcon,
   PhoneIcon,
-  ChartBarIcon,
   ShieldCheckIcon,
   UserIcon,
   CogIcon,
@@ -84,20 +83,6 @@ const Header: React.FC = () => {
         Icon: HomeModernIcon,
         category: 'properties',
         description: 'Découvrez notre collection exclusive'
-      },
-      {
-        path: '/confidential',
-        label: 'Sélection confidentielle',
-        Icon: ShieldCheckIcon,
-        category: 'properties',
-        description: 'Propriétés discrètes et prestigieuses'
-      },
-      {
-        path: '/investment',
-        label: 'Investissement',
-        Icon: ChartBarIcon,
-        category: 'properties',
-        description: "Opportunités d'investissement lucratives"
       }
     ],
     clients: [
@@ -109,11 +94,11 @@ const Header: React.FC = () => {
         description: 'Solutions sur mesure pour propriétaires'
       },
       {
-        path: '/selling-multistep',
-        label: 'Vendre votre bien',
-        Icon: HomeModernIcon,
+        path: '/confidential',
+        label: 'Sélection confidentielle',
+        Icon: ShieldCheckIcon,
         category: 'clients',
-        description: 'Estimation et accompagnement personnalisé'
+        description: 'Propriétés discrètes et prestigieuses'
       },
       {
         path: '/traveler',
@@ -123,11 +108,18 @@ const Header: React.FC = () => {
         description: 'Locations de prestige pour vos voyages'
       },
       {
-        path: '/concierge',
-        label: 'Services Conciergerie',
-        Icon: StarIcon,
+        path: '/auth',
+        label: 'Connexion',
+        Icon: UserIcon,
         category: 'clients',
-        description: 'Services haut de gamme sur mesure'
+        description: 'Accédez à votre espace personnel'
+      },
+      {
+        path: '/dashboard',
+        label: 'Tableau de bord',
+        Icon: CogIcon,
+        category: 'clients',
+        description: 'Gérez vos propriétés et services'
       }
     ],
     company: [
@@ -139,11 +131,18 @@ const Header: React.FC = () => {
         description: 'Découvrez notre histoire et expertise'
       },
       {
-        path: '/mag',
-        label: 'Le Mag',
-        Icon: NewspaperIcon,
+        path: '/services',
+        label: 'Nos services',
+        Icon: StarIcon,
         category: 'company',
-        description: 'Actualités et tendances immobilières'
+        description: 'Services et offres pour nos clients'
+      },
+      {
+        path: '/concierge',
+        label: 'Services Conciergerie',
+        Icon: StarIcon,
+        category: 'company',
+        description: 'Services de conciergerie haut de gamme'
       },
       {
         path: '/careers',
@@ -158,31 +157,17 @@ const Header: React.FC = () => {
         Icon: PhoneIcon,
         category: 'company',
         description: 'Échangeons sur vos projets'
+      },
+      {
+        path: '/mag',
+        label: 'Le Mag',
+        Icon: NewspaperIcon,
+        category: 'company',
+        description: 'Actualités et tendances immobilières'
       }
     ],
-    account: [
-      {
-        path: '/auth',
-        label: 'Connexion',
-        Icon: UserIcon,
-        category: 'account',
-        description: 'Accédez à votre espace personnel'
-      },
-      {
-        path: '/dashboard',
-        label: 'Tableau de bord',
-        Icon: CogIcon,
-        category: 'account',
-        description: 'Gérez vos propriétés et services'
-      },
-      {
-        path: '/services',
-        label: 'Mes services',
-        Icon: StarIcon,
-        category: 'account',
-        description: 'Vos services personnalisés'
-      }
-    ]
+    // `account` section intentionally removed; its items were moved into `clients`
+    
   };
 
   // Localize primary icons (available via navigation if needed)
@@ -340,6 +325,17 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
+
+      {/* Spacer to offset the fixed header on non-hero pages */}
+      {(() => {
+        const heroRoots = ['/', '/properties', '/owners'];
+        const isHero = heroRoots.some((p) => location.pathname === p || location.pathname.startsWith(p + '/'));
+        if (isHero) return null;
+        const h = headerHeight || (isScrolled ? 64 : 96);
+        return (
+          <div aria-hidden="true" style={{ height: `${h}px` }} className="w-full" />
+        );
+      })()}
 
       {/* Floating Menu Panel (right-side) */}
       <div className={`fixed inset-0 z-40 transition-all duration-700 pointer-events-none ${
@@ -522,55 +518,7 @@ const Header: React.FC = () => {
                 </div>
               </div>
 
-              {/* Account Section */}
-              <div>
-                <h3 className="text-gray-800 text-xl font-bold tracking-widest uppercase mb-8">
-                  Mon Compte
-                </h3>
-                <div className="grid grid-cols-1 gap-4">
-                  {navigation.account.map((item, index) => {
-                    const Icon = item.Icon;
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`group relative p-6 rounded-2xl transition-all duration-500 border-2 ${
-                          isActivePath(item.path)
-                            ? 'bg-gray-50 border-gray-200 shadow-sm'
-                            : 'bg-white/60 border-gray-100 hover:bg-gray-50 hover:border-gray-200 hover:shadow-sm'
-                        }`}
-                        style={{ transitionDelay: `${index * 100 + 600}ms` }}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <div className="flex items-start space-x-4">
-                          <div className={`p-3 rounded-xl transition-all duration-500 ${
-                            isActivePath(item.path)
-                              ? 'bg-gray-100 text-gray-900 shadow-sm'
-                              : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
-                          }`}>
-                            <Icon className="w-6 h-6" />
-                          </div>
-                          <div className="flex-1">
-                            <span className={`text-lg font-semibold transition-all duration-500 ${
-                              isActivePath(item.path)
-                                ? 'text-gray-900'
-                                : 'text-gray-800'
-                            }`}>
-                              {item.label}
-                            </span>
-                            <p className="text-sm text-gray-600 mt-1 transition-colors duration-300">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                          <div className="w-3 h-3 border-r-2 border-t-2 border-gray-400 transform rotate-45" />
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
+              {/* `Mon Compte` section removed — items moved into Espace Clients */}
             </div>
           </div>
         </div>

@@ -24,7 +24,6 @@ import {
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [isVisible, setIsVisible] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +32,7 @@ const Footer: React.FC = () => {
       const documentHeight = document.documentElement.scrollHeight;
       
       // Consider footer "scrolled" when near bottom of page
-      setIsScrolled(scrollPosition > 100);
+      // (no longer tracking isScrolled in footer)
       
       // Show footer content with fade-in effect
       if (scrollPosition > documentHeight - windowHeight - 200) {
@@ -57,7 +56,7 @@ const Footer: React.FC = () => {
       { path: '/owners', label: 'Propriétaires', Icon: UserGroupIcon },
       { path: '/selling-multistep', label: 'Vendre votre bien', Icon: BuildingStorefrontIcon },
       { path: '/traveler', label: 'Espace Voyageurs', Icon: PaperAirplaneIcon },
-      { path: '/concierge', label: 'Services Conciergerie', Icon: StarIcon }
+      
     ],
     company: [
       { path: '/agency', label: "L'agence", Icon: BuildingOfficeIcon },
@@ -192,7 +191,6 @@ const Footer: React.FC = () => {
               </h4>
               <ul className="space-y-2">
                 {navigation.properties.map((item, index) => {
-                  const Icon = item.Icon;
                   return (
                     <li key={item.path}>
                       <Link 
@@ -219,7 +217,6 @@ const Footer: React.FC = () => {
               </h4>
               <ul className="space-y-2">
                 {navigation.clients.map((item, index) => {
-                  const Icon = item.Icon;
                   return (
                     <li key={item.path}>
                       <Link 
