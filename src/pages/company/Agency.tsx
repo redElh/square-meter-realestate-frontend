@@ -144,7 +144,7 @@ const Agency: React.FC = () => {
   return (
     <div className="min-h-screen bg-white font-inter text-base">
       {/* Hero Section - match Properties page height and spacing */}
-      <section className="relative h-[60vh] overflow-hidden bg-white">
+      <section className="relative h-[60vh] sm:h-[70vh] overflow-hidden bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
@@ -165,23 +165,23 @@ const Agency: React.FC = () => {
         </div>
 
         {/* Navigation Controls */}
-        <div className="absolute top-1/2 left-6 right-6 transform -translate-y-1/2 flex justify-between z-20">
+        <div className="absolute top-1/2 left-3 right-3 sm:left-6 sm:right-6 transform -translate-y-1/2 flex justify-between z-20">
           <button
             onClick={prevSlide}
-            className="w-12 h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
           >
-            <ChevronLeftIcon className="w-6 h-6" />
+            <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={nextSlide}
-            className="w-12 h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
           >
-            <ChevronRightIcon className="w-6 h-6" />
+            <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
         {/* Slide Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-20">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4 z-20">
           <div className="flex space-x-2">
             {heroSlides.map((_, index) => (
               <button
@@ -198,20 +198,20 @@ const Agency: React.FC = () => {
         </div>
 
         {/* Buttons Container - Centered at bottom */}
-        <div className="absolute bottom-12 lg:bottom-16 left-0 right-0 z-20 flex justify-center">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <div className="absolute bottom-16 sm:bottom-12 lg:bottom-16 left-0 right-0 z-20 flex justify-center px-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Link 
               to="/contact" 
-              className="bg-[#023927] text-white px-12 py-4 font-inter uppercase tracking-wider text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
+              className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
             >
               <span className="flex items-center justify-center space-x-2">
                 <span>Rencontrer notre équipe</span>
-                <ArrowRightIcon className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
               </span>
             </Link>
             <Link 
               to="/properties" 
-              className="border-2 border-white text-white px-12 py-4 font-inter uppercase tracking-wider text-lg hover:bg-white hover:text-[#023927] transition-all duration-500"
+              className="border-2 border-white text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] transition-all duration-500 text-center"
             >
               <span>Découvrir nos biens</span>
             </Link>
@@ -223,14 +223,14 @@ const Agency: React.FC = () => {
       </section>
 
       {/* Team Section - Placed immediately after hero */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-inter font-light text-gray-900 mb-4">
+      <section className="py-8 sm:py-12 lg:py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 px-4">
               Notre Équipe d'Experts
             </h2>
-            <div className="h-px bg-gray-200 w-24 mx-auto mb-4"></div>
-            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
+            <div className="h-px bg-gray-200 w-16 sm:w-24 mx-auto mb-3 sm:mb-4"></div>
+            <p className="text-gray-600 max-w-3xl mx-auto text-sm sm:text-base lg:text-lg px-4">
               Des professionnels passionnés, unis par l'excellence et dédiés à la réalisation de vos projets les plus ambitieux
             </p>
           </div>
@@ -241,7 +241,7 @@ const Agency: React.FC = () => {
             <div className="bg-white border-2 border-gray-100 shadow-sm">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
                 {/* Team Member Image */}
-                <div className="relative h-[500px] lg:h-auto">
+                <div className="relative h-[350px] sm:h-[400px] md:h-[500px] lg:h-auto">
                   <img
                     src={teamMembers[activeTeamMember].image}
                     alt={teamMembers[activeTeamMember].name}
@@ -251,38 +251,38 @@ const Agency: React.FC = () => {
                   {/* Navigation Arrows */}
                   <button
                     onClick={prevTeamMember}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+                    className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
                   >
-                    <ChevronLeftIcon className="w-6 h-6" />
+                    <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
                   <button
                     onClick={nextTeamMember}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+                    className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
                   >
-                    <ChevronRightIcon className="w-6 h-6" />
+                    <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
                 </div>
 
                 {/* Team Member Info */}
-                <div className="p-12 flex flex-col justify-center">
-                  <div className="mb-8">
-                    <span className="inline-block px-3 py-1 bg-gray-100 text-gray-800 font-inter uppercase text-xs tracking-wide mb-4 border border-gray-300">
+                <div className="p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
+                  <div className="mb-6 sm:mb-8">
+                    <span className="inline-block px-2 sm:px-3 py-1 bg-gray-100 text-gray-800 font-inter uppercase text-xs tracking-wide mb-3 sm:mb-4 border border-gray-300">
                       {teamMembers[activeTeamMember].role}
                     </span>
-                    <h3 className="text-3xl font-inter font-medium text-gray-900 mb-4">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter font-medium text-gray-900 mb-3 sm:mb-4">
                       {teamMembers[activeTeamMember].name}
                     </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed text-lg">
+                    <p className="text-gray-600 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base lg:text-lg">
                       {teamMembers[activeTeamMember].description}
                     </p>
                   </div>
 
                   {/* Specialties */}
-                  <div className="mb-8">
-                    <h4 className="font-inter uppercase text-gray-700 text-sm mb-4 font-medium">Spécialités</h4>
+                  <div className="mb-6 sm:mb-8">
+                    <h4 className="font-inter uppercase text-gray-700 text-xs sm:text-sm mb-3 sm:mb-4 font-medium">Spécialités</h4>
                     <div className="flex flex-wrap gap-2">
                       {teamMembers[activeTeamMember].specialties.map((specialty, index) => (
-                        <span key={index} className="px-3 py-1 bg-[#023927]/10 text-[#023927] font-medium text-sm border border-[#023927]/20">
+                        <span key={index} className="px-2 sm:px-3 py-1 bg-[#023927]/10 text-[#023927] font-medium text-xs sm:text-sm border border-[#023927]/20">
                           {specialty}
                         </span>
                       ))}
@@ -290,23 +290,23 @@ const Agency: React.FC = () => {
                   </div>
 
                   {/* Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-8">
-                    <div className="text-center p-4 bg-gray-50 border border-gray-200">
-                      <div className="font-inter text-[#023927] text-xl font-semibold">{teamMembers[activeTeamMember].experience}</div>
-                      <div className="text-gray-600 text-sm">Expérience</div>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                    <div className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
+                      <div className="font-inter text-[#023927] text-lg sm:text-xl font-semibold">{teamMembers[activeTeamMember].experience}</div>
+                      <div className="text-gray-600 text-xs sm:text-sm">Expérience</div>
                     </div>
-                    <div className="text-center p-4 bg-gray-50 border border-gray-200">
-                      <div className="font-inter text-[#023927] text-xl font-semibold">{teamMembers[activeTeamMember].properties}</div>
-                      <div className="text-gray-600 text-sm">Propriétés</div>
+                    <div className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
+                      <div className="font-inter text-[#023927] text-lg sm:text-xl font-semibold">{teamMembers[activeTeamMember].properties}</div>
+                      <div className="text-gray-600 text-xs sm:text-sm">Propriétés</div>
                     </div>
                   </div>
 
                   {/* Languages */}
-                  <div className="flex items-center space-x-3 mb-8">
-                    <span className="font-inter uppercase text-gray-700 text-sm font-medium">Langues:</span>
-                    <div className="flex space-x-2">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+                    <span className="font-inter uppercase text-gray-700 text-xs sm:text-sm font-medium">Langues:</span>
+                    <div className="flex flex-wrap gap-2">
                       {teamMembers[activeTeamMember].languages.map((lang, index) => (
-                        <span key={index} className="px-3 py-1 bg-[#023927] text-white text-sm font-medium">
+                        <span key={index} className="px-2 sm:px-3 py-1 bg-[#023927] text-white text-xs sm:text-sm font-medium">
                           {lang}
                         </span>
                       ))}
@@ -314,8 +314,8 @@ const Agency: React.FC = () => {
                   </div>
 
                   {/* Quote */}
-                  <div className="pt-6 border-t border-gray-200">
-                    <p className="text-gray-600 italic text-lg leading-relaxed">
+                  <div className="pt-4 sm:pt-6 border-t border-gray-200">
+                    <p className="text-gray-600 italic text-sm sm:text-base lg:text-lg leading-relaxed">
                       "{teamMembers[activeTeamMember].quote}"
                     </p>
                   </div>
@@ -324,7 +324,7 @@ const Agency: React.FC = () => {
             </div>
 
             {/* Team Member Indicators */}
-            <div className="flex justify-center space-x-3 mt-8">
+            <div className="flex justify-center space-x-2 sm:space-x-3 mt-6 sm:mt-8">
               {teamMembers.map((_, index) => (
                 <button
                   key={index}
@@ -342,14 +342,14 @@ const Agency: React.FC = () => {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-20 bg-gray-50 border-t border-b border-gray-200">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-inter font-light text-gray-900 mb-4">
+      <section className="py-8 sm:py-12 lg:py-20 bg-gray-50 border-t border-b border-gray-200">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 px-4">
               Notre Philosophie
             </h2>
-            <div className="h-px bg-gray-200 w-24 mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 leading-relaxed mb-12">
+            <div className="h-px bg-gray-200 w-16 sm:w-24 mx-auto mb-4 sm:mb-6"></div>
+            <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-6 sm:mb-8 lg:mb-12 px-4">
               Fondée sur les principes d'excellence, de discrétion et d'expertise, 
               M² Square Meter réinvente l'immobilier de prestige. Notre approche 
               personnalisée et notre réseau international nous permettent de vous 
@@ -357,25 +357,25 @@ const Agency: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
             {philosophyPrinciples.map((principle, index) => {
               const IconComponent = principle.icon;
               return (
                 <div 
                   key={index}
-                  className="bg-white p-8 border-2 border-gray-100 hover:border-[#023927] transition-all duration-500 group"
+                  className="bg-white p-4 sm:p-6 lg:p-8 border-2 border-gray-100 hover:border-[#023927] transition-all duration-500 group"
                 >
-                  <div className="flex items-start space-x-6">
+                  <div className="flex items-start space-x-4 sm:space-x-6">
                     <div className="flex-shrink-0">
-                      <div className="w-14 h-14 bg-[#023927]/10 flex items-center justify-center border border-[#023927]/20 group-hover:bg-[#023927] group-hover:text-white transition-all duration-500">
-                        <IconComponent className="w-7 h-7 text-[#023927] group-hover:text-white transition-colors duration-500" />
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#023927]/10 flex items-center justify-center border border-[#023927]/20 group-hover:bg-[#023927] group-hover:text-white transition-all duration-500">
+                        <IconComponent className="w-6 h-6 sm:w-7 sm:h-7 text-[#023927] group-hover:text-white transition-colors duration-500" />
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-inter text-xl text-gray-900 mb-4 group-hover:text-[#023927] transition-colors duration-500">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-inter text-base sm:text-lg lg:text-xl text-gray-900 mb-2 sm:mb-4 group-hover:text-[#023927] transition-colors duration-500">
                         {principle.title}
                       </h3>
-                      <p className="text-gray-600 leading-relaxed">
+                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                         {principle.description}
                       </p>
                     </div>

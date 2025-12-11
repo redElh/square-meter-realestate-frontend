@@ -196,10 +196,10 @@ const SellingMultiStep: React.FC = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-8">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-8">
             {/* Address Section */}
             <div>
-              <label className="block font-medium text-gray-900 text-lg mb-4">
+              <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
                 Adresse du bien *
               </label>
               <input
@@ -209,24 +209,24 @@ const SellingMultiStep: React.FC = () => {
                 onChange={handleChange}
                 required
                 placeholder="123 Avenue de Luxe, 75008 Paris"
-                className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-lg transition-colors duration-300"
+                className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base lg:text-lg transition-colors duration-300"
                 style={{ borderRadius: '0' }}
               />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {/* Property Type */}
               <div>
-                <label className="block font-medium text-gray-900 text-lg mb-4">
+                <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
                   Type de bien *
                 </label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2 sm:gap-4">
                   {propertyTypes.map(type => (
                     <button
                       key={type.value}
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, propertyType: type.value }))}
-                      className={`py-4 border-2 transition-all duration-500 text-base font-medium ${
+                      className={`py-3 sm:py-4 border-2 transition-all duration-500 text-sm sm:text-base font-medium ${
                         formData.propertyType === type.value
                           ? 'border-[#023927] bg-white text-[#023927]'
                           : 'border-gray-300 bg-white text-gray-700 hover:border-gray-900 hover:text-[#023927]'
@@ -239,9 +239,9 @@ const SellingMultiStep: React.FC = () => {
               </div>
 
               {/* Surface & Rooms */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Surface (m²) *
                   </label>
                   <input
@@ -251,14 +251,14 @@ const SellingMultiStep: React.FC = () => {
                     onChange={handleChange}
                     required
                     placeholder="Ex: 120"
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-3 sm:gap-6">
                   <div>
-                    <label className="block font-medium text-gray-900 text-lg mb-3">
+                    <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                       Pièces *
                     </label>
                     <input
@@ -268,13 +268,13 @@ const SellingMultiStep: React.FC = () => {
                       onChange={handleChange}
                       required
                       placeholder="Ex: 5"
-                      className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                       style={{ borderRadius: '0' }}
                     />
                   </div>
 
                   <div>
-                    <label className="block font-medium text-gray-900 text-lg mb-3">
+                    <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                       Chambres *
                     </label>
                     <input
@@ -284,7 +284,7 @@ const SellingMultiStep: React.FC = () => {
                       onChange={handleChange}
                       required
                       placeholder="Ex: 3"
-                      className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                       style={{ borderRadius: '0' }}
                     />
                   </div>
@@ -294,25 +294,25 @@ const SellingMultiStep: React.FC = () => {
 
             {/* Condition */}
             <div>
-              <label className="block font-medium text-gray-900 text-lg mb-4">
+              <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
                 État du bien *
               </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 {conditions.map(condition => (
                   <button
                     key={condition.value}
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, condition: condition.value }))}
-                    className={`p-6 border-2 text-left transition-all duration-500 ${
+                    className={`p-4 sm:p-6 border-2 text-left transition-all duration-500 ${
                       formData.condition === condition.value
                         ? 'border-[#023927] bg-white text-[#023927]'
                         : 'border-gray-300 hover:border-gray-900'
                     }`}
                   >
-                    <div className="font-medium text-gray-900 mb-2">
+                    <div className="font-medium text-gray-900 text-sm sm:text-base mb-1 sm:mb-2">
                       {condition.label}
                     </div>
-                    <div className="font-light text-gray-600 text-sm">
+                    <div className="font-light text-gray-600 text-xs sm:text-sm">
                       {condition.description}
                     </div>
                   </button>
@@ -324,34 +324,34 @@ const SellingMultiStep: React.FC = () => {
 
       case 2:
         return (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h3 className="text-3xl font-light text-gray-900 mb-4">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-8">
+            <div className="text-center mb-4 sm:mb-6 lg:mb-8">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-light text-gray-900 mb-2 sm:mb-4 px-2">
                 Équipements & Prestations
               </h3>
-              <p className="font-light text-gray-600 text-lg">
+              <p className="font-light text-gray-600 text-sm sm:text-base lg:text-lg px-4">
                 Sélectionnez les équipements qui valorisent votre bien
               </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
               {features.map(feature => (
                 <button
                   key={feature.value}
                   type="button"
                   onClick={() => handleFeatureToggle(feature.value)}
-                  className={`py-6 border-2 text-center transition-all duration-500 ${
+                  className={`py-4 sm:py-6 border-2 text-center transition-all duration-500 ${
                     formData.features.includes(feature.value)
                       ? 'border-[#023927] bg-white text-[#023927]'
                       : 'border-gray-300 hover:border-gray-900'
                   }`}
                 >
-                  <div className="font-medium">
+                  <div className="font-medium text-xs sm:text-sm">
                     {feature.label}
                   </div>
                   {formData.features.includes(feature.value) && (
-                    <div className="mt-2">
-                      <CheckCircleIconSolid className="w-5 h-5 text-[#023927] mx-auto" />
+                    <div className="mt-1 sm:mt-2">
+                      <CheckCircleIconSolid className="w-4 h-4 sm:w-5 sm:h-5 text-[#023927] mx-auto" />
                     </div>
                   )}
                 </button>
@@ -360,8 +360,8 @@ const SellingMultiStep: React.FC = () => {
 
             {/* Selected Features Summary */}
             {formData.features.length > 0 && (
-              <div className="p-6 border-2 border-gray-100">
-                <h4 className="font-medium text-gray-900 text-lg mb-4">
+              <div className="p-4 sm:p-6 border-2 border-gray-100">
+                <h4 className="font-medium text-gray-900 text-base sm:text-lg mb-3 sm:mb-4">
                   Équipements sélectionnés ({formData.features.length})
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -381,29 +381,29 @@ const SellingMultiStep: React.FC = () => {
 
       case 3:
         return (
-          <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {/* Timeline */}
               <div>
-                <label className="block font-medium text-gray-900 text-lg mb-4">
+                <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
                   Délai de vente souhaité *
                 </label>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {timelines.map(timeline => (
                     <button
                       key={timeline.value}
                       type="button"
                       onClick={() => setFormData(prev => ({ ...prev, timeline: timeline.value }))}
-                      className={`w-full p-6 border-2 text-left transition-all duration-500 ${
+                      className={`w-full p-4 sm:p-6 border-2 text-left transition-all duration-500 ${
                         formData.timeline === timeline.value
                           ? 'border-[#023927] bg-white text-[#023927]'
                           : 'border-gray-300 hover:border-gray-900'
                       }`}
                     >
-                      <div className="font-medium text-gray-900 mb-1">
+                      <div className="font-medium text-gray-900 text-sm sm:text-base mb-1">
                         {timeline.label}
                       </div>
-                      <div className="font-light text-gray-600 text-sm">
+                      <div className="font-light text-gray-600 text-xs sm:text-sm">
                         {timeline.description}
                       </div>
                     </button>
@@ -412,9 +412,9 @@ const SellingMultiStep: React.FC = () => {
               </div>
 
               {/* Price Expectation */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Fourchette de prix envisagée
                   </label>
                   <input
@@ -423,13 +423,13 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.priceExpectation}
                     onChange={handleChange}
                     placeholder="Ex: 1,200,000 - 1,500,000 €"
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Disponibilités pour les visites
                   </label>
                   <input
@@ -438,7 +438,7 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.visitAvailability}
                     onChange={handleChange}
                     placeholder="Ex: Weekends, en semaine après 18h..."
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
@@ -447,7 +447,7 @@ const SellingMultiStep: React.FC = () => {
 
             {/* Motivation */}
             <div>
-              <label className="block font-medium text-gray-900 text-lg mb-4">
+              <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
                 Motivation de la vente *
               </label>
               <textarea
@@ -455,9 +455,9 @@ const SellingMultiStep: React.FC = () => {
                 value={formData.motivation}
                 onChange={handleChange}
                 required
-                rows={6}
+                rows={4}
                 placeholder="Décrivez brièvement les raisons de votre projet de vente (déménagement, investissement, succession...)"
-                className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light resize-none transition-colors duration-300 leading-relaxed"
+                className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base resize-none transition-colors duration-300 leading-relaxed"
                 style={{ borderRadius: '0' }}
               ></textarea>
             </div>
@@ -466,16 +466,16 @@ const SellingMultiStep: React.FC = () => {
 
       case 4:
         return (
-          <div className="space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
               {/* Personal Information */}
-              <div className="space-y-6">
-                <h3 className="font-medium text-gray-900 text-2xl mb-6">
+              <div className="space-y-4 sm:space-y-6">
+                <h3 className="font-medium text-gray-900 text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-6">
                   Informations personnelles
                 </h3>
                 
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Prénom *
                   </label>
                   <input
@@ -484,13 +484,13 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.firstName}
                     onChange={handleChange}
                     required
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Nom *
                   </label>
                   <input
@@ -499,20 +499,20 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.lastName}
                     onChange={handleChange}
                     required
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
               </div>
 
               {/* Contact Information */}
-              <div className="space-y-6">
-                <h3 className="font-medium text-gray-900 text-2xl mb-6">
+              <div className="space-y-4 sm:space-y-6">
+                <h3 className="font-medium text-gray-900 text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-6">
                   Coordonnées
                 </h3>
 
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Email *
                   </label>
                   <input
@@ -521,13 +521,13 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block font-medium text-gray-900 text-lg mb-3">
+                  <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     Téléphone *
                   </label>
                   <input
@@ -536,7 +536,7 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-6 py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light transition-colors duration-300"
+                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
                 </div>
@@ -544,15 +544,15 @@ const SellingMultiStep: React.FC = () => {
             </div>
 
             {/* Summary Card */}
-            <div className="p-8 border-2 border-gray-100">
-              <h4 className="font-medium text-gray-900 text-2xl mb-6">
+            <div className="p-4 sm:p-6 lg:p-8 border-2 border-gray-100">
+              <h4 className="font-medium text-gray-900 text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6">
                 Récapitulatif de votre demande
               </h4>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-sm sm:text-base lg:text-lg">
                 <div>
-                  <div className="font-medium text-gray-900 mb-4">BIEN IMMOBILIER</div>
-                  <div className="font-light text-gray-700 space-y-2">
+                  <div className="font-medium text-gray-900 mb-2 sm:mb-4 text-sm sm:text-base">BIEN IMMOBILIER</div>
+                  <div className="font-light text-gray-700 space-y-1 sm:space-y-2 text-sm sm:text-base">
                     <div>{formData.address}</div>
                     <div>{propertyTypes.find(t => t.value === formData.propertyType)?.label}</div>
                     <div>{formData.surface} m² • {formData.rooms} pièces • {formData.bedrooms} chambres</div>
@@ -580,7 +580,7 @@ const SellingMultiStep: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section - Matching Properties Style */}
-      <section className="relative h-[70vh] overflow-hidden bg-white">
+      <section className="relative h-[60vh] sm:h-[70vh] overflow-hidden bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
@@ -598,29 +598,29 @@ const SellingMultiStep: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
               
               {/* Title Overlay - Bottom Left */}
-              <div className="absolute bottom-16 left-12 text-white max-w-2xl">
-                <h1 className="text-5xl font-light mb-4">{slide.title}</h1>
-                <p className="text-xl font-light opacity-90">{slide.subtitle}</p>
+              <div className="absolute bottom-8 sm:bottom-16 left-4 sm:left-12 text-white max-w-2xl px-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-2 sm:mb-4">{slide.title}</h1>
+                <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light opacity-90">{slide.subtitle}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Carousel Controls */}
-        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-2 sm:space-x-4">
           <button
             onClick={prevSlide}
-            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
             style={{ borderRadius: '0' }}
           >
-            <ChevronLeftIcon className="w-5 h-5" />
+            <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={nextSlide}
-            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
             style={{ borderRadius: '0' }}
           >
-            <ChevronRightIcon className="w-5 h-5" />
+            <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           
           {/* Slide Indicators */}
@@ -641,14 +641,14 @@ const SellingMultiStep: React.FC = () => {
         </div>
 
         {/* Progress Indicator */}
-        <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2 z-30 max-w-md w-full">
-          <div className="flex justify-between text-sm text-white mb-2">
+        <div className="absolute bottom-16 sm:bottom-24 left-1/2 transform -translate-x-1/2 z-30 max-w-md w-full px-4">
+          <div className="flex justify-between text-xs sm:text-sm text-white mb-2">
             <span>Étape {currentStep} sur {steps.length}</span>
-            <span>{Math.round((currentStep / steps.length) * 100)}% complété</span>
+            <span className="hidden sm:inline">{Math.round((currentStep / steps.length) * 100)}% complété</span>
           </div>
           <div className="w-full bg-white/20">
             <div 
-              className="bg-white h-2 transition-all duration-1000 ease-out"
+              className="bg-white h-1.5 sm:h-2 transition-all duration-1000 ease-out"
               style={{ width: `${(currentStep / steps.length) * 100}%` }}
             ></div>
           </div>
@@ -659,18 +659,18 @@ const SellingMultiStep: React.FC = () => {
       </section>
 
       {/* Main Form Content */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-6 max-w-6xl">
+      <section className="py-8 sm:py-12 lg:py-16 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           {/* Steps Progress */}
-          <div className="mb-12">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="mb-6 sm:mb-8 lg:mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {steps.map((step, index) => {
                 const isCompleted = currentStep > step.number;
                 const isActive = currentStep === step.number;
                 
                 return (
                   <div key={step.number} className="text-center">
-                    <div className={`w-16 h-16 mx-auto mb-4 flex items-center justify-center border-2 transition-all duration-500 ${
+                    <div className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-4 flex items-center justify-center border-2 transition-all duration-500 ${
                       isActive 
                         ? 'border-[#023927] bg-white text-[#023927]' 
                         : isCompleted
@@ -678,18 +678,18 @@ const SellingMultiStep: React.FC = () => {
                         : 'border-gray-300 text-gray-300'
                     }`}>
                       {isCompleted ? (
-                        <CheckCircleIconSolid className="w-8 h-8" />
+                        <CheckCircleIconSolid className="w-6 h-6 sm:w-8 sm:h-8" />
                       ) : (
-                        <span className="text-2xl font-light">{step.number}</span>
+                        <span className="text-lg sm:text-2xl font-light">{step.number}</span>
                       )}
                     </div>
                     
-                    <div className={`font-medium text-lg mb-2 ${
+                    <div className={`font-medium text-sm sm:text-base lg:text-lg mb-1 sm:mb-2 ${
                       isActive ? 'text-[#023927]' : 'text-gray-600'
                     }`}>
                       {step.title}
                     </div>
-                    <div className="font-light text-gray-500 text-sm">
+                    <div className="font-light text-gray-500 text-xs sm:text-sm hidden sm:block">
                       {step.description}
                     </div>
                   </div>
@@ -699,50 +699,50 @@ const SellingMultiStep: React.FC = () => {
           </div>
 
           {/* Form Container */}
-          <div className="border-2 border-gray-100 p-8 md:p-12">
+          <div className="border-2 border-gray-100 p-4 sm:p-6 md:p-8 lg:p-12">
             <div className="max-w-4xl mx-auto">
               {/* Step Content */}
-              <div className="mb-12">
+              <div className="mb-6 sm:mb-8 lg:mb-12">
                 {renderStep()}
               </div>
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between items-center pt-8 border-t border-gray-200">
+              <div className="flex justify-between items-center pt-4 sm:pt-6 lg:pt-8 border-t border-gray-200 gap-2 sm:gap-4">
                 <button
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
-                  className={`px-8 py-4 font-medium uppercase tracking-wider transition-all duration-500 border-2 ${
+                  className={`px-4 sm:px-8 py-3 sm:py-4 font-medium uppercase tracking-wider text-xs sm:text-sm transition-all duration-500 border-2 ${
                     currentStep === 1
                       ? 'border-gray-300 text-gray-400 cursor-not-allowed'
                       : 'border-gray-900 text-gray-900 hover:border-[#023927] hover:text-[#023927]'
                   }`}
                 >
-                  <span className="flex items-center space-x-3">
-                    <ChevronLeftIcon className="w-5 h-5" />
-                    <span>Précédent</span>
+                  <span className="flex items-center space-x-1 sm:space-x-3">
+                    <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="hidden sm:inline">Précédent</span>
                   </span>
                 </button>
 
                 <button
                   onClick={handleNext}
                   disabled={isSubmitting}
-                  className="bg-[#023927] text-white px-12 py-4 font-medium uppercase tracking-wider hover:bg-white hover:text-[#023927] transition-all duration-500 border-2 border-[#023927]"
+                  className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-medium uppercase tracking-wider text-xs sm:text-sm hover:bg-white hover:text-[#023927] transition-all duration-500 border-2 border-[#023927]"
                 >
-                  <span className="flex items-center space-x-3">
+                  <span className="flex items-center space-x-1 sm:space-x-3">
                     {isSubmitting ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin" />
-                        <span>Traitement...</span>
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent animate-spin" />
+                        <span className="hidden sm:inline">Traitement...</span>
                       </>
                     ) : currentStep === steps.length ? (
                       <>
                         <span>Soumettre</span>
-                        <CheckCircleIcon className="w-5 h-5" />
+                        <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </>
                     ) : (
                       <>
                         <span>Continuer</span>
-                        <ChevronRightIcon className="w-5 h-5" />
+                        <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </>
                     )}
                   </span>

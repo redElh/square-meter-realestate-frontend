@@ -119,7 +119,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Épurée */}
-      <section className="relative h-screen overflow-hidden">
+      <section className="relative h-[70vh] sm:h-screen overflow-hidden">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
@@ -140,7 +140,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* Logo Minimaliste en haut à gauche */}
-        <div className="absolute top-8 left-8 z-30">
+        <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-30">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-[#023927] flex items-center justify-center">
               <span className="text-white font-bold text-xl">M²</span>
@@ -153,8 +153,8 @@ const Home: React.FC = () => {
         </div>
 
         {/* Contenu Hero - Positionné en bas */}
-        <div className="absolute bottom-20 left-0 right-0 z-20">
-          <div className="container mx-auto px-6">
+        <div className="absolute bottom-12 sm:bottom-20 left-0 right-0 z-20">
+          <div className="container mx-auto px-4 sm:px-6">
             <div className={`transform transition-all duration-1000 delay-300 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}>
@@ -163,7 +163,7 @@ const Home: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
                 <Link 
                   to="/properties?type=buy" 
-                  className="group relative bg-white text-gray-900 px-10 py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center min-w-[200px]"
+                  className="group relative bg-white text-gray-900 px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center"
                 >
                   <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
@@ -173,7 +173,7 @@ const Home: React.FC = () => {
                 
                 <Link 
                   to="/properties?type=rent" 
-                  className="group relative border-2 border-white text-white px-10 py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center min-w-[200px]"
+                  className="group relative border-2 border-white text-white px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center"
                 >
                   <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
@@ -184,13 +184,13 @@ const Home: React.FC = () => {
 
               {/* Info de la slide actuelle - Discrète */}
               <div className="text-center">
-                <div className="inline-flex items-center space-x-6 bg-black/40 backdrop-blur-sm px-6 py-3">
+                <div className="inline-flex items-center space-x-4 sm:space-x-6 bg-black/40 backdrop-blur-sm px-4 py-2 sm:px-6 sm:py-3">
                   <div className="text-white">
                     <div className="font-inter uppercase tracking-widest text-sm">{heroSlides[activeSlide].title}</div>
-                    <div className="font-serif text-xs text-gray-300">{heroSlides[activeSlide].location}</div>
+                    <div className="font-serif text-xs sm:text-xs text-gray-300">{heroSlides[activeSlide].location}</div>
                   </div>
                   <div className="w-px h-6 bg-white/30"></div>
-                  <div className="font-serif text-white text-sm font-medium">
+                  <div className="font-serif text-white text-sm sm:text-sm font-medium">
                     {heroSlides[activeSlide].price}
                   </div>
                 </div>
@@ -200,7 +200,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* Contrôles Carousel - Positionné en bas à droite */}
-        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
+        <div className="absolute bottom-8 right-4 z-30 hidden sm:flex items-center space-x-4">
           {/* Navigation Arrows */}
           <div className="flex space-x-2">
             <button
@@ -223,7 +223,7 @@ const Home: React.FC = () => {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-8 h-1 transition-all duration-300 ${
+                className={`w-6 sm:w-8 h-1 transition-all duration-300 ${
                   index === activeSlide 
                     ? 'bg-[#023927]' 
                     : 'bg-white/50 hover:bg-white/80'
@@ -242,7 +242,7 @@ const Home: React.FC = () => {
         </div>
 
         {/* Indicateur de scroll */}
-        <div className="absolute bottom-8 left-8 animate-pulse">
+        <div className="hidden sm:block absolute bottom-8 left-4 sm:left-8 animate-pulse">
           <div className="text-white text-xs font-inter uppercase tracking-widest rotate-[-90deg] origin-left">
             Scroll
           </div>
@@ -251,14 +251,14 @@ const Home: React.FC = () => {
 
       {/* Notre Essence Section */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-inter uppercase mb-6 text-gray-900 text-center">
+            <h2 className="text-3xl md:text-4xl font-inter uppercase mb-6 text-gray-900 text-center">
               Notre essence
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-8"></div>
             
-            <p className="text-xl font-serif text-gray-700 mb-6 leading-relaxed">
+            <p className="text-lg md:text-xl font-serif text-gray-700 mb-6 leading-relaxed">
               La rigueur de la gestion et la passion de la pierre
             </p>
             
@@ -292,9 +292,9 @@ const Home: React.FC = () => {
 
       {/* Notre Mission Section */}
       <section className="py-20 bg-gray-50">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-inter uppercase text-gray-900 mb-4">
               Sublimer chaque projet, notre mission
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
@@ -303,7 +303,7 @@ const Home: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="bg-white p-8 shadow-sm hover:shadow-md transition-shadow duration-300 group">
               <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-3 font-medium">
                 Transaction Immobilière
@@ -336,9 +336,9 @@ const Home: React.FC = () => {
 
       {/* Featured Properties */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-inter uppercase text-gray-900 mb-4">
               Propriétés d'Exception
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
@@ -348,13 +348,13 @@ const Home: React.FC = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {featuredProperties.map((property, index) => (
               <div 
                 key={index}
                 className="bg-white border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] group"
               >
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative h-48 sm:h-64 overflow-hidden">
                   <img 
                     src={property.image}
                     alt={property.title}
@@ -434,8 +434,8 @@ const Home: React.FC = () => {
                 key={index}
                 className="bg-white p-6 shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <div className="text-[#023927] text-5xl mb-4">"</div>
-                <p className="text-gray-600 italic mb-6 leading-relaxed text-lg">
+                <div className="text-[#023927] text-4xl md:text-5xl mb-4">"</div>
+                <p className="text-gray-600 italic mb-6 leading-relaxed text-base md:text-lg">
                   {testimonial.text}
                 </p>
                 <p className="font-inter text-gray-900 font-medium border-t border-gray-100 pt-4">
@@ -555,7 +555,7 @@ const Home: React.FC = () => {
                 
                 <Link 
                   to="/contact" 
-                  className="bg-[#023927] text-white py-4 font-inter uppercase tracking-wide hover:bg-white hover:text-[#023927] hover:border hover:border-[#023927] transition-all duration-300 transform hover:scale-[1.02] text-center text-lg"
+                  className="bg-[#023927] text-white py-3 md:py-4 font-inter uppercase tracking-wide hover:bg-white hover:text-[#023927] hover:border hover:border-[#023927] transition-all duration-300 transform hover:scale-[1.02] text-center text-base md:text-lg"
                 >
                   Prendre rendez-vous
                 </Link>
@@ -576,7 +576,7 @@ const Home: React.FC = () => {
               { number: "12", label: "Pays desservis" }
             ].map((stat, index) => (
               <div key={index} className="group">
-                <div className="text-4xl font-inter text-[#023927] font-light mb-2 group-hover:scale-110 transition-transform duration-300">
+                <div className="text-3xl md:text-4xl font-inter text-[#023927] font-light mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.number}
                 </div>
                 <div className="text-gray-600 font-medium">

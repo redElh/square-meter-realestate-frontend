@@ -210,7 +210,7 @@ const Mag: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section - Matching Properties Page Style */}
-      <section className="relative h-[60vh] overflow-hidden bg-white">
+      <section className="relative h-[60vh] sm:h-[70vh] overflow-hidden bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
@@ -231,42 +231,42 @@ const Mag: React.FC = () => {
         </div>
 
         {/* Centered Content */}
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-6">
+        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 sm:px-6">
           <div className="w-full max-w-4xl text-center">
-            <div className="mb-8">
-              <h1 className="text-5xl md:text-6xl font-inter font-light text-white mb-6 tracking-tight">
+            <div className="mb-4 sm:mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
                 Le Mag
               </h1>
-              <div className="h-1 bg-white/30 w-48 mx-auto mb-8"></div>
-              <p className="text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed">
+              <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-4 sm:mb-8"></div>
+              <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
                 L'expertise immobilière de prestige, décryptée par nos spécialistes
               </p>
             </div>
 
             {/* Search Bar - Like Properties Page */}
-            <div className="w-full max-w-2xl mx-auto mt-12">
+            <div className="w-full max-w-2xl mx-auto mt-6 sm:mt-12">
               <div className="relative">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher un article, une tendance, un expert..."
-                  className="w-full px-8 py-6 pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-lg font-light transition-all duration-300"
+                  placeholder="Rechercher un article..."
+                  className="w-full px-6 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-base lg:text-lg font-light transition-all duration-300"
                   style={{ borderRadius: '0' }}
                 />
-                <div className="absolute left-8 top-1/2 transform -translate-y-1/2">
-                  <MagnifyingGlassIcon className="w-6 h-6 text-[#023927]" />
+                <div className="absolute left-4 sm:left-8 top-1/2 transform -translate-y-1/2">
+                  <MagnifyingGlassIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#023927]" />
                 </div>
               </div>
               
               {/* Search Suggestions */}
-              <div className="mt-6 flex flex-wrap gap-3 justify-center">
-                <span className="text-white/90 text-sm">Catégories :</span>
+              <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3 justify-center px-2">
+                <span className="text-white/90 text-xs sm:text-sm">Catégories :</span>
                 {categories.slice(1, 5).map((category) => (
                   <button 
                     key={category.key}
                     onClick={() => setActiveCategory(category.key)}
-                    className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
                     style={{ borderRadius: '0' }}
                   >
                     {category.label}
@@ -278,20 +278,20 @@ const Mag: React.FC = () => {
         </div>
 
         {/* Carousel Controls */}
-        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-2 sm:space-x-4">
           <button
             onClick={prevHeroSlide}
-            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
             style={{ borderRadius: '0' }}
           >
-            <ChevronLeftIcon className="w-5 h-5" />
+            <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={nextHeroSlide}
-            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
             style={{ borderRadius: '0' }}
           >
-            <ChevronRightIcon className="w-5 h-5" />
+            <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           
           {/* Slide Indicators */}
@@ -316,11 +316,11 @@ const Mag: React.FC = () => {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 lg:py-12">
         {/* Enhanced Categories */}
-        <div className={`flex justify-center mb-16 transition-all duration-300 ${isScrolled ? 'sticky top-4 z-50 transform scale-95' : ''}`}>
-          <div className="bg-white border-2 border-gray-200 p-2">
-            <div className="flex flex-wrap justify-center gap-2">
+        <div className={`flex justify-center mb-8 sm:mb-12 lg:mb-16 transition-all duration-300 ${isScrolled ? 'sticky top-4 z-50 transform scale-95' : ''}` }>
+          <div className="bg-white border-2 border-gray-200 p-1 sm:p-2 w-full overflow-x-auto">
+            <div className="flex justify-start sm:justify-center gap-2 min-w-max sm:min-w-0 sm:flex-wrap">
               {categories.map((category) => {
                 const CategoryIcon = category.icon;
                 const isActive = activeCategory === category.key;
@@ -329,15 +329,16 @@ const Mag: React.FC = () => {
                   <button
                     key={category.key}
                     onClick={() => setActiveCategory(category.key)}
-                    className={`px-6 py-3 font-inter uppercase text-sm tracking-wide transition-all duration-500 flex items-center space-x-3 group border-2 ${
+                    className={`px-3 sm:px-4 lg:px-6 py-2 sm:py-3 font-inter uppercase text-xs sm:text-sm tracking-wide transition-all duration-500 flex items-center space-x-2 sm:space-x-3 group border-2 whitespace-nowrap ${
                       isActive
                         ? 'border-[#023927] bg-white text-[#023927]'
                         : 'border-gray-300 bg-white text-gray-700 hover:border-gray-900 hover:text-[#023927] hover:bg-white'
                     }`}
                   >
-                    <CategoryIcon className="w-4 h-4" />
-                    <span>{category.label}</span>
-                    <span className={`px-2 py-1 text-xs ${
+                    <CategoryIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">{category.label}</span>
+                    <span className="sm:hidden">{category.label.split(' ')[0]}</span>
+                    <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs ${
                       isActive ? 'bg-[#023927]/10 text-[#023927]' : 'bg-gray-100 text-gray-600'
                     }`}>
                       {category.count}
@@ -351,11 +352,11 @@ const Mag: React.FC = () => {
 
         {/* Featured Article - Enhanced Clean Design */}
         {featuredArticle && activeCategory === 'all' && (
-          <div className="mb-16">
+          <div className="mb-8 sm:mb-12 lg:mb-16">
             <Link to={`/mag/${featuredArticle.id}`} className="group block">
               <div className="bg-white border-2 border-gray-200 overflow-hidden group-hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] transition-all duration-700">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
-                  <div className="relative overflow-hidden h-96 lg:h-auto">
+                  <div className="relative overflow-hidden h-64 sm:h-80 lg:h-auto">
                     <img 
                       src={featuredArticle.image} 
                       alt={featuredArticle.title}
@@ -363,13 +364,13 @@ const Mag: React.FC = () => {
                     />
                     
                     {/* Badges */}
-                    <div className="absolute top-6 left-6 flex flex-col gap-2">
-                      <span className="inline-flex items-center px-4 py-2 bg-[#023927] text-white font-inter uppercase text-xs tracking-wide max-w-max">
+                    <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-2">
+                      <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-[#023927] text-white font-inter uppercase text-xs tracking-wide max-w-max">
                         À la une
                       </span>
                       {featuredArticle.trending && (
-                        <span className="inline-flex items-center px-4 py-2 bg-black text-white font-inter uppercase text-xs tracking-wide max-w-max">
-                          <FireIconSolid className="w-3 h-3 mr-2" />
+                        <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-black text-white font-inter uppercase text-xs tracking-wide max-w-max">
+                          <FireIconSolid className="w-3 h-3 mr-1 sm:mr-2" />
                           Tendances
                         </span>
                       )}
@@ -381,52 +382,52 @@ const Mag: React.FC = () => {
                         e.preventDefault();
                         toggleSaveArticle(featuredArticle.id);
                       }}
-                      className="absolute top-6 right-6 w-12 h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
+                      className="absolute top-3 sm:top-6 right-3 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
                     >
                       {savedArticles.includes(featuredArticle.id) ? (
-                        <BookmarkIconSolid className="w-6 h-6 text-[#023927]" />
+                        <BookmarkIconSolid className="w-5 h-5 sm:w-6 sm:h-6 text-[#023927]" />
                       ) : (
-                        <BookmarkIcon className="w-6 h-6 text-gray-600 group-hover/fav:text-[#023927] transition-colors" />
+                        <BookmarkIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover/fav:text-[#023927] transition-colors" />
                       )}
                     </button>
                   </div>
                   
-                  <div className="p-12 flex flex-col justify-center">
-                    <div className="flex items-center space-x-4 mb-6">
-                      <span className="inline-block px-4 py-2 border-2 border-gray-300 text-gray-700 font-inter uppercase text-xs tracking-wide">
+                  <div className="p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
+                    <div className="flex items-center space-x-3 sm:space-x-4 mb-4 sm:mb-6 flex-wrap gap-2">
+                      <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 border-2 border-gray-300 text-gray-700 font-inter uppercase text-xs tracking-wide">
                         {categories.find(c => c.key === featuredArticle.category)?.label}
                       </span>
-                      <div className="flex items-center text-gray-500 font-inter text-sm">
-                        <ClockIcon className="w-4 h-4 mr-1" />
+                      <div className="flex items-center text-gray-500 font-inter text-xs sm:text-sm">
+                        <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         {featuredArticle.readTime}
                       </div>
-                      <div className="flex items-center text-gray-500 font-inter text-sm">
-                        <EyeIcon className="w-4 h-4 mr-1" />
+                      <div className="flex items-center text-gray-500 font-inter text-xs sm:text-sm">
+                        <EyeIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         {featuredArticle.views}
                       </div>
                     </div>
 
-                    <h2 className="text-3xl font-inter font-light text-gray-900 mb-6 leading-tight group-hover:text-[#023927] transition-colors duration-300">
+                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-6 leading-tight group-hover:text-[#023927] transition-colors duration-300">
                       {featuredArticle.title}
                     </h2>
-                    <p className="font-inter text-gray-600 mb-8 leading-relaxed">
+                    <p className="font-inter text-gray-600 text-sm sm:text-base mb-6 sm:mb-8 leading-relaxed">
                       {featuredArticle.excerpt}
                     </p>
 
                     {/* Author & Meta */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center space-x-3 sm:space-x-4">
                         {featuredArticle.authorImage && (
                           <img 
                             src={featuredArticle.authorImage} 
                             alt={featuredArticle.author}
-                            className="w-12 h-12 object-cover border-2 border-gray-200"
+                            className="w-10 h-10 sm:w-12 sm:h-12 object-cover border-2 border-gray-200"
                           />
                         )}
                         <div>
-                          <div className="font-inter text-gray-900 text-sm">{featuredArticle.author}</div>
+                          <div className="font-inter text-gray-900 text-xs sm:text-sm">{featuredArticle.author}</div>
                           <div className="font-inter text-gray-500 text-xs flex items-center">
-                            <CalendarIcon className="w-4 h-4 mr-1" />
+                            <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                             {featuredArticle.date}
                           </div>
                         </div>
@@ -447,40 +448,40 @@ const Mag: React.FC = () => {
 
         {/* Trending Articles - Clean Design */}
         {activeCategory === 'all' && trendingArticles.length > 0 && (
-          <div className="mb-16">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-inter font-light text-gray-900 flex items-center space-x-3">
+          <div className="mb-8 sm:mb-12 lg:mb-16">
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 flex items-center space-x-2 sm:space-x-3">
                 <span>Articles Tendances</span>
               </h2>
-              <div className="h-px flex-1 bg-gray-200 ml-4"></div>
+              <div className="h-px flex-1 bg-gray-200 ml-2 sm:ml-4"></div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {trendingArticles.map((article) => (
                 <Link
                   key={article.id}
                   to={`/mag/${article.id}`}
                   className="group bg-white border-2 border-gray-200 overflow-hidden transition-all duration-500 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)]"
                 >
-                  <div className="relative overflow-hidden h-48">
+                  <div className="relative overflow-hidden h-40 sm:h-48">
                     <img 
                       src={article.image} 
                       alt={article.title}
                       className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-4 left-4">
-                      <span className="inline-flex items-center px-3 py-1 bg-black text-white font-inter uppercase text-xs tracking-wide">
+                    <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+                      <span className="inline-flex items-center px-2 sm:px-3 py-1 bg-black text-white font-inter uppercase text-xs tracking-wide">
                         <FireIconSolid className="w-3 h-3 mr-1" />
                         Tendances
                       </span>
                     </div>
                   </div>
                   
-                  <div className="p-6">
-                    <h3 className="font-inter text-gray-900 text-lg mb-3 group-hover:text-[#023927] transition-colors duration-300 line-clamp-2">
+                  <div className="p-4 sm:p-6">
+                    <h3 className="font-inter text-gray-900 text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-[#023927] transition-colors duration-300 line-clamp-2">
                       {article.title}
                     </h3>
-                    <p className="font-inter text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="font-inter text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2">
                       {article.excerpt}
                     </p>
                     <div className="flex items-center justify-between text-gray-500 font-inter text-sm">
@@ -498,7 +499,7 @@ const Mag: React.FC = () => {
         )}
 
         {/* Articles Grid - Clean Design */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {filteredArticles
             .filter(article => !article.featured || activeCategory !== 'all')
             .map((article) => (
@@ -507,7 +508,7 @@ const Mag: React.FC = () => {
                 className="group bg-white border-2 border-gray-200 overflow-hidden transition-all duration-500 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)]"
               >
                 <Link to={`/mag/${article.id}`}>
-                  <div className="relative overflow-hidden h-48">
+                  <div className="relative overflow-hidden h-40 sm:h-48">
                     <img 
                       src={article.image} 
                       alt={article.title}
@@ -515,8 +516,8 @@ const Mag: React.FC = () => {
                     />
                     
                     {/* Category Badge */}
-                    <div className="absolute top-4 left-4">
-                      <span className="inline-block px-3 py-1 border-2 border-white/80 bg-black/70 text-white font-inter uppercase text-xs tracking-wide">
+                    <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+                      <span className="inline-block px-2 sm:px-3 py-1 border-2 border-white/80 bg-black/70 text-white font-inter uppercase text-xs tracking-wide">
                         {categories.find(c => c.key === article.category)?.label}
                       </span>
                     </div>
@@ -527,27 +528,27 @@ const Mag: React.FC = () => {
                         e.preventDefault();
                         toggleSaveArticle(article.id);
                       }}
-                      className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white"
+                      className="absolute top-3 sm:top-4 right-3 sm:right-4 p-1.5 sm:p-2 bg-white/90 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white"
                     >
                       {savedArticles.includes(article.id) ? (
-                        <BookmarkIconSolid className="w-4 h-4 text-[#023927]" />
+                        <BookmarkIconSolid className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#023927]" />
                       ) : (
-                        <BookmarkIcon className="w-4 h-4 text-gray-600" />
+                        <BookmarkIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-600" />
                       )}
                     </button>
                   </div>
                 </Link>
                 
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center text-gray-500 font-inter text-sm space-x-3">
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
+                    <div className="flex items-center text-gray-500 font-inter text-xs sm:text-sm space-x-2 sm:space-x-3">
                       <div className="flex items-center">
-                        <ClockIcon className="w-4 h-4 mr-1" />
+                        <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         {article.readTime}
                       </div>
                       {article.views && (
                         <div className="flex items-center">
-                          <EyeIcon className="w-4 h-4 mr-1" />
+                          <EyeIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                           {article.views}
                         </div>
                       )}
@@ -555,17 +556,17 @@ const Mag: React.FC = () => {
                   </div>
 
                   <Link to={`/mag/${article.id}`}>
-                    <h3 className="font-inter text-gray-900 text-lg mb-3 group-hover:text-[#023927] transition-colors duration-300 line-clamp-2 leading-tight">
+                    <h3 className="font-inter text-gray-900 text-base sm:text-lg mb-2 sm:mb-3 group-hover:text-[#023927] transition-colors duration-300 line-clamp-2 leading-tight">
                       {article.title}
                     </h3>
-                    <p className="font-inter text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
+                    <p className="font-inter text-gray-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3 leading-relaxed">
                       {article.excerpt}
                     </p>
                   </Link>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                    <div className="flex items-center text-gray-500 font-inter text-sm">
-                      <CalendarIcon className="w-4 h-4 mr-2" />
+                  <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-200">
+                    <div className="flex items-center text-gray-500 font-inter text-xs sm:text-sm">
+                      <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                       {article.date}
                     </div>
                     <Link 
@@ -582,37 +583,37 @@ const Mag: React.FC = () => {
         </div>
 
         {/* Newsletter Section - Clean Green & White */}
-        <div className="max-w-4xl mx-auto mt-24 bg-[#023927] p-12 text-white text-center">
+        <div className="max-w-4xl mx-auto mt-12 sm:mt-16 lg:mt-24 bg-[#023927] p-6 sm:p-8 lg:p-12 text-white text-center">
           <div className="relative z-10">
-            <h3 className="text-2xl font-inter font-light text-white mb-4">
+            <h3 className="text-xl sm:text-2xl font-inter font-light text-white mb-3 sm:mb-4">
               Restez Informé
             </h3>
-            <p className="font-inter text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="font-inter text-white/80 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
               Recevez nos analyses de marché et les tendances du luxe directement dans votre boîte mail.
             </p>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="votre.email@exemple.com"
-                className="flex-1 px-6 py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 focus:outline-none focus:border-white font-inter text-white placeholder-white/60"
+                className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 focus:outline-none focus:border-white font-inter text-white placeholder-white/60 text-sm sm:text-base"
                 style={{ borderRadius: '0' }}
               />
               <button
                 type="submit"
-                className="bg-white text-[#023927] px-8 py-4 font-inter hover:bg-gray-100 transition-all duration-500 font-medium border-2 border-white"
+                className="bg-white text-[#023927] px-6 sm:px-8 py-3 sm:py-4 font-inter hover:bg-gray-100 transition-all duration-500 font-medium border-2 border-white text-sm sm:text-base"
                 style={{ borderRadius: '0' }}
               >
                 S'abonner
               </button>
             </form>
-            <p className="font-inter text-white/60 text-sm mt-4">
+            <p className="font-inter text-white/60 text-xs sm:text-sm mt-3 sm:mt-4 px-4">
               Désabonnement à tout moment • Données protégées
             </p>
           </div>
         </div>
 
         {/* Stats Section - Clean */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-20 text-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 lg:mt-20 text-center">
           {[
             { number: '500+', label: 'Articles Premium' },
             { number: '50K+', label: 'Lecteurs Mensuels' },
@@ -620,10 +621,10 @@ const Mag: React.FC = () => {
             { number: '98%', label: 'Satisfaction' }
           ].map((stat, index) => (
             <div key={index} className="group">
-              <div className="text-3xl lg:text-4xl font-inter font-light text-[#023927] mb-2">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-[#023927] mb-1 sm:mb-2">
                 {stat.number}
               </div>
-              <div className="font-inter text-gray-600 text-sm">
+              <div className="font-inter text-gray-600 text-xs sm:text-sm">
                 {stat.label}
               </div>
             </div>
