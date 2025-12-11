@@ -4,23 +4,22 @@ import { useParams, Link } from 'react-router-dom';
 import { 
   MapPinIcon, 
   ArrowsPointingOutIcon, 
-  HomeModernIcon, 
+  HomeIcon, 
   HeartIcon,
-  EyeIcon,
-  PhoneIcon,
-  EnvelopeIcon,
   CalendarIcon,
   DocumentTextIcon,
-  ShareIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  PlayIcon,
-  PauseIcon
+  CameraIcon,
+  PhoneIcon,
+  EnvelopeIcon,
+  CheckIcon,
+  Square2StackIcon,
+  ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 import {
   HeartIcon as HeartIconSolid,
-  MapPinIcon as MapPinIconSolid,
-  HomeModernIcon as HomeModernIconSolid
+  MapPinIcon as MapPinIconSolid
 } from '@heroicons/react/24/solid';
 
 const PropertyDetail: React.FC = () => {
@@ -29,7 +28,6 @@ const PropertyDetail: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showAllFeatures, setShowAllFeatures] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
 
   // Premium property images from Pexels
   const propertyImages = [
@@ -126,6 +124,7 @@ const PropertyDetail: React.FC = () => {
     }
   ];
 
+  // Carousel autoplay effect
   useEffect(() => {
     let slideInterval: NodeJS.Timeout;
     if (isPlaying && property.images.length > 1) {
@@ -147,216 +146,153 @@ const PropertyDetail: React.FC = () => {
   const visibleFeatures = showAllFeatures ? property.features : property.features.slice(0, 8);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ivory to-white">
-      {/* Cinematic Hero Gallery */}
-      <section className="relative h-screen overflow-hidden">
-        {/* Main Image */}
+    <div className="min-h-screen bg-white">
+      {/* HERO CAROUSEL - Updated to match Properties page style */}
+      <section className="relative h-[80vh] overflow-hidden bg-white">
+        {/* Background Carousel */}
         <div className="absolute inset-0">
           {property.images.map((image, index) => (
-            <img 
+            <div
               key={index}
-              src={image} 
-              alt={`${property.title} - Vue ${index + 1}`}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              className={`absolute inset-0 transition-opacity duration-1000 ${
                 activeImage === index ? 'opacity-100' : 'opacity-0'
               }`}
-            />
+            >
+              <img
+                src={image}
+                alt={`${property.title} - Vue ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+            </div>
           ))}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
         </div>
 
-        {/* Navigation Controls */}
-        <div className="absolute top-1/2 left-6 right-6 transform -translate-y-1/2 flex justify-between z-20">
+        {/* Carousel Controls - Positioned like Properties page */}
+        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
           <button
             onClick={prevImage}
-            className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-ivory hover:bg-gold hover:text-deep-green transition-all duration-300 transform hover:scale-110"
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            style={{ borderRadius: '0' }}
           >
-            <ChevronLeftIcon className="w-6 h-6" />
+            <ChevronLeftIcon className="w-5 h-5" />
           </button>
           <button
             onClick={nextImage}
-            className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-ivory hover:bg-gold hover:text-deep-green transition-all duration-300 transform hover:scale-110"
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            style={{ borderRadius: '0' }}
           >
-            <ChevronRightIcon className="w-6 h-6" />
+            <ChevronRightIcon className="w-5 h-5" />
           </button>
-        </div>
-
-        {/* Image Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-4 z-20">
-          {property.images.length > 1 && (
-            <button
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="text-ivory hover:text-gold transition-colors duration-300"
-            >
-              {isPlaying ? <PauseIcon className="w-6 h-6" /> : <PlayIcon className="w-6 h-6" />}
-            </button>
-          )}
+          
+          {/* Slide Indicators */}
           <div className="flex space-x-2">
             {property.images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveImage(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                className={`w-2 h-2 transition-all duration-300 ${
                   activeImage === index 
-                    ? 'bg-gold scale-125' 
-                    : 'bg-ivory/50 hover:bg-ivory'
+                    ? 'bg-white scale-125' 
+                    : 'bg-white/60 hover:bg-white/80'
                 }`}
+                style={{ borderRadius: '0' }}
               />
             ))}
           </div>
-          <span className="text-ivory/70 font-didot text-sm">
-            {activeImage + 1} / {property.images.length}
-          </span>
         </div>
 
-        {/* Property Info Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12 z-10">
+        {/* Property Title Overlay - Simplified */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 p-8 lg:p-12">
           <div className="container mx-auto">
             <div className="max-w-6xl">
-              {/* Status Badge */}
-              <div className="inline-flex items-center bg-gold text-deep-green px-6 py-3 rounded-full font-inter uppercase text-sm tracking-wide mb-6 shadow-lg">
-                <div className="w-2 h-2 bg-deep-green rounded-full mr-2 animate-pulse"></div>
-                {property.status}
+              {/* Status Badge - Green theme */}
+              <div className="inline-block mb-4">
+                <span className="bg-[#023927] text-white px-4 py-2 font-inter uppercase text-xs font-medium tracking-wider">
+                  EXCLUSIF
+                </span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-inter uppercase text-ivory mb-6 leading-tight font-light">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 leading-tight">
                 {property.title}
               </h1>
               
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-                <div className="flex items-center space-x-6 text-ivory">
-                  <div className="flex items-center space-x-2">
-                    <MapPinIcon className="w-5 h-5 text-gold" />
-                    <span className="font-didot text-xl">{property.location}</span>
-                  </div>
-                  <div className="w-px h-6 bg-ivory/30"></div>
-                  <div className="flex items-center space-x-2">
-                    <ArrowsPointingOutIcon className="w-5 h-5 text-gold" />
-                    <span className="font-didot text-xl">{property.surface} m²</span>
-                  </div>
-                  <div className="w-px h-6 bg-ivory/30"></div>
-                  <div className="flex items-center space-x-2">
-                    <HomeModernIcon className="w-5 h-5 text-gold" />
-                    <span className="font-didot text-xl">{property.bedrooms} chambres</span>
-                  </div>
+              <div className="flex items-center space-x-4 text-white">
+                <div className="flex items-center space-x-2">
+                  <MapPinIcon className="w-5 h-5" />
+                  <span className="font-inter">{property.location}</span>
                 </div>
-
-                <div className="text-4xl lg:text-5xl font-didot text-gold font-light">
+                <div className="w-px h-6 bg-white/30"></div>
+                <div className="text-2xl lg:text-3xl font-serif font-light text-white">
                   {property.price.toLocaleString('fr-FR')} €
                 </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap gap-4 mt-8">
-                <Link
-                  to="/contact?type=visit&property=1"
-                  className="group relative bg-gold text-deep-green px-8 py-4 font-inter uppercase tracking-wide transition-all duration-300 transform hover:scale-105 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  <span className="relative z-10 flex items-center space-x-2">
-                    <CalendarIcon className="w-5 h-5" />
-                    <span>Visite Privée</span>
-                  </span>
-                </Link>
-                <Link
-                  to="/contact?type=info&property=1"
-                  className="group relative border-2 border-ivory text-ivory px-8 py-4 font-inter uppercase tracking-wide transition-all duration-300 transform hover:scale-105 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  <span className="relative z-10 flex items-center space-x-2 group-hover:text-deep-green">
-                    <DocumentTextIcon className="w-5 h-5" />
-                    <span>Documentation Complète</span>
-                  </span>
-                </Link>
-                <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className="group relative border-2 border-ivory text-ivory w-14 h-14 flex items-center justify-center transition-all duration-300 transform hover:scale-105 overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  {isFavorite ? (
-                    <HeartIconSolid className="w-6 h-6 relative z-10 text-red-500 group-hover:text-red-600" />
-                  ) : (
-                    <HeartIcon className="w-6 h-6 relative z-10 group-hover:text-deep-green" />
-                  )}
-                </button>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
       </section>
 
-      {/* Enhanced Quick Stats Bar */}
-      <section className="bg-deep-green text-ivory py-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-repeat" style={{ 
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }}></div>
-        </div>
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-8 text-center">
+      {/* Quick Stats Bar - Green theme */}
+      <section className="bg-[#023927] text-white py-6">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 text-center items-center">
             {[
-              { icon: ArrowsPointingOutIcon, value: `${property.surface} m²`, label: 'Surface habitable' },
-              { icon: MapPinIcon, value: `${property.land} m²`, label: 'Terrain' },
-              { icon: HomeModernIcon, value: property.bedrooms, label: 'Chambres' },
-              { icon: '🛁', value: property.bathrooms, label: 'Salles de bain' },
-              { icon: '🏛️', value: property.yearBuilt, label: 'Construction' }
+              { value: `${property.surface} m²`, label: 'Surface' },
+              { value: `${property.land} m²`, label: 'Terrain' },
+              { value: property.bedrooms, label: 'Chambres' },
+              { value: property.bathrooms, label: 'Salles de bain' },
+              { value: property.yearBuilt, label: 'Année' }
             ].map((stat, index) => (
-              <div key={index} className="group">
-                <div className="flex justify-center mb-3">
-                  {typeof stat.icon === 'string' ? (
-                    <div className="text-3xl transform group-hover:scale-110 transition-transform duration-300">
-                      {stat.icon}
-                    </div>
-                  ) : (
-                    <stat.icon className="w-8 h-8 text-gold transform group-hover:scale-110 transition-transform duration-300" />
-                  )}
-                </div>
-                <div className="text-2xl lg:text-3xl font-inter text-ivory mb-1 transform group-hover:scale-105 transition-transform duration-300">
+              <div key={index} className="text-center">
+                <div className="text-lg sm:text-xl font-inter font-medium mb-1">
                   {stat.value}
                 </div>
-                <div className="font-didot text-gold text-sm">{stat.label}</div>
+                <div className="text-sm text-white/80 tracking-wide">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Enhanced Description & Details */}
-      <section className="py-20 bg-white relative overflow-hidden">
+      {/* Description & Details */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-6">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
               {/* Main Content */}
               <div className="lg:col-span-2">
-                <h2 className="text-5xl font-inter uppercase text-deep-green mb-8 relative">
-                  <span className="relative z-10">Présentation Exclusive</span>
-                  <div className="absolute bottom-0 left-0 w-24 h-1 bg-gold"></div>
+                <h2 className="text-3xl font-inter font-light text-gray-900 mb-8 pb-4 border-b border-gray-200">
+                  Description Exclusive
                 </h2>
                 
-                <div className="prose prose-lg max-w-none mb-12">
-                  <p className="font-didot text-gray-700 text-xl leading-relaxed mb-8">
+                <div className="mb-12">
+                  <p className="text-gray-700 text-lg leading-relaxed mb-8">
                     {property.description}
                   </p>
                 </div>
 
                 {/* Features Grid */}
                 <div className="mb-12">
-                  <h3 className="text-3xl font-inter uppercase text-deep-green mb-8">
+                  <h3 className="text-2xl font-inter font-light text-gray-900 mb-6 pb-3 border-b border-gray-200">
                     Équipements & Prestations
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {visibleFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center group p-3 rounded-xl hover:bg-ivory transition-all duration-300">
-                        <div className="w-3 h-3 bg-gold rounded-full mr-4 transform group-hover:scale-125 transition-transform duration-300"></div>
-                        <span className="font-didot text-gray-700 text-lg">{feature}</span>
+                      <div key={index} className="flex items-center p-3 border border-gray-100 hover:bg-gray-50 transition-colors duration-300">
+                        <CheckIcon className="w-4 h-4 text-[#023927] mr-3" />
+                        <span className="text-gray-700">{feature}</span>
                       </div>
                     ))}
                   </div>
                   {property.features.length > 8 && (
                     <button
                       onClick={() => setShowAllFeatures(!showAllFeatures)}
-                      className="mt-6 text-gold hover:text-deep-green font-inter uppercase text-sm tracking-wide transition-colors duration-300"
+                      className="mt-6 text-[#023927] hover:text-[#023927]/80 font-inter text-sm transition-colors duration-300 border-b border-[#023927] pb-1"
                     >
                       {showAllFeatures ? 'Voir moins' : `Voir les ${property.features.length - 8} équipements supplémentaires`}
                     </button>
@@ -365,12 +301,12 @@ const PropertyDetail: React.FC = () => {
 
                 {/* Amenities */}
                 <div>
-                  <h3 className="text-3xl font-inter uppercase text-deep-green mb-6">
+                  <h3 className="text-2xl font-inter font-light text-gray-900 mb-6 pb-3 border-b border-gray-200">
                     Environnement & Prestations
                   </h3>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {property.amenities.map((amenity, index) => (
-                      <span key={index} className="bg-ivory text-deep-green px-4 py-2 rounded-full font-didot text-sm border border-gold/30">
+                      <span key={index} className="bg-gray-100 text-gray-700 px-4 py-2 font-inter text-sm border border-gray-200">
                         {amenity}
                       </span>
                     ))}
@@ -378,30 +314,28 @@ const PropertyDetail: React.FC = () => {
                 </div>
               </div>
 
-              {/* Enhanced Contact Sidebar */}
+              {/* Contact Sidebar - Clean green & white theme */}
               <div className="lg:col-span-1">
-                <div className="bg-gradient-to-br from-ivory to-white rounded-3xl p-8 sticky top-8 shadow-2xl border border-gold/20 backdrop-blur-sm">
-                  <h3 className="font-inter uppercase text-deep-green text-2xl mb-6 text-center">
+                <div className="bg-white border-2 border-gray-200 p-8 sticky top-8">
+                  <h3 className="font-inter text-gray-900 text-xl mb-6 text-center pb-3 border-b border-gray-200">
                     Visite Exclusive
                   </h3>
                   
                   <div className="space-y-4 mb-8">
                     <Link
                       to="/contact?type=visit&property=1"
-                      className="block w-full bg-deep-green text-ivory text-center py-4 font-inter uppercase tracking-wide hover:bg-gold hover:text-deep-green transition-all duration-500 transform hover:scale-105 rounded-xl group relative overflow-hidden"
+                      className="block w-full bg-[#023927] text-white text-center py-4 font-inter hover:bg-[#023927]/90 transition-all duration-300 border-2 border-[#023927]"
                     >
-                      <div className="absolute inset-0 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                      <span className="relative z-10 flex items-center justify-center space-x-2">
+                      <span className="flex items-center justify-center space-x-2">
                         <CalendarIcon className="w-5 h-5" />
                         <span>Visite Privée</span>
                       </span>
                     </Link>
                     <Link
                       to="/contact?type=info&property=1"
-                      className="block w-full border-2 border-deep-green text-deep-green text-center py-4 font-inter uppercase tracking-wide hover:bg-deep-green hover:text-ivory transition-all duration-500 transform hover:scale-105 rounded-xl group relative overflow-hidden"
+                      className="block w-full border-2 border-[#023927] text-[#023927] text-center py-4 font-inter hover:bg-[#023927] hover:text-white transition-all duration-300"
                     >
-                      <div className="absolute inset-0 bg-deep-green transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                      <span className="relative z-10 flex items-center justify-center space-x-2 group-hover:text-ivory">
+                      <span className="flex items-center justify-center space-x-2">
                         <DocumentTextIcon className="w-5 h-5" />
                         <span>Dossier Complet</span>
                       </span>
@@ -409,23 +343,22 @@ const PropertyDetail: React.FC = () => {
                   </div>
 
                   {/* Agent Profile */}
-                  <div className="border-t border-gold/30 pt-6">
-                    <h4 className="font-inter uppercase text-deep-green text-sm mb-4 text-center">
+                  <div className="border-t border-gray-200 pt-6">
+                    <h4 className="font-inter text-gray-900 text-sm mb-4 text-center uppercase tracking-wider">
                       Votre Conseiller Dédié
                     </h4>
                     <div className="text-center">
-                      <div className="relative inline-block mb-4">
+                      <div className="mb-4">
                         <img
                           src={property.agent.image}
                           alt={property.agent.name}
-                          className="w-20 h-20 rounded-full object-cover mx-auto border-4 border-gold shadow-lg"
+                          className="w-20 h-20 object-cover mx-auto border-2 border-gray-300"
                         />
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gold rounded-full border-2 border-white"></div>
                       </div>
-                      <div className="font-inter uppercase text-deep-green text-lg mb-1">
+                      <div className="font-inter text-gray-900 text-lg mb-1">
                         {property.agent.name}
                       </div>
-                      <div className="font-didot text-gold text-sm mb-3">
+                      <div className="text-[#023927] text-sm mb-3">
                         {property.agent.title}
                       </div>
                       <div className="text-xs text-gray-600 space-y-1 mb-4">
@@ -433,13 +366,13 @@ const PropertyDetail: React.FC = () => {
                         <div>{property.agent.properties} propriétés vendues</div>
                       </div>
                       <div className="space-y-2">
-                        <a href={`tel:${property.agent.phone}`} className="flex items-center justify-center space-x-2 text-deep-green hover:text-gold transition-colors duration-300">
+                        <a href={`tel:${property.agent.phone}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300">
                           <PhoneIcon className="w-4 h-4" />
-                          <span className="font-didot">{property.agent.phone}</span>
+                          <span>{property.agent.phone}</span>
                         </a>
-                        <a href={`mailto:${property.agent.email}`} className="flex items-center justify-center space-x-2 text-deep-green hover:text-gold transition-colors duration-300">
+                        <a href={`mailto:${property.agent.email}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300">
                           <EnvelopeIcon className="w-4 h-4" />
-                          <span className="font-didot text-sm">{property.agent.email}</span>
+                          <span className="text-sm">{property.agent.email}</span>
                         </a>
                       </div>
                     </div>
@@ -451,53 +384,51 @@ const PropertyDetail: React.FC = () => {
         </div>
       </section>
 
-      {/* Enhanced Similar Properties */}
-      <section className="py-20 bg-gradient-to-br from-ivory to-white">
+      {/* Similar Properties */}
+      <section className="py-16 bg-white border-t border-gray-200">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-inter uppercase text-deep-green mb-6">
+          <div className="mb-12">
+            <h2 className="text-3xl font-inter font-light text-gray-900 mb-4">
               Propriétés Similaires
             </h2>
-            <div className="w-24 h-1 bg-gold mx-auto mb-6"></div>
-            <p className="text-xl font-didot text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600">
               Découvrez d'autres propriétés d'exception qui pourraient vous séduire
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {similarProperties.map((similar, index) => (
+            {similarProperties.map((similar) => (
               <Link
                 key={similar.id}
                 to={`/properties/${similar.id}`}
-                className="group bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-700 transform hover:-translate-y-2"
+                className="group bg-white border-2 border-gray-100 hover:border-gray-200 transition-all duration-300 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)]"
               >
-                <div className="relative overflow-hidden h-64">
+                <div className="relative overflow-hidden h-48">
                   <img
                     src={similar.image}
                     alt={similar.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="absolute top-4 right-4">
-                    <span className="bg-gold text-deep-green px-3 py-1 font-inter uppercase text-xs tracking-wide rounded-full">
+                    <span className="bg-[#023927] text-white px-3 py-1 font-inter uppercase text-xs tracking-wide">
                       EXCLUSIF
                     </span>
                   </div>
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="font-inter uppercase text-deep-green text-xl mb-3 group-hover:text-gold transition-colors duration-300">
+                  <h3 className="font-inter text-gray-900 text-lg mb-2 group-hover:text-[#023927] transition-colors duration-300">
                     {similar.title}
                   </h3>
                   <div className="flex items-center text-gray-600 mb-3">
                     <MapPinIcon className="w-4 h-4 mr-2" />
-                    <span className="font-didot">{similar.location}</span>
+                    <span>{similar.location}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-2xl font-didot text-gold font-semibold">
+                    <span className="text-xl font-serif text-[#023927] font-semibold">
                       {similar.price.toLocaleString('fr-FR')} €
                     </span>
-                    <span className="font-didot text-gray-600">
+                    <span className="text-gray-600 text-sm">
                       {similar.surface} m² • {similar.bedrooms} ch.
                     </span>
                   </div>

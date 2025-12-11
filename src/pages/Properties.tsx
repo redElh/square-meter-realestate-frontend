@@ -4,14 +4,17 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { 
   MapPinIcon, 
   ArrowsPointingOutIcon, 
-  HomeModernIcon, 
   HeartIcon,
-  EyeIcon,
-  CurrencyEuroIcon,
   CameraIcon,
   MagnifyingGlassIcon,
   BuildingStorefrontIcon,
-  SparklesIcon
+  SparklesIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  HomeIcon,
+  CheckIcon,
+  Square2StackIcon,
+  ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 import {
   HeartIcon as HeartIconSolid,
@@ -33,6 +36,7 @@ interface Property {
   featured?: boolean;
   yearBuilt?: number;
   features?: string[];
+  reference?: string;
 }
 
 const Properties: React.FC = () => {
@@ -46,34 +50,52 @@ const Properties: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+  const [isHeroPlaying, setIsHeroPlaying] = useState(true);
 
   // Exclusive properties hero images
   const heroProperties = [
     {
-      image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+      image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
       title: "Villa Azure",
       location: "Côte d'Azur, France",
       price: "4,200,000 €",
-      type: "buy",
-      features: ["Vue mer", "Piscine à débordement", "Architecture contemporaine"]
+      type: "buy"
     },
     {
-      image: "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+      image: "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
       title: "Château de la Renaissance",
       location: "Loire Valley, France",
       price: "8,500,000 €",
-      type: "buy",
-      features: ["Monument historique", "Parc de 15 hectares", "Vignoble"]
+      type: "buy"
     },
     {
-      image: "https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+      image: "https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
       title: "Penthouse Skyline",
       location: "Paris 16ème, France",
       price: "12,500 €/mois",
-      type: "rent",
-      features: ["Terrasse panoramique", "Vue Tour Eiffel", "Services hôteliers"]
+      type: "rent"
     }
   ];
+
+  // Hero carousel controls
+  useEffect(() => {
+    let slideInterval: NodeJS.Timeout;
+    if (isHeroPlaying) {
+      slideInterval = setInterval(() => {
+        setActiveHeroSlide((prev) => (prev + 1) % heroProperties.length);
+      }, 5000);
+    }
+    return () => clearInterval(slideInterval);
+  }, [isHeroPlaying]);
+
+  const nextHeroSlide = () => {
+    setActiveHeroSlide((prev) => (prev + 1) % heroProperties.length);
+  };
+
+  const prevHeroSlide = () => {
+    setActiveHeroSlide((prev) => (prev - 1 + heroProperties.length) % heroProperties.length);
+  };
 
   // Premium property images from Pexels
   const propertyImages = [
@@ -90,10 +112,26 @@ const Properties: React.FC = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
-      // Enhanced mock data with real images
+      // Enhanced mock data with real images - Updated to match reference
       const mockProperties: Property[] = [
         {
           id: 1,
+          title: 'Appartement Haussmannien',
+          description: 'Exceptionnel appartement haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
+          type: 'buy',
+          price: 3595000,
+          location: 'Paris 16ème',
+          surface: 216.96,
+          bedrooms: 5,
+          bathrooms: 4,
+          images: [propertyImages[4], propertyImages[5], propertyImages[6]],
+          featured: true,
+          yearBuilt: 1850,
+          features: ['Terrasse privative', 'Vue Tour Eiffel', 'Parquet Versailles', 'Hauteur sous plafond', 'Cheminée d\'origine', 'Ascenseur privatif'],
+          reference: '86198435'
+        },
+        {
+          id: 2,
           title: 'Villa Méditerranéenne Exceptionnelle',
           description: 'Magnifique villa contemporaine avec vue panoramique sur la Méditerranée, piscine à débordement et jardin paysager conçu par un architecte renommé.',
           type: 'buy',
@@ -105,12 +143,13 @@ const Properties: React.FC = () => {
           images: [propertyImages[0], propertyImages[1], propertyImages[2]],
           featured: true,
           yearBuilt: 2020,
-          features: ['Piscine à débordement', 'Vue mer', 'Jardin paysager', 'Cuisine équipée']
+          features: ['Piscine à débordement', 'Vue mer', 'Jardin paysager', 'Salle de sport', 'Home cinéma', 'Cave à vin'],
+          reference: '86198436'
         },
         {
-          id: 2,
-          title: 'Penthouse Haussmannien Prestige',
-          description: 'Exceptionnel appartement haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
+          id: 3,
+          title: 'Penthouse Prestige',
+          description: 'Exceptionnel penthouse haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
           type: 'rent',
           price: 28000,
           location: 'Paris 8ème',
@@ -119,10 +158,11 @@ const Properties: React.FC = () => {
           bathrooms: 3,
           images: [propertyImages[3], propertyImages[4], propertyImages[5]],
           yearBuilt: 1850,
-          features: ['Terrasse privative', 'Vue Tour Eiffel', 'Parquet Versailles', 'Moulures d\'origine']
+          features: ['Terrasse privative', 'Vue Tour Eiffel', 'Parquet Versailles', 'Sécurité 24/7', 'Conciergerie', 'Parking privé'],
+          reference: '86198437'
         },
         {
-          id: 3,
+          id: 4,
           title: 'Domaine Provençal Historique',
           description: 'Authentique mas provençal du 18ème siècle entièrement rénové avec piscine chauffée, oliveraie centenaire et dépendances.',
           type: 'buy',
@@ -134,10 +174,11 @@ const Properties: React.FC = () => {
           images: [propertyImages[6], propertyImages[7], propertyImages[0]],
           confidential: true,
           yearBuilt: 1780,
-          features: ['Oliveraie centenaire', 'Piscine chauffée', 'Dépendances', 'Mas authentique']
+          features: ['Oliveraie centenaire', 'Piscine chauffée', 'Dépendances', 'Vignoble', 'Écuries', 'Court de tennis'],
+          reference: '86198438'
         },
         {
-          id: 4,
+          id: 5,
           title: 'Villa Contemporaine Côte d\'Azur',
           description: 'Architecture contemporaine signée, vue mer imprenable, piscine infinity et accès plage privée.',
           type: 'seasonal',
@@ -149,10 +190,11 @@ const Properties: React.FC = () => {
           images: [propertyImages[1], propertyImages[2], propertyImages[3]],
           featured: true,
           yearBuilt: 2018,
-          features: ['Piscine infinity', 'Accès plage privée', 'Architecture contemporaine', 'Vue mer']
+          features: ['Piscine infinity', 'Accès plage privée', 'Architecture contemporaine', 'Spa', 'Héliport', 'Marina privée'],
+          reference: '86198439'
         },
         {
-          id: 5,
+          id: 6,
           title: 'Appartement Design Marais',
           description: 'Loft design dans le Marais, hauteur sous plafond exceptionnelle, verrière et équipements haut de gamme.',
           type: 'rent',
@@ -163,22 +205,8 @@ const Properties: React.FC = () => {
           bathrooms: 2,
           images: [propertyImages[4], propertyImages[5], propertyImages[6]],
           yearBuilt: 2015,
-          features: ['Hauteur sous plafond', 'Verrière', 'Design contemporain', 'Marais historique']
-        },
-        {
-          id: 6,
-          title: 'Château Renaissance Val de Loire',
-          description: 'Château historique classé monument historique, parc arboré de 12 hectares, dépendances et vignoble.',
-          type: 'buy',
-          price: 8500000,
-          location: 'Touraine',
-          surface: 1200,
-          bedrooms: 12,
-          bathrooms: 8,
-          images: [propertyImages[7], propertyImages[0], propertyImages[1]],
-          confidential: true,
-          yearBuilt: 1560,
-          features: ['Monument historique', 'Parc 12 hectares', 'Vignoble', 'Dépendances']
+          features: ['Hauteur sous plafond', 'Verrière', 'Design contemporain', 'Terrasse', 'Cuisine équipée', 'Mezzanine'],
+          reference: '86198440'
         }
       ];
       
@@ -214,10 +242,10 @@ const Properties: React.FC = () => {
   };
 
   const propertyTypes = [
-    { key: 'all', label: 'Tous les biens', count: properties.length, icon: BuildingStorefrontIcon },
-    { key: 'buy', label: 'À acheter', count: properties.filter(p => p.type === 'buy').length, icon: HomeModernIcon },
-    { key: 'rent', label: 'À louer', count: properties.filter(p => p.type === 'rent').length, icon: SparklesIcon },
-    { key: 'seasonal', label: 'Saisonnière', count: properties.filter(p => p.type === 'seasonal').length, icon: StarIcon },
+    { key: 'all', label: 'Tous les biens', count: properties.length },
+    { key: 'buy', label: 'À acheter', count: properties.filter(p => p.type === 'buy').length },
+    { key: 'rent', label: 'À louer', count: properties.filter(p => p.type === 'rent').length },
+    { key: 'seasonal', label: 'Saisonnière', count: properties.filter(p => p.type === 'seasonal').length },
   ];
 
   const locations = Array.from(new Set(properties.map(p => p.location)));
@@ -256,186 +284,194 @@ const Properties: React.FC = () => {
     if (type === 'seasonal') {
       return `${price.toLocaleString('fr-FR')} €/semaine`;
     }
-    if (price >= 1000000) {
-      return `${(price / 1000000).toFixed(1)}M €`;
-    }
-    if (price >= 1000) {
-      return `${(price / 1000).toFixed(0)}K €`;
-    }
     return `${price.toLocaleString('fr-FR')} €`;
   };
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Unique Hero Section for Properties */}
-      <section className="relative h-screen overflow-hidden bg-gradient-to-br from-gray-900 via-deep-green to-gray-800">
-        {/* Animated Background Elements */}
+      {/* Hero Section with Search Only - Updated with margin */}
+      <section className="relative h-[60vh] overflow-hidden bg-white">
+        {/* Background Carousel */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-72 h-72 bg-gold/10 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-ivory/5 rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-gold/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-        </div>
-
-        {/* Floating Property Cards */}
-        <div className="absolute inset-0 overflow-hidden">
-          {heroProperties.map((property, index) => (
+          {heroProperties.map((slide, index) => (
             <div
               key={index}
-              className="absolute w-64 h-80 rounded-2xl overflow-hidden transform transition-all duration-1000 hover:scale-110 hover:z-20"
-              style={{
-                top: `${20 + index * 25}%`,
-                left: `${10 + index * 30}%`,
-                rotate: `${-5 + index * 5}deg`,
-                animation: `float${index + 1} 8s ease-in-out infinite`
-              }}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === activeHeroSlide ? 'opacity-100' : 'opacity-0'
+              }`}
             >
               <img
-                src={property.image}
-                alt={property.title}
+                src={slide.image}
+                alt={slide.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="font-semibold text-lg mb-1">{property.title}</h3>
-                <p className="text-gold text-sm">{property.price}</p>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
             </div>
           ))}
         </div>
 
-        {/* Main Hero Content */}
-        <div className="relative z-20 flex items-center justify-center h-full text-white">
-          <div className="max-w-6xl mx-auto px-6 w-full text-center">
-            <div className="transform transition-all duration-1000">
-              {/* Animated Logo/Brand */}
-              <div className="flex items-center justify-center mb-8">
-                <div className="relative group">
-                  <div className="relative w-20 h-20 bg-gradient-to-br from-gold to-amber-600 rounded-2xl shadow-2xl transform group-hover:rotate-6 transition-transform duration-500 flex items-center justify-center overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-                    <BuildingStorefrontIcon className="w-10 h-10 text-deep-green relative z-10" />
-                  </div>
-                </div>
+        {/* Centered Search Bar - Moved down 40px */}
+        <div className="absolute inset-0 flex items-start justify-center z-20 px-6 pt-40">
+          <div className="w-full max-w-4xl">
+            <div className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Rechercher une propriété, une localisation, un bien spécifique..."
+                className="w-full mt-10 px-8 py-6 pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-lg font-light transition-all duration-300"
+                style={{ borderRadius: '0' }}
+              />
+              <div className="absolute mt-5 left-8 top-1/2 transform -translate-y-1/2">
+                <MagnifyingGlassIcon className="w-6 h-6 text-[#023927]" />
               </div>
-
-              <h1 className="text-6xl md:text-8xl font-light uppercase mb-6 tracking-wider">
-                Collection
-              </h1>
-              <p className="text-2xl md:text-3xl text-gold mb-8 leading-relaxed font-serif max-w-4xl mx-auto">
-                Découvrez notre portefeuille exclusif de propriétés d'exception, 
-                soigneusement sélectionnées pour leur caractère unique et leur excellence architecturale.
-              </p>
-
-              {/* Search Bar */}
-              <div className="max-w-2xl mx-auto mb-12">
-                <div className="relative group">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Rechercher une propriété, une localisation, un bien spécifique..."
-                    className="w-full px-8 py-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 group-hover:bg-white/15"
-                  />
-                  <MagnifyingGlassIcon className="w-6 h-6 text-gold absolute right-8 top-1/2 transform -translate-y-1/2" />
-                </div>
+              <div className="absolute right-4 mt-5 top-1/2 transform -translate-y-1/2">
+                <span className="text-sm text-gray-500 font-medium px-3 py-1 bg-white/80">
+                  {filteredProperties.length} résultats
+                </span>
               </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
-                {[
-                  { number: '50+', label: 'Propriétés Premium' },
-                  { number: '12', label: 'Destinations' },
-                  { number: '98%', label: 'Satisfaction Client' }
-                ].map((stat, index) => (
-                  <div key={index} className="text-center group">
-                    <div className="text-3xl font-light text-gold mb-2 transform group-hover:scale-110 transition-transform duration-300">
-                      {stat.number}
-                    </div>
-                    <div className="text-white/80 text-sm font-light">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
+            </div>
+            
+            {/* Search Suggestions - Updated hover effects */}
+            <div className="mt-6 flex flex-wrap gap-3 justify-center">
+              <span className="text-white/90 text-sm">Suggestions :</span>
+              <button 
+                onClick={() => setLocationFilter('Paris')}
+                className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
+                style={{ borderRadius: '0' }}
+              >
+                Paris
+              </button>
+              <button 
+                onClick={() => setBedroomsFilter(3)}
+                className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
+                style={{ borderRadius: '0' }}
+              >
+                3+ chambres
+              </button>
+              <button 
+                onClick={() => setFilter('buy')}
+                className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
+                style={{ borderRadius: '0' }}
+              >
+                À acheter
+              </button>
+              <button 
+                onClick={() => setMaxPrice(5000000)}
+                className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
+                style={{ borderRadius: '0' }}
+              >
+                Budget &lt; 5M€
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-gold rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-gold rounded-full mt-2"></div>
+        {/* Carousel Controls - Minimal */}
+        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
+          <button
+            onClick={prevHeroSlide}
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            style={{ borderRadius: '0' }}
+          >
+            <ChevronLeftIcon className="w-5 h-5" />
+          </button>
+          <button
+            onClick={nextHeroSlide}
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            style={{ borderRadius: '0' }}
+          >
+            <ChevronRightIcon className="w-5 h-5" />
+          </button>
+          
+          {/* Slide Indicators */}
+          <div className="flex space-x-2">
+            {heroProperties.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveHeroSlide(index)}
+                className={`w-2 h-2 transition-all duration-300 ${
+                  index === activeHeroSlide 
+                    ? 'bg-white scale-125' 
+                    : 'bg-white/60 hover:bg-white/80'
+                }`}
+                style={{ borderRadius: '0' }}
+              />
+            ))}
           </div>
         </div>
+
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
       </section>
 
-      {/* Enhanced Filters Section */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50 border-b border-gray-200">
+      {/* Enhanced Filters Section - Cleaner */}
+      <section className="py-8 bg-white border-b border-gray-100">
         <div className="container mx-auto px-6">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+          <div className="bg-white p-6 shadow-sm">
             {/* Filters Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
               <div>
-                <h2 className="text-3xl font-light uppercase text-gray-900 mb-2">
+                <h2 className="text-3xl font-inter font-light text-gray-900 mb-2">
                   Exploration Sur Mesure
                 </h2>
-                <p className="text-gray-600 text-lg">
+                <p className="text-gray-500 text-base">
                   Affinez votre recherche avec nos filtres intelligents
                 </p>
               </div>
               <div className="flex items-center space-x-4 mt-4 lg:mt-0">
                 {activeFiltersCount > 0 && (
-                  <span className="bg-gold text-gray-900 px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                  <span className="bg-[#023927] text-white px-5 py-2.5 text-base font-medium">
                     {activeFiltersCount} filtre(s) actif(s)
                   </span>
                 )}
                 <button
                   onClick={resetFilters}
-                  className="text-gray-500 hover:text-gray-700 transition-colors duration-300 text-sm border border-gray-300 px-4 py-2 rounded-lg hover:border-gray-400"
+                  className="text-gray-600 hover:text-[#023927] hover:bg-white transition-all duration-500 text-base border-2 border-gray-300 px-5 py-2.5 hover:border-[#023927]"
                 >
                   Tout réinitialiser
                 </button>
               </div>
             </div>
 
-            {/* Property Type Tabs with Icons */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-              {propertyTypes.map(({ key, label, count, icon: Icon }) => (
+            {/* Property Type Tabs - Larger, no icons */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              {propertyTypes.map(({ key, label, count }) => (
                 <button
                   key={key}
                   onClick={() => setFilter(key)}
-                  className={`p-6 rounded-2xl border-2 transition-all duration-500 transform hover:scale-105 group ${
+                  className={`p-5 border-2 transition-all duration-500 text-base font-medium ${
                     filter === key
-                      ? 'border-gray-900 bg-gray-900 text-white shadow-2xl'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-gold hover:shadow-lg'
+                      ? 'border-[#023927] bg-white text-[#023927]'
+                      : 'border-gray-300 bg-white text-gray-700 hover:border-gray-900 hover:text-[#023927] hover:bg-white'
                   }`}
                 >
-                  <div className="text-left">
-                    <div className="flex items-center space-x-3 mb-3">
-                      <div className={`p-2 rounded-lg transition-colors duration-300 ${
-                        filter === key ? 'bg-gold text-gray-900' : 'bg-gray-100 text-gray-600 group-hover:bg-gold group-hover:text-gray-900'
-                      }`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div className="font-medium text-sm">{label}</div>
-                    </div>
-                    <div className="text-2xl font-light">{count}</div>
+                  <div className="flex items-center justify-between">
+                    <span>{label}</span>
+                    <span className={`text-sm px-2.5 py-1 ${
+                      filter === key 
+                        ? 'bg-[#023927]/10 text-[#023927]' 
+                        : 'bg-gray-100 text-gray-600'
+                    }`}>
+                      {count}
+                    </span>
                   </div>
                 </button>
               ))}
             </div>
 
-            {/* Advanced Filters Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
+            {/* Advanced Filters Grid - Larger */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               {/* Location */}
-              <div className="relative">
-                <label className="block font-medium text-gray-900 text-sm mb-3">
-                  <MapPinIcon className="w-4 h-4 inline mr-2" />
+              <div>
+                <label className="block font-medium text-gray-900 text-lg mb-3">
                   Localisation
                 </label>
                 <select 
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white transition-all duration-300 hover:border-gray-400"
+                  className="w-full px-5 py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-base hover:border-gray-900 transition-colors duration-300"
+                  style={{ borderRadius: '0' }}
                 >
                   <option value="">Toutes les localisations</option>
                   {locations.map(location => (
@@ -446,14 +482,14 @@ const Properties: React.FC = () => {
 
               {/* Bedrooms */}
               <div>
-                <label className="block font-medium text-gray-900 text-sm mb-3">
-                  <HomeModernIcon className="w-4 h-4 inline mr-2" />
+                <label className="block font-medium text-gray-900 text-lg mb-3">
                   Chambres
                 </label>
                 <select 
                   value={bedroomsFilter || ''}
                   onChange={(e) => setBedroomsFilter(e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white transition-all duration-300 hover:border-gray-400"
+                  className="w-full px-5 py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-base hover:border-gray-900 transition-colors duration-300"
+                  style={{ borderRadius: '0' }}
                 >
                   <option value="">Toutes</option>
                   {bedroomOptions.map(beds => (
@@ -464,8 +500,7 @@ const Properties: React.FC = () => {
 
               {/* Min Price */}
               <div>
-                <label className="block font-medium text-gray-900 text-sm mb-3">
-                  <CurrencyEuroIcon className="w-4 h-4 inline mr-2" />
+                <label className="block font-medium text-gray-900 text-lg mb-3">
                   Budget min
                 </label>
                 <div className="relative">
@@ -475,16 +510,16 @@ const Properties: React.FC = () => {
                     onChange={(e) => handlePriceChange('min', e.target.value)}
                     placeholder="0"
                     min="0"
-                    className="w-full px-4 py-3 pl-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white transition-all duration-300 hover:border-gray-400"
+                    className="w-full px-5 py-3.5 pl-12 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-base hover:border-gray-900 transition-colors duration-300"
+                    style={{ borderRadius: '0' }}
                   />
-                  <span className="absolute left-3 top-3 text-gray-500">€</span>
+                  <span className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">€</span>
                 </div>
               </div>
 
               {/* Max Price */}
               <div>
-                <label className="block font-medium text-gray-900 text-sm mb-3">
-                  <CurrencyEuroIcon className="w-4 h-4 inline mr-2" />
+                <label className="block font-medium text-gray-900 text-lg mb-3">
                   Budget max
                 </label>
                 <div className="relative">
@@ -494,258 +529,176 @@ const Properties: React.FC = () => {
                     onChange={(e) => handlePriceChange('max', e.target.value)}
                     placeholder="10,000,000"
                     min="0"
-                    className="w-full px-4 py-3 pl-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent bg-white transition-all duration-300 hover:border-gray-400"
+                    className="w-full px-5 py-3.5 pl-12 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-base hover:border-gray-900 transition-colors duration-300"
+                    style={{ borderRadius: '0' }}
                   />
-                  <span className="absolute left-3 top-3 text-gray-500">€</span>
+                  <span className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg">€</span>
                 </div>
               </div>
 
-              {/* Quick Actions */}
+              {/* Apply Button - Updated hover */}
               <div className="flex items-end">
-                <button
-                  onClick={resetFilters}
-                  className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gold hover:text-gray-900 transition-all duration-300 transform hover:scale-105"
-                >
-                  Appliquer
+                <button className="w-full border-2 border-gray-900 text-gray-900 py-3.5 text-base font-medium hover:text-[#023927] hover:bg-white transition-all duration-500 hover:border-[#023927]">
+                  Appliquer les filtres
                 </button>
-              </div>
-            </div>
-
-            {/* Price Range Visualizer */}
-            <div className="p-6 bg-gradient-to-r from-gray-50 to-gold/5 rounded-2xl border border-gold/20">
-              <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
-                <span className="font-semibold">Échelle de budget:</span>
-                <span className="font-bold text-gray-900 text-lg">
-                  {minPrice.toLocaleString('fr-FR')} € - {maxPrice.toLocaleString('fr-FR')} €
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3 relative">
-                <div 
-                  className="bg-gradient-to-r from-gold to-amber-600 h-3 rounded-full transition-all duration-1000 ease-out"
-                  style={{
-                    width: `${Math.max(2, ((maxPrice - minPrice) / 10000000) * 100)}%`,
-                    marginLeft: `${(minPrice / 10000000) * 100}%`
-                  }}
-                ></div>
-                <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-300 transform -translate-y-1/2"></div>
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-2">
-                <span>0 €</span>
-                <span>10M €</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="py-16 bg-white">
+      {/* Property Cards Section - REVOLUTIONARY NEW LAYOUT */}
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-6">
           {/* Results Header */}
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <h3 className="text-4xl font-light uppercase text-gray-900 mb-3">
-                {filteredProperties.length} Trésor{filteredProperties.length > 1 ? 's' : ''} Immobilier{filteredProperties.length > 1 ? 's' : ''}
+          <div className="mb-12">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
+              <h3 className="text-4xl font-inter font-light text-gray-900 mb-4 lg:mb-0">
+                {filteredProperties.length} Biens disponibles
               </h3>
-              <p className="text-gray-600 text-lg">
-                {filter !== 'all' && `Filtré par : ${propertyTypes.find(t => t.key === filter)?.label}`}
-                {(minPrice > 0 || maxPrice < 10000000) && ` • Budget: ${minPrice.toLocaleString('fr-FR')}€ - ${maxPrice.toLocaleString('fr-FR')}€`}
-                {searchQuery && ` • Recherche: "${searchQuery}"`}
-              </p>
+              <div className="flex items-center space-x-3">
+                <span className="text-gray-500 text-base">Trier par :</span>
+                <select className="border-2 border-gray-300 px-4 py-2 text-base focus:outline-none focus:border-[#023927]">
+                  <option>Pertinence</option>
+                  <option>Prix croissant</option>
+                  <option>Prix décroissant</option>
+                  <option>Surface</option>
+                  <option>Plus récents</option>
+                </select>
+              </div>
             </div>
+            <div className="h-px bg-gray-200 w-full"></div>
           </div>
 
-          {/* Properties Grid */}
+          {/* Properties Grid - ELEGANT HORIZONTAL LAYOUT */}
           {loading ? (
-            <div className="flex justify-center items-center py-20">
+            <div className="flex justify-center items-center py-40">
               <div className="relative">
-                <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"></div>
+                <div className="animate-spin h-24 w-24 border-2 border-[#023927] border-t-transparent"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 border-t-2 border-gold rounded-full animate-spin reverse"></div>
+                  <span className="text-[#023927] font-light text-lg">Chargement...</span>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-8 max-w-6xl mx-auto">
               {filteredProperties.map((property, index) => (
                 <div
                   key={property.id}
-                  className="group bg-white border border-gray-200 shadow-2xl hover:shadow-3xl transition-all duration-700 overflow-hidden rounded-3xl transform hover:scale-[1.02]"
-                  style={{ 
-                    animationDelay: `${index * 100}ms`,
-                    animation: 'fadeInUp 0.8s ease-out forwards'
-                  }}
+                  className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
                 >
-                  <div className="flex flex-col lg:flex-row h-full">
-                    {/* Image Section */}
-                    <div className="lg:w-2/5 flex h-96 lg:h-auto">
-                      <div className="w-2/3 h-full relative overflow-hidden">
+                  {/* MAIN CARD CONTAINER - Horizontal Layout */}
+                  <div className="flex flex-col">
+                    {/* IMAGE SECTION - Left side with primary + secondary images */}
+                    <div className="w-full flex flex-col md:flex-row h-[500px]">
+                      {/* Primary Image - Larger on left */}
+                      <div className="md:w-2/3 h-full relative overflow-hidden">
                         <img
                           src={property.images[0]}
                           alt={property.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         
-                        {/* Badges */}
-                        <div className="absolute top-6 left-6 flex flex-col space-y-2">
-                          {property.confidential && (
-                            <span className="bg-gray-900/90 backdrop-blur-sm text-white px-4 py-2 font-medium uppercase text-xs tracking-wide shadow-2xl rounded-full">
-                              🔒 CONFIDENTIEL
-                            </span>
-                          )}
+                        {/* Overlay Badges */}
+                        <div className="absolute top-6 left-6 flex flex-col gap-2">
                           {property.featured && (
-                            <span className="bg-gold text-gray-900 px-4 py-2 font-medium uppercase text-xs tracking-wide shadow-2xl rounded-full">
-                              ⭐ EXCLUSIVITÉ
+                            <span className="bg-[#023927] text-white px-4 py-2 font-inter uppercase text-xs font-medium tracking-wider max-w-max">
+                              EXCLUSIF
+                            </span>
+                          )}
+                          {property.confidential && (
+                            <span className="bg-black/90 text-white px-4 py-2 font-inter uppercase text-xs font-medium tracking-wider max-w-max">
+                              CONFIDENTIEL
                             </span>
                           )}
                         </div>
-
-                        {/* Image Count */}
-                        <div className="absolute bottom-6 left-6 bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-full text-sm flex items-center space-x-2">
-                          <CameraIcon className="w-4 h-4" />
-                          <span>{property.images.length}</span>
-                        </div>
-
-                        {/* Quick View */}
-                        <button className="absolute bottom-6 right-6 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110 hover:bg-gold hover:text-gray-900">
-                          <EyeIcon className="w-5 h-5" />
+                        
+                        {/* Favorite Button */}
+                        <button 
+                          onClick={() => toggleFavorite(property.id)}
+                          className="absolute top-6 right-6 w-12 h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
+                        >
+                          {favorites.includes(property.id) ? (
+                            <HeartIconSolid className="w-6 h-6 text-red-500" />
+                          ) : (
+                            <HeartIcon className="w-6 h-6 text-gray-600 group-hover/fav:text-red-500 transition-colors" />
+                          )}
                         </button>
+                        
+                        {/* Image Counter */}
+                        <div className="absolute bottom-6 left-6 bg-black/80 text-white px-4 py-2 flex items-center space-x-2 backdrop-blur-sm">
+                          <CameraIcon className="w-4 h-4" />
+                          <span className="text-sm">{property.images.length} photos</span>
+                        </div>
                       </div>
                       
-                      {/* Secondary Images */}
-                      <div className="w-1/3 flex flex-col h-full">
-                        <div className="h-1/2 relative overflow-hidden border-l-2 border-white">
-                          <img
-                            src={property.images[1]}
-                            alt={property.title}
-                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                          />
-                        </div>
-                        <div className="h-1/2 relative overflow-hidden border-l-2 border-white border-t-2 border-white">
-                          <img
-                            src={property.images[2]}
-                            alt={property.title}
-                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                          />
-                        </div>
+                      {/* Secondary Images - Stacked vertically on right */}
+                      <div className="md:w-1/3 h-full flex flex-col gap-2 p-2">
+                        {property.images.slice(1, 3).map((img, imgIndex) => (
+                          <div 
+                            key={imgIndex} 
+                            className="flex-1 relative overflow-hidden group/secondary"
+                          >
+                            <img
+                              src={img}
+                              alt={`${property.title} ${imgIndex + 2}`}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover/secondary:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"></div>
+                            {/* View More Overlay for last image */}
+                            {imgIndex === 1 && property.images.length > 3 && (
+                              <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300">
+                                <div className="text-white text-center p-4">
+                                  <ArrowTopRightOnSquareIcon className="w-6 h-6 mx-auto mb-2" />
+                                  <span className="text-xs font-medium">+{property.images.length - 3} photos</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
-
-                    {/* Content Section */}
-                    <div className="lg:w-3/5 p-8 flex flex-col justify-between">
-                      <div>
-                        <div className="flex justify-between items-start mb-6">
-                          <div className="flex-1">
-                            <h3 className="text-3xl font-light text-gray-900 mb-3 group-hover:text-gold transition-colors duration-300">
-                              {property.title}
-                            </h3>
-                            <div className="flex items-center text-gray-600 mb-4">
-                              <MapPinIcon className="w-5 h-5 mr-2 text-gold" />
-                              <span className="text-lg font-serif">{property.location}</span>
-                            </div>
-                          </div>
-                          
-                          {/* Price */}
-                          <div className="text-right">
-                            <div className="text-4xl font-light text-gray-900 mb-2">
-                              {formatPrice(property.price, property.type)}
-                            </div>
-                            <div className="text-sm text-gray-500 font-serif">
-                              {property.type === 'buy' && 'Acquisition libre'}
-                              {property.type === 'rent' && 'Location longue durée'}
-                              {property.type === 'seasonal' && 'Location de prestige'}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-gray-600 mb-8 leading-relaxed text-lg font-serif line-clamp-2">
-                          {property.description}
-                        </p>
-
-                        {/* Property Features */}
-                        <div className="grid grid-cols-4 gap-4 mb-8">
-                          <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 group-hover:border-gold/30 transition-all duration-300">
-                            <ArrowsPointingOutIcon className="w-8 h-8 text-gold mx-auto mb-3" />
-                            <div className="font-semibold text-gray-900 text-xl">{property.surface} m²</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-wide">Surface</div>
-                          </div>
-                          <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 group-hover:border-gold/30 transition-all duration-300">
-                            <HomeModernIcon className="w-8 h-8 text-gold mx-auto mb-3" />
-                            <div className="font-semibold text-gray-900 text-xl">{property.bedrooms}</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-wide">Chambres</div>
-                          </div>
-                          <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 group-hover:border-gold/30 transition-all duration-300">
-                            <div className="w-8 h-8 text-gold mx-auto mb-3">🛁</div>
-                            <div className="font-semibold text-gray-900 text-xl">{property.bathrooms}</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-wide">SDB</div>
-                          </div>
-                          <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-100 group-hover:border-gold/30 transition-all duration-300">
-                            <div className="w-8 h-8 text-gold mx-auto mb-3">📅</div>
-                            <div className="font-semibold text-gray-900 text-xl">{property.yearBuilt}</div>
-                            <div className="text-xs text-gray-500 uppercase tracking-wide">Construction</div>
-                          </div>
-                        </div>
-
-                        {/* Key Features */}
-                        {property.features && (
-                          <div className="flex flex-wrap gap-2 mb-6">
-                            {property.features.slice(0, 4).map((feature, idx) => (
-                              <span
-                                key={idx}
-                                className="px-3 py-1 bg-gold/10 text-gold rounded-full text-sm font-medium border border-gold/20"
-                              >
-                                {feature}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center justify-between pt-8 border-t border-gray-200">
-                        <div className="flex items-center space-x-6">
-                          <button 
-                            onClick={() => toggleFavorite(property.id)}
-                            className="flex items-center space-x-3 text-gray-600 hover:text-red-500 transition-all duration-300 group/fav"
-                          >
-                            <div className="p-2 rounded-full bg-gray-100 group-hover/fav:bg-red-50 transition-colors duration-300">
-                              {favorites.includes(property.id) ? (
-                                <HeartIconSolid className="w-6 h-6 text-red-500" />
-                              ) : (
-                                <HeartIcon className="w-6 h-6 group-hover/fav:text-red-500" />
-                              )}
-                            </div>
-                            <span className="font-medium">Favoris</span>
-                          </button>
-                          
-                          <span className={`px-4 py-2 text-sm font-semibold rounded-full border-2 ${
+                    
+                    {/* DETAILS SECTION - compact single-line summary */}
+                    <div className="w-full p-4 flex items-center justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <span className={`px-2 py-1 text-xs font-medium tracking-wider ${
                             property.type === 'buy' 
-                              ? 'bg-blue-50 text-blue-800 border-blue-200' 
+                              ? 'bg-blue-50 text-blue-800 border border-blue-200' 
                               : property.type === 'rent'
-                              ? 'bg-green-50 text-green-800 border-green-200'
-                              : 'bg-purple-50 text-purple-800 border-purple-200'
-                          }`}>
-                            {property.type === 'buy' && 'À VENDRE'}
-                            {property.type === 'rent' && 'À LOUER'}
-                            {property.type === 'seasonal' && 'SAISONNIER'}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center space-x-4">
-                          <button className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium border border-gray-300 px-6 py-3 rounded-lg hover:border-gray-400">
-                            Plan de visite
-                          </button>
-                          <Link
-                            to={`/properties/${property.id}`}
-                            className="bg-gradient-to-r from-gray-900 to-deep-green text-white px-8 py-3 font-semibold hover:from-gold hover:to-amber-600 hover:text-gray-900 transition-all duration-500 transform hover:scale-105 flex items-center space-x-3 rounded-2xl shadow-lg hover:shadow-2xl"
-                          >
-                            <span>Explorer ce bien</span>
-                            <EyeIcon className="w-5 h-5" />
-                          </Link>
+                              ? 'bg-green-50 text-green-800 border border-green-200'
+                              : 'bg-purple-50 text-purple-800 border border-purple-200'
+                          }`}>{property.type === 'buy' ? 'À VENDRE' : property.type === 'rent' ? 'À LOUER' : 'SAISONNIER'}</span>
+
+                          <h3 className="text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
+
+                          <span className="text-gray-500 text-sm truncate">• {property.location}</span>
                         </div>
                       </div>
+
+                      <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
+                        <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.bedrooms}</span></div>
+                        <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.bathrooms}</span></div>
+                        <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="font-serif text-[#023927] font-bold text-lg whitespace-nowrap">{formatPrice(property.price, property.type)}</div>
+                        <Link
+                          to={`/properties/${property.id}`}
+                          className="bg-white border-2 border-[#023927] text-[#023927] px-3 py-2 text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
+                        >
+                          Voir
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Property ID Badge - Subtle */}
+                  <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-white border border-gray-200 px-4 py-1 text-gray-400 text-xs font-mono">
+                      ID: {property.id.toString().padStart(4, '0')}
                     </div>
                   </div>
                 </div>
@@ -755,27 +708,27 @@ const Properties: React.FC = () => {
 
           {/* Empty State */}
           {!loading && filteredProperties.length === 0 && (
-            <div className="text-center py-24 bg-gradient-to-br from-gray-50 to-white rounded-3xl border border-gray-200">
-              <div className="text-9xl mb-8 opacity-10">🔍</div>
-              <h3 className="text-4xl font-light text-gray-900 mb-6">
+            <div className="text-center py-32 bg-gray-50 border-2 border-gray-200 max-w-4xl mx-auto">
+              <div className="text-8xl mb-10 opacity-20">🏠</div>
+              <h3 className="text-3xl font-inter text-gray-900 mb-8 font-light">
                 Aucune propriété ne correspond à votre recherche
               </h3>
-              <p className="text-gray-600 mb-12 max-w-2xl mx-auto text-xl leading-relaxed">
-                Notre collection évolue constamment. Élargissez vos critères de recherche, 
-                consultez notre sélection confidentielle ou contactez-nous pour une recherche personnalisée.
+              <p className="text-gray-600 mb-16 max-w-2xl mx-auto text-lg">
+                Notre collection évolue constamment. Élargissez vos critères de recherche 
+                ou contactez-nous pour une recherche personnalisée.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <button
                   onClick={resetFilters}
-                  className="bg-gradient-to-r from-gray-900 to-deep-green text-white px-10 py-4 font-semibold hover:from-gold hover:to-amber-600 hover:text-gray-900 transition-all duration-500 transform hover:scale-105 rounded-2xl shadow-lg"
+                  className="border-2 border-gray-900 text-gray-900 px-10 py-4 font-inter uppercase tracking-wider text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500"
                 >
                   Élargir la recherche
                 </button>
                 <Link
-                  to="/confidential"
-                  className="border-2 border-gray-900 text-gray-900 px-10 py-4 font-semibold hover:bg-gray-900 hover:text-white transition-all duration-500 transform hover:scale-105 rounded-2xl"
+                  to="/contact"
+                  className="bg-[#023927] text-white px-10 py-4 font-inter uppercase tracking-wider text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
                 >
-                  Accéder aux biens confidentiels
+                  Nous contacter
                 </Link>
               </div>
             </div>
@@ -784,52 +737,13 @@ const Properties: React.FC = () => {
           {/* Load More */}
           {filteredProperties.length > 0 && (
             <div className="text-center mt-16">
-              <button className="border-2 border-gray-900 text-gray-900 px-14 py-5 font-semibold hover:bg-gray-900 hover:text-white transition-all duration-500 transform hover:scale-105 group rounded-2xl text-lg">
-                <span className="flex items-center space-x-4">
-                  <span>Découvrir plus de trésors</span>
-                  <span className="transform group-hover:translate-y-1 transition-transform duration-300 text-2xl">↓</span>
-                </span>
+              <button className="border-2 border-gray-900 text-gray-900 px-14 py-5 font-inter uppercase tracking-wider text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500 focus:outline-none">
+                <span>Voir plus de biens</span>
               </button>
             </div>
           )}
         </div>
       </section>
-
-      {/* Add custom styles */}
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes float1 {
-          0%, 100% { transform: translateY(0px) rotate(-5deg); }
-          50% { transform: translateY(-20px) rotate(-5deg); }
-        }
-
-        @keyframes float2 {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-25px) rotate(0deg); }
-        }
-
-        @keyframes float3 {
-          0%, 100% { transform: translateY(0px) rotate(5deg); }
-          50% { transform: translateY(-15px) rotate(5deg); }
-        }
-        
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </div>
   );
 };

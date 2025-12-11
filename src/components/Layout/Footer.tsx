@@ -124,22 +124,19 @@ const Footer: React.FC = () => {
                     {/* Subtle shimmer */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1500" />
                     
-                    {/* Logo Content */}
-                    <div className="relative z-10 flex flex-col items-center">
-                      <span className="text-gray-900 font-bold text-2xl tracking-tighter leading-none">
-                        M²
-                      </span>
-                      <div className="w-5 h-0.5 bg-gray-300 mt-1 rounded-full transition-all duration-300 group-hover:scale-125" />
+                    {/* Logo Content (use same image as header) */}
+                    <div className="relative z-10 w-full h-full flex items-center justify-center">
+                      <img src="/logo-m2.jpg" alt="Square Meter logo" className="w-full h-full object-contain" />
                     </div>
                   </div>
                 </div>
                 
                 <div className="flex flex-col">
-                  <span className="text-2xl font-bold text-gray-900 tracking-wide">
-                    Square Meter
+                  <span className="text-sm font-semibold tracking-[0.3em] uppercase text-gray-900">
+                    SQUARE METER
                   </span>
-                  <span className="text-sm text-gray-500 tracking-widest transform group-hover:translate-x-1 transition-transform duration-300 font-medium">
-                    LUXURY REAL ESTATE
+                  <span className="text-xs text-gray-500 tracking-[0.2em] transition-transform duration-300 font-medium">
+                    IMMOBILIER
                   </span>
                 </div>
               </div>

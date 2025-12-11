@@ -1,37 +1,93 @@
 // src/pages/Services.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { HomeModernIcon, BuildingStorefrontIcon, CurrencyEuroIcon, SparklesIcon, ChartBarIcon, WrenchScrewdriverIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { 
+  HomeModernIcon, 
+  BuildingStorefrontIcon, 
+  CurrencyEuroIcon, 
+  ChartBarIcon, 
+  WrenchScrewdriverIcon, 
+  GlobeAltIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  MagnifyingGlassIcon,
+  ShieldCheckIcon,
+  UserGroupIcon,
+  DocumentTextIcon
+} from '@heroicons/react/24/outline';
 
 const Services: React.FC = () => {
+  const [activeHeroSlide, setActiveHeroSlide] = useState(0);
+  const [isHeroPlaying, setIsHeroPlaying] = useState(true);
+
+  // Hero slides for services
+  const heroSlides = [
+    {
+      image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      title: "Excellence Immobilière",
+      subtitle: "Des services sur mesure pour vos projets d'exception"
+    },
+    {
+      image: "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      title: "Gestion Prestige",
+      subtitle: "Une approche exclusive pour une clientèle exigeante"
+    },
+    {
+      image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      title: "Conseil Personnalisé",
+      subtitle: "Expertise et discrétion au service de vos ambitions"
+    }
+  ];
+
+  // Hero carousel controls
+  useEffect(() => {
+    let slideInterval: NodeJS.Timeout;
+    if (isHeroPlaying) {
+      slideInterval = setInterval(() => {
+        setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length);
+      }, 5000);
+    }
+    return () => clearInterval(slideInterval);
+  }, [isHeroPlaying]);
+
+  const nextHeroSlide = () => {
+    setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevHeroSlide = () => {
+    setActiveHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
   const mainServices = [
     {
       icon: HomeModernIcon,
       title: 'Achat & Vente',
       description: 'Acquisition et cession de biens d\'exception avec une expertise marché incomparable',
       features: ['Évaluation précise', 'Mise en valeur premium', 'Réseau d\'acquéreurs internationaux', 'Négociation experte'],
-      link: '/properties?type=buy'
+      link: '/properties?type=buy',
+      color: 'border-blue-200 bg-blue-50 text-blue-800'
     },
     {
       icon: BuildingStorefrontIcon,
       title: 'Location Prestige',
       description: 'Location saisonnière et longue durée de propriétés d\'exception',
       features: ['Gestion complète', 'Sélection locataire rigoureuse', 'Services conciergerie', 'Optimisation des revenus'],
-      link: '/properties?type=rent'
+      link: '/properties?type=rent',
+      color: 'border-green-200 bg-green-50 text-green-800'
     },
     {
       icon: CurrencyEuroIcon,
       title: 'Gestion de Patrimoine',
       description: 'Optimisation et gestion de votre patrimoine immobilier de prestige',
       features: ['Audit patrimonial', 'Stratégie d\'investissement', 'Gestion locative', 'Conseil fiscal'],
-      link: '/owners'
+      link: '/owners',
+      color: 'border-purple-200 bg-purple-50 text-purple-800'
     }
   ];
 
   const additionalServices = [
     {
-      icon: SparklesIcon,
+      icon: ShieldCheckIcon,
       title: 'Services Conciergerie',
       description: 'Services sur mesure pour une expérience de vie et de séjour exceptionnelle'
     },
@@ -52,127 +108,233 @@ const Services: React.FC = () => {
     }
   ];
 
+  const processSteps = [
+    {
+      step: '01',
+      title: 'Consultation',
+      description: 'Analyse de vos besoins et objectifs'
+    },
+    {
+      step: '02',
+      title: 'Recherche',
+      description: 'Sélection de biens correspondant à vos critères'
+    },
+    {
+      step: '03',
+      title: 'Présentation',
+      description: 'Visites et analyses détaillées'
+    },
+    {
+      step: '04',
+      title: 'Finalisation',
+      description: 'Accompagnement jusqu\'à la signature'
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-ivory py-12">
-      <div className="container mx-auto px-6">
-        {/* Hero */}
-        <header className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-12">
-          <div>
-            <h1 className="text-5xl font-inter uppercase text-deep-green mb-4">Nos Prestations</h1>
-            <p className="text-lg font-didot text-gray-700 max-w-3xl leading-relaxed">
-              Découvrez l'étendue de notre expertise et nos services sur mesure, conçus pour
-              répondre aux attentes les plus exigeantes du marché immobilier de prestige.
-            </p>
-            <div className="mt-6 flex gap-4">
-              <Link to="/contact" className="inline-flex items-center gap-3 bg-deep-green text-ivory px-6 py-3 rounded-lg shadow-lg hover:bg-gold hover:text-deep-green transition-colors">
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Matching Properties/Mag Page Style */}
+      <section className="relative h-[60vh] overflow-hidden bg-white">
+        {/* Background Carousel */}
+        <div className="absolute inset-0">
+          {heroSlides.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === activeHeroSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <img
+                src={slide.image}
+                alt={slide.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+            </div>
+          ))}
+        </div>
+
+        {/* Centered Content */}
+        <div className="absolute inset-0 flex items-center justify-center z-20 px-6">
+          <div className="w-full max-w-4xl text-center">
+            <div className="mb-8">
+              <h1 className="text-5xl md:text-6xl font-inter font-light text-white mb-6 tracking-tight">
+                Nos Prestations
+              </h1>
+              <div className="h-1 bg-white/30 w-48 mx-auto mb-8"></div>
+              <p className="text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed">
+                L'expertise immobilière de prestige, des services sur mesure pour vos projets d'exception
+              </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
+              <Link 
+                to="/contact" 
+                className="px-8 py-4 bg-white/95 backdrop-blur-sm text-[#023927] border-2 border-white hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-all duration-500 font-inter font-medium text-lg"
+                style={{ borderRadius: '0' }}
+              >
                 Prendre rendez-vous
               </Link>
-              <Link to="/agency" className="inline-flex items-center gap-3 border-2 border-deep-green text-deep-green px-6 py-3 rounded-lg hover:bg-deep-green hover:text-ivory transition-colors">
+              <Link 
+                to="/agency" 
+                className="px-8 py-4 bg-white/20 backdrop-blur-sm text-white border-2 border-white hover:bg-white hover:text-[#023927] transition-all duration-500 font-inter font-medium text-lg"
+                style={{ borderRadius: '0' }}
+              >
                 Rencontrer l'équipe
               </Link>
             </div>
           </div>
+        </div>
 
-          <div className="hidden md:flex items-center justify-center">
-            {/* Decorative illustration: subtle skyline/svg to match brand */}
-            <svg className="w-72 h-48" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-              <defs>
-                <linearGradient id="g1" x1="0" x2="1">
-                  <stop offset="0%" stopColor="#f8e8d2" />
-                  <stop offset="100%" stopColor="#fff" />
-                </linearGradient>
-              </defs>
-              <rect width="600" height="400" rx="24" fill="url(#g1)" />
-              <g opacity="0.9">
-                <circle cx="110" cy="220" r="36" fill="#fde68a" />
-                <rect x="220" y="140" width="44" height="120" rx="8" fill="#c7f9cc" />
-                <rect x="280" y="100" width="70" height="160" rx="10" fill="#c7f9cc" />
-                <rect x="370" y="160" width="38" height="100" rx="8" fill="#d1f7f3" />
-              </g>
-            </svg>
+        {/* Carousel Controls */}
+        <div className="absolute bottom-8 right-8 z-30 flex items-center space-x-4">
+          <button
+            onClick={prevHeroSlide}
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            style={{ borderRadius: '0' }}
+          >
+            <ChevronLeftIcon className="w-5 h-5" />
+          </button>
+          <button
+            onClick={nextHeroSlide}
+            className="w-10 h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            style={{ borderRadius: '0' }}
+          >
+            <ChevronRightIcon className="w-5 h-5" />
+          </button>
+          
+          {/* Slide Indicators */}
+          <div className="flex space-x-2">
+            {heroSlides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveHeroSlide(index)}
+                className={`w-2 h-2 transition-all duration-300 ${
+                  index === activeHeroSlide 
+                    ? 'bg-white scale-125' 
+                    : 'bg-white/60 hover:bg-white/80'
+                }`}
+                style={{ borderRadius: '0' }}
+              />
+            ))}
           </div>
-        </header>
+        </div>
 
-        {/* Services grid */}
-        <section className="mb-14">
-          <h2 className="text-3xl font-inter uppercase text-deep-green text-center mb-8">Services Principaux</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {mainServices.map((service, idx) => (
-              <motion.article key={idx} whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 200 }} className="bg-white rounded-2xl shadow-lg p-8 overflow-hidden">
-                <div className="flex items-start gap-5">
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl" style={{background: 'linear-gradient(135deg,#fbe7c3,#e6f9f0)'}}>
-                    {(() => {
-                      const Icon = service.icon as any;
-                      return <Icon className="w-8 h-8 text-gold" aria-hidden />;
-                    })()}
+        {/* Bottom Gradient */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
+      </section>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-6 py-16">
+        {/* Services Header */}
+        <div className="mb-16 text-center max-w-3xl mx-auto">
+          <h2 className="text-3xl font-inter font-light text-gray-900 mb-4">
+            Services Principaux
+          </h2>
+          <p className="font-inter text-gray-600">
+            Découvrez l'étendue de notre expertise et nos services sur mesure, conçus pour
+            répondre aux attentes les plus exigeantes du marché immobilier de prestige.
+          </p>
+        </div>
+
+        {/* Main Services Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+          {mainServices.map((service, idx) => {
+            const IconComponent = service.icon;
+            return (
+              <div 
+                key={idx} 
+                className="bg-white border-2 border-gray-200 overflow-hidden transition-all duration-500 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)]"
+              >
+                <div className="p-8">
+                  <div className="flex items-start gap-5 mb-6">
+                    <div className="w-16 h-16 flex items-center justify-center border-2 border-gray-200">
+                      <IconComponent className="w-8 h-8 text-[#023927]" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-inter font-medium text-gray-900 mb-2">{service.title}</h3>
+                      <p className="font-inter text-gray-600 text-sm">{service.description}</p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-inter uppercase text-deep-green mb-2">{service.title}</h3>
-                    <p className="font-didot text-gray-600 mb-4 text-sm md:text-base">{service.description}</p>
-                    <ul className="grid grid-cols-1 gap-2 text-sm text-gray-700 mb-4">
-                      {service.features.map((f, i) => (
-                        <li key={i} className="flex items-center gap-3">
-                          <span className="w-2 h-2 bg-gold rounded-full shrink-0" />
-                          <span>{f}</span>
+                  
+                  <div className="mb-8">
+                    <h4 className="font-inter font-medium text-gray-900 text-sm mb-3">NOTRE APPROCHE</h4>
+                    <ul className="space-y-2">
+                      {service.features.map((feature, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-[#023927] mt-2"></div>
+                          <span className="font-inter text-gray-700 text-sm">{feature}</span>
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-2">
-                      <Link to={service.link} className="inline-flex items-center gap-2 text-gold hover:text-deep-green font-inter uppercase text-sm tracking-wide">
-                        Découvrir
-                        <span className="transform transition-transform">→</span>
-                      </Link>
-                    </div>
                   </div>
+                  
+                  <Link 
+                    to={service.link} 
+                    className="inline-flex items-center gap-2 text-[#023927] hover:text-gray-900 font-inter uppercase text-sm tracking-wide transition-colors duration-300"
+                  >
+                    <span>Découvrir</span>
+                    <span className="transform transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  </Link>
                 </div>
-              </motion.article>
-            ))}
-          </div>
-        </section>
+              </div>
+            );
+          })}
+        </div>
 
         {/* Additional Services */}
-        <section className="mb-14">
-          <h2 className="text-3xl font-inter uppercase text-deep-green text-center mb-8">Services Complémentaires</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {additionalServices.map((s, i) => (
-              <motion.div key={i} whileHover={{ scale: 1.02 }} className="bg-white rounded-xl shadow-sm p-5 text-center flex flex-col items-center gap-3">
-                <div className="w-14 h-14 rounded-lg flex items-center justify-center text-2xl" style={{background: 'linear-gradient(135deg,#fff7ed,#e8fdf5)'}}>
-                  {(() => { const Icon = s.icon as any; return <Icon className="w-6 h-6 text-gold" aria-hidden /> })()}
-                </div>
-                <h3 className="font-inter uppercase text-deep-green text-sm">{s.title}</h3>
-                <p className="font-didot text-gray-600 text-sm">{s.description}</p>
-              </motion.div>
-            ))}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-inter font-light text-gray-900 mb-4">
+              Services Complémentaires
+            </h2>
+            <p className="font-inter text-gray-600 max-w-2xl mx-auto">
+              Une gamme de services supplémentaires pour répondre à toutes vos attentes
+            </p>
           </div>
-        </section>
-
-        {/* Process */}
-        <section className="mb-14">
-          <div className="bg-deep-green text-ivory rounded-2xl p-10">
-            <h2 className="text-3xl font-inter uppercase text-center mb-8">Notre Processus d'Accompagnement</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {[{ step: '01', title: 'Consultation', description: 'Analyse de vos besoins et objectifs' }, { step: '02', title: 'Recherche', description: 'Sélection de biens correspondant à vos critères' }, { step: '03', title: 'Présentation', description: 'Visites et analyses détaillées' }, { step: '04', title: 'Finalisation', description: 'Accompagnement jusqu\'à la signature' }].map((item, k) => (
-                <div key={k} className="text-center p-4">
-                  <div className="w-16 h-16 bg-ivory rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-                    <span className="font-inter text-deep-green">{item.step}</span>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {additionalServices.map((service, i) => {
+              const IconComponent = service.icon;
+              return (
+                <div 
+                  key={i} 
+                  className="bg-white border-2 border-gray-200 p-6 text-center transition-all duration-300 hover:border-[#023927] group"
+                >
+                  <div className="w-12 h-12 flex items-center justify-center border-2 border-gray-200 mx-auto mb-4 group-hover:border-[#023927] transition-colors duration-300">
+                    <IconComponent className="w-6 h-6 text-gray-600 group-hover:text-[#023927] transition-colors duration-300" />
                   </div>
-                  <h3 className="font-inter uppercase text-ivory mb-2">{item.title}</h3>
-                  <p className="font-didot text-ivory text-sm">{item.description}</p>
+                  <h3 className="font-inter font-medium text-gray-900 text-sm mb-2">{service.title}</h3>
+                  <p className="font-inter text-gray-600 text-xs">{service.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Process Section */}
+        <div className="bg-[#023927] p-12 mb-20">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-inter font-light text-white text-center mb-12">
+              Notre Processus d'Accompagnement
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {processSteps.map((step, k) => (
+                <div key={k} className="text-center">
+                  <div className="w-16 h-16 bg-white text-[#023927] flex items-center justify-center mx-auto mb-4 font-inter text-2xl font-medium border-2 border-white">
+                    {step.step}
+                  </div>
+                  <h3 className="font-inter font-medium text-white mb-2 text-sm">{step.title}</h3>
+                  <p className="font-inter text-white/80 text-xs">{step.description}</p>
                 </div>
               ))}
             </div>
           </div>
-        </section>
+        </div>
 
-        {/* CTA */}
-        <section className="text-center">
-          <h2 className="text-3xl font-inter uppercase text-deep-green mb-4">Prêt à concrétiser votre projet ?</h2>
-          <p className="text-lg font-didot text-gray-700 mb-6 max-w-2xl mx-auto">Rencontrons-nous pour discuter de vos ambitions et découvrir comment nous pouvons vous accompagner vers l'excellence.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact" className="bg-gold text-deep-green px-8 py-3 font-inter uppercase tracking-wide rounded-lg shadow-md hover:shadow-xl transition-all">Prendre rendez-vous</Link>
-            <Link to="/agency" className="border-2 border-deep-green text-deep-green px-8 py-3 font-inter uppercase tracking-wide hover:bg-deep-green hover:text-ivory transition-colors rounded-lg">Rencontrer l'équipe</Link>
-          </div>
-        </section>
+        {/* Contact section removed per request */}
       </div>
     </div>
   );
