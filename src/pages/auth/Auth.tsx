@@ -1,8 +1,7 @@
 // src/pages/Auth.tsx
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { EyeIcon, EyeSlashIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
+import { EyeIcon, EyeSlashIcon, EnvelopeIcon, LockClosedIcon, UserIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,48 +33,45 @@ const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-16">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-inter uppercase text-gray-900 mb-4 tracking-wide">
-              {isLogin ? 'Connexion' : 'Créer un compte'}
+    <div className="min-h-screen bg-white">
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-[#023927] via-[#0a4d3a] to-[#023927] py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
+              {isLogin ? 'Connexion' : 'Inscription'}
             </h1>
-            <div className="w-24 h-1 bg-gray-300 mx-auto mb-6"></div>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-4 sm:mb-8"></div>
+            <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
               {isLogin 
-                ? 'Bienvenue de retour. Accédez à votre espace personnel et gérez vos propriétés.' 
+                ? 'Accédez à votre espace personnel pour gérer vos propriétés et suivre vos projets.' 
                 : 'Rejoignez notre communauté exclusive et accédez à des propriétés d\'exception.'}
             </p>
           </div>
+        </div>
+      </div>
 
-          {/* Form Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white border border-gray-200 rounded-2xl shadow-lg p-8 md:p-12 max-w-3xl mx-auto"
-          >
-            {/* Tab Switcher */}
+      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 lg:py-16">
+        <div className="max-w-3xl mx-auto">
+          {/* Form Container */}
+          <div className="bg-white border-2 border-gray-200 p-4 sm:p-6 lg:p-8">
+            {/* Tab Switcher - Clean Green Design */}
             <div className="flex justify-center mb-8">
-              <div className="inline-flex bg-gray-100 rounded-lg p-1">
+              <div className="flex border-2 border-gray-200">
                 <button 
                   onClick={() => setIsLogin(true)} 
-                  className={`px-8 py-3 rounded-lg font-inter uppercase text-sm tracking-wide transition-all duration-300 ${
-                    isLogin 
-                      ? 'bg-gray-900 text-white shadow-md' 
-                      : 'text-gray-600 hover:text-gray-900'
+                  className={`px-8 py-3 font-inter uppercase text-sm tracking-wide transition-all duration-300 ${isLogin 
+                    ? 'bg-[#023927] text-white border-2 border-[#023927] font-medium' 
+                    : 'bg-white text-gray-700 hover:text-[#023927] hover:bg-gray-50 border-2 border-transparent'
                   }`}
                 >
                   Connexion
                 </button>
                 <button 
                   onClick={() => setIsLogin(false)} 
-                  className={`px-8 py-3 rounded-lg font-inter uppercase text-sm tracking-wide transition-all duration-300 ${
-                    !isLogin 
-                      ? 'bg-gray-900 text-white shadow-md' 
-                      : 'text-gray-600 hover:text-gray-900'
+                  className={`px-8 py-3 font-inter uppercase text-sm tracking-wide transition-all duration-300 ${!isLogin 
+                    ? 'bg-[#023927] text-white border-2 border-[#023927] font-medium' 
+                    : 'bg-white text-gray-700 hover:text-[#023927] hover:bg-gray-50 border-2 border-transparent'
                   }`}
                 >
                   Inscription
@@ -88,36 +84,47 @@ const Auth: React.FC = () => {
               {isLogin ? <LoginForm /> : <SignupForm />}
             </div>
 
-            {/* Social Login */}
-            <div className="pt-6 border-t border-gray-200">
-              <p className="text-center text-sm text-gray-600 mb-4">Ou continuer avec</p>
-              <div className="grid grid-cols-2 gap-4">
-                <motion.button 
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center gap-3 border-2 border-gray-200 rounded-xl py-3 hover:border-gray-300 hover:shadow-md transition-all duration-300 bg-white"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 12.07C22 6.48 17.52 2 11.93 2 6.34 2 1.86 6.48 1.86 12.07 1.86 16.5 5.06 20.24 9.26 21v-7.25H7.08v-2.68h2.18V9.69c0-2.16 1.29-3.35 3.25-3.35.94 0 1.94.17 1.94.17v2.13h-1.09c-1.08 0-1.42.67-1.42 1.36v1.62h2.42l-.39 2.68h-2.03V21c4.2-.76 7.4-4.5 7.4-8.93z" fill="#3b5998"/>
-                  </svg>
-                  <span className="font-medium text-gray-700">Facebook</span>
-                </motion.button>
-                <motion.button 
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center gap-3 border-2 border-gray-200 rounded-xl py-3 hover:border-gray-300 hover:shadow-md transition-all duration-300 bg-white"
-                >
-                  <svg className="w-5 h-5" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#EA4335" d="M24 9.5c3.8 0 6.5 1.6 8.5 3l6.2-6.2C35.5 3 30.1 1 24 1 14 1 5.4 6.6 1.9 14.8l7.6 5.9C11.2 14.1 17 9.5 24 9.5z"/>
-                    <path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.2-.4-4.7H24v9h12.9c-.6 3.2-2.5 5.9-5.3 7.7l8 6.2C43.9 39.3 46.1 32.4 46.1 24.5z"/>
-                    <path fill="#4A90E2" d="M8.1 28.8c-.5-1.4-.8-2.9-.8-4.4 0-1.5.3-3 .8-4.4L.7 14.1C-.4 16.8-.4 20.2.7 23c1.1 2.9 3.3 5.5 7.4 7.8l0-.0z"/>
-                    <path fill="#FBBC05" d="M24 46.9c6.1 0 11.5-2 15.9-5.5l-8-6.2c-2.2 1.5-5 2.3-7.9 2.3-7 0-12.7-4.6-14.8-11.1L1.9 33.2C5.4 41.4 14 46.9 24 46.9z"/>
-                  </svg>
-                  <span className="font-medium text-gray-700">Google</span>
-                </motion.button>
+            {/* Divider */}
+            <div className="relative mb-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t-2 border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500 font-inter">Ou continuer avec</span>
               </div>
             </div>
-          </motion.div>
+
+            {/* Social Login */}
+            <div className="grid grid-cols-2 gap-4">
+              <button className="flex items-center justify-center gap-3 border-2 border-gray-200 py-3 hover:border-[#023927] hover:bg-gray-50 transition-all duration-300 bg-white group">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 12.07C22 6.48 17.52 2 11.93 2 6.34 2 1.86 6.48 1.86 12.07 1.86 16.5 5.06 20.24 9.26 21v-7.25H7.08v-2.68h2.18V9.69c0-2.16 1.29-3.35 3.25-3.35.94 0 1.94.17 1.94.17v2.13h-1.09c-1.08 0-1.42.67-1.42 1.36v1.62h2.42l-.39 2.68h-2.03V21c4.2-.76 7.4-4.5 7.4-8.93z" fill="#3b5998"/>
+                </svg>
+                <span className="font-inter font-medium text-gray-700 group-hover:text-[#023927] transition-colors duration-300">Facebook</span>
+              </button>
+              <button className="flex items-center justify-center gap-3 border-2 border-gray-200 py-3 hover:border-[#023927] hover:bg-gray-50 transition-all duration-300 bg-white group">
+                <svg className="w-5 h-5" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#EA4335" d="M24 9.5c3.8 0 6.5 1.6 8.5 3l6.2-6.2C35.5 3 30.1 1 24 1 14 1 5.4 6.6 1.9 14.8l7.6 5.9C11.2 14.1 17 9.5 24 9.5z"/>
+                  <path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.2-.4-4.7H24v9h12.9c-.6 3.2-2.5 5.9-5.3 7.7l8 6.2C43.9 39.3 46.1 32.4 46.1 24.5z"/>
+                  <path fill="#4A90E2" d="M8.1 28.8c-.5-1.4-.8-2.9-.8-4.4 0-1.5.3-3 .8-4.4L.7 14.1C-.4 16.8-.4 20.2.7 23c1.1 2.9 3.3 5.5 7.4 7.8l0-.0z"/>
+                  <path fill="#FBBC05" d="M24 46.9c6.1 0 11.5-2 15.9-5.5l-8-6.2c-2.2 1.5-5 2.3-7.9 2.3-7 0-12.7-4.6-14.8-11.1L1.9 33.2C5.4 41.4 14 46.9 24 46.9z"/>
+                </svg>
+                <span className="font-inter font-medium text-gray-700 group-hover:text-[#023927] transition-colors duration-300">Google</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Security Info */}
+          <div className="mt-8 bg-gradient-to-r from-[#023927] to-[#0a4d3a] p-6 text-white">
+            <div className="flex items-center space-x-3 mb-4">
+              <ShieldCheckIcon className="w-6 h-6" />
+              <h3 className="font-inter font-medium text-lg">Sécurité Garantie</h3>
+            </div>
+            <p className="font-inter text-white/90 text-sm leading-relaxed">
+              Toutes vos informations sont protégées par un chiffrement de niveau bancaire. 
+              Nous ne partageons jamais vos données avec des tiers.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -132,33 +139,37 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginValues) => {
     // TODO: call API
-    window.alert(`Connexion mock: ${data.email}`);
+    console.log('Login attempt:', data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Adresse email</label>
+        <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+          Adresse email *
+        </label>
         <div className="relative">
           <EnvelopeIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input 
             {...register('email')} 
             type="email" 
             placeholder="votre@email.com"
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
           />
         </div>
-        {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
+        {errors.email && <p className="font-inter text-red-500 text-xs mt-2">{errors.email.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+        <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+          Mot de passe *
+        </label>
         <div className="relative">
           <input 
             {...register('password')} 
             type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
-            className="w-full px-4 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
+            className="w-full px-4 pr-12 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
           />
           <button 
             type="button" 
@@ -168,15 +179,15 @@ function LoginForm() {
             {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         </div>
-        {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>}
+        {errors.password && <p className="font-inter text-red-500 text-xs mt-2">{errors.password.message}</p>}
       </div>
 
       <div className="flex items-center justify-between">
         <label className="flex items-center space-x-2 cursor-pointer">
-          <input type="checkbox" className="w-4 h-4 border-2 border-gray-300 rounded focus:ring-2 focus:ring-gray-900" />
-          <span className="text-sm text-gray-600">Se souvenir de moi</span>
+          <input type="checkbox" className="w-4 h-4 border-2 border-gray-300 focus:ring-2 focus:ring-[#023927]" />
+          <span className="font-inter text-gray-600 text-sm">Se souvenir de moi</span>
         </label>
-        <Link to="/forgot-password" className="text-sm text-gray-900 hover:text-gray-600 transition-colors duration-200 font-medium">
+        <Link to="/forgot-password" className="font-inter text-[#023927] hover:text-[#0a4d3a] transition-colors duration-300 text-sm font-medium">
           Mot de passe oublié ?
         </Link>
       </div>
@@ -184,9 +195,12 @@ function LoginForm() {
       <button 
         type="submit" 
         disabled={isSubmitting} 
-        className="w-full py-4 rounded-xl bg-gray-900 text-white font-inter uppercase tracking-wide hover:bg-gray-800 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-r from-[#023927] to-[#0a4d3a] text-white py-3 sm:py-4 font-inter font-medium hover:from-[#0a4d3a] hover:to-[#023927] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group text-sm sm:text-base"
       >
-        Se connecter
+        <span className="flex items-center justify-center space-x-2">
+          <LockClosedIcon className="w-5 h-5" />
+          <span>Se connecter</span>
+        </span>
       </button>
     </form>
   );
@@ -205,54 +219,90 @@ function SignupForm() {
 
   const onSubmit = async (data: SignupValues) => {
     // TODO: call signup API
-    window.alert(`Inscription mock: ${data.email}`);
+    console.log('Signup attempt:', data);
+  };
+
+  const getStrengthColor = (score: number) => {
+    switch (score) {
+      case 0: return 'bg-red-400';
+      case 1: return 'bg-orange-400';
+      case 2: return 'bg-yellow-400';
+      case 3: return 'bg-blue-400';
+      case 4: return 'bg-green-500';
+      default: return 'bg-gray-200';
+    }
+  };
+
+  const getStrengthTextColor = (score: number) => {
+    switch (score) {
+      case 0: return 'text-red-600';
+      case 1: return 'text-orange-600';
+      case 2: return 'text-yellow-600';
+      case 3: return 'text-blue-600';
+      case 4: return 'text-green-600';
+      default: return 'text-gray-600';
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <div className="grid grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
-          <input 
-            {...register('firstName')} 
-            placeholder="Jean"
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
-          />
-          {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName.message}</p>}
+          <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+            Prénom *
+          </label>
+          <div className="relative">
+            <UserIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input 
+              {...register('firstName')} 
+              placeholder="Jean"
+              className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+            />
+          </div>
+          {errors.firstName && <p className="font-inter text-red-500 text-xs mt-2">{errors.firstName.message}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Nom</label>
-          <input 
-            {...register('lastName')} 
-            placeholder="Dupont"
-            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
-          />
-          {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName.message}</p>}
+          <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+            Nom *
+          </label>
+          <div className="relative">
+            <UserIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input 
+              {...register('lastName')} 
+              placeholder="Dupont"
+              className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+            />
+          </div>
+          {errors.lastName && <p className="font-inter text-red-500 text-xs mt-2">{errors.lastName.message}</p>}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Adresse email</label>
+        <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+          Adresse email *
+        </label>
         <div className="relative">
           <EnvelopeIcon className="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input 
             {...register('email')} 
             type="email" 
             placeholder="votre@email.com"
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
           />
         </div>
-        {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
+        {errors.email && <p className="font-inter text-red-500 text-xs mt-2">{errors.email.message}</p>}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+        <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+          Mot de passe *
+        </label>
         <div className="relative">
           <input 
             {...register('password')} 
             type={showPassword ? 'text' : 'password'} 
             placeholder="••••••••"
-            className="w-full px-4 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
+            className="w-full px-4 pr-12 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
           />
           <button 
             type="button" 
@@ -262,58 +312,64 @@ function SignupForm() {
             {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
           </button>
         </div>
-        {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>}
+        {errors.password && <p className="font-inter text-red-500 text-xs mt-2">{errors.password.message}</p>}
 
         {/* Password strength meter */}
         {password && (
-          <div className="mt-3">
-            <div className="flex items-center justify-between text-xs mb-1">
-              <span className="text-gray-600">Force du mot de passe</span>
-              <span className={`font-medium ${score >= 4 ? 'text-green-600' : score >= 2 ? 'text-yellow-600' : 'text-red-600'}`}>
+          <div className="mt-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-inter text-gray-600 text-xs">Force du mot de passe</span>
+              <span className={`font-inter font-medium text-xs ${getStrengthTextColor(score)}`}>
                 {strengthLabel(score)}
               </span>
             </div>
-            <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-gray-200">
               <div 
-                className={`h-2 transition-all duration-300 ${score >= 4 ? 'bg-green-500' : score >= 2 ? 'bg-yellow-400' : 'bg-red-400'}`} 
+                className={`h-1.5 transition-all duration-300 ${getStrengthColor(score)}`} 
                 style={{ width: `${(score / 4) * 100}%` }} 
               />
             </div>
-            {result?.feedback?.warning && <p className="text-xs text-yellow-600 mt-2">{result.feedback.warning}</p>}
-            {result?.feedback?.suggestions?.length > 0 && <p className="text-xs text-gray-500 mt-1">{result.feedback.suggestions[0]}</p>}
+            {result?.feedback?.warning && (
+              <p className="font-inter text-yellow-600 text-xs mt-2">{result.feedback.warning}</p>
+            )}
           </div>
         )}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Confirmer le mot de passe</label>
+        <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
+          Confirmer le mot de passe *
+        </label>
         <input 
           {...register('confirm')} 
           type={showPassword ? 'text' : 'password'} 
           placeholder="••••••••"
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all duration-300"
+          className="w-full px-4 py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
         />
-        {errors.confirm && <p className="text-xs text-red-500 mt-1">{errors.confirm.message}</p>}
+        {errors.confirm && <p className="font-inter text-red-500 text-xs mt-2">{errors.confirm.message}</p>}
       </div>
 
       <label className="flex items-start space-x-3 cursor-pointer">
         <input 
           {...register('acceptTerms')} 
           type="checkbox" 
-          className="w-4 h-4 mt-1 border-2 border-gray-300 rounded focus:ring-2 focus:ring-gray-900" 
+          className="w-4 h-4 mt-1 border-2 border-gray-300 focus:ring-2 focus:ring-[#023927]" 
         />
-        <span className="text-sm text-gray-600">
-          J'accepte les <Link to="/terms" className="text-gray-900 hover:text-gray-600 font-medium transition-colors duration-200">conditions générales</Link> et la <Link to="/privacy" className="text-gray-900 hover:text-gray-600 font-medium transition-colors duration-200">politique de confidentialité</Link>
+        <span className="font-inter text-gray-600 text-sm flex-1">
+          J'accepte les <Link to="/terms" className="text-[#023927] hover:text-[#0a4d3a] font-medium transition-colors duration-300">conditions générales</Link> et la <Link to="/privacy" className="text-[#023927] hover:text-[#0a4d3a] font-medium transition-colors duration-300">politique de confidentialité</Link>
         </span>
       </label>
-      {errors.acceptTerms && <p className="text-xs text-red-500 mt-1">{errors.acceptTerms.message}</p>}
+      {errors.acceptTerms && <p className="font-inter text-red-500 text-xs mt-2">{errors.acceptTerms.message}</p>}
 
       <button 
         type="submit" 
         disabled={isSubmitting || score < 2} 
-        className="w-full py-4 rounded-xl bg-gray-900 text-white font-inter uppercase tracking-wide hover:bg-gray-800 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-gradient-to-r from-[#023927] to-[#0a4d3a] text-white py-3 sm:py-4 font-inter font-medium hover:from-[#0a4d3a] hover:to-[#023927] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group text-sm sm:text-base"
       >
-        Créer un compte
+        <span className="flex items-center justify-center space-x-2">
+          <UserIcon className="w-5 h-5" />
+          <span>Créer un compte</span>
+        </span>
       </button>
     </form>
   );

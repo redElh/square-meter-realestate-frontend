@@ -10,8 +10,6 @@ import {
   UserCircleIcon,
   CogIcon,
   BellIcon,
-  ShieldCheckIcon,
-  StarIcon,
   BuildingStorefrontIcon,
   MapPinIcon,
   CurrencyEuroIcon,
@@ -23,76 +21,37 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
   XMarkIcon,
-  CheckBadgeIcon,
-  BuildingLibraryIcon
+  HomeIcon,
+  KeyIcon,
+  BanknotesIcon,
+  ChartPieIcon,
+  DocumentChartBarIcon,
+  FolderOpenIcon,
+  ArrowRightIcon
 } from '@heroicons/react/24/outline';
 import {
-  HeartIcon as HeartIconSolid,
-  StarIcon as StarIconSolid,
-  CheckBadgeIcon as CheckBadgeIconSolid,
-  EyeIcon as EyeIconSolid
+  HeartIcon as HeartIconSolid
 } from '@heroicons/react/24/solid';
 import UserProfile from '../../components/UserProfile';
 
 const Dashboard: React.FC = () => {
+  const [userType, setUserType] = useState<'buyer' | 'owner'>('buyer'); // Toggle between buyer and owner
   const [activeTab, setActiveTab] = useState('overview');
   const [notifications, setNotifications] = useState(3);
   const [isLoading, setIsLoading] = useState(true);
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   
-  // Sample appointments and requests data
-  const appointmentsData = [
-    {
-      id: 1,
-      title: 'Visite - Villa Les Oliviers',
-      date: '2025-11-10',
-      time: '14:00',
-      location: 'Saint-Tropez',
-      status: 'Confirmed',
-      advisor: 'Sophie Laurent'
-    },
-    {
-      id: 2,
-      title: 'Visite - Appartement Haussmannien',
-      date: '2025-11-15',
-      time: '11:00',
-      location: 'Paris 8ème',
-      status: 'Pending',
-      advisor: 'Thomas Moreau'
-    }
-  ];
-
-  const requestsData = [
-    {
-      id: 'REQ-001',
-      type: 'Estimation',
-      created: '2025-10-02',
-      status: 'En cours',
-      summary: 'Demande d\'estimation pour appartement Paris 8ème'
-    },
-    {
-      id: 'REQ-002',
-      type: 'Visite privée',
-      created: '2025-09-28',
-      status: 'Traitée',
-      summary: 'Organisation d\'une visite privée pour une villa'
-    }
-  ];
-
-  // Mock data with premium images
-  const savedProperties = [
+  // Buyer-specific data
+  const buyerSavedProperties = [
     { 
       id: 1, 
       title: 'Villa Les Oliviers', 
       location: 'Saint-Tropez', 
       price: '2,500,000 €',
       image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=600',
-      type: 'buy',
       surface: '420 m²',
       bedrooms: 6,
-      bathrooms: 5,
-      featured: true,
-      lastViewed: '2 hours ago'
+      bathrooms: 5
     },
     { 
       id: 2, 
@@ -100,60 +59,75 @@ const Dashboard: React.FC = () => {
       location: 'Paris 8ème', 
       price: '15,000 €/mois',
       image: 'https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=600',
-      type: 'rent',
       surface: '180 m²',
       bedrooms: 3,
-      bathrooms: 2,
-      featured: false,
-      lastViewed: '1 day ago'
-    },
-    { 
-      id: 3, 
-      title: 'Domaine Provençal Historique', 
-      location: 'Gordes', 
-      price: '4,800,000 €',
-      image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600',
-      type: 'buy',
-      surface: '650 m²',
-      bedrooms: 8,
-      bathrooms: 6,
-      featured: true,
-      lastViewed: '3 days ago'
+      bathrooms: 2
     }
   ];
 
-  const recentActivity = [
-    { 
-      type: 'view', 
-      property: 'Villa Les Oliviers', 
-      date: '2024-01-15', 
-      time: '14:30',
-      icon: EyeIcon,
-      color: 'text-blue-500'
+  const buyerSearches = [
+    { id: 1, criteria: 'Villa, 300-500m², Saint-Tropez, Budget 2-3M€', results: 12, date: '2024-12-10' },
+    { id: 2, criteria: 'Appartement, Paris 8ème, Location, 3+ chambres', results: 8, date: '2024-12-08' }
+  ];
+
+  // Owner-specific data
+  const ownerProperties = [
+    {
+      id: 1,
+      title: 'Ma Villa Méditerranéenne',
+      location: 'Nice',
+      status: 'En vente',
+      price: '1,850,000 €',
+      image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600',
+      views: 245,
+      favorites: 18,
+      inquiries: 7
     },
-    { 
-      type: 'saved', 
-      property: 'Appartement Haussmannien', 
-      date: '2024-01-14', 
-      time: '11:15',
-      icon: HeartIcon,
-      color: 'text-red-500'
+    {
+      id: 2,
+      title: 'Appartement Centre Ville',
+      location: 'Lyon',
+      status: 'En location',
+      price: '2,200 €/mois',
+      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600',
+      views: 132,
+      favorites: 9,
+      inquiries: 4
+    }
+  ];
+
+  const ownerStats = [
+    { label: 'Propriétés actives', value: '2', icon: HomeIcon },
+    { label: 'Visites ce mois', value: '8', icon: CalendarIcon },
+    { label: 'Demandes reçues', value: '11', icon: EnvelopeIcon },
+    { label: 'Revenus mensuels', value: '2,200 €', icon: BanknotesIcon }
+  ];
+
+  const buyerStats = [
+    { label: 'Biens sauvegardés', value: '12', icon: HeartIcon },
+    { label: 'Visites programmées', value: '3', icon: CalendarIcon },
+    { label: 'Messages', value: '5', icon: EnvelopeIcon },
+    { label: 'Recherches actives', value: '2', icon: MagnifyingGlassIcon }
+  ];
+
+  const appointmentsData = [
+    {
+      id: 1,
+      title: 'Visite - Villa Les Oliviers',
+      date: '2025-12-15',
+      time: '14:00',
+      location: 'Saint-Tropez',
+      status: 'Confirmé',
+      advisor: 'Sophie Laurent'
     },
-    { 
-      type: 'contact', 
-      property: 'Domaine Provençal', 
-      date: '2024-01-12', 
-      time: '09:45',
-      icon: ChatBubbleLeftIcon,
-      color: 'text-green-500'
-    },
-    { 
-      type: 'appointment', 
-      property: 'Villa Baie des Anges', 
-      date: '2024-01-10', 
-      time: '16:20',
-      icon: CalendarIcon,
-      color: 'text-purple-500'
+    {
+      id: 2,
+      title: 'Visite - Appartement Haussmannien',
+      date: '2025-12-18',
+      time: '11:00',
+      location: 'Paris 8ème',
+      status: 'En attente',
+      advisor: 'Thomas Moreau'
     }
   ];
 
@@ -161,86 +135,35 @@ const Dashboard: React.FC = () => {
     {
       id: 1,
       sender: 'Sophie Laurent',
-      role: 'Directrice des Ventes',
-      content: 'Bonjour, je vous recontacte concernant votre visite de la Villa Les Oliviers...',
-      time: '2 hours ago',
-      unread: true,
-      avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400'
+      role: 'Conseillère immobilière',
+      content: 'Bonjour, je vous recontacte concernant votre visite...',
+      time: '2h',
+      unread: true
     },
     {
       id: 2,
       sender: 'Thomas Moreau',
-      role: 'Responsable Conciergerie',
-      content: 'Votre demande de services conciergerie a bien été prise en compte...',
-      time: '1 day ago',
-      unread: false,
-      avatar: 'https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=400'
+      role: 'Agent commercial',
+      content: 'Votre demande a bien été prise en compte...',
+      time: '1j',
+      unread: false
     }
   ];
 
-  const stats = [
-    { 
-      label: 'Biens Sauvegardés', 
-      value: '12', 
-      change: '+2', 
-      icon: HeartIcon,
-      color: 'from-red-500 to-pink-600',
-      trend: 'up'
-    },
-    { 
-      label: 'Visites Programméees', 
-      value: '3', 
-      change: '+1', 
-      icon: CalendarIcon,
-      color: 'from-purple-500 to-indigo-600',
-      trend: 'up'
-    },
-    { 
-      label: 'Messages Non Lus', 
-      value: '5', 
-      change: '-2', 
-      icon: EnvelopeIcon,
-      color: 'from-blue-500 to-cyan-600',
-      trend: 'down'
-    },
-    { 
-      label: 'Favoris Experts', 
-      value: '8', 
-      change: '+3', 
-      icon: StarIcon,
-      color: 'from-amber-500 to-orange-600',
-      trend: 'up'
-    }
-  ];
-
-  const userProfile = {
-    name: 'Jean Dupont',
-    membership: 'Premium Client',
-    since: '2023',
-    avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400',
-    completion: 85,
-    nextAppointment: '2024-01-20 à 14:00',
-    advisor: 'Sophie Laurent'
-  };
 
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => setIsLoading(false), 1000);
+    setTimeout(() => setIsLoading(false), 800);
   }, []);
 
-  // Function to handle opening UserProfile
   const handleOpenUserProfile = () => {
     setIsUserProfileOpen(true);
   };
 
-  // Function to handle closing UserProfile
   const handleCloseUserProfile = () => {
     setIsUserProfileOpen(false);
-    // When profile closed, switch back to overview tab
     setActiveTab('overview');
   };
 
-  // Handle navigation item clicks
   const handleNavigationClick = (tabId: string) => {
     setActiveTab(tabId);
     if (tabId === 'profile') {
@@ -250,171 +173,260 @@ const Dashboard: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-ivory via-white to-amber-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-20 w-20 border-b-2 border-gold"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 border-t-2 border-deep-green rounded-full animate-spin reverse"></div>
-            </div>
-          </div>
-          <p className="mt-4 font-didot text-deep-green text-lg">Chargement de votre espace...</p>
+          <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent animate-spin mx-auto"></div>
+          <p className="mt-4 text-emerald-800 text-lg font-medium">Chargement...</p>
         </div>
       </div>
     );
   }
 
+  const currentStats = userType === 'buyer' ? buyerStats : ownerStats;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ivory via-white to-amber-50 py-8">
-      <div className="container mx-auto px-4 sm:px-6">
-        {/* Enhanced Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
-          <div>
-            <h1 className="text-5xl md:text-6xl font-inter uppercase text-deep-green mb-4">
-              Mon Espace Privé
-            </h1>
-            <p className="text-xl font-didot text-gray-600 max-w-2xl">
-              Bienvenue dans votre espace personnel Square Meter, {userProfile.name}
-            </p>
-          </div>
-          
-          {/* Notifications & Quick Actions */}
-          <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-            <button className="relative p-3 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-gold/20 hover:shadow-xl transition-all duration-300 group">
-              <BellIcon className="w-6 h-6 text-deep-green group-hover:text-gold transition-colors duration-300" />
-              {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-ivory text-xs rounded-full flex items-center justify-center animate-pulse">
-                  {notifications}
-                </span>
-              )}
-            </button>
-            <Link
-              to="/contact"
-              className="bg-gradient-to-r from-gold to-amber-600 text-deep-green px-6 py-3 rounded-2xl font-inter uppercase tracking-wide hover:from-amber-500 hover:to-gold transition-all duration-500 transform hover:scale-105 flex items-center space-x-2 shadow-lg"
-            >
-              <PlusIcon className="w-5 h-5" />
-              <span>Nouvelle Demande</span>
-            </Link>
+    <div className="min-h-screen bg-gray-50 pt-8">
+      {/* Header Section */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-4 sm:px-6 py-6">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+            <div>
+              <h1 className="text-4xl font-bold text-emerald-800 mb-2">
+                {userType === 'buyer' ? 'Espace Acheteur' : 'Espace Propriétaire'}
+              </h1>
+              <p className="text-gray-600">
+                {userType === 'buyer' 
+                  ? 'Gérez vos recherches et favoris immobiliers' 
+                  : 'Gérez vos propriétés et suivez vos performances'}
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              {/* User Type Toggle */}
+              <div className="flex bg-gray-100 p-1">
+                <button
+                  onClick={() => { setUserType('buyer'); setActiveTab('overview'); }}
+                  className={`px-6 py-2 font-medium transition-all ${
+                    userType === 'buyer'
+                      ? 'bg-emerald-600 text-white'
+                      : 'text-gray-600 hover:text-emerald-600'
+                  }`}
+                >
+                  Acheteur
+                </button>
+                <button
+                  onClick={() => { setUserType('owner'); setActiveTab('overview'); }}
+                  className={`px-6 py-2 font-medium transition-all ${
+                    userType === 'owner'
+                      ? 'bg-emerald-600 text-white'
+                      : 'text-gray-600 hover:text-emerald-600'
+                  }`}
+                >
+                  Propriétaire
+                </button>
+              </div>
+
+              <button className="relative p-3 bg-white border border-gray-200 hover:border-emerald-600 transition-all">
+                <BellIcon className="w-6 h-6 text-gray-700" />
+                {notifications > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center">
+                    {notifications}
+                  </span>
+                )}
+              </button>
+              
+              <Link
+                to="/contact"
+                className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
+              >
+                <PlusIcon className="w-5 h-5" />
+                <span>Nouvelle demande</span>
+              </Link>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Enhanced Sidebar */}
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 sm:px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sticky top-8 border border-gold/20">
-              {/* User Profile Card */}
-              <div className="text-center mb-8">
-                <div className="relative inline-block mb-4">
-                  <img
-                    src={userProfile.avatar}
-                    alt={userProfile.name}
-                    className="w-24 h-24 rounded-2xl object-cover border-4 border-gold shadow-lg mx-auto"
-                  />
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                    <CheckBadgeIconSolid className="w-4 h-4 text-white" />
-                  </div>
-                </div>
-                <h3 className="font-inter uppercase text-deep-green text-xl mb-1">{userProfile.name}</h3>
-                <div className="flex items-center justify-center space-x-2 mb-2">
-                  <ShieldCheckIcon className="w-4 h-4 text-gold" />
-                  <p className="font-didot text-gold text-sm">{userProfile.membership}</p>
-                </div>
-                <p className="font-didot text-gray-600 text-sm">Membre depuis {userProfile.since}</p>
-                
-                {/* Profile Completion */}
-                <div className="mt-4">
-                  <div className="flex justify-between text-xs text-gray-600 mb-1">
-                    <span>Profil complété</span>
-                    <span>{userProfile.completion}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-gradient-to-r from-gold to-amber-600 h-2 rounded-full transition-all duration-500"
-                      style={{ width: `${userProfile.completion}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Navigation */}
+            <div className="bg-white border border-gray-200 p-6 sticky top-6">
               <nav className="space-y-2">
-                {[
-                  { id: 'overview', label: 'Vue d\'ensemble', icon: ChartBarIcon, badge: null },
-                  { id: 'properties', label: 'Biens sauvegardés', icon: HeartIcon, badge: savedProperties.length },
-                  { id: 'requests', label: 'Mes demandes', icon: DocumentTextIcon, badge: '3' },
-                  { id: 'messages', label: 'Messages', icon: EnvelopeIcon, badge: messages.filter(m => m.unread).length },
-                  { id: 'appointments', label: 'Rendez-vous', icon: CalendarIcon, badge: '2' },
-                  { id: 'profile', label: 'Profil', icon: UserCircleIcon, badge: null },
-                ].map((item) => {
-                  const IconComponent = item.icon;
-                  return (
+                {userType === 'buyer' ? (
+                  <>
                     <button
-                      key={item.id}
-                      onClick={() => handleNavigationClick(item.id)}
-                      className={`w-full text-left flex items-center justify-between p-4 rounded-2xl transition-all duration-300 group ${
-                        activeTab === item.id
-                          ? 'bg-gradient-to-r from-deep-green to-emerald-800 text-ivory shadow-lg transform scale-105'
-                          : 'text-gray-700 hover:bg-gradient-to-r hover:from-gold/10 hover:to-transparent hover:border hover:border-gold/30'
+                      onClick={() => setActiveTab('overview')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'overview'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <div className="flex items-center space-x-3">
-                        <IconComponent className={`w-5 h-5 ${activeTab === item.id ? 'text-ivory' : 'text-gold'} transition-colors duration-300`} />
-                        <span className="font-didot">{item.label}</span>
-                      </div>
-                      {item.badge && (
-                        <span className={`px-2 py-1 rounded-full text-xs font-inter ${
-                          activeTab === item.id 
-                            ? 'bg-ivory text-deep-green' 
-                            : 'bg-gold text-deep-green'
-                        }`}>
-                          {item.badge}
-                        </span>
-                      )}
+                      <ChartBarIcon className="w-5 h-5" />
+                      <span>Vue d'ensemble</span>
                     </button>
-                  );
-                })}
+                    <button
+                      onClick={() => setActiveTab('saved')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'saved'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <HeartIcon className="w-5 h-5" />
+                      <span>Biens sauvegardés</span>
+                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold">
+                        {buyerSavedProperties.length}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('searches')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'searches'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <MagnifyingGlassIcon className="w-5 h-5" />
+                      <span>Mes recherches</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('appointments')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'appointments'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <CalendarIcon className="w-5 h-5" />
+                      <span>Rendez-vous</span>
+                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold">
+                        {appointmentsData.length}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('messages')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'messages'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <EnvelopeIcon className="w-5 h-5" />
+                      <span>Messages</span>
+                      <span className="ml-auto bg-red-500 text-white px-2 py-1 text-xs font-semibold">
+                        {messages.filter(m => m.unread).length}
+                      </span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setActiveTab('overview')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'overview'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ChartBarIcon className="w-5 h-5" />
+                      <span>Vue d'ensemble</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('properties')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'properties'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <HomeIcon className="w-5 h-5" />
+                      <span>Mes propriétés</span>
+                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold">
+                        {ownerProperties.length}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('analytics')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'analytics'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <ChartPieIcon className="w-5 h-5" />
+                      <span>Statistiques</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('inquiries')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'inquiries'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <EnvelopeIcon className="w-5 h-5" />
+                      <span>Demandes reçues</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('documents')}
+                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        activeTab === 'documents'
+                          ? 'bg-emerald-600 text-white'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <FolderOpenIcon className="w-5 h-5" />
+                      <span>Documents</span>
+                    </button>
+                  </>
+                )}
+                <button
+                  onClick={() => handleNavigationClick('profile')}
+                  className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                    activeTab === 'profile'
+                      ? 'bg-emerald-600 text-white'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <UserCircleIcon className="w-5 h-5" />
+                  <span>Profil</span>
+                </button>
+                <button
+                  className="w-full text-left flex items-center gap-3 px-4 py-3 font-medium text-gray-700 hover:bg-gray-50 transition-all"
+                >
+                  <CogIcon className="w-5 h-5" />
+                  <span>Paramètres</span>
+                </button>
               </nav>
-
-              {/* Next Appointment */}
-              <div className="mt-8 pt-6 border-t border-gold/30">
-                <div className="text-center">
-                  <p className="font-didot text-gray-600 text-sm mb-2">Prochain rendez-vous</p>
-                  <p className="font-inter text-deep-green text-sm mb-1">{userProfile.nextAppointment}</p>
-                  <p className="font-didot text-gold text-xs">avec {userProfile.advisor}</p>
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Main Content */}
+
+          {/* Main Content Area */}
           <div className="lg:col-span-3">
             {/* Overview Tab */}
             {activeTab === 'overview' && (
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                  {stats.map((stat, index) => {
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                  {currentStats.map((stat, index) => {
                     const IconComponent = stat.icon;
                     return (
                       <div 
                         key={index}
-                        className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-gold/20 hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 group"
+                        className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all"
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <div className={`p-3 rounded-2xl bg-gradient-to-r ${stat.color} shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
-                            <IconComponent className="w-6 h-6 text-white" />
-                          </div>
-                          <div className={`flex items-center space-x-1 text-sm font-inter ${
-                            stat.trend === 'up' ? 'text-green-500' : 'text-red-500'
-                          }`}>
-                            <ArrowTrendingUpIcon className={`w-4 h-4 ${stat.trend === 'down' ? 'transform rotate-180' : ''}`} />
-                            <span>{stat.change}</span>
-                          </div>
+                          <IconComponent className="w-8 h-8 text-emerald-600" />
                         </div>
-                        <div className="text-3xl font-inter text-deep-green font-light mb-1">
+                        <div className="text-3xl font-bold text-gray-900 mb-1">
                           {stat.value}
                         </div>
-                        <div className="font-didot text-gray-600 text-sm">
+                        <div className="text-sm text-gray-600">
                           {stat.label}
                         </div>
                       </div>
@@ -422,269 +434,345 @@ const Dashboard: React.FC = () => {
                   })}
                 </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                  {/* Recent Activity */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 border border-gold/20">
-                    <div className="flex items-center justify-between mb-6">
-                      <h3 className="font-inter uppercase text-deep-green text-xl">Activité Récente</h3>
-                      <Link to="/activity" className="text-gold hover:text-deep-green font-inter uppercase text-sm transition-colors duration-300">
-                        Voir tout
+                {/* Buyer Overview */}
+                {userType === 'buyer' && (
+                  <>
+                    {/* Saved Properties Preview */}
+                    <div className="bg-white border border-gray-200 p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-xl font-bold text-gray-900">Biens sauvegardés récents</h3>
+                        <button 
+                          onClick={() => setActiveTab('saved')}
+                          className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2"
+                        >
+                          Voir tout
+                          <ArrowRightIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {buyerSavedProperties.map((property) => (
+                          <div key={property.id} className="border border-gray-200 hover:border-emerald-600 transition-all group">
+                            <div className="relative h-48 overflow-hidden">
+                              <img 
+                                src={property.image} 
+                                alt={property.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                              />
+                              <button className="absolute top-4 right-4 w-10 h-10 bg-white flex items-center justify-center hover:bg-emerald-600 transition-all">
+                                <HeartIconSolid className="w-5 h-5 text-red-500" />
+                              </button>
+                            </div>
+                            <div className="p-4">
+                              <h4 className="text-lg font-bold text-gray-900 mb-2">
+                                {property.title}
+                              </h4>
+                              <div className="flex items-center text-gray-600 mb-3 gap-1">
+                                <MapPinIcon className="w-4 h-4" />
+                                <span className="text-sm">{property.location}</span>
+                              </div>
+                              <div className="text-2xl font-bold text-emerald-600 mb-4">
+                                {property.price}
+                              </div>
+                              <div className="flex gap-4 text-sm text-gray-600 mb-4">
+                                <span>{property.surface}</span>
+                                <span>•</span>
+                                <span>{property.bedrooms} ch.</span>
+                                <span>•</span>
+                                <span>{property.bathrooms} sdb</span>
+                              </div>
+                              <Link
+                                to={`/properties/${property.id}`}
+                                className="block w-full bg-emerald-600 text-white py-3 text-center font-medium hover:bg-emerald-700 transition-all"
+                              >
+                                Voir les détails
+                              </Link>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Link
+                        to="/properties"
+                        className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all group"
+                      >
+                        <MagnifyingGlassIcon className="w-10 h-10 text-emerald-600 mb-4" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Rechercher un bien</h4>
+                        <p className="text-gray-600 text-sm">Parcourir notre catalogue de propriétés exclusives</p>
+                      </Link>
+                      <Link
+                        to="/contact"
+                        className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all group"
+                      >
+                        <ChatBubbleLeftIcon className="w-10 h-10 text-emerald-600 mb-4" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Contacter un conseiller</h4>
+                        <p className="text-gray-600 text-sm">Un expert à votre écoute pour vous accompagner</p>
                       </Link>
                     </div>
-                    <div className="space-y-4">
-                      {recentActivity.map((activity, index) => {
-                        const IconComponent = activity.icon;
-                        return (
-                          <div key={index} className="flex items-center justify-between p-4 rounded-2xl hover:bg-gradient-to-r hover:from-gold/5 hover:to-transparent transition-all duration-300 group">
-                            <div className="flex items-center space-x-4">
-                              <div className={`p-3 rounded-xl bg-gradient-to-br from-gray-50 to-white shadow-lg group-hover:shadow-xl transition-all duration-300`}>
-                                <IconComponent className={`w-5 h-5 ${activity.color}`} />
-                              </div>
-                              <div>
-                                <div className="font-didot text-gray-700">{activity.property}</div>
-                                <div className="font-didot text-gray-500 text-sm capitalize">
-                                  {activity.type === 'view' && 'Consulté'}
-                                  {activity.type === 'saved' && 'Sauvegardé'}
-                                  {activity.type === 'contact' && 'Contacté'}
-                                  {activity.type === 'appointment' && 'Rendez-vous programmé'}
+                  </>
+                )}
+
+                {/* Owner Overview */}
+                {userType === 'owner' && (
+                  <>
+                    {/* Properties Performance */}
+                    <div className="bg-white border border-gray-200 p-6">
+                      <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-xl font-bold text-gray-900">Performances de vos biens</h3>
+                        <button 
+                          onClick={() => setActiveTab('properties')}
+                          className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2"
+                        >
+                          Gérer
+                          <ArrowRightIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="space-y-4">
+                        {ownerProperties.map((property) => (
+                          <div key={property.id} className="border border-gray-200 p-4 hover:border-emerald-600 transition-all">
+                            <div className="flex gap-4">
+                              <img 
+                                src={property.image} 
+                                alt={property.title}
+                                className="w-32 h-32 object-cover"
+                              />
+                              <div className="flex-1">
+                                <div className="flex items-start justify-between mb-2">
+                                  <div>
+                                    <h4 className="text-lg font-bold text-gray-900">{property.title}</h4>
+                                    <p className="text-sm text-gray-600 flex items-center gap-1">
+                                      <MapPinIcon className="w-4 h-4" />
+                                      {property.location}
+                                    </p>
+                                  </div>
+                                  <span className="bg-emerald-100 text-emerald-800 px-3 py-1 text-sm font-semibold">
+                                    {property.status}
+                                  </span>
+                                </div>
+                                <div className="text-2xl font-bold text-emerald-600 mb-3">
+                                  {property.price}
+                                </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                  <div>
+                                    <div className="text-sm text-gray-600">Vues</div>
+                                    <div className="text-lg font-bold text-gray-900">{property.views}</div>
+                                  </div>
+                                  <div>
+                                    <div className="text-sm text-gray-600">Favoris</div>
+                                    <div className="text-lg font-bold text-gray-900">{property.favorites}</div>
+                                  </div>
+                                  <div>
+                                    <div className="text-sm text-gray-600">Demandes</div>
+                                    <div className="text-lg font-bold text-gray-900">{property.inquiries}</div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                            <div className="text-right">
-                              <div className="font-didot text-gray-500 text-sm">{activity.date}</div>
-                              <div className="font-didot text-gray-400 text-xs">{activity.time}</div>
-                            </div>
                           </div>
-                        );
-                      })}
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Quick Actions */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 border border-gold/20">
-                    <h3 className="font-inter uppercase text-deep-green text-xl mb-6">Actions Rapides</h3>
-                    <div className="grid grid-cols-1 gap-4">
+                    {/* Quick Actions for Owners */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Link
-                        to="/properties"
-                        className="flex items-center space-x-4 p-4 rounded-2xl border-2 border-gold/30 hover:border-gold hover:bg-gradient-to-r hover:from-gold/5 hover:to-transparent transition-all duration-500 transform hover:scale-105 group"
+                        to="/selling"
+                        className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all"
                       >
-                        <div className="w-12 h-12 bg-gradient-to-br from-gold to-amber-600 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                          <MagnifyingGlassIcon className="w-6 h-6 text-deep-green" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-inter uppercase text-deep-green group-hover:text-gold transition-colors duration-300">
-                            Rechercher un bien
-                          </div>
-                          <div className="font-didot text-gray-600 text-sm">Parcourir nos propriétés exclusives</div>
-                        </div>
-                        <ArrowTrendingUpIcon className="w-5 h-5 text-gold transform group-hover:translate-x-1 transition-transform duration-300" />
+                        <PlusIcon className="w-10 h-10 text-emerald-600 mb-4" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Ajouter une propriété</h4>
+                        <p className="text-gray-600 text-sm">Mettre un nouveau bien en vente ou location</p>
                       </Link>
-                      
                       <Link
                         to="/contact"
-                        className="flex items-center space-x-4 p-4 rounded-2xl border-2 border-gold/30 hover:border-gold hover:bg-gradient-to-r hover:from-gold/5 hover:to-transparent transition-all duration-500 transform hover:scale-105 group"
+                        className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all"
                       >
-                        <div className="w-12 h-12 bg-gradient-to-br from-gold to-amber-600 rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                          <ChatBubbleLeftIcon className="w-6 h-6 text-deep-green" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="font-inter uppercase text-deep-green group-hover:text-gold transition-colors duration-300">
-                            Contacter un conseiller
-                          </div>
-                          <div className="font-didot text-gray-600 text-sm">Expertise personnalisée</div>
-                        </div>
-                        <ArrowTrendingUpIcon className="w-5 h-5 text-gold transform group-hover:translate-x-1 transition-transform duration-300" />
+                        <DocumentChartBarIcon className="w-10 h-10 text-emerald-600 mb-4" />
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">Demander une estimation</h4>
+                        <p className="text-gray-600 text-sm">Obtenez une évaluation professionnelle gratuite</p>
                       </Link>
                     </div>
+                  </>
+                )}
+              </div>
+            )}
+
+
+            {/* Buyer: Saved Properties Tab */}
+            {activeTab === 'saved' && userType === 'buyer' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Biens sauvegardés</h3>
+                    <p className="text-gray-600">{buyerSavedProperties.length} propriétés</p>
                   </div>
+                  <select className="px-4 py-2 border border-gray-200 bg-white text-gray-700">
+                    <option>Trier par date</option>
+                    <option>Prix croissant</option>
+                    <option>Prix décroissant</option>
+                  </select>
                 </div>
 
-                {/* Featured Saved Properties */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 border border-gold/20">
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-inter uppercase text-deep-green text-xl">Vos Biens Favoris</h3>
-                    <Link to="/dashboard?tab=properties" className="text-gold hover:text-deep-green font-inter uppercase text-sm transition-colors duration-300">
-                      Voir tous ({savedProperties.length})
-                    </Link>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {savedProperties.slice(0, 2).map((property) => (
-                      <div key={property.id} className="group bg-gradient-to-br from-white to-ivory rounded-2xl shadow-lg overflow-hidden hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border border-gold/20">
-                        <div className="relative overflow-hidden h-48">
-                          <img 
-                            src={property.image} 
-                            alt={property.title}
-                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                          
-                          {/* Badges */}
-                          <div className="absolute top-4 left-4 flex space-x-2">
-                            {property.featured && (
-                              <span className="bg-gold text-deep-green px-3 py-1 font-inter uppercase text-xs tracking-wide rounded-full shadow-lg">
-                                EXCLUSIF
-                              </span>
-                            )}
-                            <span className={`px-3 py-1 font-inter uppercase text-xs tracking-wide rounded-full shadow-lg ${
-                              property.type === 'buy' 
-                                ? 'bg-blue-500 text-ivory' 
-                                : 'bg-green-500 text-ivory'
-                            }`}>
-                              {property.type === 'buy' ? 'À VENDRE' : 'À LOUER'}
-                            </span>
-                          </div>
-
-                          {/* Favorite Button */}
-                          <button className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-gold">
-                            <HeartIconSolid className="w-5 h-5 text-red-500" />
-                          </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {buyerSavedProperties.map((property) => (
+                    <div key={property.id} className="border border-gray-200 hover:border-emerald-600 transition-all group">
+                      <div className="relative h-56 overflow-hidden">
+                        <img 
+                          src={property.image} 
+                          alt={property.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <button className="absolute top-4 right-4 w-10 h-10 bg-white flex items-center justify-center hover:bg-red-50 transition-all">
+                          <HeartIconSolid className="w-5 h-5 text-red-500" />
+                        </button>
+                      </div>
+                      <div className="p-6">
+                        <h4 className="text-xl font-bold text-gray-900 mb-2">
+                          {property.title}
+                        </h4>
+                        <div className="flex items-center text-gray-600 mb-4 gap-1">
+                          <MapPinIcon className="w-4 h-4" />
+                          <span className="text-sm">{property.location}</span>
                         </div>
-                        
-                        <div className="p-6">
-                          <h4 className="font-inter uppercase text-deep-green text-lg mb-2 group-hover:text-gold transition-colors duration-300">
-                            {property.title}
-                          </h4>
-                          <div className="flex items-center text-gray-600 mb-3">
-                            <MapPinIcon className="w-4 h-4 mr-2" />
-                            <span className="font-didot">{property.location}</span>
-                          </div>
-                          
-                          <div className="flex justify-between items-center mb-4">
-                            <span className="text-2xl font-didot text-gold font-semibold">
-                              {property.price}
-                            </span>
-                            <span className="font-didot text-gray-600 text-sm">
-                              {property.surface} • {property.bedrooms} ch.
-                            </span>
-                          </div>
-
-                          <div className="flex space-x-2">
-                            <Link
-                              to={`/properties/${property.id}`}
-                              className="flex-1 bg-deep-green text-ivory py-3 rounded-xl font-inter uppercase tracking-wide hover:bg-gold hover:text-deep-green transition-all duration-300 transform hover:scale-105 text-center text-sm"
-                            >
-                              Voir détail
-                            </Link>
-                            <button className="px-4 py-3 border border-red-500 text-red-500 rounded-xl hover:bg-red-50 transition-all duration-300 transform hover:scale-105">
-                              <XMarkIcon className="w-5 h-5" />
-                            </button>
-                          </div>
+                        <div className="text-3xl font-bold text-emerald-600 mb-4">
+                          {property.price}
+                        </div>
+                        <div className="flex gap-4 text-sm text-gray-600 mb-6 pb-6 border-b border-gray-200">
+                          <span>{property.surface}</span>
+                          <span>•</span>
+                          <span>{property.bedrooms} chambres</span>
+                          <span>•</span>
+                          <span>{property.bathrooms} sdb</span>
+                        </div>
+                        <div className="flex gap-3">
+                          <Link
+                            to={`/properties/${property.id}`}
+                            className="flex-1 bg-emerald-600 text-white py-3 text-center font-medium hover:bg-emerald-700 transition-all"
+                          >
+                            Voir détails
+                          </Link>
+                          <Link
+                            to="/contact"
+                            className="flex-1 border border-emerald-600 text-emerald-600 py-3 text-center font-medium hover:bg-emerald-50 transition-all"
+                          >
+                            Contacter
+                          </Link>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
-            {/* Properties Tab */}
-            {activeTab === 'properties' && (
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 border border-gold/20">
-                <div className="flex items-center justify-between mb-8">
+            {/* Buyer: Searches Tab */}
+            {activeTab === 'searches' && userType === 'buyer' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="font-inter uppercase text-deep-green text-2xl mb-2">Vos Biens Sauvegardés</h3>
-                    <p className="font-didot text-gray-600">{savedProperties.length} propriétés sauvegardées</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Mes recherches</h3>
+                    <p className="text-gray-600">Gérez vos critères de recherche</p>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <select className="px-4 py-3 border-2 border-gold/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gold font-didot bg-white/50 backdrop-blur-sm">
-                      <option>Trier par</option>
-                      <option>Récents</option>
-                      <option>Prix croissant</option>
-                      <option>Prix décroissant</option>
-                    </select>
-                  </div>
+                  <Link
+                    to="/properties"
+                    className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all"
+                  >
+                    Nouvelle recherche
+                  </Link>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {savedProperties.map((property) => (
-                    <div key={property.id} className="group bg-gradient-to-br from-white to-ivory rounded-2xl shadow-lg overflow-hidden hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border border-gold/20">
-                      <div className="relative overflow-hidden h-64">
+                <div className="space-y-4">
+                  {buyerSearches.map((search) => (
+                    <div key={search.id} className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-gray-900 mb-2">{search.criteria}</h4>
+                          <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <span>{search.results} résultats</span>
+                            <span>•</span>
+                            <span>Créée le {search.date}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-3">
+                          <button className="px-4 py-2 border border-emerald-600 text-emerald-600 font-medium hover:bg-emerald-50 transition-all">
+                            Modifier
+                          </button>
+                          <button className="px-4 py-2 bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-all">
+                            Voir résultats
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Owner: Properties Tab */}
+            {activeTab === 'properties' && userType === 'owner' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Mes propriétés</h3>
+                    <p className="text-gray-600">{ownerProperties.length} biens actifs</p>
+                  </div>
+                  <Link
+                    to="/selling"
+                    className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
+                  >
+                    <PlusIcon className="w-5 h-5" />
+                    Ajouter un bien
+                  </Link>
+                </div>
+
+                <div className="space-y-6">
+                  {ownerProperties.map((property) => (
+                    <div key={property.id} className="border border-gray-200 hover:border-emerald-600 transition-all">
+                      <div className="flex gap-6 p-6">
                         <img 
                           src={property.image} 
                           alt={property.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          className="w-48 h-48 object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        
-                        {/* Badges */}
-                        <div className="absolute top-4 left-4 flex space-x-2">
-                          {property.featured && (
-                            <span className="bg-gold text-deep-green px-3 py-1 font-inter uppercase text-xs tracking-wide rounded-full shadow-lg">
-                              EXCLUSIF
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h4 className="text-2xl font-bold text-gray-900 mb-2">{property.title}</h4>
+                              <p className="text-gray-600 flex items-center gap-1">
+                                <MapPinIcon className="w-4 h-4" />
+                                {property.location}
+                              </p>
+                            </div>
+                            <span className="bg-emerald-100 text-emerald-800 px-4 py-2 font-semibold">
+                              {property.status}
                             </span>
-                          )}
-                          <span className={`px-3 py-1 font-inter uppercase text-xs tracking-wide rounded-full shadow-lg ${
-                            property.type === 'buy' 
-                              ? 'bg-blue-500 text-ivory' 
-                              : 'bg-green-500 text-ivory'
-                          }`}>
-                            {property.type === 'buy' ? 'À VENDRE' : 'À LOUER'}
-                          </span>
-                        </div>
-
-                        {/* Action Buttons */}
-                        <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <button className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-gold transition-colors duration-300">
-                            <EyeIcon className="w-5 h-5 text-ivory" />
-                          </button>
-                          <button className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-500 transition-colors duration-300">
-                            <XMarkIcon className="w-5 h-5 text-ivory" />
-                          </button>
-                        </div>
-
-                        {/* Last Viewed */}
-                        <div className="absolute bottom-4 left-4">
-                          <span className="bg-black/50 text-ivory px-3 py-1 rounded-full font-didot text-xs backdrop-blur-sm">
-                            Vu {property.lastViewed}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="p-6">
-                        <h4 className="font-inter uppercase text-deep-green text-xl mb-3 group-hover:text-gold transition-colors duration-300">
-                          {property.title}
-                        </h4>
-                        <div className="flex items-center text-gray-600 mb-4">
-                          <MapPinIcon className="w-4 h-4 mr-2" />
-                          <span className="font-didot">{property.location}</span>
-                        </div>
-                        
-                        {/* Property Features */}
-                        <div className="grid grid-cols-3 gap-4 mb-6">
-                          <div className="text-center p-3 bg-ivory rounded-xl">
-                            <BuildingStorefrontIcon className="w-6 h-6 text-gold mx-auto mb-1" />
-                            <div className="font-inter text-deep-green font-semibold">{property.surface}</div>
-                            <div className="font-didot text-gray-600 text-xs">Surface</div>
                           </div>
-                          <div className="text-center p-3 bg-ivory rounded-xl">
-                            <div className="w-6 h-6 text-gold mx-auto mb-1">🛏️</div>
-                            <div className="font-inter text-deep-green font-semibold">{property.bedrooms}</div>
-                            <div className="font-didot text-gray-600 text-xs">Chambres</div>
-                          </div>
-                          <div className="text-center p-3 bg-ivory rounded-xl">
-                            <div className="w-6 h-6 text-gold mx-auto mb-1">🛁</div>
-                            <div className="font-inter text-deep-green font-semibold">{property.bathrooms}</div>
-                            <div className="font-didot text-gray-600 text-xs">SDB</div>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <span className="text-2xl font-didot text-gold font-semibold">
+                          <div className="text-3xl font-bold text-emerald-600 mb-6">
                             {property.price}
-                          </span>
-                          <div className="flex space-x-2">
-                            <Link
-                              to={`/properties/${property.id}`}
-                              className="bg-deep-green text-ivory px-6 py-3 rounded-xl font-inter uppercase tracking-wide hover:bg-gold hover:text-deep-green transition-all duration-300 transform hover:scale-105 text-sm"
-                            >
-                              Découvrir
-                            </Link>
-                            <Link
-                              to="/contact"
-                              className="border-2 border-deep-green text-deep-green px-6 py-3 rounded-xl font-inter uppercase tracking-wide hover:bg-deep-green hover:text-ivory transition-all duration-300 transform hover:scale-105 text-sm"
-                            >
-                              Contacter
-                            </Link>
+                          </div>
+                          <div className="grid grid-cols-3 gap-6 mb-6">
+                            <div className="bg-gray-50 p-4">
+                              <div className="text-sm text-gray-600 mb-1">Vues totales</div>
+                              <div className="text-2xl font-bold text-gray-900">{property.views}</div>
+                            </div>
+                            <div className="bg-gray-50 p-4">
+                              <div className="text-sm text-gray-600 mb-1">Mis en favoris</div>
+                              <div className="text-2xl font-bold text-gray-900">{property.favorites}</div>
+                            </div>
+                            <div className="bg-gray-50 p-4">
+                              <div className="text-sm text-gray-600 mb-1">Demandes reçues</div>
+                              <div className="text-2xl font-bold text-gray-900">{property.inquiries}</div>
+                            </div>
+                          </div>
+                          <div className="flex gap-3">
+                            <button className="px-6 py-3 border border-emerald-600 text-emerald-600 font-medium hover:bg-emerald-50 transition-all">
+                              Modifier
+                            </button>
+                            <button className="px-6 py-3 bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-all">
+                              Voir statistiques
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -694,46 +782,134 @@ const Dashboard: React.FC = () => {
               </div>
             )}
 
-            {/* Messages Tab */}
-            {activeTab === 'messages' && (
-              <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 border border-gold/20">
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <h3 className="font-inter uppercase text-deep-green text-2xl mb-2">Messages</h3>
-                    <p className="font-didot text-gray-600">{messages.filter(m => m.unread).length} messages non lus</p>
+            {/* Owner: Analytics Tab */}
+            {activeTab === 'analytics' && userType === 'owner' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Statistiques détaillées</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="border border-gray-200 p-6">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">Vues mensuelles</h4>
+                    <div className="text-4xl font-bold text-emerald-600 mb-2">377</div>
+                    <p className="text-gray-600 text-sm">+23% vs mois précédent</p>
                   </div>
-                  <button className="bg-gradient-to-r from-gold to-amber-600 text-deep-green px-6 py-3 rounded-2xl font-inter uppercase tracking-wide hover:from-amber-500 hover:to-gold transition-all duration-500 transform hover:scale-105 flex items-center space-x-2">
+                  <div className="border border-gray-200 p-6">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">Taux de conversion</h4>
+                    <div className="text-4xl font-bold text-emerald-600 mb-2">4.2%</div>
+                    <p className="text-gray-600 text-sm">Visites → Demandes</p>
+                  </div>
+                  <div className="border border-gray-200 p-6">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">Temps moyen</h4>
+                    <div className="text-4xl font-bold text-emerald-600 mb-2">3m 42s</div>
+                    <p className="text-gray-600 text-sm">Durée de consultation</p>
+                  </div>
+                  <div className="border border-gray-200 p-6">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">Position moyenne</h4>
+                    <div className="text-4xl font-bold text-emerald-600 mb-2">#12</div>
+                    <p className="text-gray-600 text-sm">Dans les résultats de recherche</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Appointments Tab (Both user types) */}
+            {activeTab === 'appointments' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Rendez-vous</h3>
+                    <p className="text-gray-600">{appointmentsData.length} rendez-vous à venir</p>
+                  </div>
+                  <Link
+                    to="/contact"
+                    className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all"
+                  >
+                    Planifier un rendez-vous
+                  </Link>
+                </div>
+
+                <div className="space-y-4">
+                  {appointmentsData.map((appt) => (
+                    <div key={appt.id} className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-gray-900 mb-2">{appt.title}</h4>
+                          <div className="space-y-1 text-sm text-gray-600 mb-4">
+                            <p className="flex items-center gap-2">
+                              <CalendarIcon className="w-4 h-4" />
+                              {appt.date} à {appt.time}
+                            </p>
+                            <p className="flex items-center gap-2">
+                              <MapPinIcon className="w-4 h-4" />
+                              {appt.location}
+                            </p>
+                            <p className="flex items-center gap-2">
+                              <UserCircleIcon className="w-4 h-4" />
+                              {appt.advisor}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-end gap-3">
+                          <span className={`px-4 py-2 font-semibold ${
+                            appt.status === 'Confirmé' 
+                              ? 'bg-emerald-100 text-emerald-800' 
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {appt.status}
+                          </span>
+                          <div className="flex gap-2">
+                            <button className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-emerald-600 hover:text-emerald-600 transition-all">
+                              Modifier
+                            </button>
+                            <button className="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-50 transition-all">
+                              Annuler
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Messages Tab (Both user types) */}
+            {activeTab === 'messages' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Messages</h3>
+                    <p className="text-gray-600">{messages.filter(m => m.unread).length} messages non lus</p>
+                  </div>
+                  <button className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2">
                     <EnvelopeIcon className="w-5 h-5" />
-                    <span>Nouveau message</span>
+                    Nouveau message
                   </button>
                 </div>
 
                 <div className="space-y-4">
                   {messages.map((message) => (
-                    <div key={message.id} className={`flex items-start space-x-4 p-6 rounded-2xl border-2 transition-all duration-300 transform hover:scale-105 ${
-                      message.unread 
-                        ? 'border-gold bg-gradient-to-r from-gold/5 to-transparent shadow-lg' 
-                        : 'border-gold/30 hover:border-gold'
-                    }`}>
-                      <img
-                        src={message.avatar}
-                        alt={message.sender}
-                        className="w-12 h-12 rounded-2xl object-cover border-2 border-gold"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-3">
-                            <h4 className="font-inter uppercase text-deep-green">{message.sender}</h4>
+                    <div 
+                      key={message.id} 
+                      className={`border p-6 transition-all ${
+                        message.unread 
+                          ? 'border-emerald-600 bg-emerald-50' 
+                          : 'border-gray-200 hover:border-emerald-600'
+                      }`}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-bold text-gray-900">{message.sender}</h4>
                             {message.unread && (
-                              <span className="bg-red-500 text-ivory px-2 py-1 rounded-full text-xs font-inter animate-pulse">
+                              <span className="bg-red-500 text-white px-3 py-1 text-xs font-semibold">
                                 NOUVEAU
                               </span>
                             )}
                           </div>
-                          <span className="font-didot text-gray-500 text-sm">{message.time}</span>
+                          <p className="text-sm text-gray-600 mb-3">{message.role}</p>
+                          <p className="text-gray-700">{message.content}</p>
                         </div>
-                        <p className="font-didot text-gray-600 text-sm mb-1">{message.role}</p>
-                        <p className="font-didot text-gray-700">{message.content}</p>
+                        <span className="text-sm text-gray-500">Il y a {message.time}</span>
                       </div>
                     </div>
                   ))}
@@ -741,102 +917,101 @@ const Dashboard: React.FC = () => {
               </div>
             )}
 
-            {/* Requests Tab - Mes demandes */}
-            {activeTab === 'requests' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
+            {/* Owner: Inquiries Tab */}
+            {activeTab === 'inquiries' && userType === 'owner' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="font-inter uppercase text-deep-green text-2xl mb-1">Mes demandes</h3>
-                    <p className="font-didot text-gray-600">Suivez l'avancement de toutes vos demandes auprès de notre équipe</p>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <button className="bg-gradient-to-r from-gold to-amber-600 text-deep-green px-4 py-2 rounded-2xl font-inter uppercase text-sm shadow-lg">Nouvelle demande</button>
-                    <select className="px-3 py-2 border-2 border-gold/30 rounded-2xl bg-white/50">
-                      <option>Toutes</option>
-                      <option>En cours</option>
-                      <option>Traitée</option>
-                    </select>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Demandes reçues</h3>
+                    <p className="text-gray-600">Gérez les demandes d'information sur vos biens</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-white/80 rounded-3xl p-6 shadow-2xl border border-gold/20">
-                    <h4 className="font-inter uppercase text-deep-green text-lg mb-4">Résumé</h4>
-                    <div className="space-y-3">
-                      {requestsData.map((req) => (
-                        <div key={req.id} className="flex items-center justify-between p-4 rounded-2xl border border-gold/20">
-                          <div>
-                            <div className="font-inter font-semibold text-deep-green">{req.type} • {req.id}</div>
-                            <div className="font-didot text-gray-600 text-sm">{req.summary}</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <span className={`px-3 py-1 rounded-full text-sm ${req.status === 'En cours' ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'}`}>{req.status}</span>
-                            <button className="px-3 py-2 bg-deep-green text-ivory rounded-xl text-sm">Détails</button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-white/80 rounded-3xl p-6 shadow-2xl border border-gold/20">
-                    <h4 className="font-inter uppercase text-deep-green text-lg mb-4">Historique & Notes</h4>
-                    <p className="font-didot text-gray-600 mb-4">Commentaires récents de votre conseiller et statut des actions requises.</p>
-                    <div className="space-y-3">
-                      <div className="p-4 bg-ivory rounded-2xl border border-gold/20">Réponse de Sophie: Nous avons bien reçu votre demande, un conseiller vous contacte sous 24h.</div>
-                      <div className="p-4 bg-ivory rounded-2xl border border-gold/20">Note interne: Vérifier documents de financement.</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Appointments Tab - Rendez-vous */}
-            {activeTab === 'appointments' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="font-inter uppercase text-deep-green text-2xl mb-1">Rendez-vous</h3>
-                    <p className="font-didot text-gray-600">Gérez vos visites et rendez-vous — confirmez, replanifiez ou annulez en un clic.</p>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <button className="bg-gradient-to-r from-gold to-amber-600 text-deep-green px-4 py-2 rounded-2xl font-inter uppercase text-sm shadow-lg">Planifier un rendez-vous</button>
-                    <select className="px-3 py-2 border-2 border-gold/30 rounded-2xl bg-white/50">
-                      <option>A venir</option>
-                      <option>Passés</option>
-                      <option>Tous</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2 space-y-4">
-                    {appointmentsData.map((appt) => (
-                      <div key={appt.id} className="bg-white/80 rounded-3xl p-6 shadow-2xl border border-gold/20 flex items-center justify-between">
-                        <div>
-                          <div className="text-lg font-inter font-semibold text-deep-green">{appt.title}</div>
-                          <div className="text-sm font-didot text-gray-600">{appt.date} • {appt.time} • {appt.location}</div>
-                          <div className="text-sm font-didot text-gray-500 mt-2">Conseiller: {appt.advisor}</div>
-                        </div>
-                        <div className="flex flex-col items-end space-y-3">
-                          <span className={`px-3 py-1 rounded-full text-sm ${appt.status === 'Confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{appt.status}</span>
-                          <div className="flex space-x-2">
-                            <button className="px-4 py-2 border border-gold text-gold rounded-xl">Replanifier</button>
-                            <button className="px-4 py-2 bg-red-500 text-ivory rounded-xl">Annuler</button>
-                          </div>
-                        </div>
+                <div className="space-y-4">
+                  <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-1">Demande de visite</h4>
+                        <p className="text-sm text-gray-600">Ma Villa Méditerranéenne - Nice</p>
                       </div>
-                    ))}
+                      <span className="bg-emerald-100 text-emerald-800 px-3 py-1 text-sm font-semibold">
+                        Nouvelle
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mb-4">Client intéressé pour une visite ce weekend. Disponibilité samedi matin?</p>
+                    <div className="flex gap-3">
+                      <button className="px-6 py-2 bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-all">
+                        Répondre
+                      </button>
+                      <button className="px-6 py-2 border border-gray-300 text-gray-700 hover:border-emerald-600 transition-all">
+                        Voir détails
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="bg-white/80 rounded-3xl p-6 shadow-2xl border border-gold/20">
-                    <h4 className="font-inter uppercase text-deep-green text-lg mb-4">Calendrier</h4>
-                    <p className="font-didot text-gray-600 mb-4">Prochaine disponibilité: 2025-11-20</p>
-                    <div className="bg-ivory rounded-2xl p-4 text-center text-sm text-gray-700">Mini calendrier (placeholder) — intégré au calendrier principal bientôt</div>
+                  <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h4 className="text-lg font-bold text-gray-900 mb-1">Question sur le bien</h4>
+                        <p className="text-sm text-gray-600">Appartement Centre Ville - Lyon</p>
+                      </div>
+                      <span className="bg-gray-100 text-gray-800 px-3 py-1 text-sm font-semibold">
+                        Traitée
+                      </span>
+                    </div>
+                    <p className="text-gray-700 mb-4">Le parking est-il inclus dans le loyer?</p>
+                    <div className="flex gap-3">
+                      <button className="px-6 py-2 border border-gray-300 text-gray-700 hover:border-emerald-600 transition-all">
+                        Voir la réponse
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             )}
-            {/* Add other tabs similarly with the same premium design */}
+
+            {/* Owner: Documents Tab */}
+            {activeTab === 'documents' && userType === 'owner' && (
+              <div className="bg-white border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Documents</h3>
+                    <p className="text-gray-600">Gérez vos documents administratifs</p>
+                  </div>
+                  <button className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2">
+                    <PlusIcon className="w-5 h-5" />
+                    Ajouter un document
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                    <DocumentTextIcon className="w-12 h-12 text-emerald-600 mb-4" />
+                    <h4 className="font-bold text-gray-900 mb-2">Diagnostics</h4>
+                    <p className="text-sm text-gray-600 mb-4">DPE, Amiante, Plomb...</p>
+                    <button className="w-full bg-emerald-600 text-white py-2 hover:bg-emerald-700 transition-all">
+                      Voir (3)
+                    </button>
+                  </div>
+                  <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                    <DocumentTextIcon className="w-12 h-12 text-emerald-600 mb-4" />
+                    <h4 className="font-bold text-gray-900 mb-2">Contrats</h4>
+                    <p className="text-sm text-gray-600 mb-4">Baux, Mandats...</p>
+                    <button className="w-full bg-emerald-600 text-white py-2 hover:bg-emerald-700 transition-all">
+                      Voir (2)
+                    </button>
+                  </div>
+                  <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
+                    <DocumentTextIcon className="w-12 h-12 text-emerald-600 mb-4" />
+                    <h4 className="font-bold text-gray-900 mb-2">Titres de propriété</h4>
+                    <p className="text-sm text-gray-600 mb-4">Actes notariés...</p>
+                    <button className="w-full bg-emerald-600 text-white py-2 hover:bg-emerald-700 transition-all">
+                      Voir (1)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

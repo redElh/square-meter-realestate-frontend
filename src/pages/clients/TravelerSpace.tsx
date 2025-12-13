@@ -10,8 +10,6 @@ import {
   ClockIcon,
   CalendarIcon,
   StarIcon,
-  GiftIcon,
-  ShieldCheckIcon,
   DocumentTextIcon,
   UserGroupIcon,
   ShoppingBagIcon,
@@ -19,13 +17,20 @@ import {
   CheckCircleIcon,
   ChevronRightIcon,
   EyeIcon,
-  EyeSlashIcon
+  EyeSlashIcon,
+  ArrowDownTrayIcon,
+  HomeIcon,
+  WrenchIcon,
+  CameraIcon,
+  ArrowRightIcon,
+  GiftIcon,
+  MapIcon,
+  CheckIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import {
-  StarIcon as StarIconSolid,
   CheckCircleIcon as CheckCircleIconSolid,
-  SparklesIcon as SparklesIconSolid,
-  TruckIcon
+  StarIcon as StarIconSolid
 } from '@heroicons/react/24/solid';
 
 const TravelerSpace: React.FC = () => {
@@ -35,7 +40,9 @@ const TravelerSpace: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showCodes, setShowCodes] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [weather, setWeather] = useState({ temp: 22, condition: 'Ensoleillé' });
+  const [showIncidentForm, setShowIncidentForm] = useState(false);
+  const [incidentDescription, setIncidentDescription] = useState('');
+  const [showCheckoutFeedback, setShowCheckoutFeedback] = useState(false);
 
   // Mock booking data
   const booking = {
@@ -44,7 +51,9 @@ const TravelerSpace: React.FC = () => {
     checkIn: "2024-06-15",
     checkOut: "2024-06-22",
     guests: 4,
-    confirmation: "SM240615XZ"
+    confirmation: "SM240615XZ",
+    contact: "+33 6 12 34 56 78",
+    deposit: "€3,000"
   };
 
   useEffect(() => {
@@ -62,79 +71,115 @@ const TravelerSpace: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'dashboard', label: 'Tableau de Bord', icon: SparklesIcon },
-    { id: 'checkin', label: 'Check-in/out', icon: CalendarIcon },
-    { id: 'privilege', label: 'Carte Privilège', icon: StarIcon },
-    { id: 'conciergerie', label: 'Conciergerie', icon: UserGroupIcon },
-    { id: 'documents', label: 'Documents', icon: DocumentTextIcon },
-    { id: 'local', label: 'Guide Local', icon: MapPinIcon }
+    { id: 'dashboard', label: 'Tableau de Bord', icon: HomeIcon },
+    { id: 'arrival', label: 'Avant Arrivée', icon: CalendarIcon },
+    { id: 'stay', label: 'Pendant Séjour', icon: StarIcon },
+    { id: 'privilege', label: 'Carte Privilège', icon: GiftIcon },
+    { id: 'activities', label: 'Activités', icon: MapIcon },
+    { id: 'departure', label: 'Au Départ', icon: ArrowRightIcon },
+    { id: 'documents', label: 'Documents', icon: DocumentTextIcon }
   ];
 
-  
+  const arrivalInfo = {
+    location: "12 Avenue des Oliviers, 83990 Saint-Tropez",
+    parking: "Parking privé pour 2 véhicules (code: 4455)",
+    directions: "Prendre sortie Saint-Tropez Centre, suivre indications 'Port'",
+    checkInTime: "16:00 - 20:00",
+    checkOutTime: "08:00 - 11:00",
+    depositProcedure: "Caution de €3,000 bloquée sur carte, restituée sous 72h après check-out"
+  };
+
+  const accessCodes = [
+    { name: 'Boîte à clés', code: '1234#', qrCode: true },
+    { name: 'Portail principal', code: '4455', qrCode: true },
+    { name: 'Appartement', code: '5678*', qrCode: true },
+    { name: 'Parking', code: '4455', qrCode: false }
+  ];
+
+  const checkinSteps = [
+    { step: 1, title: 'Récupération clés', description: 'Utiliser le code 1234# sur la boîte à clés à droite du portail', completed: false },
+    { step: 2, title: 'Accès propriété', description: 'Entrer le code 4455 au portail principal', completed: false },
+    { step: 3, title: 'Entrée villa', description: 'Utiliser la clé bleue sur la porte d\'entrée', completed: false },
+    { step: 4, title: 'Visite guidée', description: 'Suivre les indications dans chaque pièce', completed: false }
+  ];
+
+  const wifiInfo = {
+    network: 'SquareMeter_Premium',
+    password: 'Luxe2024!',
+    qrCode: true
+  };
+
+  const houseRules = [
+    'Pas de fêtes ni événements',
+    'Animaux non autorisés',
+    'Pas de fumée à l\'intérieur',
+    'Économie d\'énergie requise'
+  ];
+
+  const activities = [
+    { title: 'Excursion en mer', price: '€450', duration: '4h', available: true },
+    { title: 'Cours de cuisine provençale', price: '€280', duration: '3h', available: true },
+    { title: 'Visite vignoble privé', price: '€320', duration: '5h', available: true },
+    { title: 'Massage spa privatif', price: '€180', duration: '1h30', available: true }
+  ];
+
+  const checkoutChecklist = [
+    'Fermer tous les volets et fenêtres',
+    'Couper climatisation/chauffage',
+    'Vider réfrigérateur',
+    'Déposer clés dans la boîte',
+    'Signaler tout dommage',
+    'Confirmer départ via WhatsApp'
+  ];
+
   const privilegePartners = [
-    { name: 'Restaurant Étoilé', discount: '15%', category: 'RESTAURANT', icon: SparklesIconSolid },
-    { name: 'Spa Prestige', discount: '20%', category: 'BIEN-ÊTRE', icon: SparklesIcon },
-    { name: 'Location Yacht', discount: '10%', category: 'NAUTIQUE', icon: TruckIcon },
-    { name: 'Boutique Luxe', discount: '15%', category: 'SHOPPING', icon: ShoppingBagIcon },
-    { name: 'Golf Privé', discount: '25%', category: 'SPORT', icon: MapPinIcon },
-    { name: 'Transfer VIP', discount: '30%', category: 'TRANSPORT', icon: TruckIcon }
+    { name: 'Restaurant Le Petit Nice', discount: '15%', category: 'GASTRONOMIE' },
+    { name: 'Spa Les Bains de Marrakech', discount: '20%', category: 'BIEN-ÊTRE' },
+    { name: 'Location Yacht Prestige', discount: '10%', category: 'NAUTIQUE' },
+    { name: 'Boutique Hermès', discount: '15%', category: 'SHOPPING' },
+    { name: 'Golf de Saint-Tropez', discount: '25%', category: 'SPORT' },
+    { name: 'Transferts VIP Azur', discount: '30%', category: 'TRANSPORT' }
   ];
 
-  const conciergeServices = [
-    { name: 'Restaurant', icon: SparklesIconSolid, available: true },
-    { name: 'Transport', icon: TruckIcon, available: true },
-    { name: 'Spa & Bien-être', icon: SparklesIcon, available: true },
-    { name: 'Activités', icon: MapPinIcon, available: true },
-    { name: 'Shopping', icon: ShoppingBagIcon, available: true },
-    { name: 'Événements', icon: CalendarIcon, available: false }
-  ];
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-ivory via-white to-amber-50 py-8">
+      <div className="min-h-screen bg-white py-8 pt-24">
         <div className="container mx-auto px-4 sm:px-6">
-          {/* Enhanced Header */}
-          <div className="text-center mb-16 relative">
-            <div className="absolute inset-0 flex items-center justify-center opacity-5">
-              <div className="text-9xl font-didot">M²</div>
-            </div>
-            <h1 className="text-6xl md:text-7xl font-inter uppercase text-deep-green mb-6 relative">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-inter uppercase text-[#023927] mb-4">
               Espace Voyageurs
             </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-gold to-amber-600 mx-auto mb-6"></div>
-            <p className="text-xl md:text-2xl font-didot text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              Accédez à votre séjour d'exception et découvrez tous les services Square Meter à votre disposition
+            <div className="h-1 w-24 bg-[#023927] mx-auto mb-6"></div>
+            <p className="font-inter text-gray-600 text-lg max-w-3xl mx-auto">
+              Accédez à votre séjour d'exception et découvrez tous les services Square Meter
             </p>
           </div>
 
-          {/* Enhanced Authentication Section */}
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-12 border border-gold/20 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold to-deep-green"></div>
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-gold/5 rounded-full blur-3xl"></div>
-              
+          {/* Authentication Section */}
+          <div className="max-w-md mx-auto">
+            <div className="bg-white border-2 border-gray-200 p-8">
               <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-gold to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <KeyIcon className="w-10 h-10 text-deep-green" />
-                </div>
-                <h2 className="text-4xl font-inter uppercase text-deep-green mb-4">
+                <KeyIcon className="w-12 h-12 text-[#023927] mx-auto mb-4" />
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-4">
                   Accès à Votre Séjour
                 </h2>
-                <p className="font-didot text-gray-600 text-lg">
+                <p className="font-inter text-gray-600">
                   Entrez votre email pour recevoir votre lien d'accès sécurisé
                 </p>
               </div>
 
               <form onSubmit={handleMagicLink} className="space-y-6">
-                <div className="group">
-                  <label className="block font-inter uppercase text-deep-green text-sm mb-3">
-                    Votre email de réservation
+                <div>
+                  <label className="block font-inter uppercase text-[#023927] text-sm mb-2">
+                    Email de réservation
                   </label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="vip@example.com"
-                    className="w-full px-6 py-5 border-2 border-gold/30 rounded-2xl focus:outline-none focus:ring-2 focus:ring-gold font-didot text-lg bg-white/50 backdrop-blur-sm transition-all duration-300 hover:border-gold"
+                    className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-inter bg-white"
                     required
                   />
                 </div>
@@ -142,49 +187,28 @@ const TravelerSpace: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-gold to-amber-600 text-deep-green py-5 font-inter uppercase tracking-wide hover:from-amber-500 hover:to-gold transition-all duration-500 transform hover:scale-105 rounded-2xl text-lg font-semibold relative overflow-hidden group"
+                  className="w-full bg-[#023927] text-white py-4 font-inter uppercase tracking-wide hover:bg-[#01261c] transition-all duration-300 flex items-center justify-center space-x-3"
                 >
-                  <div className="absolute inset-0 bg-ivory transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-                  <span className="relative z-10 flex items-center justify-center space-x-3">
-                    {isLoading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-deep-green"></div>
-                        <span>Envoi en cours...</span>
-                      </>
-                    ) : (
-                      <>
-                        <SparklesIconSolid className="w-6 h-6" />
-                        <span>Recevoir mon lien magique</span>
-                      </>
-                    )}
-                  </span>
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                      <span>Envoi en cours...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Recevoir mon lien d'accès</span>
+                      <ArrowRightIcon className="w-5 h-5" />
+                    </>
+                  )}
                 </button>
               </form>
 
-              {/* Security Assurance */}
-              <div className="mt-8 text-center">
+              <div className="mt-6 text-center">
                 <div className="flex items-center justify-center space-x-2 text-gray-600">
-                  <ShieldCheckIcon className="w-5 h-5 text-gold" />
-                  <span className="font-didot text-sm">Connexion 100% sécurisée • Données cryptées</span>
+                  <CheckCircleIcon className="w-5 h-5 text-[#023927]" />
+                  <span className="font-inter text-sm">Connexion sécurisée • Données cryptées</span>
                 </div>
               </div>
-            </div>
-
-            {/* Features Preview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-              {[
-                { icon: KeyIcon, title: 'Accès Immédiat', description: 'Codes et instructions dès connexion' },
-                { icon: StarIcon, title: 'Avantages Exclusifs', description: 'Offres partenaires privilégiées' },
-                { icon: UserGroupIcon, title: 'Conciergerie 24/7', description: 'Assistance personnalisée' }
-              ].map((feature, index) => (
-                <div key={index} className="text-center group">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg">
-                    <feature.icon className="w-8 h-8 text-deep-green" />
-                  </div>
-                  <h3 className="font-inter uppercase text-deep-green text-sm mb-2">{feature.title}</h3>
-                  <p className="font-didot text-gray-600 text-xs">{feature.description}</p>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -193,52 +217,49 @@ const TravelerSpace: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ivory via-white to-amber-50 py-8">
+    <div className="min-h-screen bg-white pt-24">
       <div className="container mx-auto px-4 sm:px-6">
-        {/* Enhanced Header with Booking Info */}
-        <div className="text-center mb-12 relative">
-          <div className="absolute inset-0 flex items-center justify-center opacity-5">
-            <div className="text-9xl font-didot">M²</div>
-          </div>
-          <h1 className="text-6xl md:text-7xl font-inter uppercase text-deep-green mb-6 relative">
+        {/* Header with Booking Info */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-inter uppercase text-[#023927] mb-4">
             Espace Voyageurs
           </h1>
           
           {/* Booking Summary */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-gold/20 max-w-4xl mx-auto shadow-lg">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
-              <div className="text-center lg:text-left">
-                <div className="text-2xl font-didot text-deep-green font-semibold">{booking.property}</div>
-                <div className="font-didot text-gray-600 flex items-center justify-center lg:justify-start mt-1">
+          <div className="bg-white border-2 border-gray-200 p-6 max-w-4xl mx-auto mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+              <div className="text-center md:text-left">
+                <div className="text-xl font-inter text-[#023927] font-semibold">{booking.property}</div>
+                <div className="font-inter text-gray-600 flex items-center justify-center md:justify-start mt-1">
                   <MapPinIcon className="w-4 h-4 mr-1" />
                   {booking.location}
                 </div>
               </div>
               
               <div className="text-center">
-                <div className="font-inter uppercase text-deep-green text-sm mb-1">CHECK-IN</div>
-                <div className="font-didot text-gold text-lg font-semibold">{booking.checkIn}</div>
-                <div className="font-didot text-gray-600 text-sm">À partir de 16h</div>
+                <div className="font-inter uppercase text-[#023927] text-sm mb-1">CHECK-IN</div>
+                <div className="font-inter text-[#023927] text-lg">{booking.checkIn}</div>
+                <div className="font-inter text-gray-600 text-sm">À partir de 16h</div>
               </div>
               
               <div className="text-center">
-                <div className="font-inter uppercase text-deep-green text-sm mb-1">CHECK-OUT</div>
-                <div className="font-didot text-gold text-lg font-semibold">{booking.checkOut}</div>
-                <div className="font-didot text-gray-600 text-sm">Avant 11h</div>
+                <div className="font-inter uppercase text-[#023927] text-sm mb-1">CHECK-OUT</div>
+                <div className="font-inter text-[#023927] text-lg">{booking.checkOut}</div>
+                <div className="font-inter text-gray-600 text-sm">Avant 11h</div>
               </div>
               
               <div className="text-center">
-                <div className="font-inter uppercase text-deep-green text-sm mb-1">CONFIRMATION</div>
-                <div className="font-didot text-gray-700 text-sm">{booking.confirmation}</div>
-                <div className="font-didot text-gray-600 text-sm">{booking.guests} voyageur(s)</div>
+                <div className="font-inter uppercase text-[#023927] text-sm mb-1">N° CONFIRMATION</div>
+                <div className="font-inter text-[#023927] text-sm">{booking.confirmation}</div>
+                <div className="font-inter text-gray-600 text-sm">{booking.guests} voyageur(s)</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Enhanced Tab Navigation */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl mb-12 border border-gold/20">
-          <div className="flex overflow-x-auto scrollbar-hide">
+        {/* Tab Navigation */}
+        <div className="bg-white border-2 border-gray-200 mb-8">
+          <div className="flex overflow-x-auto">
             {tabs.map((tab) => {
               const TabIcon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -247,153 +268,367 @@ const TravelerSpace: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 min-w-0 py-6 font-inter uppercase transition-all duration-500 flex items-center justify-center space-x-3 group relative ${
+                  className={`flex-1 min-w-0 py-4 font-inter uppercase text-sm transition-all duration-300 flex items-center justify-center space-x-2 border-r-2 border-gray-200 last:border-r-0 ${
                     isActive 
-                      ? 'text-deep-green' 
-                      : 'text-gray-500 hover:text-gold'
+                      ? 'bg-[#023927] text-white' 
+                      : 'text-gray-600 hover:text-[#023927] hover:bg-gray-50'
                   }`}
                 >
-                  <div className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    isActive ? 'bg-gold scale-125' : 'bg-transparent group-hover:bg-gold/50'
-                  }`}></div>
-                  <TabIcon className={`w-5 h-5 transition-transform duration-300 ${
-                    isActive ? 'scale-110' : 'group-hover:scale-110'
-                  }`} />
-                  <span className="text-sm whitespace-nowrap">{tab.label}</span>
-                  
-                  {isActive && (
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-gold to-amber-600 rounded-full"></div>
-                  )}
+                  <TabIcon className="w-4 h-4" />
+                  <span className="whitespace-nowrap">{tab.label}</span>
                 </button>
               );
             })}
           </div>
 
           {/* Tab Content */}
-          <div className="p-8 lg:p-12">
+          <div className="p-6">
             {/* Dashboard Tab */}
             {activeTab === 'dashboard' && (
               <div className="space-y-8">
-                {/* Welcome & Time */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <div className="lg:col-span-2 bg-gradient-to-br from-deep-green to-forest-green rounded-2xl p-8 text-ivory relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full -translate-y-16 translate-x-16"></div>
-                    <h2 className="text-3xl font-inter uppercase mb-4">Bienvenue à {booking.property}</h2>
-                    <p className="font-didot text-ivory/80 text-lg mb-6">
-                      Votre séjour d'exception commence maintenant. Profitez de chaque instant.
-                    </p>
-                    <div className="flex items-center space-x-6">
-                      <div className="text-4xl font-light font-didot">
-                        {currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                      </div>
-                      <div className="w-px h-12 bg-ivory/30"></div>
-                      <div>
-                        <div className="font-didot">{currentTime.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
-                        <div className="font-didot text-gold">{weather.temp}°C • {weather.condition}</div>
-                      </div>
+                {/* Welcome Section */}
+                <div className="bg-[#023927] text-white p-6">
+                  <h2 className="text-2xl font-inter uppercase mb-4">Bienvenue à {booking.property}</h2>
+                  <p className="font-inter mb-4">
+                    Votre séjour d'exception commence maintenant. Profitez de chaque instant.
+                  </p>
+                  <div className="flex items-center space-x-6">
+                    <div className="text-3xl font-inter">
+                      {currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                     </div>
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="space-y-4">
-                    <button className="w-full bg-gradient-to-r from-gold to-amber-600 text-deep-green py-4 rounded-xl font-inter uppercase tracking-wide hover:from-amber-500 hover:to-gold transition-all duration-500 transform hover:scale-105 flex items-center justify-center space-x-3">
-                      <PhoneIcon className="w-5 h-5" />
-                      <span>Assistance Immédiate</span>
-                    </button>
-                    <button className="w-full border-2 border-deep-green text-deep-green py-4 rounded-xl font-inter uppercase tracking-wide hover:bg-deep-green hover:text-ivory transition-all duration-500 transform hover:scale-105 flex items-center justify-center space-x-3">
-                      <ExclamationTriangleIcon className="w-5 h-5" />
-                      <span>Signaler un Incident</span>
-                    </button>
+                    <div className="w-px h-12 bg-white/30"></div>
+                    <div>
+                      <div className="font-inter">{currentTime.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+                      <div className="font-inter text-white/80">Séjour en cours</div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Essential Information Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Quick Actions Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <button 
+                    onClick={() => setActiveTab('arrival')}
+                    className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
+                  >
+                    <MapPinIcon className="w-8 h-8 text-[#023927] mb-2" />
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">Localisation</h3>
+                    <p className="font-inter text-gray-600 text-sm">Itinéraire et parking</p>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('stay')}
+                    className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
+                  >
+                    <KeyIcon className="w-8 h-8 text-[#023927] mb-2" />
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">Codes Accès</h3>
+                    <p className="font-inter text-gray-600 text-sm">Boîte à clés et QR codes</p>
+                  </button>
+
+                  <a 
+                    href={`https://wa.me/${booking.contact.replace(/\s/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
+                  >
+                    <PhoneIcon className="w-8 h-8 text-[#023927] mb-2" />
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">Assistance</h3>
+                    <p className="font-inter text-gray-600 text-sm">WhatsApp 24/7</p>
+                  </a>
+
+                  <button 
+                    onClick={() => setActiveTab('departure')}
+                    className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
+                  >
+                    <ArrowRightIcon className="w-8 h-8 text-[#023927] mb-2" />
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">Check-out</h3>
+                    <p className="font-inter text-gray-600 text-sm">Checklist de départ</p>
+                  </button>
+                </div>
+
+                {/* Essential Information */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Access Codes */}
-                  <div className="bg-gradient-to-br from-ivory to-white rounded-2xl p-6 border border-gold/20 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group">
+                  <div className="bg-white border-2 border-gray-200 p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-inter uppercase text-deep-green flex items-center space-x-3">
-                        <KeyIcon className="w-6 h-6 text-gold" />
+                      <h3 className="font-inter uppercase text-[#023927] text-lg flex items-center space-x-2">
+                        <KeyIcon className="w-5 h-5" />
                         <span>Codes d'Accès</span>
                       </h3>
                       <button 
                         onClick={() => setShowCodes(!showCodes)}
-                        className="text-gold hover:text-deep-green transition-colors duration-300"
+                        className="text-[#023927] hover:text-[#01261c] transition-colors duration-300 flex items-center space-x-1"
                       >
-                        {showCodes ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                        {showCodes ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
+                        <span className="text-sm">{showCodes ? 'Masquer' : 'Afficher'}</span>
                       </button>
                     </div>
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 bg-white rounded-xl border border-gold/30">
-                        <span className="font-didot text-gray-600">Portail Principal</span>
-                        <span className="font-inter text-deep-green font-mono text-lg">
-                          {showCodes ? '1234' : '••••'}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 bg-white rounded-xl border border-gold/30">
-                        <span className="font-didot text-gray-600">Appartement</span>
-                        <span className="font-inter text-deep-green font-mono text-lg">
-                          {showCodes ? '5678' : '••••'}
-                        </span>
-                      </div>
-                    </div>
-                    <button className="w-full mt-4 flex items-center justify-center space-x-2 text-gold hover:text-deep-green transition-colors duration-300 group/btn">
-                      <QrCodeIcon className="w-5 h-5" />
-                      <span className="font-inter uppercase text-sm">Afficher QR Codes</span>
-                    </button>
-                  </div>
-
-                  {/* WiFi */}
-                  <div className="bg-gradient-to-br from-ivory to-white rounded-2xl p-6 border border-gold/20 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group">
-                    <h3 className="font-inter uppercase text-deep-green mb-4 flex items-center space-x-3">
-                      <WifiIcon className="w-6 h-6 text-gold" />
-                      <span>Connexion WiFi</span>
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="p-3 bg-white rounded-xl border border-gold/30">
-                        <div className="font-didot text-gray-600 text-sm">Réseau</div>
-                        <div className="font-inter text-deep-green">SquareMeter_Premium</div>
-                      </div>
-                      <div className="p-3 bg-white rounded-xl border border-gold/30">
-                        <div className="font-didot text-gray-600 text-sm">Mot de passe</div>
-                        <div className="font-inter text-deep-green font-mono">Luxe2024!</div>
-                      </div>
-                    </div>
-                    <button className="w-full mt-4 flex items-center justify-center space-x-2 text-gold hover:text-deep-green transition-colors duration-300">
-                      <QrCodeIcon className="w-5 h-5" />
-                      <span className="font-inter uppercase text-sm">Connexion QR Code</span>
-                    </button>
-                  </div>
-
-                  {/* Check-in Progress */}
-                  <div className="bg-gradient-to-br from-ivory to-white rounded-2xl p-6 border border-gold/20 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group">
-                    <h3 className="font-inter uppercase text-deep-green mb-4 flex items-center space-x-3">
-                      <CheckCircleIcon className="w-6 h-6 text-gold" />
-                      <span>Check-in Digital</span>
-                    </h3>
-                    <div className="space-y-4">
-                      {[
-                        { step: 1, label: 'Profil Complété', completed: true },
-                        { step: 2, label: 'Paiement Validé', completed: true },
-                        { step: 3, label: 'Documents Signés', completed: true },
-                        { step: 4, label: 'Prêt à Arriver', completed: false }
-                      ].map((item) => (
-                        <div key={item.step} className="flex items-center space-x-3">
-                          {item.completed ? (
-                            <CheckCircleIconSolid className="w-5 h-5 text-green-500" />
-                          ) : (
-                            <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
+                      {accessCodes.map((item, index) => (
+                        <div key={index} className="flex justify-between items-center p-3 bg-gray-50 border border-gray-200">
+                          <div>
+                            <div className="font-inter font-medium text-gray-900">{item.name}</div>
+                            <div className="font-inter text-gray-600 text-sm">Code: {showCodes ? item.code : '••••'}</div>
+                          </div>
+                          {item.qrCode && (
+                            <button className="text-[#023927] hover:text-[#01261c]">
+                              <QrCodeIcon className="w-5 h-5" />
+                            </button>
                           )}
-                          <span className={`font-didot ${item.completed ? 'text-gray-700' : 'text-gray-400'}`}>
-                            {item.label}
-                          </span>
                         </div>
                       ))}
                     </div>
-                    <button className="w-full mt-4 bg-deep-green text-ivory py-3 rounded-xl font-inter uppercase tracking-wide hover:bg-gold hover:text-deep-green transition-all duration-300 transform hover:scale-105">
-                      Finaliser Check-in
+                  </div>
+
+                  {/* WiFi Information */}
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <WifiIcon className="w-5 h-5" />
+                      <span>Connexion WiFi</span>
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="p-3 bg-gray-50 border border-gray-200">
+                        <div className="font-inter text-gray-600 text-sm">Réseau</div>
+                        <div className="font-inter text-[#023927] font-medium">{wifiInfo.network}</div>
+                      </div>
+                      <div className="p-3 bg-gray-50 border border-gray-200">
+                        <div className="font-inter text-gray-600 text-sm">Mot de passe</div>
+                        <div className="font-inter text-[#023927] font-mono font-medium">{wifiInfo.password}</div>
+                      </div>
+                    </div>
+                    {wifiInfo.qrCode && (
+                      <button className="mt-4 flex items-center justify-center space-x-2 text-[#023927] hover:text-[#01261c] w-full py-2 border-2 border-[#023927]">
+                        <QrCodeIcon className="w-4 h-4" />
+                        <span className="font-inter uppercase text-sm">Scanner QR Code</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Arrival Tab */}
+            {activeTab === 'arrival' && (
+              <div className="space-y-8">
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Avant l'arrivée</h2>
+
+                {/* Location & Directions */}
+                <div className="bg-white border-2 border-gray-200 p-6">
+                  <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                    <MapPinIcon className="w-5 h-5" />
+                    <span>Localisation & Itinéraire</span>
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="font-inter text-gray-600 text-sm mb-1">Adresse</div>
+                      <div className="font-inter text-gray-900">{arrivalInfo.location}</div>
+                    </div>
+                    <div>
+                      <div className="font-inter text-gray-600 text-sm mb-1">Parking</div>
+                      <div className="font-inter text-gray-900">{arrivalInfo.parking}</div>
+                    </div>
+                    <div>
+                      <div className="font-inter text-gray-600 text-sm mb-1">Indications</div>
+                      <div className="font-inter text-gray-900">{arrivalInfo.directions}</div>
+                    </div>
+                    <button className="mt-4 bg-[#023927] text-white py-3 px-6 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300 flex items-center justify-center space-x-2">
+                      <MapIcon className="w-4 h-4" />
+                      <span>Ouvrir dans Google Maps</span>
                     </button>
                   </div>
+                </div>
+
+                {/* Schedule & Deposit */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <ClockIcon className="w-5 h-5" />
+                      <span>Horaires</span>
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="font-inter text-gray-600 text-sm mb-1">Arrivée</div>
+                        <div className="font-inter text-gray-900">À partir de {arrivalInfo.checkInTime}</div>
+                      </div>
+                      <div>
+                        <div className="font-inter text-gray-600 text-sm mb-1">Départ</div>
+                        <div className="font-inter text-gray-900">Avant {arrivalInfo.checkOutTime}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <DocumentTextIcon className="w-5 h-5" />
+                      <span>Modalités Caution</span>
+                    </h3>
+                    <div className="space-y-2">
+                      <div className="font-inter text-gray-900">Montant: {booking.deposit}</div>
+                      <div className="font-inter text-gray-600 text-sm">{arrivalInfo.depositProcedure}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Stay Tab */}
+            {activeTab === 'stay' && (
+              <div className="space-y-8">
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Pendant le séjour</h2>
+
+                {/* Guided Check-in */}
+                <div className="bg-white border-2 border-gray-200 p-6">
+                  <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                    <CheckCircleIcon className="w-5 h-5" />
+                    <span>Check-in Guidé</span>
+                  </h3>
+                  <div className="space-y-4">
+                    {checkinSteps.map((step) => (
+                      <div key={step.step} className="flex items-start space-x-4 p-3 border border-gray-200">
+                        <div className={`flex-shrink-0 w-8 h-8 flex items-center justify-center border-2 ${
+                          step.completed 
+                            ? 'border-[#023927] bg-[#023927] text-white' 
+                            : 'border-gray-300 text-gray-400'
+                        }`}>
+                          {step.step}
+                        </div>
+                        <div>
+                          <div className="font-inter text-gray-900 font-medium mb-1">{step.title}</div>
+                          <div className="font-inter text-gray-600 text-sm">{step.description}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Practical Information Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* WiFi */}
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <WifiIcon className="w-5 h-5" />
+                      <span>WiFi</span>
+                    </h3>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="font-inter text-gray-600 text-sm">Réseau</div>
+                        <div className="font-inter text-[#023927] font-medium">{wifiInfo.network}</div>
+                      </div>
+                      <div>
+                        <div className="font-inter text-gray-600 text-sm">Mot de passe</div>
+                        <div className="font-inter text-[#023927] font-mono font-medium">{wifiInfo.password}</div>
+                      </div>
+                    </div>
+                    <button className="mt-4 w-full border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300 flex items-center justify-center space-x-2">
+                      <QrCodeIcon className="w-4 h-4" />
+                      <span>QR Code de Connexion</span>
+                    </button>
+                  </div>
+
+                  {/* House Rules */}
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <DocumentTextIcon className="w-5 h-5" />
+                      <span>Règles du Logement</span>
+                    </h3>
+                    <ul className="space-y-2">
+                      {houseRules.map((rule, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <CheckIcon className="w-4 h-4 text-[#023927] mt-0.5 flex-shrink-0" />
+                          <span className="font-inter text-gray-600 text-sm">{rule}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Assistance & Incident Reporting */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Assistance */}
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <PhoneIcon className="w-5 h-5" />
+                      <span>Assistance</span>
+                    </h3>
+                    <div className="space-y-4">
+                      <p className="font-inter text-gray-600">
+                        Notre équipe est disponible 24h/24 pour vous assister
+                      </p>
+                      <a 
+                        href={`https://wa.me/${booking.contact.replace(/\s/g, '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block bg-green-600 text-white py-3 font-inter uppercase text-sm hover:bg-green-700 transition-all duration-300 text-center"
+                      >
+                        WhatsApp Urgent
+                      </a>
+                      <button className="block w-full border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300 text-center">
+                        Appel Direct: {booking.contact}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Incident Reporting */}
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                      <ExclamationTriangleIcon className="w-5 h-5" />
+                      <span>Signalement d'Incident</span>
+                    </h3>
+                    {!showIncidentForm ? (
+                      <div className="space-y-4">
+                        <p className="font-inter text-gray-600">
+                          Signalez tout problème technique ou dommage immédiatement
+                        </p>
+                        <button 
+                          onClick={() => setShowIncidentForm(true)}
+                          className="w-full border-2 border-red-600 text-red-600 py-3 font-inter uppercase text-sm hover:bg-red-600 hover:text-white transition-all duration-300"
+                        >
+                          Signaler un Incident
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block font-inter text-gray-600 text-sm mb-2">Description</label>
+                          <textarea 
+                            value={incidentDescription}
+                            onChange={(e) => setIncidentDescription(e.target.value)}
+                            className="w-full px-3 py-2 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-inter"
+                            rows={4}
+                            placeholder="Décrivez l'incident..."
+                          />
+                        </div>
+                        <div className="flex space-x-4">
+                          <button className="flex-1 border-2 border-gray-600 text-gray-600 py-2 font-inter uppercase text-sm hover:bg-gray-600 hover:text-white transition-all duration-300">
+                            <CameraIcon className="w-4 h-4 inline mr-2" />
+                            Photo
+                          </button>
+                          <button 
+                            onClick={() => setShowIncidentForm(false)}
+                            className="flex-1 border-2 border-red-600 text-red-600 py-2 font-inter uppercase text-sm hover:bg-red-600 hover:text-white transition-all duration-300"
+                          >
+                            Envoyer Alerte
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Activities Teaser */}
+                <div className="bg-[#023927] text-white p-6">
+                  <h3 className="font-inter uppercase text-lg mb-4 flex items-center space-x-2">
+                    <SparklesIcon className="w-5 h-5" />
+                    <span>Découvrez SquareHoli</span>
+                  </h3>
+                  <p className="font-inter mb-4">
+                    Notre conciergerie organise vos expériences pour un séjour sans contraintes
+                  </p>
+                  <button 
+                    onClick={() => setActiveTab('activities')}
+                    className="bg-white text-[#023927] py-3 px-6 font-inter uppercase text-sm hover:bg-gray-100 transition-all duration-300"
+                  >
+                    Voir les Activités
+                  </button>
                 </div>
               </div>
             )}
@@ -402,59 +637,59 @@ const TravelerSpace: React.FC = () => {
             {activeTab === 'privilege' && (
               <div className="space-y-8">
                 <div className="text-center mb-8">
-                  <h2 className="text-4xl font-inter uppercase text-deep-green mb-4">
+                  <h2 className="text-2xl font-inter uppercase text-[#023927] mb-4">
                     Carte Privilège Square Meter
                   </h2>
-                  <p className="font-didot text-gray-600 text-xl max-w-2xl mx-auto">
-                    Découvrez nos partenaires d'exception et bénéficiez d'avantages exclusifs durant votre séjour
+                  <p className="font-inter text-gray-600">
+                    Découvrez vos avantages exclusifs auprès de nos partenaires d'exception
                   </p>
                 </div>
 
                 {/* Privilege Card */}
-                <div className="bg-gradient-to-br from-gold to-amber-600 rounded-3xl p-8 text-deep-green max-w-2xl mx-auto shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
-                  <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-8">
-                      <div>
-                        <div className="font-inter uppercase text-sm opacity-80">CARTE PRIVILÈGE</div>
-                        <div className="font-didot text-2xl font-semibold">VIP {booking.confirmation}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-inter uppercase text-sm opacity-80">VALIDE JUSQU'AU</div>
-                        <div className="font-didot text-lg">{booking.checkOut}</div>
-                      </div>
+                <div className="bg-[#023927] text-white p-6 max-w-2xl mx-auto">
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                      <div className="font-inter uppercase text-sm opacity-80">CARTE PRIVILÈGE</div>
+                      <div className="font-inter text-2xl font-light">VIP {booking.confirmation}</div>
+                      <div className="font-inter text-sm opacity-80 mt-1">{booking.property}</div>
                     </div>
-                    
-                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-6">
-                      <div className="font-inter uppercase text-sm mb-2">AVANTAGES EXCLUSIFS</div>
-                      <div className="font-didot text-lg">Accès aux partenaires premium • Remises exceptionnelles • Services VIP</div>
+                    <div className="text-right">
+                      <div className="font-inter uppercase text-sm opacity-80">VALIDE JUSQU'AU</div>
+                      <div className="font-inter text-lg">{booking.checkOut}</div>
                     </div>
+                  </div>
+                  
+                  <div className="bg-white/10 p-4 mb-6">
+                    <div className="font-inter uppercase text-sm mb-2">AVANTAGES EXCLUSIFS</div>
+                    <div className="font-inter">Accès aux partenaires premium • Remises exceptionnelles • Services VIP</div>
+                  </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="font-didot text-sm">Square Meter Experience</div>
-                      <StarIconSolid className="w-8 h-8" />
-                    </div>
+                  <div className="flex items-center justify-between">
+                    <div className="font-inter text-sm">Square Meter Experience</div>
+                    <button className="bg-white text-[#023927] px-4 py-2 font-inter uppercase text-sm hover:bg-gray-100 transition-all duration-300 flex items-center space-x-2">
+                      <ArrowDownTrayIcon className="w-4 h-4" />
+                      <span>Télécharger la carte</span>
+                    </button>
                   </div>
                 </div>
 
                 {/* Partners Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {privilegePartners.map((partner, index) => (
-                    <div key={index} className="bg-white rounded-2xl p-6 border border-gold/20 hover:border-gold transition-all duration-500 transform hover:-translate-y-2 group">
-                      <div className="flex items-center justify-between mb-4">
-                        <partner.icon className="w-8 h-8 text-gold" />
-                        <span className="bg-gold/10 text-gold px-3 py-1 rounded-full font-inter uppercase text-xs">
-                          {partner.discount} OFF
+                    <div key={index} className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="bg-[#023927] text-white px-3 py-1 font-inter uppercase text-xs">
+                          {partner.category}
+                        </span>
+                        <span className="bg-[#023927]/10 text-[#023927] px-3 py-1 rounded font-inter uppercase text-xs">
+                          -{partner.discount}
                         </span>
                       </div>
-                      <h3 className="font-inter uppercase text-deep-green text-lg mb-2">{partner.name}</h3>
-                      <div className="bg-ivory text-deep-green px-3 py-1 rounded-full font-inter uppercase text-xs inline-block mb-4">
-                        {partner.category}
-                      </div>
-                      <p className="font-didot text-gray-600 text-sm mb-4">
+                      <h3 className="font-inter uppercase text-[#023927] text-sm mb-2">{partner.name}</h3>
+                      <p className="font-inter text-gray-600 text-xs mb-3">
                         Présentez votre carte privilège pour bénéficier de votre remise exclusive
                       </p>
-                      <button className="w-full border-2 border-deep-green text-deep-green py-2 rounded-xl font-inter uppercase text-sm tracking-wide hover:bg-deep-green hover:text-ivory transition-all duration-300 transform hover:scale-105">
+                      <button className="w-full border-2 border-[#023927] text-[#023927] py-2 font-inter uppercase text-xs hover:bg-[#023927] hover:text-white transition-all duration-300">
                         Voir les détails
                       </button>
                     </div>
@@ -463,77 +698,253 @@ const TravelerSpace: React.FC = () => {
               </div>
             )}
 
-            {/* Conciergerie Tab */}
-            {activeTab === 'conciergerie' && (
+            {/* Activities Tab */}
+            {activeTab === 'activities' && (
               <div className="space-y-8">
                 <div className="text-center mb-8">
-                  <h2 className="text-4xl font-inter uppercase text-deep-green mb-4">
-                    Conciergerie 24/7
+                  <h2 className="text-2xl font-inter uppercase text-[#023927] mb-4">
+                    Conciergerie d'Activités
                   </h2>
-                  <p className="font-didot text-gray-600 text-xl max-w-2xl mx-auto">
-                    Notre équipe dédiée est à votre disposition pour rendre votre séjour inoubliable
+                  <p className="font-inter text-gray-600 max-w-2xl mx-auto">
+                    Notre conciergerie organise vos expériences pour un séjour sans contraintes
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Services Grid */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {conciergeServices.map((service, index) => {
-                      const ServiceIcon = service.icon;
-                      return (
-                        <button
-                          key={index}
-                          className={`p-6 rounded-2xl border-2 transition-all duration-500 transform hover:scale-105 flex flex-col items-center justify-center space-y-3 ${
-                            service.available
-                              ? 'border-gold/30 hover:border-gold bg-gradient-to-br from-ivory to-white'
-                              : 'border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed'
-                          }`}
-                        >
-                          <ServiceIcon className={`w-8 h-8 ${service.available ? 'text-gold' : 'text-gray-400'}`} />
-                          <span className={`font-inter uppercase text-sm ${service.available ? 'text-deep-green' : 'text-gray-500'}`}>
-                            {service.name}
-                          </span>
-                          {!service.available && (
-                            <span className="font-didot text-gray-400 text-xs">Bientôt</span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {activities.map((activity, index) => (
+                    <div key={index} className="bg-white border-2 border-gray-200 p-6 hover:border-[#023927] transition-all duration-300">
+                      <div className="flex justify-between items-start mb-4">
+                        <h3 className="font-inter uppercase text-[#023927] text-lg">{activity.title}</h3>
+                        <div className="bg-[#023927] text-white px-3 py-1 font-inter uppercase text-sm">
+                          {activity.price}
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 mb-4">
+                        <div className="flex items-center space-x-1 text-gray-600">
+                          <ClockIcon className="w-4 h-4" />
+                          <span className="font-inter text-sm">{activity.duration}</span>
+                        </div>
+                        <div className={`px-3 py-1 font-inter uppercase text-xs ${
+                          activity.available 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-gray-100 text-gray-600'
+                        }`}>
+                          {activity.available ? 'Disponible' : 'Complet'}
+                        </div>
+                      </div>
+                      <p className="font-inter text-gray-600 text-sm mb-6">
+                        Profitez d'une expérience unique organisée par notre conciergerie
+                      </p>
+                      <a 
+                        href={`https://wa.me/${booking.contact.replace(/\s/g, '')}?text=Bonjour, je souhaite réserver: ${activity.title}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block w-full bg-[#023927] text-white py-3 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300 text-center"
+                      >
+                        Réserver via WhatsApp
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-                  {/* Contact Methods */}
-                  <div className="space-y-6">
-                    <div className="bg-gradient-to-br from-ivory to-white rounded-2xl p-6 border border-gold/20">
-                      <h3 className="font-inter uppercase text-deep-green mb-4">Contact Immédiat</h3>
+            {/* Departure Tab */}
+            {activeTab === 'departure' && (
+              <div className="space-y-8">
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Au moment du départ</h2>
+
+                {/* Checkout Checklist */}
+                <div className="bg-white border-2 border-gray-200 p-6">
+                  <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
+                    <CheckCircleIcon className="w-5 h-5" />
+                    <span>Checklist de Check-out</span>
+                  </h3>
+                  <div className="space-y-3">
+                    {checkoutChecklist.map((item, index) => (
+                      <div key={index} className="flex items-start space-x-3 p-3 border border-gray-200">
+                        <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center border-2 border-gray-300">
+                          {index + 1}
+                        </div>
+                        <span className="font-inter text-gray-900">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-6 bg-green-50 border-2 border-green-200 p-4">
+                    <div className="font-inter text-green-800 text-sm">
+                      <strong>Important:</strong> Merci de confirmer votre départ via WhatsApp à {booking.contact}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Feedback & Loyalty */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Feedback */}
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Retour d'Expérience</h3>
+                    {!showCheckoutFeedback ? (
                       <div className="space-y-4">
-                        <button className="w-full bg-green-600 text-white py-4 rounded-xl font-inter uppercase tracking-wide hover:bg-green-700 transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3">
-                          <PhoneIcon className="w-5 h-5" />
-                          <span>WhatsApp Urgent</span>
+                        <p className="font-inter text-gray-600">
+                          Partagez votre expérience pour nous aider à améliorer nos services
+                        </p>
+                        <button 
+                          onClick={() => setShowCheckoutFeedback(true)}
+                          className="w-full bg-[#023927] text-white py-3 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300"
+                        >
+                          Donner mon Avis
                         </button>
-                        <button className="w-full border-2 border-deep-green text-deep-green py-4 rounded-xl font-inter uppercase tracking-wide hover:bg-deep-green hover:text-ivory transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3">
-                          <PhoneIcon className="w-5 h-5" />
-                          <span>Appel Direct</span>
-                        </button>
-                        <button className="w-full border-2 border-red-500 text-red-500 py-4 rounded-xl font-inter uppercase tracking-wide hover:bg-red-500 hover:text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3">
-                          <ExclamationTriangleIcon className="w-5 h-5" />
-                          <span>Signaler un Incident</span>
+                        <a 
+                          href="https://g.page/r/CYOURGOOGLEPAGELINK"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300 text-center"
+                        >
+                          Laisser un Avis Google
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block font-inter text-gray-600 text-sm mb-2">Votre avis</label>
+                          <textarea 
+                            className="w-full px-3 py-2 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-inter"
+                            rows={4}
+                            placeholder="Partagez votre expérience..."
+                          />
+                        </div>
+                        <div className="flex items-center space-x-2 mb-4">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button key={star} className="text-gray-400 hover:text-[#023927]">
+                              <StarIconSolid className="w-6 h-6" />
+                            </button>
+                          ))}
+                        </div>
+                        <button className="w-full bg-[#023927] text-white py-3 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300">
+                          Envoyer mon Avis
                         </button>
                       </div>
-                    </div>
+                    )}
+                  </div>
 
-                    {/* Response Time */}
-                    <div className="bg-deep-green text-ivory rounded-2xl p-6 text-center">
-                      <ClockIcon className="w-8 h-8 text-gold mx-auto mb-3" />
-                      <div className="font-inter uppercase text-sm mb-2">TEMPS DE RÉPONSE MOYEN</div>
-                      <div className="text-3xl font-didot text-gold font-light">8 minutes</div>
-                      <div className="font-didot text-ivory/80 text-sm mt-2">Notre équipe est disponible 24h/24</div>
+                  {/* Loyalty & Upsell */}
+                  <div className="bg-[#023927] text-white p-6">
+                    <h3 className="font-inter uppercase text-lg mb-4">Fidélisation</h3>
+                    <div className="space-y-6">
+                      <div>
+                        <div className="font-inter uppercase text-sm opacity-80 mb-2">PROLONGER VOTRE SÉJOUR</div>
+                        <p className="font-inter mb-4">
+                          Souhaitez-vous prolonger votre séjour ? Contactez-nous pour vérifier la disponibilité.
+                        </p>
+                        <a 
+                          href={`https://wa.me/${booking.contact.replace(/\s/g, '')}?text=Bonjour, je souhaite prolonger mon séjour`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full bg-white text-[#023927] py-3 font-inter uppercase text-sm hover:bg-gray-100 transition-all duration-300 text-center"
+                        >
+                          Demander une Prolongation
+                        </a>
+                      </div>
+                      <div className="pt-6 border-t border-white/20">
+                        <div className="font-inter uppercase text-sm opacity-80 mb-2">OFFRE FIDÉLITÉ</div>
+                        <p className="font-inter mb-4">
+                          Revenez chez nous et bénéficiez de 10% de réduction sur votre prochain séjour
+                        </p>
+                        <button className="block w-full border-2 border-white text-white py-3 font-inter uppercase text-sm hover:bg-white hover:text-[#023927] transition-all duration-300 text-center">
+                          Obtenir mon Code Promo
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Additional tabs would follow similar enhanced patterns */}
+            {/* Documents Tab */}
+            {activeTab === 'documents' && (
+              <div className="space-y-8">
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Documents & Factures</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Documents du Séjour</h3>
+                    <div className="space-y-3">
+                      {[
+                        { name: 'Contrat de Location', date: '2024-06-10', size: '1.2 MB' },
+                        { name: 'Règlement Intérieur', date: '2024-06-10', size: '0.8 MB' },
+                        { name: 'Plan de la Propriété', date: '2024-06-10', size: '2.1 MB' },
+                        { name: 'Assurance Responsabilité', date: '2024-06-10', size: '1.5 MB' }
+                      ].map((doc, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 border border-gray-200">
+                          <div>
+                            <div className="font-inter text-gray-900">{doc.name}</div>
+                            <div className="font-inter text-gray-600 text-sm">{doc.date} • {doc.size}</div>
+                          </div>
+                          <button className="text-[#023927] hover:text-[#01261c]">
+                            <ArrowDownTrayIcon className="w-5 h-5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-white border-2 border-gray-200 p-6">
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Factures</h3>
+                    <div className="space-y-3">
+                      {[
+                        { name: 'Facture N° SM2024-0615', amount: '€4,200', status: 'Payée' },
+                        { name: 'Facture Caution', amount: '€3,000', status: 'Bloquée' },
+                        { name: 'Facture Services', amount: '€480', status: 'À régler' }
+                      ].map((invoice, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 border border-gray-200">
+                          <div>
+                            <div className="font-inter text-gray-900">{invoice.name}</div>
+                            <div className="font-inter text-gray-600 text-sm">{invoice.amount}</div>
+                          </div>
+                          <span className={`px-3 py-1 font-inter uppercase text-xs ${
+                            invoice.status === 'Payée' 
+                              ? 'bg-green-100 text-green-800'
+                              : invoice.status === 'Bloquée'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {invoice.status}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <button className="w-full mt-6 border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300">
+                      Télécharger Toutes les Factures
+                    </button>
+                  </div>
+                </div>
+
+                {/* Stay History */}
+                <div className="bg-white border-2 border-gray-200 p-6">
+                  <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Mes Séjours Passés</h3>
+                  <div className="space-y-3">
+                    {[
+                      { property: 'Villa Saint-Tropez', dates: '15-22 Juin 2024', status: 'En cours' },
+                      { property: 'Appartement Paris 16e', dates: '10-15 Mars 2024', status: 'Terminé' },
+                      { property: 'Chalet Courchevel', dates: '20-27 Février 2024', status: 'Terminé' }
+                    ].map((stay, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 border border-gray-200">
+                        <div>
+                          <div className="font-inter text-gray-900">{stay.property}</div>
+                          <div className="font-inter text-gray-600 text-sm">{stay.dates}</div>
+                        </div>
+                        <span className={`px-3 py-1 font-inter uppercase text-xs ${
+                          stay.status === 'En cours' 
+                            ? 'bg-[#023927] text-white'
+                            : 'bg-gray-100 text-gray-600'
+                        }`}>
+                          {stay.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
