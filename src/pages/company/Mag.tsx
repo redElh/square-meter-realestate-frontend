@@ -1,6 +1,7 @@
 // src/pages/Mag.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   ClockIcon,
   CalendarIcon,
@@ -40,6 +41,7 @@ interface Article {
 }
 
 const Mag: React.FC = () => {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [savedArticles, setSavedArticles] = useState<number[]>([]);
@@ -51,20 +53,20 @@ const Mag: React.FC = () => {
   const heroSlides = [
     {
       image: "https://images.pexels.com/photos/3209049/pexels-photo-3209049.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      title: "L'Art de l'Immobilier",
-      subtitle: "Découvrez les tendances 2024 et les analyses exclusives de nos experts",
+      title: t('mag.heroSlides.slide1.title'),
+      subtitle: t('mag.heroSlides.slide1.subtitle'),
       category: "market"
     },
     {
       image: "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      title: "Architecture & Design",
-      subtitle: "Les plus belles réalisations architecturales du moment",
+      title: t('mag.heroSlides.slide2.title'),
+      subtitle: t('mag.heroSlides.slide2.subtitle'),
       category: "architecture"
     },
     {
       image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      title: "Investissements Prestige",
-      subtitle: "Stratégies et opportunités pour les portefeuilles d'exception",
+      title: t('mag.heroSlides.slide3.title'),
+      subtitle: t('mag.heroSlides.slide3.subtitle'),
       category: "investments"
     }
   ];
@@ -78,7 +80,7 @@ const Mag: React.FC = () => {
       }, 5000);
     }
     return () => clearInterval(slideInterval);
-  }, [isHeroPlaying]);
+  }, [isHeroPlaying, heroSlides.length]);
 
   const nextHeroSlide = () => {
     setActiveHeroSlide((prev) => (prev + 1) % heroSlides.length);
@@ -101,87 +103,87 @@ const Mag: React.FC = () => {
   const articles: Article[] = [
     {
       id: 1,
-      title: 'Les Tendances de l\'Immobilier de Luxe 2024',
-      excerpt: 'Découvrez les évolutions du marché prestige et les nouvelles attentes des acquéreurs internationaux dans un contexte économique en mutation.',
+      title: t('mag.articles.article1.title'),
+      excerpt: t('mag.articles.article1.excerpt'),
       category: 'market',
       image: articleImages[0],
-      readTime: '5 min',
-      date: '15 Jan 2024',
+      readTime: t('mag.articles.article1.readTime'),
+      date: t('mag.articles.article1.date'),
       featured: true,
       views: 2847,
-      author: 'Sophie Laurent',
+      author: t('mag.articles.article1.author'),
       authorImage: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400',
       trending: true
     },
     {
       id: 2,
-      title: 'Saint-Tropez : Le Nouvel Âge d\'Or',
-      excerpt: 'Comment la perle de la Côte d\'Azur continue de séduire les investisseurs les plus exigeants avec des transactions records.',
+      title: t('mag.articles.article2.title'),
+      excerpt: t('mag.articles.article2.excerpt'),
       category: 'destinations',
       image: articleImages[1],
-      readTime: '4 min',
-      date: '12 Jan 2024',
+      readTime: t('mag.articles.article2.readTime'),
+      date: t('mag.articles.article2.date'),
       views: 1923,
-      author: 'Pierre Dubois',
+      author: t('mag.articles.article2.author'),
       authorImage: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 3,
-      title: 'L\'Art de la Vente Discrète',
-      excerpt: 'Les secrets des transactions immobilières confidentielles pour une clientèle d\'exception qui valorise la discrétion absolue.',
+      title: t('mag.articles.article3.title'),
+      excerpt: t('mag.articles.article3.excerpt'),
       category: 'expertise',
       image: articleImages[2],
-      readTime: '6 min',
-      date: '8 Jan 2024',
+      readTime: t('mag.articles.article3.readTime'),
+      date: t('mag.articles.article3.date'),
       views: 1567,
-      author: 'Marie-Claire de Villiers',
+      author: t('mag.articles.article3.author'),
       authorImage: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=400',
       trending: true
     },
     {
       id: 4,
-      title: 'Architecture : Le Retour du Classique',
-      excerpt: 'Pourquoi les acheteurs premium reviennent aux codes architecturaux traditionnels et aux matériaux nobles.',
+      title: t('mag.articles.article4.title'),
+      excerpt: t('mag.articles.article4.excerpt'),
       category: 'architecture',
       image: articleImages[3],
-      readTime: '7 min',
-      date: '5 Jan 2024',
+      readTime: t('mag.articles.article4.readTime'),
+      date: t('mag.articles.article4.date'),
       views: 1342,
-      author: 'Jean-Michel Durand'
+      author: t('mag.articles.article4.author')
     },
     {
       id: 5,
-      title: 'Conciergerie 5 Étoiles : Le Nouveau Standard',
-      excerpt: 'Comment les services sur mesure révolutionnent l\'expérience des propriétaires dans l\'immobilier de prestige.',
+      title: t('mag.articles.article5.title'),
+      excerpt: t('mag.articles.article5.excerpt'),
       category: 'services',
       image: articleImages[4],
-      readTime: '3 min',
-      date: '3 Jan 2024',
+      readTime: t('mag.articles.article5.readTime'),
+      date: t('mag.articles.article5.date'),
       views: 987,
-      author: 'Thomas Moreau'
+      author: t('mag.articles.article5.author')
     },
     {
       id: 6,
-      title: 'Investir dans le Vin : Les Domaines Prestige',
-      excerpt: 'Focus sur les vignobles qui attirent les investisseurs les plus avisés et offrent des rendements exceptionnels.',
+      title: t('mag.articles.article6.title'),
+      excerpt: t('mag.articles.article6.excerpt'),
       category: 'investments',
       image: articleImages[5],
-      readTime: '8 min',
-      date: '1 Jan 2024',
+      readTime: t('mag.articles.article6.readTime'),
+      date: t('mag.articles.article6.date'),
       views: 2156,
-      author: 'Isabelle Renaud',
+      author: t('mag.articles.article6.author'),
       trending: true
     }
   ];
 
   const categories = [
-    { key: 'all', label: 'Tous les articles', icon: StarIcon, count: articles.length },
-    { key: 'market', label: 'Marché', icon: ChartBarIcon, count: articles.filter(a => a.category === 'market').length },
-    { key: 'destinations', label: 'Destinations', icon: MapPinIcon, count: articles.filter(a => a.category === 'destinations').length },
-    { key: 'expertise', label: 'Expertise', icon: StarIcon, count: articles.filter(a => a.category === 'expertise').length },
-    { key: 'architecture', label: 'Architecture', icon: BuildingStorefrontIcon, count: articles.filter(a => a.category === 'architecture').length },
-    { key: 'services', label: 'Services', icon: HomeModernIcon, count: articles.filter(a => a.category === 'services').length },
-    { key: 'investments', label: 'Investissements', icon: ChartBarIcon, count: articles.filter(a => a.category === 'investments').length }
+    { key: 'all', label: t('mag.categories.all'), icon: StarIcon, count: articles.length },
+    { key: 'market', label: t('mag.categories.market'), icon: ChartBarIcon, count: articles.filter(a => a.category === 'market').length },
+    { key: 'destinations', label: t('mag.categories.destinations'), icon: MapPinIcon, count: articles.filter(a => a.category === 'destinations').length },
+    { key: 'expertise', label: t('mag.categories.expertise'), icon: StarIcon, count: articles.filter(a => a.category === 'expertise').length },
+    { key: 'architecture', label: t('mag.categories.architecture'), icon: BuildingStorefrontIcon, count: articles.filter(a => a.category === 'architecture').length },
+    { key: 'services', label: t('mag.categories.services'), icon: HomeModernIcon, count: articles.filter(a => a.category === 'services').length },
+    { key: 'investments', label: t('mag.categories.investments'), icon: ChartBarIcon, count: articles.filter(a => a.category === 'investments').length }
   ];
 
   useEffect(() => {
@@ -235,11 +237,11 @@ const Mag: React.FC = () => {
           <div className="w-full max-w-4xl text-center">
             <div className="mb-4 sm:mb-8">
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
-                Le Mag
+                {t('mag.title')}
               </h1>
               <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-4 sm:mb-8"></div>
               <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
-                L'expertise immobilière de prestige, décryptée par nos spécialistes
+                {t('mag.subtitle')}
               </p>
             </div>
 
@@ -250,7 +252,7 @@ const Mag: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher un article..."
+                  placeholder={t('mag.searchPlaceholder')}
                   className="w-full px-6 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-base lg:text-lg font-light transition-all duration-300"
                   style={{ borderRadius: '0' }}
                 />
@@ -261,7 +263,7 @@ const Mag: React.FC = () => {
               
               {/* Search Suggestions */}
               <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3 justify-center px-2">
-                <span className="text-white/90 text-xs sm:text-sm">Catégories :</span>
+                <span className="text-white/90 text-xs sm:text-sm">{t('mag.categoriesLabel')}</span>
                 {categories.slice(1, 5).map((category) => (
                   <button 
                     key={category.key}
@@ -366,12 +368,12 @@ const Mag: React.FC = () => {
                     {/* Badges */}
                     <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-2">
                       <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-[#023927] text-white font-inter uppercase text-xs tracking-wide max-w-max">
-                        À la une
+                        {t('mag.badges.featured')}
                       </span>
                       {featuredArticle.trending && (
                         <span className="inline-flex items-center px-2 sm:px-4 py-1 sm:py-2 bg-black text-white font-inter uppercase text-xs tracking-wide max-w-max">
                           <FireIconSolid className="w-3 h-3 mr-1 sm:mr-2" />
-                          Tendances
+                          {t('mag.badges.trending')}
                         </span>
                       )}
                     </div>
@@ -451,7 +453,7 @@ const Mag: React.FC = () => {
           <div className="mb-8 sm:mb-12 lg:mb-16">
             <div className="flex items-center justify-between mb-6 sm:mb-8">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 flex items-center space-x-2 sm:space-x-3">
-                <span>Articles Tendances</span>
+                <span>{t('mag.articlesSection.trending')}</span>
               </h2>
               <div className="h-px flex-1 bg-gray-200 ml-2 sm:ml-4"></div>
             </div>
@@ -472,7 +474,7 @@ const Mag: React.FC = () => {
                     <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
                       <span className="inline-flex items-center px-2 sm:px-3 py-1 bg-black text-white font-inter uppercase text-xs tracking-wide">
                         <FireIconSolid className="w-3 h-3 mr-1" />
-                        Tendances
+                        {t('mag.badges.trending')}
                       </span>
                     </div>
                   </div>
@@ -573,7 +575,7 @@ const Mag: React.FC = () => {
                       to={`/mag/${article.id}`}
                       className="flex items-center space-x-2 text-[#023927] hover:text-gray-900 transition-colors duration-300 group/readmore"
                     >
-                      <span className="font-inter text-sm">Lire</span>
+                      <span className="font-inter text-sm">{t('mag.articlesSection.readMore')}</span>
                       <ArrowRightIcon className="w-4 h-4 transform group-hover/readmore:translate-x-1 transition-transform duration-300" />
                     </Link>
                   </div>
@@ -586,15 +588,15 @@ const Mag: React.FC = () => {
         <div className="max-w-4xl mx-auto mt-12 sm:mt-16 lg:mt-24 bg-[#023927] p-6 sm:p-8 lg:p-12 text-white text-center">
           <div className="relative z-10">
             <h3 className="text-xl sm:text-2xl font-inter font-light text-white mb-3 sm:mb-4">
-              Restez Informé
+              {t('mag.newsletter.title')}
             </h3>
             <p className="font-inter text-white/80 text-sm sm:text-base mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
-              Recevez nos analyses de marché et les tendances du luxe directement dans votre boîte mail.
+              {t('mag.newsletter.description')}
             </p>
             <form className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-md mx-auto">
               <input
                 type="email"
-                placeholder="votre.email@exemple.com"
+                placeholder={t('mag.newsletter.emailPlaceholder')}
                 className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border-2 border-white/30 focus:outline-none focus:border-white font-inter text-white placeholder-white/60 text-sm sm:text-base"
                 style={{ borderRadius: '0' }}
               />
@@ -603,11 +605,11 @@ const Mag: React.FC = () => {
                 className="bg-white text-[#023927] px-6 sm:px-8 py-3 sm:py-4 font-inter hover:bg-gray-100 transition-all duration-500 font-medium border-2 border-white text-sm sm:text-base"
                 style={{ borderRadius: '0' }}
               >
-                S'abonner
+                {t('mag.newsletter.subscribeButton')}
               </button>
             </form>
             <p className="font-inter text-white/60 text-xs sm:text-sm mt-3 sm:mt-4 px-4">
-              Désabonnement à tout moment • Données protégées
+              {t('mag.newsletter.disclaimer')}
             </p>
           </div>
         </div>
@@ -615,10 +617,10 @@ const Mag: React.FC = () => {
         {/* Stats Section - Clean */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 lg:mt-20 text-center">
           {[
-            { number: '500+', label: 'Articles Premium' },
-            { number: '50K+', label: 'Lecteurs Mensuels' },
-            { number: '25+', label: 'Experts' },
-            { number: '98%', label: 'Satisfaction' }
+            { number: t('mag.stats.stat1.number'), label: t('mag.stats.stat1.label') },
+            { number: t('mag.stats.stat2.number'), label: t('mag.stats.stat2.label') },
+            { number: t('mag.stats.stat3.number'), label: t('mag.stats.stat3.label') },
+            { number: t('mag.stats.stat4.number'), label: t('mag.stats.stat4.label') }
           ].map((stat, index) => (
             <div key={index} className="group">
               <div className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-[#023927] mb-1 sm:mb-2">

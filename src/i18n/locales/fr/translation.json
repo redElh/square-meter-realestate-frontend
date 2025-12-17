@@ -1,0 +1,1925 @@
+{
+  "common": {
+    "welcome": "Bienvenue",
+    "loading": "Chargement...",
+    "search": "Rechercher",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "apply": "Appliquer",
+    "close": "Fermer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "send": "Envoyer",
+    "view": "Voir",
+    "details": "Détails",
+    "more": "Plus",
+    "less": "Moins",
+    "all": "Tout",
+    "none": "Aucun",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou",
+    "and": "et",
+    "month": "mois",
+    "week": "semaine"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "properties": "Propriétés",
+    "owners": "Propriétaires",
+    "travelers": "Voyageurs",
+    "agency": "Agence",
+    "magazine": "Magazine",
+    "contact": "Contact",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "dashboard": "Acquéreurs",
+    "clientSpace": "Espace Clients",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "services": "Services",
+    "markets": "Marchés",
+    "help": "Aide",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "careers": "Carrières",
+    "concierge": "Conciergerie",
+    "success": "Histoires de réussite",
+    "confidential": "Sélection confidentielle"
+  },
+  "header": {
+    "exclusiveProperties": "Propriétés exclusives",
+    "prestigeRentals": "Locations prestige",
+    "allProperties": "Toutes les propriétés",
+    "discoverCollection": "Découvrez notre collection exclusive",
+    "confidentialSelection": "Sélection confidentielle",
+    "discretePrestigious": "Propriétés discrètes et prestigieuses",
+    "travelerSpace": "Espace Voyageurs",
+    "prestigeForTravel": "Locations de prestige pour vos voyages",
+    "sellProperty": "Vendre votre propriété",
+    "buyersSupport": "Gérez vos interactions et achats",
+    "loginDescription": "Accédez à votre espace personnel",
+    "dashboardDescription": "Gérez vos interactions et achats"
+  },
+  "home": {
+    "hero": {
+      "title": "Immobilier d'Exception",
+      "subtitle": "Découvrez les propriétés les plus prestigieuses au monde",
+      "cta": "Explorer la Collection",
+      "buyButton": "Acheter",
+      "rentButton": "Louer",
+      "scroll": "Faites défiler pour découvrir",
+      "mediterraneanVilla": "Villa Méditerranéenne",
+      "modernPenthouse": "Penthouse Moderne",
+      "historicEstate": "Domaine Historique",
+      "locations": {
+        "saintTropez": "Saint-Tropez, France",
+        "paris16": "Paris 16ème, France",
+        "provence": "Provence, France"
+      },
+      "slides": {
+        "villa": {
+          "title": "Villa Méditerranéenne",
+          "location": "Saint-Tropez, France"
+        },
+        "penthouse": {
+          "title": "Penthouse Moderne",
+          "location": "Paris 16ème, France"
+        },
+        "estate": {
+          "title": "Domaine Historique",
+          "location": "Provence, France"
+        }
+      }
+    },
+    "essence": {
+      "title": "L'Art de l'Immobilier d'Exception",
+      "tagline": "L'Excellence Depuis 2010",
+      "paragraph1": "Depuis plus d'une décennie, nous sommes le partenaire privilégié de clients exigeants à la recherche de propriétés qui transcendent l'ordinaire. Notre expertise réside dans la compréhension qu'une maison est plus qu'une adresse—c'est le reflet de vos aspirations et de vos accomplissements.",
+      "paragraph2": "Chaque propriété de notre portfolio est soigneusement sélectionnée pour répondre aux plus hauts standards d'excellence, de beauté architecturale et de caractère unique.",
+      "conviction": "C'est notre conviction, notre signature.",
+      "ctaDiscover": "Découvrir Notre Sélection",
+      "ctaValuation": "Estimation de Propriété"
+    },
+    "mission": {
+      "title": "Notre Mission",
+      "subtitle": "L'Excellence en Chaque Service",
+      "transaction": {
+        "title": "Acheter & Vendre",
+        "description": "Accompagnement expert pour acquérir ou vendre des propriétés de prestige avec discrétion et efficacité totales."
+      },
+      "longTerm": {
+        "title": "Location Longue Durée",
+        "description": "Propriétés de location exclusives pour ceux qui recherchent des espaces de vie raffinés avec des commodités premium."
+      },
+      "seasonal": {
+        "title": "Location Saisonnière",
+        "description": "Propriétés de vacances exceptionnelles dans les destinations les plus prisées du monde."
+      }
+    },
+    "featured": {
+      "title": "Propriétés en vedette",
+      "subtitle": "Une sélection minutieuse de demeures extraordinaires",
+      "viewAll": "Voir toutes les propriétés",
+      "exclusive": "Exclusif",
+      "confidential": "Confidentiel",
+      "photos": "photos",
+      "forSale": "À Vendre",
+      "forRent": "À Louer",
+      "vacation": "Vacances",
+      "viewButton": "Voir les Détails",
+      "exploreCollection": "Explorez Notre Collection Complète",
+      "contemporaryVilla": "Villa Contemporaine Côte d'Azur",
+      "haussmannianApt": "Appartement Haussmannien Prestige",
+      "renaissanceChateau": "Château Renaissance Historique",
+      "descriptions": {
+        "villa": "Architecture contemporaine signée, vue mer imprenable, piscine infinity et accès plage privée.",
+        "apartment": "Exceptionnel appartement rénové avec soin, parquet Versailles, moulures d'origine et terrasse privative.",
+        "chateau": "Authentique château du 16ème siècle entièrement rénové avec parc paysager et dépendances."
+      },
+      "properties": {
+        "villa": {
+          "title": "Villa Contemporaine Côte d'Azur",
+          "description": "Architecture contemporaine signée, vue mer imprenable, piscine infinity et accès plage privée.",
+          "location": "Saint-Tropez, France"
+        },
+        "apartment": {
+          "title": "Appartement Haussmannien Prestige",
+          "description": "Exceptionnel appartement rénové avec soin, parquet Versailles, moulures d'origine et terrasse privative.",
+          "location": "Paris 16ème, France"
+        },
+        "chateau": {
+          "title": "Château Renaissance Historique",
+          "description": "Authentique château du 16ème siècle entièrement rénové avec parc paysager et dépendances.",
+          "location": "Provence, France"
+        }
+      }
+    },
+    "services": {
+      "title": "Nos Services",
+      "subtitle": "Une expertise complète pour tous vos besoins immobiliers",
+      "buyTitle": "Acheter",
+      "buyDesc": "Propriétés exclusives sélectionnées pour vous",
+      "rentTitle": "Louer",
+      "rentDesc": "Locations saisonnières et annuelles de prestige",
+      "sellTitle": "Vendre",
+      "sellDesc": "Vente discrète et efficace de votre bien",
+      "investTitle": "Investir",
+      "investDesc": "Conseils experts pour vos investissements",
+      "conciergeTitle": "Conciergerie",
+      "conciergeDesc": "Services premium pour votre style de vie",
+      "valuationTitle": "Estimation",
+      "valuationDesc": "Évaluation gratuite par nos experts"
+    },
+    "stats": {
+      "yearsExperience": "Années d'Excellence",
+      "propertiesSold": "Propriétés Vendues",
+      "happyClients": "Clients Satisfaits",
+      "countries": "Pays",
+      "exclusiveProperties": "Propriétés Exclusives",
+      "satisfiedClients": "Satisfaction Client",
+      "countriesServed": "Pays"
+    },
+    "testimonials": {
+      "title": "Témoignages Clients",
+      "subtitle": "Ils nous ont fait confiance pour leurs projets immobiliers",
+      "clients": {
+        "aicha": {
+          "name": "Aïcha B.",
+          "text": "Service exceptionnel ! L'équipe nous a trouvé notre villa de rêve en moins d'un mois. Professionnalisme et écoute à chaque étape."
+        },
+        "marc": {
+          "name": "Marc D.",
+          "text": "Une vente efficace et discrète. Mon bien a été vendu rapidement et dans les meilleures conditions. Je recommande vivement."
+        },
+        "thomas": {
+          "name": "Thomas L.",
+          "text": "Parfait pour notre location saisonnière. De belles propriétés et un service impeccable. Nous reviendrons sans hésiter."
+        }
+      }
+    },
+    "values": {
+      "title": "Nos Valeurs",
+      "excellence": {
+        "title": "Excellence",
+        "description": "Nous sélectionnons uniquement les meilleures propriétés et offrons un service inégalé à nos clients."
+      },
+      "humanity": {
+        "title": "Humanité",
+        "description": "Chaque client est unique. Nous écoutons, comprenons et adaptons notre approche à vos besoins."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Nous adoptons les technologies et solutions modernes pour améliorer votre expérience immobilière."
+      },
+      "responsibility": {
+        "title": "Responsabilité",
+        "description": "Nous nous engageons à des pratiques durables et éthiques dans toutes nos transactions."
+      }
+    },
+    "contact": {
+      "title": "Visitez Notre Agence",
+      "subtitle": "Nous vous accueillons dans notre espace prestigieux",
+      "agency": "Notre Agence",
+      "address": "Adresse",
+      "addressValue": "123 Avenue Prestige, Paris 75008, France",
+      "hours": "Horaires",
+      "hoursValue": "Lundi - Samedi : 9h - 19h",
+      "email": "Email",
+      "emailValue": "contact@squaremeter.com",
+      "phone": "Téléphone",
+      "phoneValue": "+33 1 23 45 67 89",
+      "brandTitle": "SQUARE METER",
+      "tagline": "Votre partenaire en immobilier d'exception",
+      "ctaButton": "Prendre Rendez-vous"
+    },
+    "cta": {
+      "title": "Prêt à Trouver Votre Propriété de Rêve?",
+      "subtitle": "Nos experts sont là pour vous guider à chaque étape",
+      "button": "Nous Contacter"
+    }
+  },
+  "propertyDetail": {
+    "exclusive": "EXCLUSIF",
+    "stats": {
+      "surface": "Surface",
+      "land": "Terrain",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "year": "Année"
+    },
+    "sections": {
+      "description": "Description Exclusive",
+      "features": "Équipements & Prestations",
+      "environment": "Environnement & Prestations"
+    },
+    "actions": {
+      "privateVisit": "Visite Privée",
+      "completeFile": "Dossier Complet",
+      "showMore": "Voir les {{count}} équipements supplémentaires",
+      "showLess": "Voir moins"
+    },
+    "contact": {
+      "title": "Visite Exclusive",
+      "advisor": "Votre Conseiller Dédié",
+      "experience": "d'expérience",
+      "propertiesSold": "propriétés vendues"
+    },
+    "similar": {
+      "title": "Propriétés Similaires",
+      "subtitle": "Découvrez d'autres propriétés d'exception qui pourraient vous séduire"
+    },
+    "mock": {
+      "property": {
+        "title": "Villa Les Oliviers",
+        "location": "Saint-Tropez, Côte d'Azur",
+        "description": "Exceptionnelle villa contemporaine nichée au cœur d'un domaine privé de 2 hectares, offrant une vue panoramique imprenable sur la Méditerranée. Cette propriété d'exception allie élégance architecturale et technologies de pointe dans un écrin de verdure préservé.\n\nConçue par l'architecte renommé Jean-Michel Durand, cette villa de 250 m² déploie ses volumes épurés autour d'un patio central arboré. Les matériaux nobles - pierre de Bourgogne, chêne massif, laiton vieilli - dialoguent avec les larges baies vitrées qui ouvrent l'espace sur le jardin paysager et la piscine à débordement.",
+        "agentName": "Sophie Laurent",
+        "agentTitle": "Directrice des Ventes"
+      },
+      "features": [
+        "Piscine à débordement chauffée",
+        "Jardin paysager avec oliveraie",
+        "Parking sécurisé 6 voitures",
+        "Domaine clos et sécurisé",
+        "Vue mer panoramique 180°",
+        "Cheminée contemporaine",
+        "Cuisine Bulthaup équipée",
+        "Salle de sport privative",
+        "Home cinéma Dolby Atmos",
+        "Domotique complète",
+        "Chauffage au sol",
+        "Ventilation double flux",
+        "Panneaux solaires",
+        "Cave à vin climatisée",
+        "Garage 3 voitures"
+      ],
+      "amenities": [
+        "Plage privée à 5 min",
+        "Golf 18 trous à 10 min",
+        "Marina de prestige",
+        "Restaurants étoilés",
+        "Helipad à proximité"
+      ],
+      "similarProperties": [
+        {
+          "title": "Villa Baie des Anges",
+          "location": "Nice"
+        },
+        {
+          "title": "Domaine Provençal",
+          "location": "Gordes"
+        },
+        {
+          "title": "Penthouse Monte-Carlo",
+          "location": "Monaco"
+        }
+      ]
+    }
+  },
+  "owners": {
+    "hero": {
+      "slides": [
+        {
+          "title": "Votre Patrimoine Immobilier",
+          "subtitle": "Expertise Prestige • Confidentialité • Réseau International"
+        },
+        {
+          "title": "Valorisation d'Exception",
+          "subtitle": "Maximisez la valeur de votre bien avec notre expertise"
+        },
+        {
+          "title": "Gestion Prestige",
+          "subtitle": "Services sur mesure pour propriétaires exigeants"
+        }
+      ],
+      "estimateButton": "Estimer mon bien",
+      "manageButton": "Faire gérer"
+    },
+    "benefits": {
+      "title": "L'Excellence Square Meter",
+      "subtitle": "Notre expertise exclusive dans le marché du luxe garantit la meilleure valorisation de votre patrimoine",
+      "items": [
+        {
+          "title": "Expertise Prestige",
+          "description": "Notre réseau de clients haut de gamme et notre connaissance du marché du luxe assurent la meilleure valorisation.",
+          "stats": "+25% de valorisation moyenne"
+        },
+        {
+          "title": "Discrétion Absolue",
+          "description": "Vente confidentielle pour préserver votre intimité et celle de votre propriété.",
+          "stats": "100% des ventes confidentielles"
+        },
+        {
+          "title": "Présentation Exclusive",
+          "description": "Photographie professionnelle et visites immersives pour mettre en valeur votre propriété.",
+          "stats": "Visites 3D incluses"
+        },
+        {
+          "title": "Process Optimisé",
+          "description": "Accompagnement personnalisé de la mise en vente jusqu'à la signature finale.",
+          "stats": "Délai moyen : 45 jours"
+        }
+      ]
+    },
+    "stats": [
+      { "number": "98%", "label": "Taux de réussite" },
+      { "number": "45j", "label": "Délai moyen" },
+      { "number": "+25%", "label": "Valorisation" },
+      { "number": "500+", "label": "Propriétés vendues" }
+    ],
+    "management": {
+      "title": "Gestion Prestige",
+      "services": [
+        {
+          "title": "Gestion Locative",
+          "description": "Gestion complète de votre bien locatif avec sélection rigoureuse des locataires.",
+          "features": ["Sélection locataire", "Gestion des loyers", "Entretien préventif"],
+          "price": "8% du loyer"
+        },
+        {
+          "title": "Location Saisonnière",
+          "description": "Optimisation de vos revenus grâce à notre gestion professionnelle des locations saisonnières.",
+          "features": ["Réservation premium", "Check-in/out", "Ménage professionnel"],
+          "price": "20% des revenus"
+        },
+        {
+          "title": "Service Conciergerie",
+          "description": "Entretien, ménage et services sur mesure pour préserver l'excellence de votre propriété.",
+          "features": ["Entretien régulier", "Services VIP", "Maintenance 24/7"],
+          "price": "Sur devis"
+        }
+      ],
+      "quoteButton": "Demander un devis"
+    },
+    "additionalServices": {
+      "title": "Services Additionnels",
+      "items": [
+        { "title": "Audit de Rendement", "description": "Analyse détaillée de la performance de votre investissement" },
+        { "title": "Rénovation Prestige", "description": "Coordination de travaux avec des artisans d'exception" },
+        { "title": "Staging Immobilier", "description": "Mise en scène professionnelle pour maximiser l'attractivité" },
+        { "title": "Assurances Premium", "description": "Solutions d'assurance adaptées aux biens d'exception" }
+      ],
+      "contactButton": "Contactez notre équipe d'experts"
+    }
+  },
+  "properties": {
+    "title": "Nos Propriétés",
+    "hero": {
+      "title": "Votre Parcours Immobilier Commence Ici",
+      "subtitle": "Découvrez les plus beaux biens immobiliers au monde, sélectionnés avec expertise et passion.",
+      "buy": "Acheter",
+      "rent": "Louer",
+      "vacation": "Vancances",
+      "scroll": "Faites défiler pour explorer"
+    },
+    "search": {
+      "placeholder": "Rechercher une propriété, une localisation, un bien spécifique...",
+      "results": "résultats",
+      "suggestions": "Suggestions",
+      "paris": "Paris",
+      "bedrooms3Plus": "3+ chambres",
+      "toBuy": "À acheter",
+      "vacation": "Vancances",
+      "tailoredExploration": "Exploration Sur Mesure"
+    },
+    "filters": {
+      "title": "Affinez votre recherche avec nos filtres intelligents",
+      "all": "Tout",
+      "buy": "À acheter",
+      "rent": "À louer",
+      "vacation": "Vancances",
+      "type": "Type de bien",
+      "location": "Localisation",
+      "allLocations": "Toutes les localisations",
+      "bedrooms": "Chambres",
+      "bedroomsLabel": "chambres",
+      "allBedrooms": "Toutes",
+      "priceRange": "Gamme de prix",
+      "surface": "Surface",
+      "activeFilters": "filtre(s) actif(s)",
+      "resetAll": "Tout réinitialiser",
+      "apply": "Appliquer les filtres"
+    },
+    "listing": {
+      "available": "Biens disponibles",
+      "sortBy": "Trier par :",
+      "relevance": "Pertinence",
+      "priceAsc": "Prix croissant",
+      "priceDesc": "Prix décroissant",
+      "surface": "Surface",
+      "newest": "Plus récents",
+      "loading": "Chargement...",
+      "exclusive": "EXCLUSIF",
+      "confidential": "CONFIDENTIEL",
+      "photos": "photos",
+      "forSale": "À VENDRE",
+      "forRent": "À LOUER",
+      "forVacation": "VANCANCES",
+      "view": "Voir",
+      "loadMore": "Voir plus de biens"
+    },
+    "empty": {
+      "title": "Aucune propriété ne correspond à votre recherche",
+      "description": "Notre collection évolue constamment. Élargissez vos critères de recherche ou contactez-nous pour une recherche personnalisée.",
+      "expandSearch": "Élargir la recherche",
+      "contactUs": "Nous contacter"
+    },
+    "details": {
+      "price": "Prix",
+      "location": "Localisation",
+      "surface": "Surface",
+      "bedrooms": "Chambres",
+      "bathrooms": "Salles de bain",
+      "yearBuilt": "Année de construction",
+      "features": "Caractéristiques",
+      "description": "Description",
+      "gallery": "Galerie",
+      "virtualTour": "Visite virtuelle",
+      "scheduleVisit": "Planifier une visite",
+      "contactAgent": "Contacter l'agent",
+      "addToFavorites": "Ajouter aux favoris",
+      "share": "Partager",
+      "similarProperties": "Propriétés similaires"
+    },
+    "types": {
+      "villa": "Villa",
+      "apartment": "Appartement",
+      "house": "Maison",
+      "penthouse": "Penthouse",
+      "chateau": "Château",
+      "land": "Terrain"
+    }
+    ,
+    "mock": {
+      "titles": {
+        "villaAzure": "Villa Azure",
+        "chateauRenaissance": "Château de la Renaissance",
+        "penthousePrestige": "Penthouse Prestige",
+        "haussmannApartment": "Appartement Haussmannien",
+        "mediterraneanVilla": "Villa Méditerranéenne",
+        "industrialLoft": "Loft Industriel",
+        "countrysideHouse": "Maison de Campagne",
+        "tropicalVilla": "Villa Tropicale",
+        "contemporaryHouse": "Maison Contemporaine",
+        "maraisApartment": "Appartement Design Marais",
+        "provencalEstate": "Domaine Provençal",
+        "contemporaryVilla": "Villa Contemporaine"
+      },
+      "locations": {
+        "paris16": "Paris 16ème",
+        "paris8": "Paris 8ème",
+        "paris4": "Paris 4ème",
+        "saintTropez": "Saint-Tropez",
+        "gordes": "Gordes",
+        "saintJeanCapFerrat": "Saint-Jean-Cap-Ferrat"
+      }
+    }
+  },
+  "settings": {
+    "title": "Paramètres du site",
+    "subtitle": "Choisissez la langue et la devise utilisées pour afficher le site",
+    "language": "Langue",
+    "currency": "Devise",
+    "apply": "Appliquer",
+    "cancel": "Annuler",
+    "success": "Paramètres mis à jour avec succès",
+    "languageDesc": "Sélectionnez votre langue d'affichage préférée",
+    "currencyDesc": "Sélectionnez votre devise préférée pour les prix"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Pas encore de compte?",
+    "hasAccount": "Vous avez déjà un compte?",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Nous sommes là pour vous aider",
+    "name": "Nom",
+    "email": "Email",
+    "phone": "Téléphone",
+    "message": "Message",
+    "send": "Envoyer le message",
+    "success": "Message envoyé avec succès",
+    "error": "Erreur lors de l'envoi du message"
+  },
+  "ai": {
+    "assistant": "Assistant IA",
+    "greeting": "Salut ! 👋",
+    "help": "Comment puis-je t'aider ?",
+    "typing": "L'IA réfléchit...",
+    "placeholder": "Écris ton message...",
+    "voicePlaceholder": "🎤 Je t'écoute...",
+    "suggestions": "Suggestions :",
+    "quickQuestions": "Questions rapides :",
+    "online": "En ligne",
+    "searchProperties": "Rechercher des propriétés",
+    "bookAppointment": "Prendre rendez-vous",
+    "getEstimate": "Obtenir une estimation",
+    "budgetHelp": "Aide au budget",
+    "neighborhoodInfo": "Informations sur le quartier"
+  },
+  "errors": {
+    "pageNotFound": "Page non trouvée",
+    "somethingWrong": "Quelque chose s'est mal passé",
+    "tryAgain": "Veuillez réessayer",
+    "goHome": "Retour à l'accueil"
+  },
+  "contact": {
+    "hero": {
+      "title": "Contact",
+      "subtitle": "Votre projet immobilier mérite une attention exceptionnelle. Notre équipe d'experts se tient à votre disposition pour concrétiser vos ambitions."
+    },
+    "successMessage": "Message envoyé avec succès!",
+    "contactMethods": {
+      "title": "Nos Coordonnées",
+      "email": {
+        "title": "Email",
+        "details": "contact@squaremeter.com",
+        "description": "Réponse sous 24h"
+      },
+      "phone": {
+        "title": "Téléphone",
+        "details": "+33 1 23 45 67 89",
+        "description": "Lun - Ven, 9h - 18h"
+      },
+      "office": {
+        "title": "Agence",
+        "details": "123 Avenue de Luxe, 75008 Paris",
+        "description": "Sur rendez-vous"
+      }
+    },
+    "quickActions": {
+      "title": "Actions Rapides",
+      "estimation": {
+        "title": "Demander une estimation",
+        "description": "Évaluation gratuite de votre bien"
+      },
+      "appointment": {
+        "title": "Prendre rendez-vous",
+        "description": "Visite privée avec un expert"
+      },
+      "confidential": {
+        "title": "Sélection confidentielle",
+        "description": "Accès aux biens exclusifs"
+      }
+    },
+    "confidentialityBox": {
+      "title": "Confidentialité Totale",
+      "description": "Toutes vos informations sont protégées et traitées de manière strictement confidentielle. Notre engagement : discrétion absolue et protection de vos données."
+    },
+    "form": {
+      "title": "Envoyez-nous un message",
+      "confidentialBadge": "100% confidentiel",
+      "firstName": "Prénom *",
+      "firstNamePlaceholder": "Votre prénom",
+      "lastName": "Nom *",
+      "lastNamePlaceholder": "Votre nom",
+      "email": "Email *",
+      "emailPlaceholder": "votre@email.com",
+      "phone": "Téléphone",
+      "phonePlaceholder": "+33 1 23 45 67 89",
+      "company": "Société",
+      "companyPlaceholder": "Nom de votre société",
+      "subject": "Sujet *",
+      "subjectPlaceholder": "Sélectionnez un sujet",
+      "preferredContact": "Méthode de contact préférée",
+      "preferredEmail": "Email",
+      "preferredPhone": "Téléphone",
+      "message": "Message *",
+      "messagePlaceholder": "Décrivez votre projet, vos attentes, ou toute information pertinente...",
+      "submit": "Envoyer le message",
+      "submitting": "Envoi en cours..."
+    },
+    "subjects": {
+      "buy": "Acheter un bien",
+      "sell": "Vendre un bien",
+      "rent": "Louer un bien",
+      "management": "Gestion de bien",
+      "estimation": "Estimation gratuite",
+      "confidential": "Sélection confidentielle",
+      "partnership": "Partenariat",
+      "other": "Autre"
+    },
+    "projectDetails": {
+      "title": "Détails de votre projet",
+      "propertyType": "Type de bien",
+      "propertyTypePlaceholder": "Type de bien",
+      "budget": "Budget",
+      "budgetPlaceholder": "Budget",
+      "timeline": "Délai",
+      "timelinePlaceholder": "Délai"
+    },
+    "propertyTypes": {
+      "apartment": "Appartement",
+      "villa": "Villa",
+      "house": "Maison",
+      "land": "Terrain",
+      "commercial": "Commercial"
+    },
+    "budgets": {
+      "1M": "1M€ - 2M€",
+      "2M": "2M€ - 5M€",
+      "5M": "5M€ - 10M€",
+      "10M": "10M€+"
+    },
+    "timelines": {
+      "urgent": "Urgent (1-3 mois)",
+      "medium": "Moyen (3-6 mois)",
+      "flexible": "Flexible (6+ mois)"
+    },
+    "trustIndicators": {
+      "confidentiality": {
+        "title": "Confidentialité",
+        "description": "Toutes vos informations sont protégées et traitées de manière strictement confidentielle."
+      },
+      "responsiveness": {
+        "title": "Réactivité",
+        "description": "Notre équipe s'engage à vous répondre dans les plus brefs délais."
+      },
+      "expertise": {
+        "title": "Expertise",
+        "description": "Bénéficiez des conseils d'experts avec plus de 15 ans d'expérience."
+      }
+    },
+    "process": {
+      "title": "Notre Processus",
+      "subtitle": "Comment nous transformons votre demande en expérience exceptionnelle",
+      "analysis": {
+        "step": "01",
+        "title": "Analyse",
+        "description": "Évaluation approfondie de votre projet"
+      },
+      "advice": {
+        "step": "02",
+        "title": "Conseil",
+        "description": "Recommandations personnalisées"
+      },
+      "research": {
+        "step": "03",
+        "title": "Recherche",
+        "description": "Sélection des meilleures opportunités"
+      },
+      "followUp": {
+        "step": "04",
+        "title": "Suivi",
+        "description": "Accompagnement jusqu'à la concrétisation"
+      }
+    }
+  },
+  "sellingMultiStep": {
+    "hero": {
+      "slides": [
+        {
+          "title": "Estimation Prestige",
+          "subtitle": "Découvrez la valeur réelle de votre patrimoine immobilier"
+        },
+        {
+          "title": "Expertise Sur Mesure",
+          "subtitle": "Évaluation précise basée sur les dernières tendances du marché"
+        },
+        {
+          "title": "Confidentialité Absolue",
+          "subtitle": "Votre projet traité avec la plus grande discrétion"
+        }
+      ]
+    },
+    "progress": {
+      "step": "Étape",
+      "of": "sur",
+      "completed": "complété"
+    },
+    "steps": [
+      {
+        "number": 1,
+        "title": "Votre Bien",
+        "description": "Caractéristiques principales"
+      },
+      {
+        "number": 2,
+        "title": "Équipements",
+        "description": "Commodités et prestations"
+      },
+      {
+        "number": 3,
+        "title": "Votre Projet",
+        "description": "Motivations et délais"
+      },
+      {
+        "number": 4,
+        "title": "Contact",
+        "description": "Informations personnelles"
+      }
+    ],
+    "step1": {
+      "addressLabel": "Adresse du bien *",
+      "addressPlaceholder": "123 Avenue de Luxe, 75008 Paris",
+      "typeLabel": "Type de bien *",
+      "surfaceLabel": "Surface (m²) *",
+      "surfacePlaceholder": "Ex: 120",
+      "roomsLabel": "Pièces *",
+      "roomsPlaceholder": "Ex: 5",
+      "bedroomsLabel": "Chambres *",
+      "bedroomsPlaceholder": "Ex: 3",
+      "conditionLabel": "État du bien *"
+    },
+    "propertyTypes": [
+      { "value": "apartment", "label": "Appartement" },
+      { "value": "house", "label": "Maison" },
+      { "value": "villa", "label": "Villa" },
+      { "value": "loft", "label": "Loft" },
+      { "value": "penthouse", "label": "Penthouse" },
+      { "value": "castle", "label": "Château" },
+      { "value": "other", "label": "Autre" }
+    ],
+    "conditions": [
+      { "value": "excellent", "label": "Excellent état", "description": "Rénovation récente, état neuf" },
+      { "value": "very-good", "label": "Très bon état", "description": "Bien entretenu, prêt à vivre" },
+      { "value": "good", "label": "Bon état", "description": "Quelques travaux de rafraîchissement" },
+      { "value": "renovation", "label": "À rénover", "description": "Projet de rénovation nécessaire" }
+    ],
+    "step2": {
+      "title": "Équipements & Prestations",
+      "subtitle": "Sélectionnez les équipements qui valorisent votre bien",
+      "selectedSummary": "Équipements sélectionnés ({{count}})"
+    },
+    "features": [
+      { "value": "terrace", "label": "Terrasse" },
+      { "value": "balcony", "label": "Balcon" },
+      { "value": "garden", "label": "Jardin" },
+      { "value": "pool", "label": "Piscine" },
+      { "value": "parking", "label": "Parking" },
+      { "value": "elevator", "label": "Ascenseur" },
+      { "value": "fireplace", "label": "Cheminée" },
+      { "value": "ac", "label": "Climatisation" },
+      { "value": "alarm", "label": "Alarme" },
+      { "value": "smart-home", "label": "Domotique" },
+      { "value": "wine-cellar", "label": "Cave à vin" },
+      { "value": "gym", "label": "Salle de sport" }
+    ],
+    "step3": {
+      "timelineLabel": "Délai de vente souhaité *",
+      "priceLabel": "Fourchette de prix envisagée",
+      "pricePlaceholder": "Ex: 1,200,000 - 1,500,000 €",
+      "availabilityLabel": "Disponibilités pour les visites",
+      "availabilityPlaceholder": "Ex: Weekends, en semaine après 18h...",
+      "motivationLabel": "Motivation de la vente *",
+      "motivationPlaceholder": "Décrivez brièvement les raisons de votre projet de vente (déménagement, investissement, succession...)"
+    },
+    "timelines": [
+      { "value": "urgent", "label": "Urgent (1-3 mois)", "description": "Vente rapide souhaitée" },
+      { "value": "medium", "label": "Moyen (3-6 mois)", "description": "Délai standard" },
+      { "value": "flexible", "label": "Flexible (6+ mois)", "description": "Pas de contrainte de temps" },
+      { "value": "undefined", "label": "À définir", "description": "En fonction du marché" }
+    ],
+    "step4": {
+      "personalInfoTitle": "Informations personnelles",
+      "contactInfoTitle": "Coordonnées",
+      "firstNameLabel": "Prénom *",
+      "lastNameLabel": "Nom *",
+      "emailLabel": "Email *",
+      "phoneLabel": "Téléphone *",
+      "summaryTitle": "Récapitulatif de votre demande",
+      "propertySection": "BIEN IMMOBILIER",
+      "projectSection": "VOTRE PROJET",
+      "budgetPrefix": "Budget:",
+      "amenitiesCount": "{{count}} équipements sélectionnés"
+    },
+    "navigation": {
+      "previous": "Précédent",
+      "continue": "Continuer",
+      "submit": "Soumettre",
+      "processing": "Traitement..."
+    }
+  },
+  "footer": {
+    "brand": {
+      "description": "L'excellence immobilière réinventée. Nous proposons des biens d'exception pour une clientèle exigeante en recherche de prestige et d'authenticité."
+    },
+    "social": {
+      "title": "SUIVEZ L'EXCELLENCE",
+      "facebook": "Rejoignez notre communauté",
+      "instagram": "Découvrez nos propriétés",
+      "linkedin": "Connectons professionnellement",
+      "pinterest": "Inspirations et tendances"
+    },
+    "sections": {
+      "properties": "PROPRIÉTÉS",
+      "clients": "CLIENTS",
+      "contact": "CONTACT"
+    },
+    "navigation": {
+      "allProperties": "Toutes les propriétés",
+      "confidentialSelection": "Sélection confidentielle",
+      "investment": "Investissement",
+      "owners": "Propriétaires",
+      "sellYourProperty": "Vendre votre bien",
+      "travelerSpace": "Espace Voyageurs",
+      "agency": "L'agence",
+      "magazine": "Le Mag",
+      "careers": "Carrières",
+      "contact": "Contact"
+    },
+    "contactInfo": {
+      "address": "123 Avenue de Luxe",
+      "city": "75008 Paris, France",
+      "phone": "+33 1 23 45 67 89",
+      "email": "contact@squaremeter.com"
+    },
+    "newsletter": {
+      "title": "NEWSLETTER EXCLUSIVE",
+      "placeholder": "Votre email",
+      "subscribe": "✓"
+    },
+    "bottom": {
+      "copyright": "© {{year}} Square Meter. Tous droits réservés.",
+      "privacy": "Confidentialité",
+      "terms": "Conditions"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace personnel pour gérer vos propriétés et suivre vos projets.",
+      "emailLabel": "Adresse email *",
+      "emailPlaceholder": "votre@email.com",
+      "passwordLabel": "Mot de passe *",
+      "passwordPlaceholder": "••••••••",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "submitButton": "Se connecter"
+    },
+    "signup": {
+      "title": "Inscription",
+      "subtitle": "Rejoignez notre communauté exclusive et accédez à des propriétés d'exception.",
+      "firstNameLabel": "Prénom *",
+      "firstNamePlaceholder": "Jean",
+      "lastNameLabel": "Nom *",
+      "lastNamePlaceholder": "Dupont",
+      "emailLabel": "Adresse email *",
+      "emailPlaceholder": "votre@email.com",
+      "accountTypeLabel": "Type de compte *",
+      "buyer": "Acheteur",
+      "owner": "Propriétaire",
+      "passwordLabel": "Mot de passe *",
+      "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Confirmer le mot de passe *",
+      "confirmPasswordPlaceholder": "••••••••",
+      "passwordStrength": "Force du mot de passe",
+      "acceptTerms": "J'accepte les",
+      "termsLink": "conditions générales",
+      "and": "et la",
+      "privacyLink": "politique de confidentialité",
+      "submitButton": "Créer un compte"
+    },
+    "tabs": {
+      "login": "Connexion",
+      "signup": "Inscription"
+    },
+    "social": {
+      "divider": "Ou continuer avec",
+      "facebook": "Facebook",
+      "google": "Google"
+    },
+    "security": {
+      "title": "Sécurité Garantie",
+      "description": "Toutes vos informations sont protégées par un chiffrement de niveau bancaire. Nous ne partageons jamais vos données avec des tiers."
+    },
+    "validation": {
+      "invalidEmail": "Email invalide",
+      "passwordTooShort": "Mot de passe trop court",
+      "firstNameRequired": "Prénom requis",
+      "lastNameRequired": "Nom requis",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "confirmPassword": "Confirmez le mot de passe",
+      "passwordsMismatch": "Les mots de passe ne correspondent pas",
+      "acceptTermsRequired": "Vous devez accepter les CGU",
+      "selectAccountType": "Veuillez sélectionner un type de compte"
+    },
+    "passwordStrength": {
+      "veryWeak": "Très faible",
+      "weak": "Faible",
+      "medium": "Moyen",
+      "strong": "Fort",
+      "veryStrong": "Très fort"
+    }
+  },
+  "dashboard": {
+    "loading": "Chargement...",
+    "header": {
+      "buyerTitle": "Espace Acheteur",
+      "ownerTitle": "Espace Propriétaire",
+      "buyerSubtitle": "Gérez vos recherches et favoris immobiliers",
+      "ownerSubtitle": "Gérez vos propriétés et suivez vos performances",
+      "buyerToggle": "Acheteur",
+      "ownerToggle": "Propriétaire",
+      "newRequest": "Nouvelle demande"
+    },
+    "navigation": {
+      "overview": "Vue d'ensemble",
+      "savedProperties": "Biens sauvegardés",
+      "mySearches": "Mes recherches",
+      "appointments": "Rendez-vous",
+      "messages": "Messages",
+      "myProperties": "Mes propriétés",
+      "statistics": "Statistiques",
+      "inquiriesReceived": "Demandes reçues",
+      "documents": "Documents",
+      "profile": "Profil",
+      "settings": "Paramètres"
+    },
+    "stats": {
+      "buyer": {
+        "savedProperties": "Biens sauvegardés",
+        "scheduledVisits": "Visites programmées",
+        "messages": "Messages",
+        "activeSearches": "Recherches actives"
+      },
+      "owner": {
+        "activeProperties": "Propriétés actives",
+        "visitsThisMonth": "Visites ce mois",
+        "requestsReceived": "Demandes reçues",
+        "monthlyRevenue": "Revenus mensuels"
+      }
+    },
+    "overview": {
+      "recentSaved": "Biens sauvegardés récents",
+      "viewAll": "Voir tout",
+      "propertyDetails": "Voir les détails",
+      "contact": "Contacter",
+      "quickActions": {
+        "searchProperty": "Rechercher un bien",
+        "searchDescription": "Parcourir notre catalogue de propriétés exclusives",
+        "contactAdvisor": "Contacter un conseiller",
+        "contactDescription": "Un expert à votre écoute pour vous accompagner",
+        "addProperty": "Ajouter une propriété",
+        "addDescription": "Mettre un nouveau bien en vente ou location",
+        "requestEstimation": "Demander une estimation",
+        "estimationDescription": "Obtenez une évaluation professionnelle gratuite"
+      },
+      "propertyPerformance": "Performances de vos biens",
+      "manage": "Gérer",
+      "views": "Vues",
+      "favorites": "Favoris",
+      "inquiries": "Demandes",
+      "totalViews": "Vues totales",
+      "addedToFavorites": "Mis en favoris",
+      "requestsReceived": "Demandes reçues",
+      "edit": "Modifier",
+      "viewStatistics": "Voir statistiques"
+    },
+    "savedProperties": {
+      "title": "Biens sauvegardés",
+      "propertiesCount": "propriétés",
+      "sortByDate": "Trier par date",
+      "priceLowToHigh": "Prix croissant",
+      "priceHighToLow": "Prix décroissant",
+      "viewDetails": "Voir détails",
+      "contact": "Contacter",
+      "bedrooms": "chambres",
+      "bathrooms": "sdb"
+    },
+    "searches": {
+      "title": "Mes recherches",
+      "subtitle": "Gérez vos critères de recherche",
+      "newSearch": "Nouvelle recherche",
+      "results": "résultats",
+      "createdOn": "Créée le",
+      "edit": "Modifier",
+      "viewResults": "Voir résultats"
+    },
+    "properties": {
+      "title": "Mes propriétés",
+      "activeProperties": "biens actifs",
+      "addProperty": "Ajouter un bien",
+      "totalViews": "Vues totales",
+      "addedToFavorites": "Mis en favoris",
+      "requestsReceived": "Demandes reçues",
+      "edit": "Modifier",
+      "viewStatistics": "Voir statistiques"
+    },
+    "analytics": {
+      "title": "Statistiques détaillées",
+      "monthlyViews": "Vues mensuelles",
+      "monthlyViewsChange": "+23% vs mois précédent",
+      "conversionRate": "Taux de conversion",
+      "conversionDescription": "Visites → Demandes",
+      "averageTime": "Temps moyen",
+      "consultationDuration": "Durée de consultation",
+      "averagePosition": "Position moyenne",
+      "searchResults": "Dans les résultats de recherche"
+    },
+    "appointments": {
+      "title": "Rendez-vous",
+      "upcomingAppointments": "rendez-vous à venir",
+      "scheduleAppointment": "Planifier un rendez-vous",
+      "confirmed": "Confirmé",
+      "pending": "En attente",
+      "at": "à",
+      "edit": "Modifier",
+      "cancel": "Annuler"
+    },
+    "messages": {
+      "title": "Messages",
+      "unreadMessages": "messages non lus",
+      "newMessage": "Nouveau message",
+      "new": "NOUVEAU",
+      "ago": "Il y a"
+    },
+    "inquiries": {
+      "title": "Demandes reçues",
+      "subtitle": "Gérez les demandes d'information sur vos biens",
+      "visitRequest": "Demande de visite",
+      "questionAboutProperty": "Question sur le bien",
+      "newStatus": "Nouvelle",
+      "processedStatus": "Traitée",
+      "respond": "Répondre",
+      "viewDetails": "Voir détails",
+      "viewResponse": "Voir la réponse"
+    },
+    "documents": {
+      "title": "Documents",
+      "subtitle": "Gérez vos documents administratifs",
+      "addDocument": "Ajouter un document",
+      "diagnostics": "Diagnostics",
+      "diagnosticsDescription": "DPE, Amiante, Plomb...",
+      "contracts": "Contrats",
+      "contractsDescription": "Baux, Mandats...",
+      "propertyTitles": "Titres de propriété",
+      "propertyTitlesDescription": "Actes notariés...",
+      "view": "Voir"
+    },
+    "sampleData": {
+      "properties": {
+        "property1": {
+          "title": "Ma Villa Méditerranéenne",
+          "location": "Nice, Côte d'Azur"
+        },
+        "property2": {
+          "title": "Appartement Centre Ville",
+          "location": "Lyon, Presqu'île"
+        }
+      },
+      "searches": {
+        "search1": "Appartement 2 chambres, Paris 16ème, budget 500k€",
+        "search2": "Villa avec piscine, Provence, budget 1.2M€"
+      },
+      "appointments": {
+        "appointment1": {
+          "title": "Visite - Villa moderne à Cannes",
+          "date": "28 décembre 2024",
+          "time": "14h00",
+          "location": "15 Bd de la Croisette, Cannes",
+          "advisor": "Sophie Martin - Conseillère immobilière"
+        },
+        "appointment2": {
+          "title": "RDV Estimation",
+          "date": "5 janvier 2025",
+          "time": "10h00",
+          "location": "Agence Square Meter - Nice",
+          "advisor": "Marc Dubois - Expert en évaluation immobilière"
+        }
+      },
+      "messages": {
+        "message1": {
+          "sender": "Sophie Martin",
+          "role": "Conseillère immobilière",
+          "content": "Bonjour ! Je voulais confirmer notre visite prévue ce samedi à 14h. N'hésitez pas si vous avez des questions.",
+          "time": "2h"
+        },
+        "message2": {
+          "sender": "Marc Dubois",
+          "role": "Expert en évaluation immobilière",
+          "content": "J'ai bien reçu votre demande d'estimation pour votre villa à Nice. Je suis disponible la semaine prochaine pour une visite sur place.",
+          "time": "1 jour"
+        },
+        "message3": {
+          "sender": "Emma Bernard",
+          "role": "Directrice d'agence",
+          "content": "Votre annonce de propriété a été validée et est maintenant en ligne. Excellente qualité des photos !",
+          "time": "3 jours"
+        }
+      },
+      "inquiries": {
+        "inquiry1": {
+          "title": "Demande de visite",
+          "property": "Ma Villa Méditerranéenne - Nice",
+          "content": "Client intéressé pour une visite ce weekend. Disponibilité samedi matin?",
+          "status": "Nouvelle"
+        },
+        "inquiry2": {
+          "title": "Question sur le bien",
+          "property": "Appartement Centre Ville - Lyon",
+          "content": "Le parking est-il inclus dans le loyer?",
+          "status": "Traitée"
+        }
+      }
+    }
+  },
+  "userProfile": {
+    "closeButton": "Fermer le profil",
+    "tabs": {
+      "personal": "Informations Personnelles",
+      "professional": "Profil Professionnel",
+      "preferences": "Préférences",
+      "security": "Sécurité",
+      "documents": "Documents"
+    },
+    "profileCompletion": "Profil complété",
+    "headers": {
+      "personal": "Informations Personnelles",
+      "personalSubtitle": "Gérez vos informations personnelles et coordonnées",
+      "professional": "Profil Professionnel",
+      "professionalSubtitle": "Informations sur votre situation professionnelle",
+      "preferences": "Préférences",
+      "preferencesSubtitle": "Personnalisez votre expérience",
+      "security": "Sécurité",
+      "securitySubtitle": "Sécurisez votre compte",
+      "documents": "Documents",
+      "documentsSubtitle": "Vos documents et vérifications"
+    },
+    "buttons": {
+      "save": "Sauvegarder",
+      "cancel": "Annuler",
+      "edit": "Modifier",
+      "updatePassword": "Mettre à jour le mot de passe",
+      "view": "Voir",
+      "download": "Télécharger",
+      "addDocument": "Ajouter un nouveau document"
+    },
+    "personal": {
+      "contactDetails": "Coordonnées",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "additionalInfo": "Informations Supplémentaires",
+      "birthDate": "Date de naissance",
+      "nationality": "Nationalité",
+      "language": "Langue",
+      "yourActivity": "Votre Activité",
+      "views": "Vues",
+      "favorites": "Favoris",
+      "contacts": "Contacts",
+      "appointments": "Rendez-vous",
+      "nationalities": {
+        "french": "Française",
+        "belgian": "Belge",
+        "swiss": "Suisse",
+        "other": "Autre"
+      },
+      "languages": {
+        "french": "Français",
+        "english": "English",
+        "german": "Deutsch"
+      }
+    },
+    "professional": {
+      "title": "Informations Professionnelles",
+      "company": "Société",
+      "position": "Poste",
+      "industry": "Secteur d'activité",
+      "website": "Site web",
+      "linkedin": "LinkedIn"
+    },
+    "preferences": {
+      "notifications": "Notifications",
+      "newsletter": "Newsletter",
+      "newsletterDesc": "Recevez nos actualités et offres exclusives",
+      "smsNotifications": "Notifications SMS",
+      "smsDesc": "Alertes par SMS pour les rendez-vous",
+      "emailAlerts": "Alertes Email",
+      "emailAlertsDesc": "Nouveaux biens correspondant à vos critères",
+      "regionalSettings": "Paramètres Régionaux",
+      "language": "Langue",
+      "currency": "Devise"
+    },
+    "security": {
+      "changePassword": "Changer le Mot de Passe",
+      "currentPassword": "Mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "accountSecurity": "Sécurité du Compte",
+      "twoFactor": "Authentification à deux facteurs",
+      "twoFactorDesc": "Protégez votre compte avec 2FA",
+      "lastLogin": "Dernière connexion"
+    },
+    "documents": {
+      "title": "Vos Documents",
+      "subtitle": "Gérez vos documents importants",
+      "securityNote": "Tous les fichiers peuvent être téléchargés ou prévisualisés en toute sécurité.",
+      "types": {
+        "verification": "Vérification",
+        "administrative": "Administratif",
+        "contract": "Contrat"
+      },
+      "statuses": {
+        "verified": "Vérifié",
+        "pending": "En attente",
+        "signed": "Signé"
+      },
+      "sampleDocs": {
+        "id": "Pièce d'identité",
+        "proofOfAddress": "Justificatif de domicile",
+        "salesAgreement": "Compromis de vente"
+      }
+    }
+  },
+  "travelerSpace": {
+    "auth": {
+      "title": "Espace Voyageurs",
+      "subtitle": "Accédez à votre séjour d'exception et découvrez tous les services Square Meter",
+      "accessTitle": "Accès à Votre Séjour",
+      "accessSubtitle": "Entrez votre email pour recevoir votre lien d'accès sécurisé",
+      "emailLabel": "Email de réservation",
+      "emailPlaceholder": "vip@example.com",
+      "sendingLink": "Envoi en cours...",
+      "receiveLinkButton": "Recevoir mon lien d'accès",
+      "secureConnection": "Connexion sécurisée • Données cryptées"
+    },
+    "booking": {
+      "checkIn": "CHECK-IN",
+      "checkOut": "CHECK-OUT",
+      "confirmationNumber": "N° CONFIRMATION",
+      "from": "Du",
+      "before": "Avant",
+      "travelers": "voyageur(s)",
+      "fromTime": "À partir de 16h",
+      "beforeTime": "Avant 11h"
+    },
+    "tabs": {
+      "dashboard": "Tableau de Bord",
+      "arrival": "Avant Arrivée",
+      "stay": "Pendant Séjour",
+      "privilege": "Carte Privilège",
+      "activities": "Activités",
+      "departure": "Au Départ",
+      "documents": "Documents"
+    },
+    "dashboard": {
+      "welcome": "Bienvenue à",
+      "welcomeMessage": "Votre séjour d'exception commence maintenant. Profitez de chaque instant.",
+      "stayInProgress": "Séjour en cours",
+      "location": "Localisation",
+      "locationDesc": "Itinéraire et parking",
+      "accessCodes": "Codes Accès",
+      "accessCodesDesc": "Boîte à clés et QR codes",
+      "assistance": "Assistance",
+      "assistanceDesc": "WhatsApp 24/7",
+      "checkout": "Check-out",
+      "checkoutDesc": "Checklist de départ",
+      "wifiConnection": "Connexion WiFi",
+      "network": "Réseau",
+      "password": "Mot de passe",
+      "scanQrCode": "Scanner QR Code",
+      "show": "Afficher",
+      "hide": "Masquer",
+      "code": "Code"
+    },
+    "arrival": {
+      "title": "Avant l'arrivée",
+      "locationTitle": "Localisation & Itinéraire",
+      "address": "Adresse",
+      "parking": "Parking",
+      "directions": "Indications",
+      "openInMaps": "Ouvrir dans Google Maps",
+      "schedule": "Horaires",
+      "arrivalTime": "Arrivée",
+      "departureTime": "Départ",
+      "fromHour": "À partir de",
+      "beforeHour": "Avant",
+      "depositTitle": "Modalités Caution",
+      "depositAmount": "Montant"
+    },
+    "stay": {
+      "title": "Pendant le séjour",
+      "guidedCheckinTitle": "Check-in Guidé",
+      "step1Title": "Récupération clés",
+      "step1Desc": "Utiliser le code 1234# sur la boîte à clés à droite du portail",
+      "step2Title": "Accès propriété",
+      "step2Desc": "Entrer le code 4455 au portail principal",
+      "step3Title": "Entrée villa",
+      "step3Desc": "Utiliser la clé bleue sur la porte d'entrée",
+      "step4Title": "Visite guidée",
+      "step4Desc": "Suivre les indications dans chaque pièce",
+      "wifiTitle": "WiFi",
+      "houseRulesTitle": "Règles du Logement",
+      "qrCodeConnection": "QR Code de Connexion",
+      "assistanceTitle": "Assistance",
+      "assistanceMessage": "Notre équipe est disponible 24h/24 pour vous assister",
+      "urgentWhatsapp": "WhatsApp Urgent",
+      "directCall": "Appel Direct",
+      "incidentTitle": "Signalement d'Incident",
+      "incidentMessage": "Signalez tout problème technique ou dommage immédiatement",
+      "reportIncident": "Signaler un Incident",
+      "description": "Description",
+      "descPlaceholder": "Décrivez l'incident...",
+      "photo": "Photo",
+      "sendAlert": "Envoyer Alerte",
+      "activitiesTeaser": "Découvrez SquareHoli",
+      "activitiesMessage": "Notre conciergerie organise vos expériences pour un séjour sans contraintes",
+      "seeActivities": "Voir les Activités"
+    },
+    "privilege": {
+      "title": "Carte Privilège Square Meter",
+      "subtitle": "Découvrez vos avantages exclusifs auprès de nos partenaires d'exception",
+      "cardLabel": "CARTE PRIVILÈGE",
+      "validUntil": "VALIDE JUSQU'AU",
+      "exclusiveBenefits": "AVANTAGES EXCLUSIFS",
+      "benefitsText": "Accès aux partenaires premium • Remises exceptionnelles • Services VIP",
+      "experienceLabel": "Square Meter Experience",
+      "downloadCard": "Télécharger la carte",
+      "presentCard": "Présentez votre carte privilège pour bénéficier de votre remise exclusive",
+      "seeDetails": "Voir les détails"
+    },
+    "activities": {
+      "title": "Conciergerie d'Activités",
+      "subtitle": "Notre conciergerie organise vos expériences pour un séjour sans contraintes",
+      "available": "Disponible",
+      "full": "Complet",
+      "bookViaWhatsapp": "Réserver via WhatsApp",
+      "experienceMessage": "Profitez d'une expérience unique organisée par notre conciergerie"
+    },
+    "departure": {
+      "title": "Au moment du départ",
+      "checklistTitle": "Checklist de Check-out",
+      "checklistItem1": "Fermer tous les volets et fenêtres",
+      "checklistItem2": "Couper climatisation/chauffage",
+      "checklistItem3": "Vider réfrigérateur",
+      "checklistItem4": "Déposer clés dans la boîte",
+      "checklistItem5": "Signaler tout dommage",
+      "checklistItem6": "Confirmer départ via WhatsApp",
+      "importantNote": "Important :",
+      "confirmMessage": "Merci de confirmer votre départ via WhatsApp à",
+      "feedbackTitle": "Retour d'Expérience",
+      "feedbackMessage": "Partagez votre expérience pour nous aider à améliorer nos services",
+      "giveReview": "Donner mon Avis",
+      "googleReview": "Laisser un Avis Google",
+      "yourReview": "Votre avis",
+      "reviewPlaceholder": "Partagez votre expérience...",
+      "sendReview": "Envoyer mon Avis",
+      "loyaltyTitle": "Fidélisation",
+      "extendStayTitle": "PROLONGER VOTRE SÉJOUR",
+      "extendMessage": "Souhaitez-vous prolonger votre séjour ? Contactez-nous pour vérifier la disponibilité.",
+      "requestExtension": "Demander une Prolongation",
+      "loyaltyOfferTitle": "OFFRE FIDÉLITÉ",
+      "loyaltyMessage": "Revenez chez nous et bénéficiez de 10% de réduction sur votre prochain séjour",
+      "getPromoCode": "Obtenir mon Code Promo"
+    },
+    "documents": {
+      "title": "Documents & Factures",
+      "stayDocuments": "Documents du Séjour",
+      "invoices": "Factures",
+      "downloadAll": "Télécharger Toutes les Factures",
+      "pastStays": "Mes Séjours Passés",
+      "rentalContract": "Contrat de Location",
+      "houseRules": "Règlement Intérieur",
+      "propertyPlan": "Plan de la Propriété",
+      "insurance": "Assurance Responsabilité",
+      "invoicePaid": "Payée",
+      "invoiceBlocked": "Bloquée",
+      "invoiceToSettle": "À régler",
+      "stayInProgress": "En cours",
+      "stayCompleted": "Terminé"
+    },
+    "houseRules": {
+      "noParties": "Pas de fêtes ni événements",
+      "noPets": "Animaux non autorisés",
+      "noSmoking": "Pas de fumée à l'intérieur",
+      "energySaving": "Économie d'énergie requise"
+    },
+    "accessCodeTypes": {
+      "keyBox": "Boîte à clés",
+      "mainGate": "Portail principal",
+      "apartment": "Appartement",
+      "parking": "Parking"
+    },
+    "sampleActivities": {
+      "seaExcursion": "Excursion en mer",
+      "cookingClass": "Cours de cuisine provençale",
+      "vineyardTour": "Visite vignoble privé",
+      "spaMessage": "Massage spa privatif"
+    },
+    "partnerCategories": {
+      "gastronomy": "GASTRONOMIE",
+      "wellness": "BIEN-ÊTRE",
+      "nautical": "NAUTIQUE",
+      "shopping": "SHOPPING",
+      "sport": "SPORT",
+      "transport": "TRANSPORT"
+    },
+    "whatsappMessages": {
+      "bookActivity": "Bonjour, je souhaite réserver:",
+      "extendStay": "Bonjour, je souhaite prolonger mon séjour"
+    }
+  },
+  "agency": {
+    "hero": {
+      "slide1": "L'Excellence Immobilière",
+      "slide2": "Réseau International",
+      "slide3": "Expertise Exclusive",
+      "meetTeamButton": "Rencontrer notre équipe",
+      "discoverPropertiesButton": "Découvrir nos biens"
+    },
+    "team": {
+      "title": "Notre Équipe d'Experts",
+      "subtitle": "Des professionnels passionnés, unis par l'excellence et dédiés à la réalisation de vos projets les plus ambitieux",
+      "specialties": "Spécialités",
+      "experience": "Expérience",
+      "properties": "Propriétés",
+      "languages": "Langues",
+      "members": {
+        "dimitri": {
+          "name": "Dimitri Martin",
+          "role": "Fondateur & CEO",
+          "description": "Expert en immobilier de luxe avec 15 ans d'expérience internationale",
+          "specialty1": "Stratégie d'acquisition",
+          "specialty2": "Négociation complexe",
+          "specialty3": "Marchés internationaux",
+          "experience": "15 ans",
+          "properties": "120+",
+          "quote": "L'excellence n'est pas un acte, mais une habitude."
+        },
+        "sophie": {
+          "name": "Sophie Laurent",
+          "role": "Directrice des Ventes",
+          "description": "Spécialiste des biens d'exception sur la Côte d'Azur et Paris",
+          "specialty1": "Propriétés côtières",
+          "specialty2": "Architecture contemporaine",
+          "specialty3": "Clientèle internationale",
+          "experience": "12 ans",
+          "properties": "85+",
+          "quote": "Chaque propriété raconte une histoire unique."
+        },
+        "thomas": {
+          "name": "Thomas Moreau",
+          "role": "Responsable Conciergerie",
+          "description": "Garant de l'expérience client premium et des services sur mesure",
+          "specialty1": "Services conciergerie",
+          "specialty2": "Gestion patrimoniale",
+          "specialty3": "Relations prestataires",
+          "experience": "10 ans",
+          "properties": "200+",
+          "quote": "Le luxe réside dans les détails."
+        },
+        "marie": {
+          "name": "Marie-Claire de Villiers",
+          "role": "Directrice Artistique",
+          "description": "Architecte d'intérieur et experte en mise en valeur patrimoniale",
+          "specialty1": "Staging premium",
+          "specialty2": "Architecture d'intérieur",
+          "specialty3": "Design contemporain",
+          "experience": "8 ans",
+          "properties": "60+",
+          "quote": "L'espace doit inspirer l'émotion."
+        }
+      }
+    },
+    "philosophy": {
+      "title": "Notre Philosophie",
+      "description": "Fondée sur les principes d'excellence, de discrétion et d'expertise, M² Square Meter réinvente l'immobilier de prestige. Notre approche personnalisée et notre réseau international nous permettent de vous proposer les biens les plus exclusifs et les services les plus raffinés.",
+      "principles": {
+        "discretion": {
+          "title": "Discrétion Absolue",
+          "description": "Vos projets immobiliers sont traités avec la plus stricte confidentialité et protection des données."
+        },
+        "excellence": {
+          "title": "Excellence & Expertise",
+          "description": "Une connaissance approfondie des marchés immobiliers de prestige et des tendances du luxe."
+        },
+        "service": {
+          "title": "Service Personnalisé",
+          "description": "Un accompagnement sur mesure pour chaque client, de la recherche à la transaction finale."
+        },
+        "network": {
+          "title": "Réseau International",
+          "description": "Accès à un portefeuille de biens exclusifs worldwide et à une clientèle internationale exigeante."
+        }
+      }
+    }
+  },
+  "languageNames": {
+    "en": "Anglais",
+    "fr": "Français",
+    "ar": "Arabe",
+    "es": "Espagnol",
+    "de": "Allemand",
+    "ru": "Russe"
+  },
+  "services": {
+    "hero": {
+      "slide1": "Expertise Immobilière d'Exception",
+      "slide2": "Services de Location Prestige",
+      "slide3": "Conseil en Gestion de Patrimoine",
+      "subtitle1": "Accompagnement personnalisé pour l'achat et la vente",
+      "subtitle2": "Propriétés exclusives pour voyageurs exigeants",
+      "subtitle3": "Solutions d'investissement immobilier stratégiques",
+      "title": "Nos Services",
+      "description": "Solutions immobilières complètes adaptées à vos besoins uniques",
+      "ctaAppointment": "Prendre Rendez-vous",
+      "ctaMeetTeam": "Rencontrer l'Équipe"
+    },
+    "main": {
+      "title": "Services Principaux",
+      "subtitle": "L'expertise à chaque étape de votre parcours immobilier",
+      "buyingSelling": {
+        "title": "Achat & Vente",
+        "description": "Accompagnement expert pour l'acquisition ou la cession de propriétés d'exception avec discrétion et efficacité.",
+        "feature1": "Analyse de marché approfondie",
+        "feature2": "Sourcing confidentiel de biens",
+        "feature3": "Expertise en négociation",
+        "feature4": "Support transactionnel complet"
+      },
+      "prestigeRental": {
+        "title": "Location Prestige",
+        "description": "Sélection de propriétés exceptionnelles pour locations courte et longue durée avec service haut de gamme.",
+        "feature1": "Portfolio de propriétés exclusives",
+        "feature2": "Matching personnalisé",
+        "feature3": "Services de conciergerie inclus",
+        "feature4": "Conditions de location flexibles"
+      },
+      "wealthManagement": {
+        "title": "Gestion de Patrimoine",
+        "description": "Conseil stratégique en investissement immobilier pour optimiser et diversifier votre patrimoine.",
+        "feature1": "Élaboration de stratégie d'investissement",
+        "feature2": "Diversification de portefeuille",
+        "feature3": "Intelligence de marché",
+        "feature4": "Optimisation fiscale"
+      },
+      "approach": "NOTRE APPROCHE",
+      "discover": "Découvrir"
+    },
+    "additional": {
+      "title": "Services Complémentaires",
+      "subtitle": "Expertise complémentaire pour enrichir votre expérience immobilière",
+      "concierge": {
+        "title": "Services de Conciergerie",
+        "description": "Gestion complète du style de vie incluant entretien de propriété, recrutement de personnel et coordination des services quotidiens."
+      },
+      "marketStudy": {
+        "title": "Études de Marché",
+        "description": "Analyses de marché approfondies et rapports d'évaluation pour éclairer vos décisions immobilières avec précision."
+      },
+      "renovation": {
+        "title": "Rénovation & Design",
+        "description": "Gestion complète de projets de rénovation et design d'intérieur avec des architectes partenaires de confiance."
+      },
+      "international": {
+        "title": "Relocation Internationale",
+        "description": "Support complet pour les déménagements internationaux incluant démarches administratives et intégration locale."
+      }
+    },
+    "process": {
+      "title": "Notre Processus d'Accompagnement",
+      "step1": {
+        "number": "01",
+        "title": "Consultation Initiale",
+        "description": "Compréhension de vos besoins, objectifs et critères à travers une évaluation personnalisée approfondie."
+      },
+      "step2": {
+        "number": "02",
+        "title": "Sélection de Biens",
+        "description": "Présentation ciblée de propriétés correspondant à vos exigences avec analyses de marché détaillées."
+      },
+      "step3": {
+        "number": "03",
+        "title": "Négociation & Vérifications",
+        "description": "Négociation experte et vérification approfondie des aspects juridiques, techniques et financiers."
+      },
+      "step4": {
+        "number": "04",
+        "title": "Transaction & Au-delà",
+        "description": "Gestion fluide de la transaction et accompagnement continu pour tous vos besoins immobiliers."
+      }
+    }
+  },
+  "careers": {
+    "hero": {
+      "title": "NOUS REJOINDRE",
+      "subtitle": "Rejoignez SQUARE METER",
+      "description": "Grandir, apprendre, accomplir. Chez M² Square Meter, nous croyons que le succès est collectif. Rejoignez une équipe où votre talent trouve sa pleine expression et votre ambition devient réalité."
+    },
+    "points": {
+      "teamSpirit": {
+        "title": "Esprit d'Équipe",
+        "description": "Le succès se construit ensemble. Nous cultivons une culture collaborative où chacun contribue à l'excellence collective."
+      },
+      "realProspects": {
+        "title": "Perspectives Réelles",
+        "description": "Nous croyons au potentiel de chacun. Votre évolution professionnelle est notre priorité, avec des parcours de progression clairs et des formations continues."
+      },
+      "recognizedExpertise": {
+        "title": "Expertise Reconnue",
+        "description": "Intégrez une structure solide et exigeante. Notre excellence est reconnue sur le marché de l'immobilier de prestige."
+      },
+      "innovativeSpirit": {
+        "title": "Esprit Innovant",
+        "description": "Nous aimons innover, tester, avancer. Vos idées et initiatives sont valorisées et encouragées."
+      },
+      "variedMissions": {
+        "title": "Missions Variées",
+        "description": "Transaction, location, gestion, conseil... Diversifiez vos compétences à travers des missions riches et stimulantes."
+      },
+      "humanJob": {
+        "title": "Métier Humain",
+        "description": "Nous ne vendons pas seulement des biens, nous créons des relations durables. Le lien humain est au cœur de notre métier."
+      }
+    },
+    "joinUs": {
+      "title": "Rejoignez-Nous",
+      "description": "Nous recherchons des profils motivés, dynamiques et curieux qui partagent notre passion pour l'immobilier d'exception. Que vous débutiez votre carrière ou soyez un professionnel expérimenté, nous vous offrons un environnement propice à votre épanouissement."
+    },
+    "form": {
+      "title": "CANDIDATEZ et écrivons ensemble votre histoire",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Email",
+      "region": "Dans quelle région souhaitez-vous travailler ?",
+      "regionPlaceholder": "Sélectionnez une région",
+      "experience": "Avez-vous déjà une expérience dans l'immobilier ?",
+      "experiencePlaceholder": "Sélectionnez votre niveau d'expérience",
+      "cvUpload": "Télécharger votre CV",
+      "cvMaxSize": "(15Mo max)",
+      "chooseFile": "Choisir un fichier",
+      "noFileChosen": "Aucun fichier choisi",
+      "firstNamePlaceholder": "Votre prénom",
+      "lastNamePlaceholder": "Votre nom",
+      "emailPlaceholder": "votre@email.com",
+      "submitButton": "Nous Rejoindre",
+      "submitting": "Envoi en cours...",
+      "successMessage": "Candidature envoyée avec succès !"
+    },
+    "regions": {
+      "paris": "Paris",
+      "coteDazur": "Côte d'Azur",
+      "paca": "Provence-Alpes-Côte d'Azur",
+      "auvergneRhone": "Auvergne-Rhône-Alpes",
+      "occitanie": "Occitanie",
+      "nouvelleAquitaine": "Nouvelle-Aquitaine",
+      "bretagne": "Bretagne",
+      "international": "International"
+    },
+    "experienceLevels": {
+      "beginner": "Débutant (moins d'1 an)",
+      "intermediate": "Intermédiaire (1-3 ans)",
+      "confirmed": "Confirmé (3-5 ans)",
+      "expert": "Expert (5+ ans)",
+      "none": "Aucune expérience"
+    }
+  },
+  "mag": {
+    "title": "Le Mag",
+    "subtitle": "L'expertise immobilière de prestige, décryptée par nos spécialistes",
+    "searchPlaceholder": "Rechercher un article...",
+    "categoriesLabel": "Catégories :",
+    "heroSlides": {
+      "slide1": {
+        "title": "L'Art de l'Immobilier",
+        "subtitle": "Découvrez les tendances 2024 et les analyses exclusives de nos experts",
+        "category": "market"
+      },
+      "slide2": {
+        "title": "Architecture & Design",
+        "subtitle": "Les plus belles réalisations architecturales du moment",
+        "category": "architecture"
+      },
+      "slide3": {
+        "title": "Investissements Prestige",
+        "subtitle": "Stratégies et opportunités pour les portefeuilles d'exception",
+        "category": "investments"
+      }
+    },
+    "categories": {
+      "all": "Tous les articles",
+      "market": "Marché",
+      "destinations": "Destinations",
+      "expertise": "Expertise",
+      "architecture": "Architecture",
+      "services": "Services",
+      "investments": "Investissements"
+    },
+    "badges": {
+      "featured": "À la une",
+      "trending": "Tendances"
+    },
+    "articlesSection": {
+      "trending": "Articles Tendances",
+      "readMore": "Lire"
+    },
+    "articles": {
+      "article1": {
+        "title": "Les Tendances de l'Immobilier de Luxe 2024",
+        "excerpt": "Découvrez les évolutions du marché prestige et les nouvelles attentes des acquéreurs internationaux dans un contexte économique en mutation.",
+        "category": "market",
+        "readTime": "5 min",
+        "date": "15 Jan 2024",
+        "author": "Sophie Laurent"
+      },
+      "article2": {
+        "title": "Saint-Tropez : Le Nouvel Âge d'Or",
+        "excerpt": "Comment la perle de la Côte d'Azur continue de séduire les investisseurs les plus exigeants avec des transactions records.",
+        "category": "destinations",
+        "readTime": "4 min",
+        "date": "12 Jan 2024",
+        "author": "Pierre Dubois"
+      },
+      "article3": {
+        "title": "L'Art de la Vente Discrète",
+        "excerpt": "Les secrets des transactions immobilières confidentielles pour une clientèle d'exception qui valorise la discrétion absolue.",
+        "category": "expertise",
+        "readTime": "6 min",
+        "date": "8 Jan 2024",
+        "author": "Marie-Claire de Villiers"
+      },
+      "article4": {
+        "title": "Architecture : Le Retour du Classique",
+        "excerpt": "Pourquoi les acheteurs premium reviennent aux codes architecturaux traditionnels et aux matériaux nobles.",
+        "category": "architecture",
+        "readTime": "7 min",
+        "date": "5 Jan 2024",
+        "author": "Jean-Michel Durand"
+      },
+      "article5": {
+        "title": "Conciergerie 5 Étoiles : Le Nouveau Standard",
+        "excerpt": "Comment les services sur mesure révolutionnent l'expérience des propriétaires dans l'immobilier de prestige.",
+        "category": "services",
+        "readTime": "3 min",
+        "date": "3 Jan 2024",
+        "author": "Thomas Moreau"
+      },
+      "article6": {
+        "title": "Investir dans le Vin : Les Domaines Prestige",
+        "excerpt": "Focus sur les vignobles qui attirent les investisseurs les plus avisés et offrent des rendements exceptionnels.",
+        "category": "investments",
+        "readTime": "8 min",
+        "date": "1 Jan 2024",
+        "author": "Isabelle Renaud"
+      }
+    },
+    "newsletter": {
+      "title": "Restez Informé",
+      "description": "Recevez nos analyses de marché et les tendances du luxe directement dans votre boîte mail.",
+      "emailPlaceholder": "votre.email@exemple.com",
+      "subscribeButton": "S'abonner",
+      "disclaimer": "Désabonnement à tout moment • Données protégées"
+    },
+    "stats": {
+      "stat1": {
+        "number": "500+",
+        "label": "Articles Premium"
+      },
+      "stat2": {
+        "number": "50K+",
+        "label": "Lecteurs Mensuels"
+      },
+      "stat3": {
+        "number": "25+",
+        "label": "Experts"
+      },
+      "stat4": {
+        "number": "98%",
+        "label": "Satisfaction"
+      }
+    }
+  },
+  "notFound": {
+    "hero": {
+      "number": "404",
+      "title": "Propriété Non Trouvée",
+      "description": "La page que vous recherchez semble avoir été déplacée ou n'existe plus. Nos conseillers sont à votre disposition pour vous aider à trouver la propriété exceptionnelle qui correspond à vos attentes."
+    },
+    "actions": {
+      "home": {
+        "title": "Retour à l'Accueil",
+        "description": "Découvrez notre sélection exclusive de propriétés d'exception",
+        "button": "Accéder à l'accueil"
+      },
+      "portfolio": {
+        "title": "Portfolio Complet",
+        "description": "Explorez notre collection de propriétés premium",
+        "button": "Explorer nos propriétés"
+      },
+      "assistance": {
+        "title": "Assistance Immédiate",
+        "description": "Nos conseillers sont disponibles pour vous accompagner dans votre recherche"
+      }
+    },
+    "search": {
+      "title": "Recherche Avancée",
+      "locationPlaceholder": "Localisation, ville ou code postal",
+      "propertyType": {
+        "label": "Type de bien",
+        "options": {
+          "apartment": "Appartement",
+          "villa": "Villa",
+          "house": "Maison",
+          "land": "Terrain",
+          "commercial": "Commercial"
+        }
+      },
+      "budget": {
+        "label": "Budget approximatif",
+        "options": {
+          "upTo1M": "Jusqu'à 1M €",
+          "range1to2M": "1M - 2M €",
+          "range2to5M": "2M - 5M €",
+          "range5to10M": "5M - 10M €",
+          "over10M": "Plus de 10M €"
+        }
+      },
+      "button": "Lancer la recherche"
+    },
+    "trust": {
+      "confidentiality": {
+        "title": "Confidentialité Garantie",
+        "description": "Toutes nos recherches sont menées avec la plus stricte confidentialité"
+      },
+      "expertise": {
+        "title": "Expertise Premium",
+        "description": "15 ans d'expertise dans les biens d'exception en France"
+      }
+    },
+    "personalizedSearch": {
+      "title": "Besoin d'une recherche personnalisée ?",
+      "description": "Notre équipe de conseillers peut vous aider à trouver la propriété parfaite",
+      "button": "Demander un contact"
+    },
+    "process": {
+      "title": "Notre Processus d'Accompagnement",
+      "description": "De la recherche initiale à la remise des clés, nous vous accompagnons à chaque étape",
+      "steps": {
+        "step1": {
+          "number": "01",
+          "title": "Analyse des Besoins",
+          "description": "Compréhension approfondie de vos attentes"
+        },
+        "step2": {
+          "number": "02",
+          "title": "Recherche Ciblée",
+          "description": "Sélection de propriétés correspondant à vos critères"
+        },
+        "step3": {
+          "number": "03",
+          "title": "Visites Personnalisées",
+          "description": "Organisation de visites sur mesure"
+        },
+        "step4": {
+          "number": "04",
+          "title": "Accompagnement Final",
+          "description": "Support jusqu'à la transaction"
+        }
+      }
+    }
+  }
+}

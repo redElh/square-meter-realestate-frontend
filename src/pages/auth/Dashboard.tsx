@@ -1,6 +1,7 @@
 // src/pages/Dashboard.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   EyeIcon,
   HeartIcon,
@@ -35,6 +36,7 @@ import {
 import UserProfile from '../../components/UserProfile';
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const [userType, setUserType] = useState<'buyer' | 'owner'>('buyer'); // Toggle between buyer and owner
   const [activeTab, setActiveTab] = useState('overview');
   const [notifications, setNotifications] = useState(3);
@@ -45,8 +47,8 @@ const Dashboard: React.FC = () => {
   const buyerSavedProperties = [
     { 
       id: 1, 
-      title: 'Villa Les Oliviers', 
-      location: 'Saint-Tropez', 
+      title: t('dashboard.sampleData.properties.property1.title'), 
+      location: t('dashboard.sampleData.properties.property1.location'), 
       price: '2,500,000 €',
       image: 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=600',
       surface: '420 m²',
@@ -55,8 +57,8 @@ const Dashboard: React.FC = () => {
     },
     { 
       id: 2, 
-      title: 'Appartement Haussmannien', 
-      location: 'Paris 8ème', 
+      title: t('dashboard.sampleData.properties.property2.title'), 
+      location: t('dashboard.sampleData.properties.property2.location'), 
       price: '15,000 €/mois',
       image: 'https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=600',
       surface: '180 m²',
@@ -66,16 +68,16 @@ const Dashboard: React.FC = () => {
   ];
 
   const buyerSearches = [
-    { id: 1, criteria: 'Villa, 300-500m², Saint-Tropez, Budget 2-3M€', results: 12, date: '2024-12-10' },
-    { id: 2, criteria: 'Appartement, Paris 8ème, Location, 3+ chambres', results: 8, date: '2024-12-08' }
+    { id: 1, criteria: t('dashboard.sampleData.searches.search1'), results: 12, date: '2024-12-10' },
+    { id: 2, criteria: t('dashboard.sampleData.searches.search2'), results: 8, date: '2024-12-08' }
   ];
 
   // Owner-specific data
   const ownerProperties = [
     {
       id: 1,
-      title: 'Ma Villa Méditerranéenne',
-      location: 'Nice',
+      title: t('dashboard.sampleData.properties.property1.title'),
+      location: t('dashboard.sampleData.properties.property1.location'),
       status: 'En vente',
       price: '1,850,000 €',
       image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -85,8 +87,8 @@ const Dashboard: React.FC = () => {
     },
     {
       id: 2,
-      title: 'Appartement Centre Ville',
-      location: 'Lyon',
+      title: t('dashboard.sampleData.properties.property2.title'),
+      location: t('dashboard.sampleData.properties.property2.location'),
       status: 'En location',
       price: '2,200 €/mois',
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -97,55 +99,55 @@ const Dashboard: React.FC = () => {
   ];
 
   const ownerStats = [
-    { label: 'Propriétés actives', value: '2', icon: HomeIcon },
-    { label: 'Visites ce mois', value: '8', icon: CalendarIcon },
-    { label: 'Demandes reçues', value: '11', icon: EnvelopeIcon },
-    { label: 'Revenus mensuels', value: '2,200 €', icon: BanknotesIcon }
+    { label: t('dashboard.stats.owner.activeProperties'), value: '2', icon: HomeIcon },
+    { label: t('dashboard.stats.owner.visitsThisMonth'), value: '8', icon: CalendarIcon },
+    { label: t('dashboard.stats.owner.requestsReceived'), value: '11', icon: EnvelopeIcon },
+    { label: t('dashboard.stats.owner.monthlyRevenue'), value: '2,200 €', icon: BanknotesIcon }
   ];
 
   const buyerStats = [
-    { label: 'Biens sauvegardés', value: '12', icon: HeartIcon },
-    { label: 'Visites programmées', value: '3', icon: CalendarIcon },
-    { label: 'Messages', value: '5', icon: EnvelopeIcon },
-    { label: 'Recherches actives', value: '2', icon: MagnifyingGlassIcon }
+    { label: t('dashboard.stats.buyer.savedProperties'), value: '12', icon: HeartIcon },
+    { label: t('dashboard.stats.buyer.scheduledVisits'), value: '3', icon: CalendarIcon },
+    { label: t('dashboard.stats.buyer.messages'), value: '5', icon: EnvelopeIcon },
+    { label: t('dashboard.stats.buyer.activeSearches'), value: '2', icon: MagnifyingGlassIcon }
   ];
 
   const appointmentsData = [
     {
       id: 1,
-      title: 'Visite - Villa Les Oliviers',
+      title: t('dashboard.sampleData.appointments.appointment1.title'),
       date: '2025-12-15',
-      time: '14:00',
-      location: 'Saint-Tropez',
-      status: 'Confirmé',
-      advisor: 'Sophie Laurent'
+      time: t('dashboard.sampleData.appointments.appointment1.time'),
+      location: t('dashboard.sampleData.appointments.appointment1.location'),
+      status: t('dashboard.appointments.confirmed'),
+      advisor: t('dashboard.sampleData.appointments.appointment1.advisor')
     },
     {
       id: 2,
-      title: 'Visite - Appartement Haussmannien',
+      title: t('dashboard.sampleData.appointments.appointment2.title'),
       date: '2025-12-18',
-      time: '11:00',
-      location: 'Paris 8ème',
-      status: 'En attente',
-      advisor: 'Thomas Moreau'
+      time: t('dashboard.sampleData.appointments.appointment2.time'),
+      location: t('dashboard.sampleData.appointments.appointment2.location'),
+      status: t('dashboard.appointments.pending'),
+      advisor: t('dashboard.sampleData.appointments.appointment2.advisor')
     }
   ];
 
   const messages = [
     {
       id: 1,
-      sender: 'Sophie Laurent',
-      role: 'Conseillère immobilière',
-      content: 'Bonjour, je vous recontacte concernant votre visite...',
-      time: '2h',
+      sender: t('dashboard.sampleData.messages.message1.sender'),
+      role: t('dashboard.sampleData.messages.message1.role'),
+      content: t('dashboard.sampleData.messages.message1.content'),
+      time: t('dashboard.sampleData.messages.message1.time'),
       unread: true
     },
     {
       id: 2,
-      sender: 'Thomas Moreau',
-      role: 'Agent commercial',
-      content: 'Votre demande a bien été prise en compte...',
-      time: '1j',
+      sender: t('dashboard.sampleData.messages.message2.sender'),
+      role: t('dashboard.sampleData.messages.message2.role'),
+      content: t('dashboard.sampleData.messages.message2.content'),
+      time: t('dashboard.sampleData.messages.message2.time'),
       unread: false
     }
   ];
@@ -176,7 +178,7 @@ const Dashboard: React.FC = () => {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent animate-spin mx-auto"></div>
-          <p className="mt-4 text-emerald-800 text-lg font-medium">Chargement...</p>
+          <p className="mt-4 text-emerald-800 text-lg font-medium">{t('dashboard.loading')}</p>
         </div>
       </div>
     );
@@ -188,60 +190,63 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen bg-gray-50 pt-8">
       {/* Header Section */}
       <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 sm:px-6 py-6">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+          <div className="flex flex-col gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-emerald-800 mb-2">
-                {userType === 'buyer' ? 'Espace Acheteur' : 'Espace Propriétaire'}
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-emerald-800 mb-1 sm:mb-2">
+                {userType === 'buyer' ? t('dashboard.header.buyerTitle') : t('dashboard.header.ownerTitle')}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 {userType === 'buyer' 
-                  ? 'Gérez vos recherches et favoris immobiliers' 
-                  : 'Gérez vos propriétés et suivez vos performances'}
+                  ? t('dashboard.header.buyerSubtitle')
+                  : t('dashboard.header.ownerSubtitle')}
               </p>
             </div>
             
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               {/* User Type Toggle */}
-              <div className="flex bg-gray-100 p-1">
+              <div className="flex bg-gray-100 p-1 flex-1 sm:flex-initial">
                 <button
                   onClick={() => { setUserType('buyer'); setActiveTab('overview'); }}
-                  className={`px-6 py-2 font-medium transition-all ${
+                  className={`flex-1 sm:flex-initial px-4 sm:px-6 py-2 text-sm sm:text-base font-medium transition-all ${
                     userType === 'buyer'
                       ? 'bg-emerald-600 text-white'
                       : 'text-gray-600 hover:text-emerald-600'
                   }`}
                 >
-                  Acheteur
+                  {t('dashboard.header.buyerToggle')}
                 </button>
                 <button
                   onClick={() => { setUserType('owner'); setActiveTab('overview'); }}
-                  className={`px-6 py-2 font-medium transition-all ${
+                  className={`flex-1 sm:flex-initial px-4 sm:px-6 py-2 text-sm sm:text-base font-medium transition-all ${
                     userType === 'owner'
                       ? 'bg-emerald-600 text-white'
                       : 'text-gray-600 hover:text-emerald-600'
                   }`}
                 >
-                  Propriétaire
+                  {t('dashboard.header.ownerToggle')}
                 </button>
               </div>
 
-              <button className="relative p-3 bg-white border border-gray-200 hover:border-emerald-600 transition-all">
-                <BellIcon className="w-6 h-6 text-gray-700" />
-                {notifications > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center">
-                    {notifications}
-                  </span>
-                )}
-              </button>
-              
-              <Link
-                to="/contact"
-                className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
-              >
-                <PlusIcon className="w-5 h-5" />
-                <span>Nouvelle demande</span>
-              </Link>
+              <div className="flex gap-3">
+                <button className="relative p-2 sm:p-3 bg-white border border-gray-200 hover:border-emerald-600 transition-all">
+                  <BellIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+                  {notifications > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center">
+                      {notifications}
+                    </span>
+                  )}
+                </button>
+                
+                <Link
+                  to="/contact"
+                  className="flex-1 sm:flex-initial bg-emerald-600 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium hover:bg-emerald-700 transition-all flex items-center justify-center gap-2"
+                >
+                  <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">{t('dashboard.header.newRequest')}</span>
+                  <span className="sm:hidden">{t('dashboard.header.newRequest')}</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -249,75 +254,75 @@ const Dashboard: React.FC = () => {
 
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-1">
-            <div className="bg-white border border-gray-200 p-6 sticky top-6">
-              <nav className="space-y-2">
+            <div className="bg-white border border-gray-200 p-3 sm:p-6 lg:sticky lg:top-6">
+              <nav className="space-y-1 sm:space-y-2">
                 {userType === 'buyer' ? (
                   <>
                     <button
                       onClick={() => setActiveTab('overview')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'overview'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <ChartBarIcon className="w-5 h-5" />
-                      <span>Vue d'ensemble</span>
+                      <ChartBarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{t('dashboard.navigation.overview')}</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('saved')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'saved'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <HeartIcon className="w-5 h-5" />
-                      <span>Biens sauvegardés</span>
-                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold">
+                      <HeartIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="truncate">{t('dashboard.navigation.savedProperties')}</span>
+                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold whitespace-nowrap">
                         {buyerSavedProperties.length}
                       </span>
                     </button>
                     <button
                       onClick={() => setActiveTab('searches')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'searches'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <MagnifyingGlassIcon className="w-5 h-5" />
-                      <span>Mes recherches</span>
+                      <MagnifyingGlassIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{t('dashboard.navigation.mySearches')}</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('appointments')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'appointments'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <CalendarIcon className="w-5 h-5" />
-                      <span>Rendez-vous</span>
-                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold">
+                      <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="truncate">{t('dashboard.navigation.appointments')}</span>
+                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold whitespace-nowrap">
                         {appointmentsData.length}
                       </span>
                     </button>
                     <button
                       onClick={() => setActiveTab('messages')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'messages'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <EnvelopeIcon className="w-5 h-5" />
-                      <span>Messages</span>
-                      <span className="ml-auto bg-red-500 text-white px-2 py-1 text-xs font-semibold">
+                      <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="truncate">{t('dashboard.navigation.messages')}</span>
+                      <span className="ml-auto bg-red-500 text-white px-2 py-1 text-xs font-semibold whitespace-nowrap">
                         {messages.filter(m => m.unread).length}
                       </span>
                     </button>
@@ -326,80 +331,80 @@ const Dashboard: React.FC = () => {
                   <>
                     <button
                       onClick={() => setActiveTab('overview')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'overview'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <ChartBarIcon className="w-5 h-5" />
-                      <span>Vue d'ensemble</span>
+                      <ChartBarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{t('dashboard.navigation.overview')}</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('properties')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'properties'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <HomeIcon className="w-5 h-5" />
-                      <span>Mes propriétés</span>
-                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold">
+                      <HomeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="truncate">{t('dashboard.navigation.myProperties')}</span>
+                      <span className="ml-auto bg-emerald-100 text-emerald-800 px-2 py-1 text-xs font-semibold whitespace-nowrap">
                         {ownerProperties.length}
                       </span>
                     </button>
                     <button
                       onClick={() => setActiveTab('analytics')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'analytics'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <ChartPieIcon className="w-5 h-5" />
-                      <span>Statistiques</span>
+                      <ChartPieIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{t('dashboard.navigation.statistics')}</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('inquiries')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'inquiries'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <EnvelopeIcon className="w-5 h-5" />
-                      <span>Demandes reçues</span>
+                      <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="truncate">{t('dashboard.navigation.inquiriesReceived')}</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('documents')}
-                      className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                      className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                         activeTab === 'documents'
                           ? 'bg-emerald-600 text-white'
                           : 'text-gray-700 hover:bg-gray-50'
                       }`}
                     >
-                      <FolderOpenIcon className="w-5 h-5" />
-                      <span>Documents</span>
+                      <FolderOpenIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{t('dashboard.navigation.documents')}</span>
                     </button>
                   </>
                 )}
                 <button
                   onClick={() => handleNavigationClick('profile')}
-                  className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                  className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                     activeTab === 'profile'
                       ? 'bg-emerald-600 text-white'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <UserCircleIcon className="w-5 h-5" />
-                  <span>Profil</span>
+                  <UserCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>{t('dashboard.navigation.profile')}</span>
                 </button>
                 <button
-                  className="w-full text-left flex items-center gap-3 px-4 py-3 font-medium text-gray-700 hover:bg-gray-50 transition-all"
+                  className="w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium text-gray-700 hover:bg-gray-50 transition-all"
                 >
-                  <CogIcon className="w-5 h-5" />
-                  <span>Paramètres</span>
+                  <CogIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span>{t('dashboard.navigation.settings')}</span>
                 </button>
               </nav>
             </div>
@@ -412,13 +417,13 @@ const Dashboard: React.FC = () => {
             {activeTab === 'overview' && (
               <div className="space-y-6">
                 {/* Stats Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
                   {currentStats.map((stat, index) => {
                     const IconComponent = stat.icon;
                     return (
                       <div 
                         key={index}
-                        className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all"
+                        className="bg-white border border-gray-200 p-4 sm:p-6 hover:border-emerald-600 transition-all"
                       >
                         <div className="flex items-center justify-between mb-4">
                           <IconComponent className="w-8 h-8 text-emerald-600" />
@@ -440,51 +445,51 @@ const Dashboard: React.FC = () => {
                     {/* Saved Properties Preview */}
                     <div className="bg-white border border-gray-200 p-6">
                       <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xl font-bold text-gray-900">Biens sauvegardés récents</h3>
+                        <h3 className="text-xl font-bold text-gray-900">{t('dashboard.overview.recentSaved')}</h3>
                         <button 
                           onClick={() => setActiveTab('saved')}
                           className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2"
                         >
-                          Voir tout
+                          {t('dashboard.overview.viewAll')}
                           <ArrowRightIcon className="w-4 h-4" />
                         </button>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         {buyerSavedProperties.map((property) => (
                           <div key={property.id} className="border border-gray-200 hover:border-emerald-600 transition-all group">
-                            <div className="relative h-48 overflow-hidden">
+                            <div className="relative h-40 sm:h-48 overflow-hidden">
                               <img 
                                 src={property.image} 
                                 alt={property.title}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                               />
-                              <button className="absolute top-4 right-4 w-10 h-10 bg-white flex items-center justify-center hover:bg-emerald-600 transition-all">
-                                <HeartIconSolid className="w-5 h-5 text-red-500" />
+                              <button className="absolute top-3 right-3 sm:top-4 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 bg-white flex items-center justify-center hover:bg-emerald-600 transition-all">
+                                <HeartIconSolid className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
                               </button>
                             </div>
-                            <div className="p-4">
-                              <h4 className="text-lg font-bold text-gray-900 mb-2">
+                            <div className="p-3 sm:p-4">
+                              <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-2">
                                 {property.title}
                               </h4>
-                              <div className="flex items-center text-gray-600 mb-3 gap-1">
-                                <MapPinIcon className="w-4 h-4" />
-                                <span className="text-sm">{property.location}</span>
+                              <div className="flex items-center text-gray-600 mb-2 sm:mb-3 gap-1">
+                                <MapPinIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                                <span className="text-xs sm:text-sm">{property.location}</span>
                               </div>
-                              <div className="text-2xl font-bold text-emerald-600 mb-4">
+                              <div className="text-xl sm:text-2xl font-bold text-emerald-600 mb-3 sm:mb-4">
                                 {property.price}
                               </div>
-                              <div className="flex gap-4 text-sm text-gray-600 mb-4">
+                              <div className="flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
                                 <span>{property.surface}</span>
                                 <span>•</span>
-                                <span>{property.bedrooms} ch.</span>
+                                <span>{property.bedrooms} {t('dashboard.savedProperties.bedrooms')}</span>
                                 <span>•</span>
-                                <span>{property.bathrooms} sdb</span>
+                                <span>{property.bathrooms} {t('dashboard.savedProperties.bathrooms')}</span>
                               </div>
                               <Link
                                 to={`/properties/${property.id}`}
-                                className="block w-full bg-emerald-600 text-white py-3 text-center font-medium hover:bg-emerald-700 transition-all"
+                                className="block w-full bg-emerald-600 text-white py-2 sm:py-3 text-sm sm:text-base text-center font-medium hover:bg-emerald-700 transition-all"
                               >
-                                Voir les détails
+                                {t('dashboard.overview.propertyDetails')}
                               </Link>
                             </div>
                           </div>
@@ -499,16 +504,16 @@ const Dashboard: React.FC = () => {
                         className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all group"
                       >
                         <MagnifyingGlassIcon className="w-10 h-10 text-emerald-600 mb-4" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Rechercher un bien</h4>
-                        <p className="text-gray-600 text-sm">Parcourir notre catalogue de propriétés exclusives</p>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">{t('dashboard.overview.quickActions.searchProperty')}</h4>
+                        <p className="text-gray-600 text-sm">{t('dashboard.overview.quickActions.searchDescription')}</p>
                       </Link>
                       <Link
                         to="/contact"
                         className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all group"
                       >
                         <ChatBubbleLeftIcon className="w-10 h-10 text-emerald-600 mb-4" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Contacter un conseiller</h4>
-                        <p className="text-gray-600 text-sm">Un expert à votre écoute pour vous accompagner</p>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">{t('dashboard.overview.quickActions.contactAdvisor')}</h4>
+                        <p className="text-gray-600 text-sm">{t('dashboard.overview.quickActions.contactDescription')}</p>
                       </Link>
                     </div>
                   </>
@@ -520,23 +525,23 @@ const Dashboard: React.FC = () => {
                     {/* Properties Performance */}
                     <div className="bg-white border border-gray-200 p-6">
                       <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-xl font-bold text-gray-900">Performances de vos biens</h3>
+                        <h3 className="text-xl font-bold text-gray-900">{t('dashboard.overview.propertyPerformance')}</h3>
                         <button 
                           onClick={() => setActiveTab('properties')}
                           className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2"
                         >
-                          Gérer
+                          {t('dashboard.overview.manage')}
                           <ArrowRightIcon className="w-4 h-4" />
                         </button>
                       </div>
                       <div className="space-y-4">
                         {ownerProperties.map((property) => (
-                          <div key={property.id} className="border border-gray-200 p-4 hover:border-emerald-600 transition-all">
-                            <div className="flex gap-4">
+                          <div key={property.id} className="border border-gray-200 p-3 sm:p-4 hover:border-emerald-600 transition-all">
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                               <img 
                                 src={property.image} 
                                 alt={property.title}
-                                className="w-32 h-32 object-cover"
+                                className="w-full sm:w-32 h-40 sm:h-32 object-cover"
                               />
                               <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
@@ -556,15 +561,15 @@ const Dashboard: React.FC = () => {
                                 </div>
                                 <div className="grid grid-cols-3 gap-4">
                                   <div>
-                                    <div className="text-sm text-gray-600">Vues</div>
+                                    <div className="text-sm text-gray-600">{t('dashboard.overview.views')}</div>
                                     <div className="text-lg font-bold text-gray-900">{property.views}</div>
                                   </div>
                                   <div>
-                                    <div className="text-sm text-gray-600">Favoris</div>
+                                    <div className="text-sm text-gray-600">{t('dashboard.overview.favorites')}</div>
                                     <div className="text-lg font-bold text-gray-900">{property.favorites}</div>
                                   </div>
                                   <div>
-                                    <div className="text-sm text-gray-600">Demandes</div>
+                                    <div className="text-sm text-gray-600">{t('dashboard.overview.inquiries')}</div>
                                     <div className="text-lg font-bold text-gray-900">{property.inquiries}</div>
                                   </div>
                                 </div>
@@ -582,16 +587,16 @@ const Dashboard: React.FC = () => {
                         className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all"
                       >
                         <PlusIcon className="w-10 h-10 text-emerald-600 mb-4" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Ajouter une propriété</h4>
-                        <p className="text-gray-600 text-sm">Mettre un nouveau bien en vente ou location</p>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">{t('dashboard.overview.quickActions.addProperty')}</h4>
+                        <p className="text-gray-600 text-sm">{t('dashboard.overview.quickActions.addDescription')}</p>
                       </Link>
                       <Link
                         to="/contact"
                         className="bg-white border border-gray-200 p-6 hover:border-emerald-600 transition-all"
                       >
                         <DocumentChartBarIcon className="w-10 h-10 text-emerald-600 mb-4" />
-                        <h4 className="text-lg font-bold text-gray-900 mb-2">Demander une estimation</h4>
-                        <p className="text-gray-600 text-sm">Obtenez une évaluation professionnelle gratuite</p>
+                        <h4 className="text-lg font-bold text-gray-900 mb-2">{t('dashboard.overview.quickActions.requestEstimation')}</h4>
+                        <p className="text-gray-600 text-sm">{t('dashboard.overview.quickActions.estimationDescription')}</p>
                       </Link>
                     </div>
                   </>
@@ -605,13 +610,13 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Biens sauvegardés</h3>
-                    <p className="text-gray-600">{buyerSavedProperties.length} propriétés</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.savedProperties.title')}</h3>
+                    <p className="text-gray-600">{buyerSavedProperties.length} {t('dashboard.savedProperties.propertiesCount')}</p>
                   </div>
                   <select className="px-4 py-2 border border-gray-200 bg-white text-gray-700">
-                    <option>Trier par date</option>
-                    <option>Prix croissant</option>
-                    <option>Prix décroissant</option>
+                    <option>{t('dashboard.savedProperties.sortByDate')}</option>
+                    <option>{t('dashboard.savedProperties.priceLowToHigh')}</option>
+                    <option>{t('dashboard.savedProperties.priceHighToLow')}</option>
                   </select>
                 </div>
 
@@ -642,22 +647,22 @@ const Dashboard: React.FC = () => {
                         <div className="flex gap-4 text-sm text-gray-600 mb-6 pb-6 border-b border-gray-200">
                           <span>{property.surface}</span>
                           <span>•</span>
-                          <span>{property.bedrooms} chambres</span>
+                          <span>{property.bedrooms} {t('dashboard.savedProperties.bedrooms')}</span>
                           <span>•</span>
-                          <span>{property.bathrooms} sdb</span>
+                          <span>{property.bathrooms} {t('dashboard.savedProperties.bathrooms')}</span>
                         </div>
                         <div className="flex gap-3">
                           <Link
                             to={`/properties/${property.id}`}
                             className="flex-1 bg-emerald-600 text-white py-3 text-center font-medium hover:bg-emerald-700 transition-all"
                           >
-                            Voir détails
+                            {t('dashboard.savedProperties.viewDetails')}
                           </Link>
                           <Link
                             to="/contact"
                             className="flex-1 border border-emerald-600 text-emerald-600 py-3 text-center font-medium hover:bg-emerald-50 transition-all"
                           >
-                            Contacter
+                            {t('dashboard.savedProperties.contact')}
                           </Link>
                         </div>
                       </div>
@@ -672,14 +677,14 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Mes recherches</h3>
-                    <p className="text-gray-600">Gérez vos critères de recherche</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.searches.title')}</h3>
+                    <p className="text-gray-600">{t('dashboard.searches.subtitle')}</p>
                   </div>
                   <Link
                     to="/properties"
                     className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all"
                   >
-                    Nouvelle recherche
+                    {t('dashboard.searches.newSearch')}
                   </Link>
                 </div>
 
@@ -690,17 +695,17 @@ const Dashboard: React.FC = () => {
                         <div className="flex-1">
                           <h4 className="text-lg font-bold text-gray-900 mb-2">{search.criteria}</h4>
                           <div className="flex items-center gap-4 text-sm text-gray-600">
-                            <span>{search.results} résultats</span>
+                            <span>{search.results} {t('dashboard.searches.results')}</span>
                             <span>•</span>
-                            <span>Créée le {search.date}</span>
+                            <span>{t('dashboard.searches.createdOn')} {search.date}</span>
                           </div>
                         </div>
                         <div className="flex gap-3">
                           <button className="px-4 py-2 border border-emerald-600 text-emerald-600 font-medium hover:bg-emerald-50 transition-all">
-                            Modifier
+                            {t('dashboard.searches.edit')}
                           </button>
                           <button className="px-4 py-2 bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-all">
-                            Voir résultats
+                            {t('dashboard.searches.viewResults')}
                           </button>
                         </div>
                       </div>
@@ -715,15 +720,15 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Mes propriétés</h3>
-                    <p className="text-gray-600">{ownerProperties.length} biens actifs</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.properties.title')}</h3>
+                    <p className="text-gray-600">{ownerProperties.length} {t('dashboard.properties.activeProperties')}</p>
                   </div>
                   <Link
                     to="/selling"
                     className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
                   >
                     <PlusIcon className="w-5 h-5" />
-                    Ajouter un bien
+                    {t('dashboard.properties.addProperty')}
                   </Link>
                 </div>
 
@@ -754,24 +759,24 @@ const Dashboard: React.FC = () => {
                           </div>
                           <div className="grid grid-cols-3 gap-6 mb-6">
                             <div className="bg-gray-50 p-4">
-                              <div className="text-sm text-gray-600 mb-1">Vues totales</div>
+                              <div className="text-sm text-gray-600 mb-1">{t('dashboard.properties.totalViews')}</div>
                               <div className="text-2xl font-bold text-gray-900">{property.views}</div>
                             </div>
                             <div className="bg-gray-50 p-4">
-                              <div className="text-sm text-gray-600 mb-1">Mis en favoris</div>
+                              <div className="text-sm text-gray-600 mb-1">{t('dashboard.properties.addedToFavorites')}</div>
                               <div className="text-2xl font-bold text-gray-900">{property.favorites}</div>
                             </div>
                             <div className="bg-gray-50 p-4">
-                              <div className="text-sm text-gray-600 mb-1">Demandes reçues</div>
+                              <div className="text-sm text-gray-600 mb-1">{t('dashboard.properties.requestsReceived')}</div>
                               <div className="text-2xl font-bold text-gray-900">{property.inquiries}</div>
                             </div>
                           </div>
                           <div className="flex gap-3">
                             <button className="px-6 py-3 border border-emerald-600 text-emerald-600 font-medium hover:bg-emerald-50 transition-all">
-                              Modifier
+                              {t('dashboard.properties.edit')}
                             </button>
                             <button className="px-6 py-3 bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-all">
-                              Voir statistiques
+                              {t('dashboard.properties.viewStatistics')}
                             </button>
                           </div>
                         </div>
@@ -785,27 +790,27 @@ const Dashboard: React.FC = () => {
             {/* Owner: Analytics Tab */}
             {activeTab === 'analytics' && userType === 'owner' && (
               <div className="bg-white border border-gray-200 p-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Statistiques détaillées</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">{t('dashboard.analytics.title')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="border border-gray-200 p-6">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">Vues mensuelles</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">{t('dashboard.analytics.monthlyViews')}</h4>
                     <div className="text-4xl font-bold text-emerald-600 mb-2">377</div>
-                    <p className="text-gray-600 text-sm">+23% vs mois précédent</p>
+                    <p className="text-gray-600 text-sm">{t('dashboard.analytics.vsLastMonth')}</p>
                   </div>
                   <div className="border border-gray-200 p-6">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">Taux de conversion</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">{t('dashboard.analytics.conversionRate')}</h4>
                     <div className="text-4xl font-bold text-emerald-600 mb-2">4.2%</div>
-                    <p className="text-gray-600 text-sm">Visites → Demandes</p>
+                    <p className="text-gray-600 text-sm">{t('dashboard.analytics.visitsToRequests')}</p>
                   </div>
                   <div className="border border-gray-200 p-6">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">Temps moyen</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">{t('dashboard.analytics.averageTime')}</h4>
                     <div className="text-4xl font-bold text-emerald-600 mb-2">3m 42s</div>
-                    <p className="text-gray-600 text-sm">Durée de consultation</p>
+                    <p className="text-gray-600 text-sm">{t('dashboard.analytics.viewingDuration')}</p>
                   </div>
                   <div className="border border-gray-200 p-6">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">Position moyenne</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">{t('dashboard.analytics.averagePosition')}</h4>
                     <div className="text-4xl font-bold text-emerald-600 mb-2">#12</div>
-                    <p className="text-gray-600 text-sm">Dans les résultats de recherche</p>
+                    <p className="text-gray-600 text-sm">{t('dashboard.analytics.inSearchResults')}</p>
                   </div>
                 </div>
               </div>
@@ -816,14 +821,14 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Rendez-vous</h3>
-                    <p className="text-gray-600">{appointmentsData.length} rendez-vous à venir</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.appointments.title')}</h3>
+                    <p className="text-gray-600">{appointmentsData.length} {t('dashboard.appointments.upcomingAppointments')}</p>
                   </div>
                   <Link
                     to="/contact"
                     className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all"
                   >
-                    Planifier un rendez-vous
+                    {t('dashboard.appointments.scheduleAppointment')}
                   </Link>
                 </div>
 
@@ -836,7 +841,7 @@ const Dashboard: React.FC = () => {
                           <div className="space-y-1 text-sm text-gray-600 mb-4">
                             <p className="flex items-center gap-2">
                               <CalendarIcon className="w-4 h-4" />
-                              {appt.date} à {appt.time}
+                              {appt.date} {t('dashboard.appointments.at')} {appt.time}
                             </p>
                             <p className="flex items-center gap-2">
                               <MapPinIcon className="w-4 h-4" />
@@ -850,7 +855,7 @@ const Dashboard: React.FC = () => {
                         </div>
                         <div className="flex flex-col items-end gap-3">
                           <span className={`px-4 py-2 font-semibold ${
-                            appt.status === 'Confirmé' 
+                            appt.status === t('dashboard.appointments.confirmed')
                               ? 'bg-emerald-100 text-emerald-800' 
                               : 'bg-yellow-100 text-yellow-800'
                           }`}>
@@ -858,10 +863,10 @@ const Dashboard: React.FC = () => {
                           </span>
                           <div className="flex gap-2">
                             <button className="px-4 py-2 border border-gray-300 text-gray-700 hover:border-emerald-600 hover:text-emerald-600 transition-all">
-                              Modifier
+                              {t('dashboard.appointments.edit')}
                             </button>
                             <button className="px-4 py-2 border border-red-500 text-red-500 hover:bg-red-50 transition-all">
-                              Annuler
+                              {t('dashboard.appointments.cancel')}
                             </button>
                           </div>
                         </div>
@@ -877,12 +882,12 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Messages</h3>
-                    <p className="text-gray-600">{messages.filter(m => m.unread).length} messages non lus</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.messages.title')}</h3>
+                    <p className="text-gray-600">{messages.filter(m => m.unread).length} {t('dashboard.messages.unreadMessages')}</p>
                   </div>
                   <button className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2">
                     <EnvelopeIcon className="w-5 h-5" />
-                    Nouveau message
+                    {t('dashboard.messages.newMessage')}
                   </button>
                 </div>
 
@@ -902,14 +907,14 @@ const Dashboard: React.FC = () => {
                             <h4 className="text-lg font-bold text-gray-900">{message.sender}</h4>
                             {message.unread && (
                               <span className="bg-red-500 text-white px-3 py-1 text-xs font-semibold">
-                                NOUVEAU
+                                {t('dashboard.messages.new')}
                               </span>
                             )}
                           </div>
                           <p className="text-sm text-gray-600 mb-3">{message.role}</p>
                           <p className="text-gray-700">{message.content}</p>
                         </div>
-                        <span className="text-sm text-gray-500">Il y a {message.time}</span>
+                        <span className="text-sm text-gray-500">{t('dashboard.messages.ago', { time: message.time })}</span>
                       </div>
                     </div>
                   ))}
@@ -922,8 +927,8 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Demandes reçues</h3>
-                    <p className="text-gray-600">Gérez les demandes d'information sur vos biens</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.inquiries.title')}</h3>
+                    <p className="text-gray-600">{t('dashboard.inquiries.subtitle')}</p>
                   </div>
                 </div>
 
@@ -931,20 +936,20 @@ const Dashboard: React.FC = () => {
                   <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h4 className="text-lg font-bold text-gray-900 mb-1">Demande de visite</h4>
-                        <p className="text-sm text-gray-600">Ma Villa Méditerranéenne - Nice</p>
+                        <h4 className="text-lg font-bold text-gray-900 mb-1">{t('dashboard.inquiries.visitRequest')}</h4>
+                        <p className="text-sm text-gray-600">{t('dashboard.sampleData.properties.property1.title')} - Nice</p>
                       </div>
                       <span className="bg-emerald-100 text-emerald-800 px-3 py-1 text-sm font-semibold">
-                        Nouvelle
+                        {t('dashboard.inquiries.new')}
                       </span>
                     </div>
-                    <p className="text-gray-700 mb-4">Client intéressé pour une visite ce weekend. Disponibilité samedi matin?</p>
+                    <p className="text-gray-700 mb-4">{t('dashboard.inquiries.sampleContent1')}</p>
                     <div className="flex gap-3">
                       <button className="px-6 py-2 bg-emerald-600 text-white font-medium hover:bg-emerald-700 transition-all">
-                        Répondre
+                        {t('dashboard.inquiries.reply')}
                       </button>
                       <button className="px-6 py-2 border border-gray-300 text-gray-700 hover:border-emerald-600 transition-all">
-                        Voir détails
+                        {t('dashboard.inquiries.viewDetails')}
                       </button>
                     </div>
                   </div>
@@ -952,17 +957,17 @@ const Dashboard: React.FC = () => {
                   <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h4 className="text-lg font-bold text-gray-900 mb-1">Question sur le bien</h4>
-                        <p className="text-sm text-gray-600">Appartement Centre Ville - Lyon</p>
+                        <h4 className="text-lg font-bold text-gray-900 mb-1">{t('dashboard.inquiries.propertyQuestion')}</h4>
+                        <p className="text-sm text-gray-600">{t('dashboard.sampleData.properties.property2.title')} - Lyon</p>
                       </div>
                       <span className="bg-gray-100 text-gray-800 px-3 py-1 text-sm font-semibold">
-                        Traitée
+                        {t('dashboard.inquiries.processed')}
                       </span>
                     </div>
-                    <p className="text-gray-700 mb-4">Le parking est-il inclus dans le loyer?</p>
+                    <p className="text-gray-700 mb-4">{t('dashboard.inquiries.sampleContent2')}</p>
                     <div className="flex gap-3">
                       <button className="px-6 py-2 border border-gray-300 text-gray-700 hover:border-emerald-600 transition-all">
-                        Voir la réponse
+                        {t('dashboard.inquiries.viewResponse')}
                       </button>
                     </div>
                   </div>
@@ -975,38 +980,38 @@ const Dashboard: React.FC = () => {
               <div className="bg-white border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Documents</h3>
-                    <p className="text-gray-600">Gérez vos documents administratifs</p>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('dashboard.documents.title')}</h3>
+                    <p className="text-gray-600">{t('dashboard.documents.subtitle')}</p>
                   </div>
                   <button className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2">
                     <PlusIcon className="w-5 h-5" />
-                    Ajouter un document
+                    {t('dashboard.documents.addDocument')}
                   </button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
                     <DocumentTextIcon className="w-12 h-12 text-emerald-600 mb-4" />
-                    <h4 className="font-bold text-gray-900 mb-2">Diagnostics</h4>
-                    <p className="text-sm text-gray-600 mb-4">DPE, Amiante, Plomb...</p>
+                    <h4 className="font-bold text-gray-900 mb-2">{t('dashboard.documents.diagnostics')}</h4>
+                    <p className="text-sm text-gray-600 mb-4">{t('dashboard.documents.diagnosticsDescription')}</p>
                     <button className="w-full bg-emerald-600 text-white py-2 hover:bg-emerald-700 transition-all">
-                      Voir (3)
+                      {t('dashboard.documents.view')} (3)
                     </button>
                   </div>
                   <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
                     <DocumentTextIcon className="w-12 h-12 text-emerald-600 mb-4" />
-                    <h4 className="font-bold text-gray-900 mb-2">Contrats</h4>
-                    <p className="text-sm text-gray-600 mb-4">Baux, Mandats...</p>
+                    <h4 className="font-bold text-gray-900 mb-2">{t('dashboard.documents.contracts')}</h4>
+                    <p className="text-sm text-gray-600 mb-4">{t('dashboard.documents.contractsDescription')}</p>
                     <button className="w-full bg-emerald-600 text-white py-2 hover:bg-emerald-700 transition-all">
-                      Voir (2)
+                      {t('dashboard.documents.view')} (2)
                     </button>
                   </div>
                   <div className="border border-gray-200 p-6 hover:border-emerald-600 transition-all">
                     <DocumentTextIcon className="w-12 h-12 text-emerald-600 mb-4" />
-                    <h4 className="font-bold text-gray-900 mb-2">Titres de propriété</h4>
-                    <p className="text-sm text-gray-600 mb-4">Actes notariés...</p>
+                    <h4 className="font-bold text-gray-900 mb-2">{t('dashboard.documents.propertyTitles')}</h4>
+                    <p className="text-sm text-gray-600 mb-4">{t('dashboard.documents.propertyTitlesDescription')}</p>
                     <button className="w-full bg-emerald-600 text-white py-2 hover:bg-emerald-700 transition-all">
-                      Voir (1)
+                      {t('dashboard.documents.view')} (1)
                     </button>
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 // src/pages/Careers.tsx
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   UserGroupIcon,
   RocketLaunchIcon,
@@ -17,6 +18,7 @@ import {
 } from '@heroicons/react/24/solid';
 
 const Careers: React.FC = () => {
+  const { t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -33,53 +35,53 @@ const Careers: React.FC = () => {
   const careerPoints = [
     {
       icon: UserGroupIcon,
-      title: 'Un esprit d\'équipe',
-      description: 'La réussite se construit ensemble. Nous valorisons la collaboration, l\'entraide et la bonne humeur. Ici, chacun a sa place et participe à une aventure partagée.'
+      title: t('careers.points.teamSpirit.title'),
+      description: t('careers.points.teamSpirit.description')
     },
     {
       icon: RocketLaunchIcon,
-      title: 'Des perspectives réelles',
-      description: 'Nous croyons au potentiel de chacun. En rejoignant notre équipe, vous profiterez de véritables opportunités d\'évolution adaptées à vos ambitions. Votre progression est notre réussite.'
+      title: t('careers.points.realProspects.title'),
+      description: t('careers.points.realProspects.description')
     },
     {
       icon: AcademicCapIcon,
-      title: 'Une expertise reconnue',
-      description: 'Intégrez une structure solide et exigeante, guidée par des professionnels passionnés. Formations, accompagnement, transmission : ici, le savoir se partage.'
+      title: t('careers.points.recognizedExpertise.title'),
+      description: t('careers.points.recognizedExpertise.description')
     },
     {
       icon: LightBulbIcon,
-      title: 'Un esprit d\'innovation',
-      description: 'Nous aimons innover, tester, avancer. Vous évoluerez dans un environnement moderne, où vos idées comptent et prennent vie.'
+      title: t('careers.points.innovativeSpirit.title'),
+      description: t('careers.points.innovativeSpirit.description')
     },
     {
       icon: BriefcaseIcon,
-      title: 'Des missions variées',
-      description: 'Transaction, location, gestion, conseil… Des projets stimulants, un impact direct, et la satisfaction de contribuer à la croissance de l\'agence.'
+      title: t('careers.points.variedMissions.title'),
+      description: t('careers.points.variedMissions.description')
     },
     {
       icon: HeartIcon,
-      title: 'Un métier humain',
-      description: 'Nous ne vendons pas seulement des biens : nous accompagnons des projets de vie. Chaque relation client est une histoire de confiance et de sens.'
+      title: t('careers.points.humanJob.title'),
+      description: t('careers.points.humanJob.description')
     }
   ];
 
   const regions = [
-    'Paris',
-    'Côte d\'Azur',
-    'Provence-Alpes-Côte d\'Azur',
-    'Auvergne-Rhône-Alpes',
-    'Occitanie',
-    'Nouvelle-Aquitaine',
-    'Bretagne',
-    'International'
+    t('careers.regions.paris'),
+    t('careers.regions.coteDazur'),
+    t('careers.regions.paca'),
+    t('careers.regions.auvergneRhone'),
+    t('careers.regions.occitanie'),
+    t('careers.regions.nouvelleAquitaine'),
+    t('careers.regions.bretagne'),
+    t('careers.regions.international')
   ];
 
   const experienceOptions = [
-    'Débutant (moins de 1 an)',
-    'Intermédiaire (1-3 ans)',
-    'Confirmé (3-5 ans)',
-    'Expert (5+ ans)',
-    'Aucune expérience'
+    t('careers.experienceLevels.beginner'),
+    t('careers.experienceLevels.intermediate'),
+    t('careers.experienceLevels.confirmed'),
+    t('careers.experienceLevels.expert'),
+    t('careers.experienceLevels.none')
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -130,7 +132,7 @@ const Careers: React.FC = () => {
         <div className="fixed top-4 sm:top-8 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in px-4 w-full max-w-md">
           <div className="bg-gradient-to-r from-[#023927] to-[#0a4d3a] text-white px-4 sm:px-8 py-3 sm:py-4 flex items-center space-x-2 sm:space-x-3 border-2 border-white shadow-2xl">
             <CheckCircleIconSolid className="w-5 h-5 sm:w-6 sm:h-6" />
-            <span className="font-inter font-medium text-sm sm:text-lg">Candidature envoyée avec succès!</span>
+            <span className="font-inter font-medium text-sm sm:text-lg">{t('careers.form.successMessage')}</span>
           </div>
         </div>
       )}
@@ -140,16 +142,14 @@ const Careers: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
-              NOUS REJOINDRE
+              {t('careers.hero.title')}
             </h1>
             <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-6 sm:mb-8"></div>
             <p className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-white mb-3 sm:mb-4 px-4">
-              Rejoindre SQUARE METER
+              {t('careers.hero.subtitle')}
             </p>
             <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
-              Grandir, apprendre, s'accomplir.
-              Chez M² Square Meter, nous croyons que la réussite est collective et que chaque talent compte.
-              Rejoindre notre agence, c'est intégrer une maison à taille humaine, où rigueur et passion se rencontrent au service d'un projet commun.
+              {t('careers.hero.description')}
             </p>
           </div>
         </div>
@@ -190,11 +190,10 @@ const Careers: React.FC = () => {
         <div className="bg-gradient-to-r from-[#023927] to-[#0a4d3a] p-6 sm:p-8 lg:p-12 text-white mb-8 sm:mb-12 lg:mb-16">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-white mb-4 sm:mb-6 px-4">
-              Rejoignez-nous
+              {t('careers.joinUs.title')}
             </h2>
             <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 mb-6 sm:mb-8 leading-relaxed px-4">
-              Nous recherchons des profils motivés, dynamiques et curieux,
-              animés par nos valeurs : transparence, exigence, innovation et responsabilité.
+              {t('careers.joinUs.description')}
             </p>
           </div>
         </div>
@@ -204,7 +203,7 @@ const Careers: React.FC = () => {
           <div className="bg-white border-2 border-gray-200 p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
             <div className="flex items-center justify-between mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-gray-200">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900">
-                POSTULEZ et écrivons votre histoire ensemble
+                {t('careers.form.title')}
               </h2>
             </div>
 
@@ -213,7 +212,7 @@ const Careers: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 sm:mb-3 font-medium">
-                    Prénom *
+                    {t('careers.form.firstName')} *
                   </label>
                   <input
                     type="text"
@@ -222,12 +221,12 @@ const Careers: React.FC = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
-                    placeholder="Votre prénom"
+                    placeholder={t('careers.form.firstNamePlaceholder')}
                   />
                 </div>
                 <div>
                   <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 sm:mb-3 font-medium">
-                    Nom de famille *
+                    {t('careers.form.lastName')} *
                   </label>
                   <input
                     type="text"
@@ -236,7 +235,7 @@ const Careers: React.FC = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
-                    placeholder="Votre nom"
+                    placeholder={t('careers.form.lastNamePlaceholder')}
                   />
                 </div>
               </div>
@@ -245,7 +244,7 @@ const Careers: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 sm:mb-3 font-medium">
-                    Email *
+                    {t('careers.form.email')} *
                   </label>
                   <input
                     type="email"
@@ -254,12 +253,12 @@ const Careers: React.FC = () => {
                     onChange={handleChange}
                     required
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
-                    placeholder="votre@email.com"
+                    placeholder={t('careers.form.emailPlaceholder')}
                   />
                 </div>
                 <div>
                   <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 sm:mb-3 font-medium">
-                    Dans quel région souhaitez-vous travailler ?
+                    {t('careers.form.region')}
                   </label>
                   <select
                     name="region"
@@ -267,7 +266,7 @@ const Careers: React.FC = () => {
                     onChange={handleChange}
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
                   >
-                    <option value="">Sélectionnez une région</option>
+                    <option value="">{t('careers.form.regionPlaceholder')}</option>
                     {regions.map(region => (
                       <option key={region} value={region}>{region}</option>
                     ))}
@@ -278,7 +277,7 @@ const Careers: React.FC = () => {
               {/* Experience */}
               <div>
                 <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 sm:mb-3 font-medium">
-                  Avez-vous déjà une expérience dans l'immobilier ? *
+                  {t('careers.form.experience')} *
                 </label>
                 <select
                   name="experience"
@@ -287,7 +286,7 @@ const Careers: React.FC = () => {
                   required
                   className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
                 >
-                  <option value="">Sélectionnez votre niveau d'expérience</option>
+                  <option value="">{t('careers.form.experiencePlaceholder')}</option>
                   {experienceOptions.map(option => (
                     <option key={option} value={option}>{option}</option>
                   ))}
@@ -297,17 +296,29 @@ const Careers: React.FC = () => {
               {/* CV Upload */}
               <div>
                 <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 sm:mb-3 font-medium">
-                  Importer votre CV * (15MO max)
+                  {t('careers.form.cvUpload')} * {t('careers.form.cvMaxSize')}
                 </label>
                 <div className="relative">
                   <input
                     type="file"
                     name="cv"
+                    id="cv-upload"
                     onChange={handleFileChange}
                     required
                     accept=".pdf,.doc,.docx"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 file:mr-2 sm:file:mr-4 file:py-1.5 sm:file:py-2 file:px-2 sm:file:px-4 file:border-0 file:bg-[#023927] file:text-white file:font-inter file:text-xs sm:file:text-sm file:cursor-pointer text-sm sm:text-base"
+                    className="hidden"
                   />
+                  <label
+                    htmlFor="cv-upload"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus-within:border-[#023927] focus-within:ring-2 focus-within:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base flex items-center cursor-pointer"
+                  >
+                    <span className="inline-block mr-2 sm:mr-4 py-1.5 sm:py-2 px-2 sm:px-4 bg-[#023927] text-white font-inter text-xs sm:text-sm cursor-pointer">
+                      {t('careers.form.chooseFile')}
+                    </span>
+                    <span className="text-gray-500 text-xs sm:text-sm">
+                      {formData.cv ? formData.cv.name : t('careers.form.noFileChosen')}
+                    </span>
+                  </label>
                   {formData.cv && (
                     <div className="flex items-center space-x-2 mt-2 text-xs sm:text-sm text-gray-600">
                       <DocumentArrowUpIcon className="w-4 h-4" />
@@ -327,11 +338,11 @@ const Careers: React.FC = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-current"></div>
-                      <span>Envoi en cours...</span>
+                      <span>{t('careers.form.submitting')}</span>
                     </>
                   ) : (
                     <>
-                      <span>Nous rejoindre</span>
+                      <span>{t('careers.form.submitButton')}</span>
                       <PaperAirplaneIcon className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-1 transition-transform duration-300" />
                     </>
                   )}

@@ -1,93 +1,127 @@
 // src/pages/Home.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocalization } from '../contexts/LocalizationContext';
 import { 
   ChevronLeftIcon, 
   ChevronRightIcon,
   PlayIcon,
   PauseIcon,
   ArrowRightIcon,
-  HomeModernIcon,
-  BuildingStorefrontIcon,
-  SparklesIcon,
   HeartIcon,
-  MapPinIcon,
-  CurrencyEuroIcon,
-  BuildingOfficeIcon,
-  CalendarDaysIcon
+  CameraIcon,
+  HomeIcon,
+  CheckIcon,
+  Square2StackIcon,
+  ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
+import {
+  HeartIcon as HeartIconSolid
+} from '@heroicons/react/24/solid';
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
+  const { formatPrice: formatCurrency } = useLocalization();
+  
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [featuredAutoPlay, setFeaturedAutoPlay] = useState(true);
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   const heroSlides = [
     {
       image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      title: "Villa Méditerranéenne",
-      location: "Saint-Tropez, France",
-      price: "2,500,000 €"
+      title: t('home.hero.slides.villa.title'),
+      location: t('home.hero.slides.villa.location'),
+      price: 2500000
     },
     {
       image: "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      title: "Penthouse Moderne",
-      location: "Paris 16ème, France",
-      price: "3,200,000 €"
+      title: t('home.hero.slides.penthouse.title'),
+      location: t('home.hero.slides.penthouse.location'),
+      price: 3200000
     },
     {
       image: "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      title: "Domaine Historique",
-      location: "Provence, France",
-      price: "4,800,000 €"
+      title: t('home.hero.slides.estate.title'),
+      location: t('home.hero.slides.estate.location'),
+      price: 4800000
     }
   ];
 
   const featuredProperties = [
     {
-      image: "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Villa Contemporaine",
-      location: "Cannes",
-      price: "3,500,000 €",
-      beds: 5,
-      baths: 4,
-      area: "420 m²",
-      exclusive: true
+      id: 1,
+      title: t('home.featured.properties.villa.title'),
+      description: t('home.featured.properties.villa.description'),
+      type: 'buy' as const,
+      price: 3500000,
+      location: t('home.featured.properties.villa.location'),
+      surface: 420,
+      bedrooms: 5,
+      bathrooms: 4,
+      images: [
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ],
+      featured: true,
+      yearBuilt: 2020
     },
     {
-      image: "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Appartement Haussmannien",
-      location: "Paris 8ème",
-      price: "1,800,000 €",
-      beds: 3,
-      baths: 2,
-      area: "180 m²",
-      exclusive: false
+      id: 2,
+      title: t('home.featured.properties.apartment.title'),
+      description: t('home.featured.properties.apartment.description'),
+      type: 'buy' as const,
+      price: 1800000,
+      location: t('home.featured.properties.apartment.location'),
+      surface: 180,
+      bedrooms: 3,
+      bathrooms: 2,
+      images: [
+        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ],
+      featured: false,
+      yearBuilt: 1880
     },
     {
-      image: "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=600",
-      title: "Château Renaissance",
-      location: "Loire Valley",
-      price: "6,200,000 €",
-      beds: 8,
-      baths: 6,
-      area: "950 m²",
-      exclusive: true
+      id: 3,
+      title: t('home.featured.properties.chateau.title'),
+      description: t('home.featured.properties.chateau.description'),
+      type: 'buy' as const,
+      price: 6200000,
+      location: t('home.featured.properties.chateau.location'),
+      surface: 950,
+      bedrooms: 8,
+      bathrooms: 6,
+      images: [
+        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ],
+      featured: true,
+      confidential: true,
+      yearBuilt: 1580
     }
   ];
 
   const clientTestimonials = [
     {
-      name: "Aïcha, MRE – Paris",
-      text: "Une équipe rare, à l'écoute et d'un professionnalisme exemplaire. Grâce à M² Square Meter, j'ai trouvé bien plus qu'une maison : une expérience humaine.",
+      name: t('home.testimonials.clients.aicha.name'),
+      text: t('home.testimonials.clients.aicha.text'),
     },
     {
-      name: "Marc & Hélène, propriétaires à Diabat",
-      text: "Une vraie connaissance du marché d'Essaouira, des conseils justes et une bienveillance sincère.",
+      name: t('home.testimonials.clients.marc.name'),
+      text: t('home.testimonials.clients.marc.text'),
     },
     {
-      name: "Thomas, investisseur – Casablanca",
-      text: "Expertise remarquable et accompagnement sur mesure. Une équipe qui comprend les enjeux de l'investissement immobilier de luxe.",
+      name: t('home.testimonials.clients.thomas.name'),
+      text: t('home.testimonials.clients.thomas.text'),
     }
   ];
 
@@ -104,6 +138,17 @@ const Home: React.FC = () => {
     return () => clearInterval(slideInterval);
   }, [isPlaying, heroSlides.length]);
 
+  useEffect(() => {
+    let featuredInterval: NodeJS.Timeout;
+    if (featuredAutoPlay) {
+      featuredInterval = setInterval(() => {
+        setFeaturedIndex((prev) => (prev + 1) % featuredProperties.length);
+      }, 6000);
+    }
+
+    return () => clearInterval(featuredInterval);
+  }, [featuredAutoPlay, featuredProperties.length]);
+
   const nextSlide = () => {
     setActiveSlide((prev) => (prev + 1) % heroSlides.length);
   };
@@ -114,6 +159,33 @@ const Home: React.FC = () => {
 
   const goToSlide = (index: number) => {
     setActiveSlide(index);
+  };
+
+  const nextFeatured = () => {
+    setFeaturedIndex((prev) => (prev + 1) % featuredProperties.length);
+  };
+
+  const prevFeatured = () => {
+    setFeaturedIndex((prev) => (prev - 1 + featuredProperties.length) % featuredProperties.length);
+  };
+
+  const toggleFavorite = (propertyId: number) => {
+    setFavorites(prev => 
+      prev.includes(propertyId) 
+        ? prev.filter(id => id !== propertyId)
+        : [...prev, propertyId]
+    );
+  };
+
+  const formatPrice = (price: number, type?: string) => {
+    const formattedPrice = formatCurrency(price, true);
+    if (type === 'rent') {
+      return `${formattedPrice}/${t('common.month') || 'month'}`;
+    }
+    if (type === 'seasonal') {
+      return `${formattedPrice}/${t('common.week') || 'week'}`;
+    }
+    return formattedPrice;
   };
 
   return (
@@ -167,7 +239,7 @@ const Home: React.FC = () => {
                 >
                   <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    Acheter
+                    {t('home.hero.buyButton')}
                   </span>
                 </Link>
                 
@@ -177,7 +249,7 @@ const Home: React.FC = () => {
                 >
                   <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                    Louer
+                    {t('home.hero.rentButton')}
                   </span>
                 </Link>
               </div>
@@ -191,7 +263,7 @@ const Home: React.FC = () => {
                   </div>
                   <div className="w-px h-6 bg-white/30"></div>
                   <div className="font-serif text-white text-sm sm:text-sm font-medium">
-                    {heroSlides[activeSlide].price}
+                    {formatCurrency(heroSlides[activeSlide].price, true)}
                   </div>
                 </div>
               </div>
@@ -244,7 +316,7 @@ const Home: React.FC = () => {
         {/* Indicateur de scroll */}
         <div className="hidden sm:block absolute bottom-8 left-4 sm:left-8 animate-pulse">
           <div className="text-white text-xs font-inter uppercase tracking-widest rotate-[-90deg] origin-left">
-            Scroll
+            {t('home.hero.scroll')}
           </div>
         </div>
       </section>
@@ -254,21 +326,21 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-inter uppercase mb-6 text-gray-900 text-center">
-              Notre essence
+              {t('home.essence.title')}
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-8"></div>
             
             <p className="text-lg md:text-xl font-serif text-gray-700 mb-6 leading-relaxed">
-              La rigueur de la gestion et la passion de la pierre
+              {t('home.essence.tagline')}
             </p>
             
             <div className="space-y-4 text-gray-600 mb-8">
               <p>
-                Née de la rencontre de huit années d'expertise dans l'immobilier et de huit années de direction dans la grande distribution, SQUARE METER conjugue discipline, exigence et sensibilité pour offrir bien plus qu'une simple agence.
+                {t('home.essence.paragraph1')}
               </p>
               <p>
-                Deux parcours complémentaires, unis par une même conviction :
-                <span className="text-[#023927] font-medium"> L'immobilier n'est pas qu'une affaire de biens, c'est une histoire de valeurs.</span>
+                {t('home.essence.paragraph2')}
+                <span className="text-[#023927] font-medium"> {t('home.essence.conviction')}</span>
               </p>
             </div>
             
@@ -277,13 +349,13 @@ const Home: React.FC = () => {
                 to="/properties" 
                 className="bg-[#023927] text-white px-8 py-3 font-inter uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-[#023927] hover:border hover:border-[#023927] hover:scale-105 text-center"
               >
-                Découvrir nos biens exclusifs
+                {t('home.essence.ctaDiscover')}
               </Link>
               <Link 
                 to="/valuation" 
                 className="border border-[#023927] text-[#023927] px-8 py-3 font-inter uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-[#023927] hover:border-[#023927] hover:scale-105 text-center"
               >
-                Faire estimer mon bien
+                {t('home.essence.ctaValuation')}
               </Link>
             </div>
           </div>
@@ -295,123 +367,231 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-inter uppercase text-gray-900 mb-4">
-              Sublimer chaque projet, notre mission
+              {t('home.mission.title')}
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Chaque propriétaire, chaque bien, chaque histoire mérite une approche sur mesure.
+              {t('home.mission.subtitle')}
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <div className="bg-white p-8 shadow-sm hover:shadow-md transition-shadow duration-300 group">
               <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-3 font-medium">
-                Transaction Immobilière
+                {t('home.mission.transaction.title')}
               </h3>
               <p className="text-gray-600 group-hover:text-[#023927]">
-                La transaction immobilière, avec une stratégie de mise en valeur et de diffusion haut de gamme.
+                {t('home.mission.transaction.description')}
               </p>
             </div>
             
             <div className="bg-white p-8 shadow-sm hover:shadow-md transition-shadow duration-300 group">
               <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-3 font-medium">
-                Location Longue Durée
+                {t('home.mission.longTerm.title')}
               </h3>
               <p className="text-gray-600 group-hover:text-[#023927]">
-                La location longue durée, avec une gestion rigoureuse et transparente.
+                {t('home.mission.longTerm.description')}
               </p>
             </div>
             
             <div className="bg-white p-8 shadow-sm hover:shadow-md transition-shadow duration-300 group">
               <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-3 font-medium">
-                Location Saisonnière
+                {t('home.mission.seasonal.title')}
               </h3>
               <p className="text-gray-600 group-hover:text-[#023927]">
-                La location saisonnière, pensée comme une expérience de séjour complète et harmonieuse.
+                {t('home.mission.seasonal.description')}
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Properties */}
+      {/* Featured Properties - Elegant Carousel */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-inter uppercase text-gray-900 mb-4">
-              Propriétés d'Exception
+              {t('home.featured.title')}
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Découvrez une sélection de biens prestigieux soigneusement choisis pour leur caractère unique, 
-              leur architecture remarquable et leur situation exclusive.
+              {t('home.featured.subtitle')}
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {featuredProperties.map((property, index) => (
+          {/* Carousel Container */}
+          <div 
+            className="relative max-w-6xl mx-auto mb-12"
+            onMouseEnter={() => setFeaturedAutoPlay(false)}
+            onMouseLeave={() => setFeaturedAutoPlay(true)}
+          >
+            <div className="overflow-hidden">
               <div 
-                key={index}
-                className="bg-white border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] group"
+                className="flex transition-all duration-700 ease-in-out" 
+                style={{ transform: `translateX(-${featuredIndex * 100}%)` }}
               >
-                <div className="relative h-48 sm:h-64 overflow-hidden">
-                  <img 
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
-                  />
-                  {property.exclusive && (
-                    <div className="absolute top-4 right-4 bg-[#023927] text-white px-3 py-1 font-inter uppercase text-xs font-medium">
-                      EXCLUSIF
-                    </div>
-                  )}
-                </div>
+                {featuredProperties.map((property) => (
+                  <div key={property.id} className="w-full flex-shrink-0 px-2">
+                    <div className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200">
+                      {/* MAIN CARD CONTAINER - Horizontal Layout */}
+                      <div className="flex flex-col">
+                        {/* IMAGE SECTION - Left side with primary + secondary images */}
+                        <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
+                          {/* Primary Image - Larger on left */}
+                          <div className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden">
+                            <img
+                              src={property.images[0]}
+                              alt={property.title}
+                              className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
+                            />
+                            
+                            {/* Overlay Badges */}
+                            <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-1.5 sm:gap-2">
+                              {property.featured && (
+                                <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
+                                  {t('home.featured.exclusive')}
+                                </span>
+                              )}
+                              {property.confidential && (
+                                <span className="bg-black/90 text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
+                                  {t('home.featured.confidential')}
+                                </span>
+                              )}
+                            </div>
+                            
+                            {/* Favorite Button */}
+                            <button 
+                              onClick={() => toggleFavorite(property.id)}
+                              className="absolute top-3 sm:top-6 right-3 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
+                            >
+                              {favorites.includes(property.id) ? (
+                                <HeartIconSolid className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
+                              ) : (
+                                <HeartIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover/fav:text-red-500 transition-colors" />
+                              )}
+                            </button>
+                            
+                            {/* Image Counter */}
+                            <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm">
+                              <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span className="text-xs sm:text-sm">{property.images.length} {t('home.featured.photos')}</span>
+                            </div>
+                          </div>
+                          
+                          {/* Secondary Images - Stacked vertically on right */}
+                          <div className="md:w-1/3 h-1/3 md:h-full flex flex-row md:flex-col gap-1 sm:gap-2 p-1 sm:p-2">
+                            {property.images.slice(1, 3).map((img, imgIndex) => (
+                              <div 
+                                key={imgIndex} 
+                                className="flex-1 relative overflow-hidden group/secondary"
+                              >
+                                <img
+                                  src={img}
+                                  alt={`${property.title} ${imgIndex + 2}`}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover/secondary:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"></div>
+                                {/* View More Overlay for last image */}
+                                {imgIndex === 1 && property.images.length > 3 && (
+                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300">
+                                    <div className="text-white text-center p-2 sm:p-4">
+                                      <ArrowTopRightOnSquareIcon className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2" />
+                                      <span className="text-[10px] sm:text-xs font-medium">+{property.images.length - 3} photos</span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {/* DETAILS SECTION - compact single-line summary */}
+                        <div className="w-full p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                          <div className="flex-1 min-w-0 w-full sm:w-auto">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                              <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
+                                property.type === 'buy' 
+                                  ? 'bg-blue-50 text-blue-800 border border-blue-200' 
+                                  : property.type === 'rent'
+                                  ? 'bg-green-50 text-green-800 border border-green-200'
+                                  : 'bg-purple-50 text-purple-800 border border-purple-200'
+                              }`}>{property.type === 'buy' ? t('home.featured.forSale') : property.type === 'rent' ? t('home.featured.forRent') : t('home.featured.vacation')}</span>
 
-                  <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg font-medium">
-                      {property.title}
-                    </h3>
-                    <span className="font-serif text-[#023927] font-semibold">
-                      {property.price}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center text-gray-600 mb-4">
-                    <MapPinIcon className="w-4 h-4 mr-1" />
-                    <span className="font-serif">{property.location}</span>
-                  </div>
+                              <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
 
-                  <div className="flex justify-between border-t border-gray-100 pt-4 mb-4">
-                    <div className="text-center">
-                      <div className="font-inter text-gray-900 font-medium">{property.beds}</div>
-                      <div className="text-gray-600 text-sm">Chambres</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-inter text-gray-900 font-medium">{property.baths}</div>
-                      <div className="text-gray-600 text-sm">SDB</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="font-inter text-gray-900 font-medium">{property.area}</div>
-                      <div className="text-gray-600 text-sm">Surface</div>
+                              <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
+                            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.bedrooms}</span></div>
+                            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.bathrooms}</span></div>
+                            <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
+                          </div>
+
+                          <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
+                            <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.bedrooms}</span></div>
+                            <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.bathrooms}</span></div>
+                            <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
+                          </div>
+
+                          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                            <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPrice(property.price, property.type)}</div>
+                            <Link
+                              to={`/properties/${property.id}`}
+                              className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
+                            >
+                              {t('home.featured.viewButton')}
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <button className="w-full bg-[#023927] text-white py-3 font-inter uppercase tracking-wide hover:bg-white hover:text-[#023927] hover:border hover:border-[#023927] transition-colors duration-300 transform hover:scale-[1.02]">
-                    Découvrir
-                  </button>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Elegant Navigation Buttons */}
+            <button 
+              onClick={prevFeatured} 
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-10"
+              aria-label="Previous property"
+            >
+              <ChevronLeftIcon className="w-6 h-6" />
+            </button>
+            <button 
+              onClick={nextFeatured} 
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-10"
+              aria-label="Next property"
+            >
+              <ChevronRightIcon className="w-6 h-6" />
+            </button>
+
+            {/* Elegant Slide Indicators */}
+            <div className="mt-8 flex justify-center items-center space-x-3">
+              {featuredProperties.map((_, i) => (
+                <button 
+                  key={i} 
+                  onClick={() => setFeaturedIndex(i)} 
+                  className={`transition-all duration-300 ${
+                    i === featuredIndex 
+                      ? 'w-12 h-1.5 bg-[#023927]' 
+                      : 'w-8 h-1 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                  aria-label={`Go to property ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
           
           <div className="text-center">
             <Link 
               to="/properties" 
-              className="inline-flex items-center space-x-2 border border-gray-900 text-gray-900 px-8 py-3 font-inter uppercase tracking-wide hover:bg-white hover:text-[#023927] hover:border-[#023927] transition-all duration-300"
+              className="inline-flex items-center space-x-2 border-2 border-gray-900 text-gray-900 px-10 py-4 font-inter uppercase tracking-wide hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-all duration-500"
             >
-              <span>Explorer notre collection</span>
-              <ArrowRightIcon className="w-4 h-4" />
+              <span>{t('home.featured.exploreCollection')}</span>
+              <ArrowRightIcon className="w-5 h-5" />
             </Link>
           </div>
         </div>
@@ -422,10 +602,10 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
-              Ce que nos clients disent de nous
+              {t('home.testimonials.title')}
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
-            <p className="text-gray-600">Reprendre nos avis sur Google</p>
+            <p className="text-gray-600">{t('home.testimonials.subtitle')}</p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -452,7 +632,7 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
-              Nos valeurs, nos racines, notre vision
+              {t('home.values.title')}
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
           </div>
@@ -461,37 +641,37 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
                 <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
-                  Exigence
+                  {t('home.values.excellence.title')}
                 </h3>
                 <p className="text-gray-600 group-hover:text-[#023927]">
-                  Offrir une qualité de service irréprochable.
+                  {t('home.values.excellence.description')}
                 </p>
               </div>
               
               <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
                 <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
-                  Humanité
+                  {t('home.values.humanity.title')}
                 </h3>
                 <p className="text-gray-600 group-hover:text-[#023927]">
-                  Placer la relation au centre de chaque mission.
+                  {t('home.values.humanity.description')}
                 </p>
               </div>
               
               <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
                 <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
-                  Innovation
+                  {t('home.values.innovation.title')}
                 </h3>
                 <p className="text-gray-600 group-hover:text-[#023927]">
-                  Mettre la technologie au service de l'expérience.
+                  {t('home.values.innovation.description')}
                 </p>
               </div>
               
               <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
                 <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
-                  Responsabilité
+                  {t('home.values.responsibility.title')}
                 </h3>
                 <p className="text-gray-600 group-hover:text-[#023927]">
-                  Redonner à Essaouira ce qu'elle nous inspire.
+                  {t('home.values.responsibility.description')}
                 </p>
               </div>
             </div>
@@ -504,12 +684,11 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-inter uppercase text-gray-900 mb-4">
-              Prêt à concrétiser votre projet ?
+              {t('home.contact.title')}
             </h2>
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Que vous soyez propriétaire, acquéreur ou investisseur,
-              nous serons ravis de vous accompagner à Essaouira et dans sa province.
+              {t('home.contact.subtitle')}
             </p>
           </div>
           
@@ -517,28 +696,28 @@ const Home: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <h3 className="text-2xl font-inter uppercase text-gray-900 mb-6">
-                  Notre agence
+                  {t('home.contact.agency')}
                 </h3>
                 
                 <div className="space-y-4">
                   <div className="p-4 bg-gray-50">
-                    <h4 className="font-inter text-gray-900 font-medium mb-1">Adresse</h4>
-                    <p className="text-gray-600">Essaouira – Maroc</p>
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">{t('home.contact.address')}</h4>
+                    <p className="text-gray-600">{t('home.contact.addressValue')}</p>
                   </div>
                   
                   <div className="p-4 bg-gray-50">
-                    <h4 className="font-inter text-gray-900 font-medium mb-1">Horaires</h4>
-                    <p className="text-gray-600">Sur rendez-vous</p>
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">{t('home.contact.hours')}</h4>
+                    <p className="text-gray-600">{t('home.contact.hoursValue')}</p>
                   </div>
                   
                   <div className="p-4 bg-gray-50">
-                    <h4 className="font-inter text-gray-900 font-medium mb-1">Email</h4>
-                    <p className="text-gray-600">essaouira@m2squaremeter.com</p>
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">{t('home.contact.email')}</h4>
+                    <p className="text-gray-600">{t('home.contact.emailValue')}</p>
                   </div>
                   
                   <div className="p-4 bg-gray-50">
-                    <h4 className="font-inter text-gray-900 font-medium mb-1">Téléphone</h4>
-                    <p className="text-gray-600">+212 (0)7 00 000 644</p>
+                    <h4 className="font-inter text-gray-900 font-medium mb-1">{t('home.contact.phone')}</h4>
+                    <p className="text-gray-600">{t('home.contact.phoneValue')}</p>
                   </div>
                 </div>
               </div>
@@ -546,10 +725,10 @@ const Home: React.FC = () => {
               <div className="flex flex-col justify-center">
                 <div className="mb-8">
                   <h3 className="text-2xl font-inter uppercase text-gray-900 mb-2">
-                    SQUARE METER
+                    {t('home.contact.brandTitle')}
                   </h3>
                   <p className="text-[#023927] italic">
-                    La rigueur de la gestion. La passion de la pierre. Et la noblesse du nécessaire.
+                    {t('home.contact.tagline')}
                   </p>
                 </div>
                 
@@ -557,7 +736,7 @@ const Home: React.FC = () => {
                   to="/contact" 
                   className="bg-[#023927] text-white py-3 md:py-4 font-inter uppercase tracking-wide hover:bg-white hover:text-[#023927] hover:border hover:border-[#023927] transition-all duration-300 transform hover:scale-[1.02] text-center text-base md:text-lg"
                 >
-                  Prendre rendez-vous
+                  {t('home.contact.ctaButton')}
                 </Link>
               </div>
             </div>
@@ -570,10 +749,10 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
-              { number: "250+", label: "Propriétés exclusives" },
-              { number: "15", label: "Années d'expertise" },
-              { number: "98%", label: "Clients satisfaits" },
-              { number: "12", label: "Pays desservis" }
+              { number: "250+", label: t('home.stats.exclusiveProperties') },
+              { number: "15", label: t('home.stats.yearsExperience') },
+              { number: "98%", label: t('home.stats.satisfiedClients') },
+              { number: "12", label: t('home.stats.countriesServed') }
             ].map((stat, index) => (
               <div key={index} className="group">
                 <div className="text-3xl md:text-4xl font-inter text-[#023927] font-light mb-2 group-hover:scale-110 transition-transform duration-300">

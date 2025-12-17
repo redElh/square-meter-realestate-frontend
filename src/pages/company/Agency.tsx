@@ -1,6 +1,7 @@
 // src/pages/Agency.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -17,6 +18,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Agency: React.FC = () => {
+  const { t } = useTranslation();
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
@@ -26,88 +28,88 @@ const Agency: React.FC = () => {
   const heroSlides = [
     {
       image: "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      title: "L'Excellence Immobilière"
+      title: t('agency.hero.slide1')
     },
     {
       image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      title: "Réseau International"
+      title: t('agency.hero.slide2')
     },
     {
       image: "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      title: "Expertise Exclusive"
+      title: t('agency.hero.slide3')
     }
   ];
 
   const teamMembers = [
     {
       id: 1,
-      name: 'Dimitri Martin',
-      role: 'Fondateur & CEO',
+      name: t('agency.team.members.dimitri.name'),
+      role: t('agency.team.members.dimitri.role'),
       image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Expert en immobilier de luxe avec 15 ans d\'expérience internationale',
-      specialties: ['Stratégie d\'acquisition', 'Négociation complexe', 'Marchés internationaux'],
-      experience: '15 ans',
-      properties: '120+',
-      languages: ['FR', 'EN', 'IT'],
-      quote: '"L\'excellence n\'est pas un acte, mais une habitude."'
+      description: t('agency.team.members.dimitri.description'),
+      specialties: [t('agency.team.members.dimitri.specialty1'), t('agency.team.members.dimitri.specialty2'), t('agency.team.members.dimitri.specialty3')],
+      experience: t('agency.team.members.dimitri.experience'),
+      properties: t('agency.team.members.dimitri.properties'),
+      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.ar')],
+      quote: t('agency.team.members.dimitri.quote')
     },
     {
       id: 2,
-      name: 'Sophie Laurent',
-      role: 'Directrice des Ventes',
+      name: t('agency.team.members.sophie.name'),
+      role: t('agency.team.members.sophie.role'),
       image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Spécialiste des biens d\'exception sur la Côte d\'Azur et Paris',
-      specialties: ['Propriétés côtières', 'Architecture contemporaine', 'Clientèle internationale'],
-      experience: '12 ans',
-      properties: '85+',
-      languages: ['FR', 'EN', 'ES'],
-      quote: '"Chaque propriété raconte une histoire unique."'
+      description: t('agency.team.members.sophie.description'),
+      specialties: [t('agency.team.members.sophie.specialty1'), t('agency.team.members.sophie.specialty2'), t('agency.team.members.sophie.specialty3')],
+      experience: t('agency.team.members.sophie.experience'),
+      properties: t('agency.team.members.sophie.properties'),
+      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.es')],
+      quote: t('agency.team.members.sophie.quote')
     },
     {
       id: 3,
-      name: 'Thomas Moreau',
-      role: 'Responsable Conciergerie',
+      name: t('agency.team.members.thomas.name'),
+      role: t('agency.team.members.thomas.role'),
       image: 'https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Garant de l\'expérience client premium et des services sur mesure',
-      specialties: ['Services conciergerie', 'Gestion patrimoniale', 'Relations prestataires'],
-      experience: '10 ans',
-      properties: '200+',
-      languages: ['FR', 'EN', 'DE'],
-      quote: '"Le luxe réside dans les détails."'
+      description: t('agency.team.members.thomas.description'),
+      specialties: [t('agency.team.members.thomas.specialty1'), t('agency.team.members.thomas.specialty2'), t('agency.team.members.thomas.specialty3')],
+      experience: t('agency.team.members.thomas.experience'),
+      properties: t('agency.team.members.thomas.properties'),
+      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.de')],
+      quote: t('agency.team.members.thomas.quote')
     },
     {
       id: 4,
-      name: 'Marie-Claire de Villiers',
-      role: 'Directrice Artistique',
+      name: t('agency.team.members.marie.name'),
+      role: t('agency.team.members.marie.role'),
       image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: 'Architecte d\'intérieur et experte en mise en valeur patrimoniale',
-      specialties: ['Staging premium', 'Architecture d\'intérieur', 'Design contemporain'],
-      experience: '8 ans',
-      properties: '60+',
-      languages: ['FR', 'EN', 'RU'],
-      quote: '"L\'espace doit inspirer l\'émotion."'
+      description: t('agency.team.members.marie.description'),
+      specialties: [t('agency.team.members.marie.specialty1'), t('agency.team.members.marie.specialty2'), t('agency.team.members.marie.specialty3')],
+      experience: t('agency.team.members.marie.experience'),
+      properties: t('agency.team.members.marie.properties'),
+      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.ru')],
+      quote: t('agency.team.members.marie.quote')
     }
   ];
 
   const philosophyPrinciples = [
     {
-      title: 'Discrétion Absolue',
-      description: 'Vos projets immobiliers sont traités avec la plus stricte confidentialité et protection des données.',
+      title: t('agency.philosophy.principles.discretion.title'),
+      description: t('agency.philosophy.principles.discretion.description'),
       icon: ShieldCheckIcon
     },
     {
-      title: 'Excellence & Expertise',
-      description: 'Une connaissance approfondie des marchés immobiliers de prestige et des tendances du luxe.',
+      title: t('agency.philosophy.principles.excellence.title'),
+      description: t('agency.philosophy.principles.excellence.description'),
       icon: ChartBarIcon
     },
     {
-      title: 'Service Personnalisé',
-      description: 'Un accompagnement sur mesure pour chaque client, de la recherche à la transaction finale.',
+      title: t('agency.philosophy.principles.service.title'),
+      description: t('agency.philosophy.principles.service.description'),
       icon: UserGroupIcon
     },
     {
-      title: 'Réseau International',
-      description: 'Accès à un portefeuille de biens exclusifs worldwide et à une clientèle internationale exigeante.',
+      title: t('agency.philosophy.principles.network.title'),
+      description: t('agency.philosophy.principles.network.description'),
       icon: BuildingLibraryIcon
     }
   ];
@@ -205,7 +207,7 @@ const Agency: React.FC = () => {
               className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
             >
               <span className="flex items-center justify-center space-x-2">
-                <span>Rencontrer notre équipe</span>
+                <span>{t('agency.hero.meetTeamButton')}</span>
                 <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
               </span>
             </Link>
@@ -213,7 +215,7 @@ const Agency: React.FC = () => {
               to="/properties" 
               className="border-2 border-white text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] transition-all duration-500 text-center"
             >
-              <span>Découvrir nos biens</span>
+              <span>{t('agency.hero.discoverPropertiesButton')}</span>
             </Link>
           </div>
         </div>
@@ -227,11 +229,11 @@ const Agency: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 px-4">
-              Notre Équipe d'Experts
+              {t('agency.team.title')}
             </h2>
             <div className="h-px bg-gray-200 w-16 sm:w-24 mx-auto mb-3 sm:mb-4"></div>
             <p className="text-gray-600 max-w-3xl mx-auto text-sm sm:text-base lg:text-lg px-4">
-              Des professionnels passionnés, unis par l'excellence et dédiés à la réalisation de vos projets les plus ambitieux
+              {t('agency.team.subtitle')}
             </p>
           </div>
 
@@ -279,7 +281,7 @@ const Agency: React.FC = () => {
 
                   {/* Specialties */}
                   <div className="mb-6 sm:mb-8">
-                    <h4 className="font-inter uppercase text-gray-700 text-xs sm:text-sm mb-3 sm:mb-4 font-medium">Spécialités</h4>
+                    <h4 className="font-inter uppercase text-gray-700 text-xs sm:text-sm mb-3 sm:mb-4 font-medium">{t('agency.team.specialties')}</h4>
                     <div className="flex flex-wrap gap-2">
                       {teamMembers[activeTeamMember].specialties.map((specialty, index) => (
                         <span key={index} className="px-2 sm:px-3 py-1 bg-[#023927]/10 text-[#023927] font-medium text-xs sm:text-sm border border-[#023927]/20">
@@ -293,17 +295,17 @@ const Agency: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
                     <div className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
                       <div className="font-inter text-[#023927] text-lg sm:text-xl font-semibold">{teamMembers[activeTeamMember].experience}</div>
-                      <div className="text-gray-600 text-xs sm:text-sm">Expérience</div>
+                      <div className="text-gray-600 text-xs sm:text-sm">{t('agency.team.experience')}</div>
                     </div>
                     <div className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
                       <div className="font-inter text-[#023927] text-lg sm:text-xl font-semibold">{teamMembers[activeTeamMember].properties}</div>
-                      <div className="text-gray-600 text-xs sm:text-sm">Propriétés</div>
+                      <div className="text-gray-600 text-xs sm:text-sm">{t('agency.team.properties')}</div>
                     </div>
                   </div>
 
                   {/* Languages */}
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-                    <span className="font-inter uppercase text-gray-700 text-xs sm:text-sm font-medium">Langues:</span>
+                    <span className="font-inter uppercase text-gray-700 text-xs sm:text-sm font-medium">{t('agency.team.languages')}:</span>
                     <div className="flex flex-wrap gap-2">
                       {teamMembers[activeTeamMember].languages.map((lang, index) => (
                         <span key={index} className="px-2 sm:px-3 py-1 bg-[#023927] text-white text-xs sm:text-sm font-medium">
@@ -316,7 +318,7 @@ const Agency: React.FC = () => {
                   {/* Quote */}
                   <div className="pt-4 sm:pt-6 border-t border-gray-200">
                     <p className="text-gray-600 italic text-sm sm:text-base lg:text-lg leading-relaxed">
-                      "{teamMembers[activeTeamMember].quote}"
+                      {teamMembers[activeTeamMember].quote}
                     </p>
                   </div>
                 </div>
@@ -346,14 +348,11 @@ const Agency: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 px-4">
-              Notre Philosophie
+              {t('agency.philosophy.title')}
             </h2>
             <div className="h-px bg-gray-200 w-16 sm:w-24 mx-auto mb-4 sm:mb-6"></div>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed mb-6 sm:mb-8 lg:mb-12 px-4">
-              Fondée sur les principes d'excellence, de discrétion et d'expertise, 
-              M² Square Meter réinvente l'immobilier de prestige. Notre approche 
-              personnalisée et notre réseau international nous permettent de vous 
-              proposer les biens les plus exclusifs et les services les plus raffinés.
+              {t('agency.philosophy.description')}
             </p>
           </div>
           

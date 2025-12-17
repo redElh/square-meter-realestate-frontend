@@ -1,14 +1,12 @@
 // src/pages/Properties.tsx
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocalization } from '../contexts/LocalizationContext';
 import { 
-  MapPinIcon, 
-  ArrowsPointingOutIcon, 
   HeartIcon,
   CameraIcon,
   MagnifyingGlassIcon,
-  BuildingStorefrontIcon,
-  SparklesIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   HomeIcon,
@@ -17,8 +15,7 @@ import {
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 import {
-  HeartIcon as HeartIconSolid,
-  StarIcon
+  HeartIcon as HeartIconSolid
 } from '@heroicons/react/24/solid';
 
 interface Property {
@@ -37,21 +34,23 @@ interface Property {
   yearBuilt?: number;
   features?: string[];
   reference?: string;
+  titleKey?: string;
+  locationKey?: string;
 }
 
 const Properties: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useTranslation();
+  const { formatPrice: formatPriceFromContext } = useLocalization();
+  const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
-  const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(10000000);
   const [locationFilter, setLocationFilter] = useState('');
   const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
-  const [isHeroPlaying, setIsHeroPlaying] = useState(true);
+  const [isHeroPlaying] = useState(true);
 
   // Exclusive properties hero images
   const heroProperties = [
@@ -87,7 +86,7 @@ const Properties: React.FC = () => {
       }, 5000);
     }
     return () => clearInterval(slideInterval);
-  }, [isHeroPlaying]);
+  }, [isHeroPlaying, heroProperties.length]);
 
   const nextHeroSlide = () => {
     setActiveHeroSlide((prev) => (prev + 1) % heroProperties.length);
@@ -97,30 +96,33 @@ const Properties: React.FC = () => {
     setActiveHeroSlide((prev) => (prev - 1 + heroProperties.length) % heroProperties.length);
   };
 
-  // Premium property images from Pexels
-  const propertyImages = [
-    "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
-    "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800"
-  ];
+
 
   useEffect(() => {
     const fetchProperties = async () => {
       setLoading(true);
+      // Premium property images from Pexels
+      const propertyImages = [
+        "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ];
       // Enhanced mock data with real images - Updated to match reference
       const mockProperties: Property[] = [
         {
           id: 1,
           title: 'Appartement Haussmannien',
+          titleKey: 'properties.mock.titles.haussmannApartment',
           description: 'Exceptionnel appartement haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
           type: 'buy',
           price: 3595000,
           location: 'Paris 16ème',
+          locationKey: 'properties.mock.locations.paris16',
           surface: 216.96,
           bedrooms: 5,
           bathrooms: 4,
@@ -133,10 +135,12 @@ const Properties: React.FC = () => {
         {
           id: 2,
           title: 'Villa Méditerranéenne Exceptionnelle',
+          titleKey: 'properties.mock.titles.mediterraneanVilla',
           description: 'Magnifique villa contemporaine avec vue panoramique sur la Méditerranée, piscine à débordement et jardin paysager conçu par un architecte renommé.',
           type: 'buy',
           price: 3850000,
           location: 'Saint-Tropez',
+          locationKey: 'properties.mock.locations.saintTropez',
           surface: 420,
           bedrooms: 6,
           bathrooms: 5,
@@ -149,10 +153,12 @@ const Properties: React.FC = () => {
         {
           id: 3,
           title: 'Penthouse Prestige',
+          titleKey: 'properties.mock.titles.penthousePrestige',
           description: 'Exceptionnel penthouse haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
           type: 'rent',
           price: 28000,
           location: 'Paris 8ème',
+          locationKey: 'properties.mock.locations.paris8',
           surface: 220,
           bedrooms: 4,
           bathrooms: 3,
@@ -164,10 +170,12 @@ const Properties: React.FC = () => {
         {
           id: 4,
           title: 'Domaine Provençal Historique',
+          titleKey: 'properties.mock.titles.provencalEstate',
           description: 'Authentique mas provençal du 18ème siècle entièrement rénové avec piscine chauffée, oliveraie centenaire et dépendances.',
           type: 'buy',
           price: 5200000,
           location: 'Gordes',
+          locationKey: 'properties.mock.locations.gordes',
           surface: 650,
           bedrooms: 8,
           bathrooms: 6,
@@ -180,10 +188,12 @@ const Properties: React.FC = () => {
         {
           id: 5,
           title: 'Villa Contemporaine Côte d\'Azur',
+          titleKey: 'properties.mock.titles.contemporaryVilla',
           description: 'Architecture contemporaine signée, vue mer imprenable, piscine infinity et accès plage privée.',
           type: 'seasonal',
           price: 45000,
           location: 'Saint-Jean-Cap-Ferrat',
+          locationKey: 'properties.mock.locations.saintJeanCapFerrat',
           surface: 380,
           bedrooms: 5,
           bathrooms: 4,
@@ -196,10 +206,12 @@ const Properties: React.FC = () => {
         {
           id: 6,
           title: 'Appartement Design Marais',
+          titleKey: 'properties.mock.titles.maraisApartment',
           description: 'Loft design dans le Marais, hauteur sous plafond exceptionnelle, verrière et équipements haut de gamme.',
           type: 'rent',
           price: 12500,
           location: 'Paris 4ème',
+          locationKey: 'properties.mock.locations.paris4',
           surface: 95,
           bedrooms: 2,
           bathrooms: 2,
@@ -221,16 +233,17 @@ const Properties: React.FC = () => {
 
   const filteredProperties = properties.filter(property => {
     const typeMatch = filter === 'all' || property.type === filter;
-    const priceMatch = property.price >= minPrice && property.price <= maxPrice;
     const locationMatch = !locationFilter || 
-      property.location.toLowerCase().includes(locationFilter.toLowerCase());
+      property.location.toLowerCase().includes(locationFilter.toLowerCase()) ||
+      (property.locationKey && t(property.locationKey).toLowerCase().includes(locationFilter.toLowerCase()));
     const bedroomsMatch = !bedroomsFilter || property.bedrooms >= bedroomsFilter;
     const searchMatch = !searchQuery || 
-      property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (property.titleKey ? t(property.titleKey).toLowerCase().includes(searchQuery.toLowerCase()) : property.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
       property.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (property.locationKey && t(property.locationKey).toLowerCase().includes(searchQuery.toLowerCase())) ||
       property.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    return typeMatch && priceMatch && locationMatch && bedroomsMatch && searchMatch;
+    return typeMatch && locationMatch && bedroomsMatch && searchMatch;
   });
 
   const toggleFavorite = (propertyId: number) => {
@@ -242,10 +255,9 @@ const Properties: React.FC = () => {
   };
 
   const propertyTypes = [
-    { key: 'all', label: 'Tous les biens', count: properties.length },
-    { key: 'buy', label: 'À acheter', count: properties.filter(p => p.type === 'buy').length },
-    { key: 'rent', label: 'À louer', count: properties.filter(p => p.type === 'rent').length },
-    { key: 'seasonal', label: 'Saisonnière', count: properties.filter(p => p.type === 'seasonal').length },
+    { key: 'buy', label: t('properties.filters.buy'), count: properties.filter(p => p.type === 'buy').length },
+    { key: 'rent', label: t('properties.filters.rent'), count: properties.filter(p => p.type === 'rent').length },
+    { key: 'seasonal', label: t('properties.filters.vacation'), count: properties.filter(p => p.type === 'seasonal').length },
   ];
 
   const locations = Array.from(new Set(properties.map(p => p.location)));
@@ -253,8 +265,6 @@ const Properties: React.FC = () => {
 
   const resetFilters = () => {
     setFilter('all');
-    setMinPrice(0);
-    setMaxPrice(10000000);
     setLocationFilter('');
     setBedroomsFilter(null);
     setSearchQuery('');
@@ -262,35 +272,28 @@ const Properties: React.FC = () => {
 
   const activeFiltersCount = [
     filter !== 'all',
-    minPrice > 0 || maxPrice < 10000000,
     locationFilter !== '',
     bedroomsFilter !== null,
     searchQuery !== '',
   ].filter(Boolean).length;
 
-  const handlePriceChange = (type: 'min' | 'max', value: string) => {
-    const numValue = value === '' ? 0 : Number(value);
-    if (type === 'min') {
-      setMinPrice(Math.max(0, numValue));
-    } else {
-      setMaxPrice(Math.max(0, numValue));
-    }
-  };
+  
 
-  const formatPrice = (price: number, type?: string) => {
+  const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal') => {
+    // Convert property type to period type for formatPrice context function
     if (type === 'rent') {
-      return `${price.toLocaleString('fr-FR')} €/mois`;
+      return formatPriceFromContext(price, true); // true means rental/monthly
     }
     if (type === 'seasonal') {
-      return `${price.toLocaleString('fr-FR')} €/semaine`;
+      return `${price.toLocaleString('fr-FR')} €/semaine`; // Keep seasonal as is for now
     }
-    return `${price.toLocaleString('fr-FR')} €`;
+    return formatPriceFromContext(price, false); // false means sale
   };
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with Search Only - Updated with margin */}
-      <section className="relative h-[40vh] sm:h-[50vh] lg:h-[60vh] overflow-hidden bg-white">
+      <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroProperties.map((slide, index) => (
@@ -311,57 +314,57 @@ const Properties: React.FC = () => {
         </div>
 
         {/* Centered Search Bar - Moved down 40px */}
-        <div className="absolute inset-0 flex items-start justify-center z-20 px-4 sm:px-6 pt-20 sm:pt-32 lg:pt-40">
+        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 sm:px-6 mt-40">
           <div className="w-full max-w-4xl">
             <div className="relative">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher une propriété, une localisation, un bien spécifique..."
-                className="w-full mt-4 sm:mt-10 px-4 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-lg font-light transition-all duration-300"
+                placeholder={t('properties.search.placeholder')}
+                className="w-full px-4 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-lg font-light transition-all duration-300"
                 style={{ borderRadius: '0' }}
               />
-              <div className="absolute mt-2 sm:mt-5 left-4 sm:left-8 top-1/2 transform -translate-y-1/2">
+              <div className="absolute left-4 sm:left-8 top-1/2 transform -translate-y-1/2">
                 <MagnifyingGlassIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#023927]" />
               </div>
-              <div className="absolute right-2 sm:right-4 mt-2 sm:mt-5 top-1/2 transform -translate-y-1/2">
+              <div className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2">
                 <span className="text-xs sm:text-sm text-gray-500 font-medium px-2 sm:px-3 py-1 bg-white/80">
-                  {filteredProperties.length} résultats
+                  {filteredProperties.length} {t('properties.search.results')}
                 </span>
               </div>
             </div>
             
             {/* Search Suggestions - Updated hover effects */}
             <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3 justify-center">
-              <span className="text-white/90 text-xs sm:text-sm hidden sm:inline">Suggestions :</span>
+              <span className="text-white/90 text-xs sm:text-sm hidden sm:inline">{t('properties.search.suggestions')} :</span>
               <button 
                 onClick={() => setLocationFilter('Paris')}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
                 style={{ borderRadius: '0' }}
               >
-                Paris
+                {t('properties.search.paris')}
               </button>
               <button 
                 onClick={() => setBedroomsFilter(3)}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
                 style={{ borderRadius: '0' }}
               >
-                3+ chambres
+                {t('properties.search.bedrooms3Plus')}
               </button>
               <button 
                 onClick={() => setFilter('buy')}
                 className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
                 style={{ borderRadius: '0' }}
               >
-                À acheter
+                {t('properties.search.toBuy')}
               </button>
               <button 
-                onClick={() => setMaxPrice(5000000)}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
+                onClick={() => setFilter('seasonal')}
+                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white"
                 style={{ borderRadius: '0' }}
               >
-                Budget &lt; 5M€
+                {t('properties.search.vacation')}
               </button>
             </div>
           </div>
@@ -413,34 +416,34 @@ const Properties: React.FC = () => {
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 sm:mb-8">
               <div>
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-1 sm:mb-2">
-                  Exploration Sur Mesure
+                  {t('properties.search.tailoredExploration')}
                 </h2>
                 <p className="text-gray-500 text-sm sm:text-base">
-                  Affinez votre recherche avec nos filtres intelligents
+                  {t('properties.filters.title')}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-3 sm:mt-4 lg:mt-0">
                 {activeFiltersCount > 0 && (
                   <span className="bg-[#023927] text-white px-3 sm:px-5 py-1.5 sm:py-2.5 text-sm sm:text-base font-medium">
-                    {activeFiltersCount} filtre(s) actif(s)
+                    {activeFiltersCount} {t('properties.filters.activeFilters')}
                   </span>
                 )}
                 <button
                   onClick={resetFilters}
                   className="text-gray-600 hover:text-[#023927] hover:bg-white transition-all duration-500 text-sm sm:text-base border-2 border-gray-300 px-3 sm:px-5 py-1.5 sm:py-2.5 hover:border-[#023927]"
                 >
-                  Tout réinitialiser
+                  {t('properties.filters.resetAll')}
                 </button>
               </div>
             </div>
 
             {/* Property Type Tabs - Larger, no icons */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-6 sm:mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
               {propertyTypes.map(({ key, label, count }) => (
                 <button
                   key={key}
                   onClick={() => setFilter(key)}
-                  className={`p-3 sm:p-5 border-2 transition-all duration-500 text-sm sm:text-base font-medium ${
+                  className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium ${
                     filter === key
                       ? 'border-[#023927] bg-white text-[#023927]'
                       : 'border-gray-300 bg-white text-gray-700 hover:border-gray-900 hover:text-[#023927] hover:bg-white'
@@ -461,19 +464,18 @@ const Properties: React.FC = () => {
             </div>
 
             {/* Advanced Filters Grid - Larger */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
-              {/* Location */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
               <div>
                 <label className="block font-medium text-gray-900 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">
-                  Localisation
+                  {t('properties.filters.location')}
                 </label>
                 <select 
                   value={locationFilter}
                   onChange={(e) => setLocationFilter(e.target.value)}
-                  className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base hover:border-gray-900 transition-colors duration-300"
+                  className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base"
                   style={{ borderRadius: '0' }}
                 >
-                  <option value="">Toutes les localisations</option>
+                  <option value="">{t('properties.filters.allLocations')}</option>
                   {locations.map(location => (
                     <option key={location} value={location}>{location}</option>
                   ))}
@@ -483,63 +485,27 @@ const Properties: React.FC = () => {
               {/* Bedrooms */}
               <div>
                 <label className="block font-medium text-gray-900 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">
-                  Chambres
+                  {t('properties.filters.bedrooms')}
                 </label>
                 <select 
                   value={bedroomsFilter || ''}
                   onChange={(e) => setBedroomsFilter(e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base hover:border-gray-900 transition-colors duration-300"
+                  className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base"
                   style={{ borderRadius: '0' }}
                 >
-                  <option value="">Toutes</option>
+                  <option value="">{t('properties.filters.allBedrooms')}</option>
                   {bedroomOptions.map(beds => (
-                    <option key={beds} value={beds}>{beds}+ chambres</option>
+                    <option key={beds} value={beds}>{beds}+ {t('properties.filters.bedroomsLabel')}</option>
                   ))}
                 </select>
               </div>
 
-              {/* Min Price */}
-              <div>
-                <label className="block font-medium text-gray-900 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">
-                  Budget min
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={minPrice === 0 ? '' : minPrice}
-                    onChange={(e) => handlePriceChange('min', e.target.value)}
-                    placeholder="0"
-                    min="0"
-                    className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 pl-8 sm:pl-12 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base hover:border-gray-900 transition-colors duration-300"
-                    style={{ borderRadius: '0' }}
-                  />
-                  <span className="absolute left-3 sm:left-5 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm sm:text-lg">€</span>
-                </div>
-              </div>
-
-              {/* Max Price */}
-              <div>
-                <label className="block font-medium text-gray-900 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">
-                  Budget max
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={maxPrice === 10000000 ? '' : maxPrice}
-                    onChange={(e) => handlePriceChange('max', e.target.value)}
-                    placeholder="10,000,000"
-                    min="0"
-                    className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 pl-8 sm:pl-12 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base hover:border-gray-900 transition-colors duration-300"
-                    style={{ borderRadius: '0' }}
-                  />
-                  <span className="absolute left-3 sm:left-5 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm sm:text-lg">€</span>
-                </div>
-              </div>
+              {/* (Budget min/max removed per request) */}
 
               {/* Apply Button - Updated hover */}
-              <div className="flex items-end sm:col-span-2 lg:col-span-1">
+              <div className="flex items-end">
                 <button className="w-full border-2 border-gray-900 text-gray-900 py-2.5 sm:py-3.5 text-sm sm:text-base font-medium hover:text-[#023927] hover:bg-white transition-all duration-500 hover:border-[#023927]">
-                  Appliquer les filtres
+                  {t('properties.filters.apply')}
                 </button>
               </div>
             </div>
@@ -554,16 +520,16 @@ const Properties: React.FC = () => {
           <div className="mb-6 sm:mb-12">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
               <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
-                {filteredProperties.length} Biens disponibles
+                {filteredProperties.length} {t('properties.listing.available')}
               </h3>
               <div className="flex items-center space-x-2 sm:space-x-3">
-                <span className="text-gray-500 text-sm sm:text-base">Trier par :</span>
+                <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
                 <select className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]">
-                  <option>Pertinence</option>
-                  <option>Prix croissant</option>
-                  <option>Prix décroissant</option>
-                  <option>Surface</option>
-                  <option>Plus récents</option>
+                  <option>{t('properties.listing.relevance')}</option>
+                  <option>{t('properties.listing.priceAsc')}</option>
+                  <option>{t('properties.listing.priceDesc')}</option>
+                  <option>{t('properties.listing.surface')}</option>
+                  <option>{t('properties.listing.newest')}</option>
                 </select>
               </div>
             </div>
@@ -576,7 +542,7 @@ const Properties: React.FC = () => {
               <div className="relative">
                 <div className="animate-spin h-16 w-16 sm:h-24 sm:w-24 border-2 border-[#023927] border-t-transparent"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-[#023927] font-light text-sm sm:text-lg">Chargement...</span>
+                  <span className="text-[#023927] font-light text-sm sm:text-lg">{t('properties.listing.loading')}</span>
                 </div>
               </div>
             </div>
@@ -603,12 +569,12 @@ const Properties: React.FC = () => {
                         <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-1.5 sm:gap-2">
                           {property.featured && (
                             <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
-                              EXCLUSIF
+                              {t('properties.listing.exclusive')}
                             </span>
                           )}
                           {property.confidential && (
                             <span className="bg-black/90 text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
-                              CONFIDENTIEL
+                              {t('properties.listing.confidential')}
                             </span>
                           )}
                         </div>
@@ -628,7 +594,7 @@ const Properties: React.FC = () => {
                         {/* Image Counter */}
                         <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm">
                           <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span className="text-xs sm:text-sm">{property.images.length} photos</span>
+                          <span className="text-xs sm:text-sm">{property.images.length} {t('properties.listing.photos')}</span>
                         </div>
                       </div>
                       
@@ -669,11 +635,11 @@ const Properties: React.FC = () => {
                               : property.type === 'rent'
                               ? 'bg-green-50 text-green-800 border border-green-200'
                               : 'bg-purple-50 text-purple-800 border border-purple-200'
-                          }`}>{property.type === 'buy' ? 'À VENDRE' : property.type === 'rent' ? 'À LOUER' : 'SAISONNIER'}</span>
+                          }`}>{property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
 
-                          <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
+                          <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.titleKey ? t(property.titleKey) : property.title}</h3>
 
-                          <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
+                          <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.locationKey ? t(property.locationKey) : property.location}</span>
                         </div>
                       </div>
 
@@ -690,23 +656,17 @@ const Properties: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPrice(property.price, property.type)}</div>
+                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPropertyPrice(property.price, property.type)}</div>
                         <Link
                           to={`/properties/${property.id}`}
                           className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
                         >
-                          Voir
+                          {t('properties.listing.view')}
                         </Link>
                       </div>
                     </div>
                   </div>
                   
-                  {/* Property ID Badge - Subtle */}
-                  <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-white border border-gray-200 px-4 py-1 text-gray-400 text-xs font-mono">
-                      ID: {property.id.toString().padStart(4, '0')}
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>
@@ -717,24 +677,23 @@ const Properties: React.FC = () => {
             <div className="text-center py-16 sm:py-32 bg-gray-50 border-2 border-gray-200 max-w-4xl mx-auto">
               <div className="text-5xl sm:text-8xl mb-6 sm:mb-10 opacity-20">🏠</div>
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter text-gray-900 mb-4 sm:mb-8 font-light px-4">
-                Aucune propriété ne correspond à votre recherche
+                {t('properties.empty.title')}
               </h3>
               <p className="text-gray-600 mb-8 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg px-4">
-                Notre collection évolue constamment. Élargissez vos critères de recherche 
-                ou contactez-nous pour une recherche personnalisée.
+                {t('properties.empty.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4">
                 <button
                   onClick={resetFilters}
                   className="border-2 border-gray-900 text-gray-900 px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500"
                 >
-                  Élargir la recherche
+                  {t('properties.empty.expandSearch')}
                 </button>
                 <Link
                   to="/contact"
                   className="bg-[#023927] text-white px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
                 >
-                  Nous contacter
+                  {t('properties.empty.contactUs')}
                 </Link>
               </div>
             </div>
@@ -744,7 +703,7 @@ const Properties: React.FC = () => {
           {filteredProperties.length > 0 && (
             <div className="text-center mt-8 sm:mt-16">
               <button className="border-2 border-gray-900 text-gray-900 px-8 sm:px-14 py-3 sm:py-5 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500 focus:outline-none">
-                <span>Voir plus de biens</span>
+                <span>{t('properties.listing.loadMore')}</span>
               </button>
             </div>
           )}

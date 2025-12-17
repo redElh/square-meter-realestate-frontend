@@ -1,6 +1,7 @@
 // src/components/Layout/Footer.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   BuildingStorefrontIcon,
   PhoneIcon,
@@ -22,6 +23,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const [isVisible, setIsVisible] = useState(false);
 
@@ -48,21 +50,21 @@ const Footer: React.FC = () => {
 
   const navigation = {
     properties: [
-      { path: '/properties', label: 'Toutes les propriétés', Icon: BuildingStorefrontIcon },
-      { path: '/confidential', label: 'Sélection confidentielle', Icon: ShieldCheckIcon },
-      { path: '/investment', label: 'Investissement', Icon: ChartBarIcon }
+      { path: '/properties', label: t('footer.navigation.allProperties'), Icon: BuildingStorefrontIcon },
+      { path: '/confidential', label: t('footer.navigation.confidentialSelection'), Icon: ShieldCheckIcon },
+      { path: '/investment', label: t('footer.navigation.investment'), Icon: ChartBarIcon }
     ],
     clients: [
-      { path: '/owners', label: 'Propriétaires', Icon: UserGroupIcon },
-      { path: '/selling-multistep', label: 'Vendre votre bien', Icon: BuildingStorefrontIcon },
-      { path: '/traveler', label: 'Espace Voyageurs', Icon: PaperAirplaneIcon },
+      { path: '/owners', label: t('footer.navigation.owners'), Icon: UserGroupIcon },
+      { path: '/selling-multistep', label: t('footer.navigation.sellYourProperty'), Icon: BuildingStorefrontIcon },
+      { path: '/traveler', label: t('footer.navigation.travelerSpace'), Icon: PaperAirplaneIcon },
       
     ],
     company: [
-      { path: '/agency', label: "L'agence", Icon: BuildingOfficeIcon },
-      { path: '/mag', label: 'Le Mag', Icon: NewspaperIcon },
-      { path: '/careers', label: 'Carrières', Icon: UserGroupIcon },
-      { path: '/contact', label: 'Contact', Icon: PhoneIcon }
+      { path: '/agency', label: t('footer.navigation.agency'), Icon: BuildingOfficeIcon },
+      { path: '/mag', label: t('footer.navigation.magazine'), Icon: NewspaperIcon },
+      { path: '/careers', label: t('footer.navigation.careers'), Icon: UserGroupIcon },
+      { path: '/contact', label: t('footer.navigation.contact'), Icon: PhoneIcon }
     ]
   };
 
@@ -71,25 +73,25 @@ const Footer: React.FC = () => {
       name: 'Facebook', 
       href: '#', 
       Icon: ChatBubbleLeftRightIcon,
-      label: 'Rejoignez notre communauté'
+      label: t('footer.social.facebook')
     },
     { 
       name: 'Instagram', 
       href: '#', 
       Icon: CameraIcon,
-      label: 'Découvrez nos propriétés'
+      label: t('footer.social.instagram')
     },
     { 
       name: 'LinkedIn', 
       href: '#', 
       Icon: BuildingLibraryIcon,
-      label: 'Connectons professionnellement'
+      label: t('footer.social.linkedin')
     },
     { 
       name: 'Pinterest', 
       href: '#', 
       Icon: HeartIcon,
-      label: 'Inspirations et tendances'
+      label: t('footer.social.pinterest')
     }
   ];
 
@@ -143,14 +145,13 @@ const Footer: React.FC = () => {
             </Link>
             
             <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-8 max-w-md leading-relaxed font-light">
-              L'excellence immobilière réinventée. Nous proposons des biens d'exception 
-              pour une clientèle exigeante en recherche de prestige et d'authenticité.
+              {t('footer.brand.description')}
             </p>
             
             {/* Social Links - Minimal design */}
             <div className="space-y-3 sm:space-y-4">
               <p className="text-gray-500 text-xs sm:text-sm font-medium tracking-wide">
-                SUIVEZ L'EXCELLENCE
+                {t('footer.social.title')}
               </p>
               <div className="flex space-x-2 sm:space-x-3">
                 {socialLinks.map((social) => (
@@ -184,7 +185,7 @@ const Footer: React.FC = () => {
                 <div className="p-1 sm:p-1.5 bg-gray-100 rounded-lg border border-gray-200">
                   <BuildingStorefrontIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                 </div>
-                <span>PROPRIÉTÉS</span>
+                <span>{t('footer.sections.properties')}</span>
               </h4>
               <ul className="space-y-1.5 sm:space-y-2">
                 {navigation.properties.map((item, index) => {
@@ -210,7 +211,7 @@ const Footer: React.FC = () => {
                 <div className="p-1 sm:p-1.5 bg-gray-100 rounded-lg border border-gray-200">
                   <UserGroupIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                 </div>
-                <span>CLIENTS</span>
+                <span>{t('footer.sections.clients')}</span>
               </h4>
               <ul className="space-y-1.5 sm:space-y-2">
                 {navigation.clients.map((item, index) => {
@@ -237,7 +238,7 @@ const Footer: React.FC = () => {
                 <div className="p-1 sm:p-1.5 bg-gray-100 rounded-lg border border-gray-200">
                   <PaperAirplaneIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                 </div>
-                <span>CONTACT</span>
+                <span>{t('footer.sections.contact')}</span>
               </h4>
               <address className="not-italic space-y-3 sm:space-y-4">
                 <div className="flex items-start space-x-2 sm:space-x-3 group">
@@ -245,8 +246,8 @@ const Footer: React.FC = () => {
                     <MapPinIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                   </div>
                   <div className="text-gray-600 text-xs sm:text-sm">
-                    <p className="font-medium">123 Avenue de Luxe</p>
-                    <p className="text-gray-500">75008 Paris, France</p>
+                    <p className="font-medium">{t('footer.contactInfo.address')}</p>
+                    <p className="text-gray-500">{t('footer.contactInfo.city')}</p>
                   </div>
                 </div>
                 
@@ -254,8 +255,8 @@ const Footer: React.FC = () => {
                   <div className="p-1 sm:p-1.5 bg-gray-100 rounded-lg border border-gray-200">
                     <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                   </div>
-                  <a href="tel:+33123456789" className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium text-xs sm:text-sm">
-                    +33 1 23 45 67 89
+                  <a href={`tel:${t('footer.contactInfo.phone')}`} className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium text-xs sm:text-sm">
+                    {t('footer.contactInfo.phone')}
                   </a>
                 </div>
                 
@@ -263,8 +264,8 @@ const Footer: React.FC = () => {
                   <div className="p-1 sm:p-1.5 bg-gray-100 rounded-lg border border-gray-200">
                     <EnvelopeIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                   </div>
-                  <a href="mailto:contact@squaremeter.com" className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium text-xs sm:text-sm">
-                    contact@squaremeter.com
+                  <a href={`mailto:${t('footer.contactInfo.email')}`} className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium text-xs sm:text-sm">
+                    {t('footer.contactInfo.email')}
                   </a>
                 </div>
               </address>
@@ -274,16 +275,16 @@ const Footer: React.FC = () => {
             <div className="pt-3 sm:pt-4">
               <div className="flex items-center space-x-2 mb-2 sm:mb-3">
                 <StarIcon className="w-3 h-3 text-gray-500" />
-                <p className="text-[10px] sm:text-xs text-gray-600 font-semibold tracking-wide">NEWSLETTER EXCLUSIVE</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 font-semibold tracking-wide">{t('footer.newsletter.title')}</p>
               </div>
               <div className="flex space-x-2">
                 <input 
                   type="email" 
-                  placeholder="Votre email"
+                  placeholder={t('footer.newsletter.placeholder')}
                   className="flex-1 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white border border-gray-300 rounded-lg text-gray-700 placeholder-gray-400 text-xs sm:text-sm focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-300 transition-all duration-300"
                 />
                 <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transform hover:scale-105 transition-all duration-300 flex items-center space-x-1 text-xs sm:text-sm">
-                  <span>✓</span>
+                  <span>{t('footer.newsletter.subscribe')}</span>
                 </button>
               </div>
             </div>
@@ -300,7 +301,7 @@ const Footer: React.FC = () => {
               <div className="p-0.5 sm:p-1 bg-gray-100 rounded border border-gray-200">
                 <ShieldCheckIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gray-600" />
               </div>
-              <span>© {currentYear} Square Meter. Tous droits réservés.</span>
+              <span>{t('footer.bottom.copyright', { year: currentYear })}</span>
             </p>
             
             <div className="flex space-x-3 sm:space-x-4">
@@ -309,14 +310,14 @@ const Footer: React.FC = () => {
                 className="text-gray-500 hover:text-gray-800 transition-all duration-300 flex items-center space-x-1 group text-xs sm:text-sm font-medium"
               >
                 <DocumentTextIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                <span>Confidentialité</span>
+                <span>{t('footer.bottom.privacy')}</span>
               </Link>
               <Link 
                 to="/terms" 
                 className="text-gray-500 hover:text-gray-800 transition-all duration-300 flex items-center space-x-1 group text-xs sm:text-sm font-medium"
               >
                 <DocumentTextIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                <span>Conditions</span>
+                <span>{t('footer.bottom.terms')}</span>
               </Link>
             </div>
           </div>

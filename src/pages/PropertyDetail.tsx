@@ -1,6 +1,7 @@
 // src/pages/PropertyDetail.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   MapPinIcon, 
   ArrowsPointingOutIcon, 
@@ -24,6 +25,7 @@ import {
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams();
+  const { t } = useTranslation();
   const [activeImage, setActiveImage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -40,17 +42,10 @@ const PropertyDetail: React.FC = () => {
 
   const property = {
     id: 1,
-    title: 'Villa Les Oliviers',
-    description: `Exceptionnelle villa contemporaine nichée au cœur d'un domaine privé de 2 hectares, 
-                  offrant une vue panoramique imprenable sur la Méditerranée. Cette propriété d'exception 
-                  allie élégance architecturale et technologies de pointe dans un écrin de verdure préservé.
-                  
-                  Conçue par l'architecte renommé Jean-Michel Durand, cette villa de 250 m² déploie ses 
-                  volumes épurés autour d'un patio central arboré. Les matériaux nobles - pierre de Bourgogne, 
-                  chêne massif, laiton vieilli - dialoguent avec les larges baies vitrées qui ouvrent 
-                  l'espace sur le jardin paysager et la piscine à débordement.`,
+    title: t('propertyDetail.mock.property.title'),
+    description: t('propertyDetail.mock.property.description'),
     price: 3850000,
-    location: 'Saint-Tropez, Côte d\'Azur',
+    location: t('propertyDetail.mock.property.location'),
     surface: 420,
     land: 20000,
     bedrooms: 6,
@@ -58,34 +53,12 @@ const PropertyDetail: React.FC = () => {
     yearBuilt: 2020,
     type: 'Villa Contemporaine',
     status: 'Exclusivité',
-    features: [
-      'Piscine à débordement chauffée',
-      'Jardin paysager avec oliveraie',
-      'Parking sécurisé 6 voitures',
-      'Domaine clos et sécurisé',
-      'Vue mer panoramique 180°',
-      'Cheminée contemporaine',
-      'Cuisine Bulthaup équipée',
-      'Salle de sport privative',
-      'Home cinéma Dolby Atmos',
-      'Domotique complète',
-      'Chauffage au sol',
-      'Ventilation double flux',
-      'Panneaux solaires',
-      'Cave à vin climatisée',
-      'Garage 3 voitures'
-    ],
-    amenities: [
-      'Plage privée à 5 min',
-      'Golf 18 trous à 10 min',
-      'Marina de prestige',
-      'Restaurants étoilés',
-      'Helipad à proximité'
-    ],
+    features: t('propertyDetail.mock.features', { returnObjects: true }) as string[],
+    amenities: t('propertyDetail.mock.amenities', { returnObjects: true }) as string[],
     images: propertyImages,
     agent: {
-      name: 'Sophie Laurent',
-      title: 'Directrice des Ventes',
+      name: t('propertyDetail.mock.property.agentName'),
+      title: t('propertyDetail.mock.property.agentTitle'),
       phone: '+33 1 23 45 67 89',
       email: 's.laurent@squaremeter.com',
       image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400',
@@ -94,11 +67,13 @@ const PropertyDetail: React.FC = () => {
     }
   };
 
+  const similarPropertiesData = t('propertyDetail.mock.similarProperties', { returnObjects: true }) as Array<{title: string; location: string}>;
+  
   const similarProperties = [
     {
       id: 2,
-      title: 'Villa Baie des Anges',
-      location: 'Nice',
+      title: similarPropertiesData[0].title,
+      location: similarPropertiesData[0].location,
       price: 3200000,
       surface: 380,
       bedrooms: 5,
@@ -106,8 +81,8 @@ const PropertyDetail: React.FC = () => {
     },
     {
       id: 3,
-      title: 'Domaine Provençal',
-      location: 'Gordes',
+      title: similarPropertiesData[1].title,
+      location: similarPropertiesData[1].location,
       price: 4500000,
       surface: 550,
       bedrooms: 7,
@@ -115,8 +90,8 @@ const PropertyDetail: React.FC = () => {
     },
     {
       id: 4,
-      title: 'Penthouse Monte-Carlo',
-      location: 'Monaco',
+      title: similarPropertiesData[2].title,
+      location: similarPropertiesData[2].location,
       price: 5200000,
       surface: 280,
       bedrooms: 4,
@@ -160,7 +135,7 @@ const PropertyDetail: React.FC = () => {
             >
               <img
                 src={image}
-                alt={`${property.title} - Vue ${index + 1}`}
+                alt={`${t('propertyDetail.mock.property.title')} - Vue ${index + 1}`}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -209,18 +184,18 @@ const PropertyDetail: React.FC = () => {
               {/* Status Badge - Green theme */}
               <div className="inline-block mb-2 sm:mb-4">
                 <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider">
-                  EXCLUSIF
+                  {t('propertyDetail.exclusive')}
                 </span>
               </div>
 
               <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-2 sm:mb-4 leading-tight">
-                {property.title}
+                {t('propertyDetail.mock.property.title')}
               </h1>
               
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-white">
                 <div className="flex items-center space-x-2">
                   <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="font-inter text-sm sm:text-base">{property.location}</span>
+                  <span className="font-inter text-sm sm:text-base">{t('propertyDetail.mock.property.location')}</span>
                 </div>
                 <div className="hidden sm:block w-px h-6 bg-white/30"></div>
                 <div className="text-xl sm:text-2xl lg:text-3xl font-serif font-light text-white">
@@ -240,11 +215,11 @@ const PropertyDetail: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 text-center items-center">
             {[
-              { value: `${property.surface} m²`, label: 'Surface' },
-              { value: `${property.land} m²`, label: 'Terrain' },
-              { value: property.bedrooms, label: 'Chambres' },
-              { value: property.bathrooms, label: 'Salles de bain' },
-              { value: property.yearBuilt, label: 'Année' }
+              { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
+              { value: `${property.land} m²`, label: t('propertyDetail.stats.land') },
+              { value: property.bedrooms, label: t('propertyDetail.stats.bedrooms') },
+              { value: property.bathrooms, label: t('propertyDetail.stats.bathrooms') },
+              { value: property.yearBuilt, label: t('propertyDetail.stats.year') }
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-base sm:text-lg lg:text-xl font-inter font-medium mb-1">
@@ -267,19 +242,19 @@ const PropertyDetail: React.FC = () => {
               {/* Main Content */}
               <div className="lg:col-span-2">
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-8 pb-3 sm:pb-4 border-b border-gray-200">
-                  Description Exclusive
+                  {t('propertyDetail.sections.description')}
                 </h2>
                 
                 <div className="mb-8 sm:mb-12">
                   <p className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed mb-4 sm:mb-8">
-                    {property.description}
+                    {t('propertyDetail.mock.property.description')}
                   </p>
                 </div>
 
                 {/* Features Grid */}
                 <div className="mb-8 sm:mb-12">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
-                    Équipements & Prestations
+                    {t('propertyDetail.sections.features')}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
                     {visibleFeatures.map((feature, index) => (
@@ -294,7 +269,7 @@ const PropertyDetail: React.FC = () => {
                       onClick={() => setShowAllFeatures(!showAllFeatures)}
                       className="mt-4 sm:mt-6 text-[#023927] hover:text-[#023927]/80 font-inter text-xs sm:text-sm transition-colors duration-300 border-b border-[#023927] pb-1"
                     >
-                      {showAllFeatures ? 'Voir moins' : `Voir les ${property.features.length - 8} équipements supplémentaires`}
+                      {showAllFeatures ? t('propertyDetail.actions.showLess') : t('propertyDetail.actions.showMore', { count: property.features.length - 8 })}
                     </button>
                   )}
                 </div>
@@ -302,7 +277,7 @@ const PropertyDetail: React.FC = () => {
                 {/* Amenities */}
                 <div>
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
-                    Environnement & Prestations
+                    {t('propertyDetail.sections.environment')}
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {property.amenities.map((amenity, index) => (
@@ -318,7 +293,7 @@ const PropertyDetail: React.FC = () => {
               <div className="lg:col-span-1">
                 <div className="bg-white border-2 border-gray-200 p-4 sm:p-6 lg:p-8 lg:sticky lg:top-8">
                   <h3 className="font-inter text-gray-900 text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 text-center pb-2 sm:pb-3 border-b border-gray-200">
-                    Visite Exclusive
+                    {t('propertyDetail.contact.title')}
                   </h3>
                   
                   <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
@@ -328,7 +303,7 @@ const PropertyDetail: React.FC = () => {
                     >
                       <span className="flex items-center justify-center space-x-2">
                         <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>Visite Privée</span>
+                        <span>{t('propertyDetail.actions.privateVisit')}</span>
                       </span>
                     </Link>
                     <Link
@@ -337,7 +312,7 @@ const PropertyDetail: React.FC = () => {
                     >
                       <span className="flex items-center justify-center space-x-2">
                         <DocumentTextIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>Dossier Complet</span>
+                        <span>{t('propertyDetail.actions.completeFile')}</span>
                       </span>
                     </Link>
                   </div>
@@ -345,7 +320,7 @@ const PropertyDetail: React.FC = () => {
                   {/* Agent Profile */}
                   <div className="border-t border-gray-200 pt-4 sm:pt-6">
                     <h4 className="font-inter text-gray-900 text-xs sm:text-sm mb-3 sm:mb-4 text-center uppercase tracking-wider">
-                      Votre Conseiller Dédié
+                      {t('propertyDetail.contact.advisor')}
                     </h4>
                     <div className="text-center">
                       <div className="mb-3 sm:mb-4">
@@ -356,14 +331,14 @@ const PropertyDetail: React.FC = () => {
                         />
                       </div>
                       <div className="font-inter text-gray-900 text-base sm:text-lg mb-1">
-                        {property.agent.name}
+                        {t('propertyDetail.mock.property.agentName')}
                       </div>
                       <div className="text-[#023927] text-xs sm:text-sm mb-2 sm:mb-3">
-                        {property.agent.title}
+                        {t('propertyDetail.mock.property.agentTitle')}
                       </div>
                       <div className="text-[10px] sm:text-xs text-gray-600 space-y-1 mb-3 sm:mb-4">
-                        <div>{property.agent.experience} d'expérience</div>
-                        <div>{property.agent.properties} propriétés vendues</div>
+                        <div>{property.agent.experience} {t('propertyDetail.contact.experience')}</div>
+                        <div>{property.agent.properties} {t('propertyDetail.contact.propertiesSold')}</div>
                       </div>
                       <div className="space-y-1.5 sm:space-y-2">
                         <a href={`tel:${property.agent.phone}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm">
@@ -389,10 +364,10 @@ const PropertyDetail: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="mb-6 sm:mb-12">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-2 sm:mb-4">
-              Propriétés Similaires
+              {t('propertyDetail.similar.title')}
             </h2>
             <p className="text-gray-600 text-sm sm:text-base">
-              Découvrez d'autres propriétés d'exception qui pourraient vous séduire
+              {t('propertyDetail.similar.subtitle')}
             </p>
           </div>
           
@@ -411,7 +386,7 @@ const PropertyDetail: React.FC = () => {
                   />
                   <div className="absolute top-2 sm:top-4 right-2 sm:right-4">
                     <span className="bg-[#023927] text-white px-2 sm:px-3 py-1 font-inter uppercase text-[10px] sm:text-xs tracking-wide">
-                      EXCLUSIF
+                      {t('propertyDetail.exclusive')}
                     </span>
                   </div>
                 </div>

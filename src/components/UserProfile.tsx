@@ -1,5 +1,6 @@
 // src/components/UserProfile.tsx
 import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   CameraIcon,
   PencilIcon,
@@ -26,6 +27,7 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -74,16 +76,16 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
   });
 
   const activityStats = [
-    { label: 'Vues', value: 47 },
-    { label: 'Favoris', value: 12 },
-    { label: 'Contacts', value: 8 },
-    { label: 'Rendez-vous', value: 6 }
+    { label: t('userProfile.personal.views'), value: 47 },
+    { label: t('userProfile.personal.favorites'), value: 12 },
+    { label: t('userProfile.personal.contacts'), value: 8 },
+    { label: t('userProfile.personal.appointments'), value: 6 }
   ];
 
   const documents = [
-    { name: 'Pièce d\'identité', type: 'Vérification', date: '2024-01-10', status: 'Vérifié' },
-    { name: 'Justificatif de domicile', type: 'Administratif', date: '2024-01-08', status: 'En attente' },
-    { name: 'Compromis de vente', type: 'Contrat', date: '2024-01-05', status: 'Signé' }
+    { name: t('userProfile.documents.sampleDocs.id'), type: t('userProfile.documents.types.verification'), date: '2024-01-10', status: t('userProfile.documents.statuses.verified') },
+    { name: t('userProfile.documents.sampleDocs.proofOfAddress'), type: t('userProfile.documents.types.administrative'), date: '2024-01-08', status: t('userProfile.documents.statuses.pending') },
+    { name: t('userProfile.documents.sampleDocs.salesAgreement'), type: t('userProfile.documents.types.contract'), date: '2024-01-05', status: t('userProfile.documents.statuses.signed') }
   ];
 
   const handleSave = () => {
@@ -130,7 +132,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-center justify-center min-h-screen px-2 sm:px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Background Overlay */}
         <div 
           className="fixed inset-0 transition-opacity bg-black bg-opacity-60 backdrop-blur-sm"
@@ -138,36 +140,36 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
         ></div>
 
         {/* Modal Panel */}
-        <div className="relative z-50 inline-block w-full max-w-6xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl">
+        <div className="relative z-50 inline-block w-full max-w-6xl my-4 sm:my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl">
           {/* Close Button */}
           <button
-            aria-label="Fermer le profil"
+            aria-label={t('userProfile.closeButton')}
             onClick={onClose}
-            className="absolute top-4 right-4 z-60 w-12 h-12 bg-white flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors duration-200"
+            className="absolute top-2 right-2 sm:top-4 sm:right-4 z-60 w-10 h-10 sm:w-12 sm:h-12 bg-white flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors duration-200"
           >
-            <XMarkIcon className="w-6 h-6 text-gray-700" />
+            <XMarkIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
           </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 max-h-[90vh] bg-white overflow-hidden border border-gray-200 shadow-2xl">
+          <div className="grid grid-cols-1 lg:grid-cols-4 h-auto lg:max-h-[90vh] bg-white overflow-hidden border border-gray-200 shadow-2xl">
             
             {/* Sidebar */}
-            <div className="lg:col-span-1 overflow-x-hidden bg-emerald-600 text-white p-8 relative max-h-[90vh] pr-4">
+            <div className="lg:col-span-1 overflow-y-auto bg-emerald-600 text-white p-4 sm:p-6 lg:p-8 relative lg:max-h-[90vh]">
               <div className="relative z-10">
                 {/* User Avatar & Basic Info */}
-                <div className="text-center mb-8">
-                  <div className="relative inline-block mb-4 group">
+                <div className="text-center mb-4 sm:mb-6 lg:mb-8">
+                  <div className="relative inline-block mb-3 sm:mb-4 group">
                     <div className="relative">
                       <img
                         src={formData.personal.avatar}
                         alt={`${formData.personal.firstName} ${formData.personal.lastName}`}
-                        className="w-32 h-32 object-cover border-4 border-white shadow-lg mx-auto"
+                        className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 object-cover border-4 border-white shadow-lg mx-auto"
                       />
                       {isEditing && (
                         <button
                           onClick={triggerFileInput}
-                          className="absolute bottom-2 right-2 w-10 h-10 bg-white flex items-center justify-center hover:bg-gray-100 transition-all duration-300 transform hover:scale-110 shadow-lg"
+                          className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 w-8 h-8 sm:w-10 sm:h-10 bg-white flex items-center justify-center hover:bg-gray-100 transition-all duration-300 transform hover:scale-110 shadow-lg"
                         >
-                          <CameraIcon className="w-5 h-5 text-emerald-600" />
+                          <CameraIcon className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
                         </button>
                       )}
                       <input
@@ -180,45 +182,45 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                     </div>
                   </div>
                   
-                  <h2 className="text-2xl font-bold mb-1">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-1">
                     {formData.personal.firstName} {formData.personal.lastName}
                   </h2>
-                  <p className="text-emerald-100 text-sm">
+                  <p className="text-emerald-100 text-xs sm:text-sm truncate px-2">
                     {formData.personal.email}
                   </p>
                 </div>
 
                 {/* Navigation */}
-                <nav className="space-y-2">
+                <nav className="space-y-1 sm:space-y-2">
                   {[
-                    { id: 'personal', label: 'Informations Personnelles', icon: UserCircleIcon },
-                    { id: 'professional', label: 'Profil Professionnel', icon: BuildingLibraryIcon },
-                    { id: 'preferences', label: 'Préférences', icon: BellIcon },
-                    { id: 'security', label: 'Sécurité', icon: LockClosedIcon },
-                    { id: 'documents', label: 'Documents', icon: DocumentTextIcon },
+                    { id: 'personal', label: t('userProfile.tabs.personal'), icon: UserCircleIcon },
+                    { id: 'professional', label: t('userProfile.tabs.professional'), icon: BuildingLibraryIcon },
+                    { id: 'preferences', label: t('userProfile.tabs.preferences'), icon: BellIcon },
+                    { id: 'security', label: t('userProfile.tabs.security'), icon: LockClosedIcon },
+                    { id: 'documents', label: t('userProfile.tabs.documents'), icon: DocumentTextIcon },
                   ].map((item) => {
                     const IconComponent = item.icon;
                     return (
                       <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`w-full text-left flex items-center gap-3 px-4 py-3 font-medium transition-all ${
+                        className={`w-full text-left flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all ${
                           activeTab === item.id
                             ? 'bg-white text-emerald-600'
                             : 'text-white hover:bg-emerald-700'
                         }`}
                       >
-                        <IconComponent className="w-5 h-5" />
-                        <span className="text-sm">{item.label}</span>
+                        <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="text-xs sm:text-sm">{item.label}</span>
                       </button>
                     );
                   })}
                 </nav>
 
                 {/* Profile Completion */}
-                <div className="mt-8 p-4 bg-emerald-700 border border-emerald-500">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span>Profil complété</span>
+                <div className="mt-4 sm:mt-6 lg:mt-8 p-3 sm:p-4 bg-emerald-700 border border-emerald-500">
+                  <div className="flex justify-between text-xs sm:text-sm mb-2">
+                    <span>{t('userProfile.profileCompletion')}</span>
                     <span className="font-semibold">85%</span>
                   </div>
                   <div className="w-full bg-emerald-800 h-2">
@@ -234,67 +236,67 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
 
             {/* Main Content */}
             <div className="lg:col-span-3 bg-gray-50 flex flex-col">
-              <div className="flex justify-between items-center p-8 pb-6 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 sm:p-6 lg:p-8 pb-4 sm:pb-6 border-b border-gray-200">
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                    {activeTab === 'personal' && 'Informations Personnelles'}
-                    {activeTab === 'professional' && 'Profil Professionnel'}
-                    {activeTab === 'preferences' && 'Préférences'}
-                    {activeTab === 'security' && 'Sécurité'}
-                    {activeTab === 'documents' && 'Documents'}
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-1 sm:mb-2">
+                    {activeTab === 'personal' && t('userProfile.headers.personal')}
+                    {activeTab === 'professional' && t('userProfile.headers.professional')}
+                    {activeTab === 'preferences' && t('userProfile.headers.preferences')}
+                    {activeTab === 'security' && t('userProfile.headers.security')}
+                    {activeTab === 'documents' && t('userProfile.headers.documents')}
                   </h1>
-                  <p className="text-gray-600">
-                    {activeTab === 'personal' && 'Gérez vos informations personnelles et coordonnées'}
-                    {activeTab === 'professional' && 'Informations sur votre situation professionnelle'}
-                    {activeTab === 'preferences' && 'Personnalisez votre expérience'}
-                    {activeTab === 'security' && 'Sécurisez votre compte'}
-                    {activeTab === 'documents' && 'Vos documents et vérifications'}
+                  <p className="text-sm sm:text-base text-gray-600">
+                    {activeTab === 'personal' && t('userProfile.headers.personalSubtitle')}
+                    {activeTab === 'professional' && t('userProfile.headers.professionalSubtitle')}
+                    {activeTab === 'preferences' && t('userProfile.headers.preferencesSubtitle')}
+                    {activeTab === 'security' && t('userProfile.headers.securitySubtitle')}
+                    {activeTab === 'documents' && t('userProfile.headers.documentsSubtitle')}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
                   {isEditing ? (
                     <>
                       <button
                         onClick={handleSave}
-                        className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
+                        className="bg-emerald-600 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium hover:bg-emerald-700 transition-all flex items-center justify-center gap-2"
                       >
-                        <CheckIcon className="w-5 h-5" />
-                        <span>Sauvegarder</span>
+                        <CheckIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>{t('userProfile.buttons.save')}</span>
                       </button>
                       <button
                         onClick={handleCancel}
-                        className="border border-red-500 text-red-500 px-6 py-3 font-medium hover:bg-red-50 transition-all flex items-center gap-2"
+                        className="border border-red-500 text-red-500 px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium hover:bg-red-50 transition-all flex items-center justify-center gap-2"
                       >
-                        <XMarkIcon className="w-5 h-5" />
-                        <span>Annuler</span>
+                        <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>{t('userProfile.buttons.cancel')}</span>
                       </button>
                     </>
                   ) : (
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="bg-emerald-600 text-white px-6 py-3 font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
+                      className="bg-emerald-600 text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium hover:bg-emerald-700 transition-all flex items-center justify-center gap-2"
                     >
-                      <PencilIcon className="w-5 h-5" />
-                      <span>Modifier</span>
+                      <PencilIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span>{t('userProfile.buttons.edit')}</span>
                     </button>
                   )}
                 </div>
               </div>
 
               {/* Scrollable Tab Content */}
-              <div className="flex-1 overflow-y-auto p-8 pt-6" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 pt-4 sm:pt-6 max-h-[60vh] lg:max-h-[calc(90vh-180px)]">
 
               {/* Personal Information Tab */}
               {activeTab === 'personal' && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-6">
-                    <div className="bg-white border border-gray-200 p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-6">Coordonnées</h3>
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="space-y-4 sm:space-y-6">
+                    <div className="bg-white border border-gray-200 p-4 sm:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">{t('userProfile.personal.contactDetails')}</h3>
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                           <div>
-                            <label className="block font-medium text-gray-700 text-sm mb-2">Prénom</label>
+                            <label className="block font-medium text-gray-700 text-xs sm:text-sm mb-2">{t('userProfile.personal.firstName')}</label>
                             <input
                               type="text"
                               value={formData.personal.firstName}
@@ -303,11 +305,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                                 personal: { ...prev.personal, firstName: e.target.value }
                               }))}
                               disabled={!isEditing}
-                              className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                              className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                             />
                           </div>
                           <div>
-                            <label className="block font-medium text-gray-700 text-sm mb-2">Nom</label>
+                            <label className="block font-medium text-gray-700 text-xs sm:text-sm mb-2">{t('userProfile.personal.lastName')}</label>
                             <input
                               type="text"
                               value={formData.personal.lastName}
@@ -316,15 +318,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                                 personal: { ...prev.personal, lastName: e.target.value }
                               }))}
                               disabled={!isEditing}
-                              className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                              className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                             />
                           </div>
                         </div>
                         
                         <div>
-                          <label className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                            <EnvelopeIcon className="w-4 h-4 text-emerald-600" />
-                            Email
+                          <label className="font-medium text-gray-700 text-xs sm:text-sm mb-2 flex items-center gap-2">
+                            <EnvelopeIcon className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
+                            {t('userProfile.personal.email')}
                           </label>
                           <input
                             type="email"
@@ -334,14 +336,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                               personal: { ...prev.personal, email: e.target.value }
                             }))}
                             disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                           />
                         </div>
 
                         <div>
-                          <label className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
-                            <PhoneIcon className="w-4 h-4 text-emerald-600" />
-                            Téléphone
+                          <label className="font-medium text-gray-700 text-xs sm:text-sm mb-2 flex items-center gap-2">
+                            <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
+                            {t('userProfile.personal.phone')}
                           </label>
                           <input
                             type="tel"
@@ -351,7 +353,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                               personal: { ...prev.personal, phone: e.target.value }
                             }))}
                             disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                           />
                         </div>
                       </div>
@@ -360,12 +362,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
 
                   <div className="space-y-6">
                     <div className="bg-white border border-gray-200 p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-6">Informations Supplémentaires</h3>
+                      <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.personal.additionalInfo')}</h3>
                       <div className="space-y-4">
                         <div>
                           <label className="font-medium text-gray-700 text-sm mb-2 flex items-center gap-2">
                             <CalendarIcon className="w-4 h-4 text-emerald-600" />
-                            Date de naissance
+                            {t('userProfile.personal.birthDate')}
                           </label>
                           <input
                             type="date"
@@ -380,7 +382,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                         </div>
 
                         <div>
-                          <label className="block font-medium text-gray-700 text-sm mb-2">Nationalité</label>
+                          <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.personal.nationality')}</label>
                           <select
                             value={formData.personal.nationality}
                             onChange={(e) => setFormData(prev => ({
@@ -390,15 +392,15 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                             disabled={!isEditing}
                             className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                           >
-                            <option>Française</option>
-                            <option>Belge</option>
-                            <option>Suisse</option>
-                            <option>Autre</option>
+                            <option>{t('userProfile.personal.nationalities.french')}</option>
+                            <option>{t('userProfile.personal.nationalities.belgian')}</option>
+                            <option>{t('userProfile.personal.nationalities.swiss')}</option>
+                            <option>{t('userProfile.personal.nationalities.other')}</option>
                           </select>
                         </div>
 
                         <div>
-                          <label className="block font-medium text-gray-700 text-sm mb-2">Langue</label>
+                          <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.personal.language')}</label>
                           <select
                             value={formData.personal.language}
                             onChange={(e) => setFormData(prev => ({
@@ -408,22 +410,22 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                             disabled={!isEditing}
                             className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                           >
-                            <option>Français</option>
-                            <option>English</option>
-                            <option>Deutsch</option>
+                            <option>{t('userProfile.personal.languages.french')}</option>
+                            <option>{t('userProfile.personal.languages.english')}</option>
+                            <option>{t('userProfile.personal.languages.german')}</option>
                           </select>
                         </div>
                       </div>
                     </div>
 
                     {/* Activity Stats */}
-                    <div className="bg-white border border-gray-200 p-6">
-                      <h3 className="text-xl font-bold text-gray-900 mb-6">Votre Activité</h3>
-                      <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white border border-gray-200 p-4 sm:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">{t('userProfile.personal.yourActivity')}</h3>
+                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
                         {activityStats.map((stat, index) => (
-                          <div key={index} className="text-center p-4 bg-gray-50 border border-gray-200">
-                            <div className="text-3xl font-bold text-emerald-600 mb-1">{stat.value}</div>
-                            <div className="text-sm text-gray-600">{stat.label}</div>
+                          <div key={index} className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
+                            <div className="text-2xl sm:text-3xl font-bold text-emerald-600 mb-1">{stat.value}</div>
+                            <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
                           </div>
                         ))}
                       </div>
@@ -438,10 +440,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
               {activeTab === 'security' && (
                 <div className="space-y-6">
                   <div className="bg-white border border-gray-200 p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Changer le Mot de Passe</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.security.changePassword')}</h3>
                     <div className="space-y-4 max-w-md">
                       <div className="relative">
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Mot de passe actuel</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.security.currentPassword')}</label>
                         <input
                           type={passwordVisible.current ? "text" : "password"}
                           value={formData.security.currentPassword}
@@ -461,7 +463,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                       </div>
 
                       <div className="relative">
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Nouveau mot de passe</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.security.newPassword')}</label>
                         <input
                           type={passwordVisible.new ? "text" : "password"}
                           value={formData.security.newPassword}
@@ -481,7 +483,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                       </div>
 
                       <div className="relative">
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Confirmer le mot de passe</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.security.confirmPassword')}</label>
                         <input
                           type={passwordVisible.confirm ? "text" : "password"}
                           value={formData.security.confirmPassword}
@@ -501,13 +503,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                       </div>
 
                       <button className="bg-emerald-600 text-white px-8 py-4 font-medium hover:bg-emerald-700 transition-all">
-                        Mettre à jour le mot de passe
+                        {t('userProfile.buttons.updatePassword')}
                       </button>
                     </div>
                   </div>
 
                   <div className="bg-white border border-gray-200 p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Sécurité du Compte</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.security.accountSecurity')}</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-4 border border-gray-200 hover:border-emerald-600 transition-all">
                         <div className="flex items-center gap-4">
@@ -515,8 +517,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                             <LockClosedIcon className="w-6 h-6 text-white" />
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-900">Authentification à deux facteurs</div>
-                            <div className="text-sm text-gray-600">Protégez votre compte avec 2FA</div>
+                            <div className="font-semibold text-gray-900">{t('userProfile.security.twoFactor')}</div>
+                            <div className="text-sm text-gray-600">{t('userProfile.security.twoFactorDesc')}</div>
                           </div>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
@@ -539,7 +541,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                             <CalendarIcon className="w-6 h-6 text-white" />
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-900">Dernière connexion</div>
+                            <div className="font-semibold text-gray-900">{t('userProfile.security.lastLogin')}</div>
                             <div className="text-sm text-gray-600">{formData.security.lastLogin}</div>
                           </div>
                         </div>
@@ -553,10 +555,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
               {activeTab === 'professional' && (
                 <div className="space-y-6">
                   <div className="bg-white border border-gray-200 p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Informations Professionnelles</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.professional.title')}</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Société</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.professional.company')}</label>
                         <input
                           type="text"
                           value={formData.professional.company}
@@ -569,7 +571,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Poste</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.professional.position')}</label>
                         <input
                           type="text"
                           value={formData.professional.position}
@@ -582,7 +584,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Secteur d'activité</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.professional.industry')}</label>
                         <input
                           type="text"
                           value={formData.professional.industry}
@@ -595,7 +597,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Site web</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.professional.website')}</label>
                         <input
                           type="text"
                           value={formData.professional.website}
@@ -608,7 +610,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">LinkedIn</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.professional.linkedin')}</label>
                         <input
                           type="text"
                           value={formData.professional.linkedin}
@@ -629,12 +631,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
               {activeTab === 'preferences' && (
                 <div className="space-y-6">
                   <div className="bg-white border border-gray-200 p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Notifications</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.preferences.notifications')}</h3>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-4 border border-gray-200 hover:border-emerald-600 transition-all">
                         <div>
-                          <div className="font-semibold text-gray-900">Newsletter</div>
-                          <div className="text-sm text-gray-600">Recevez nos actualités et offres exclusives</div>
+                          <div className="font-semibold text-gray-900">{t('userProfile.preferences.newsletter')}</div>
+                          <div className="text-sm text-gray-600">{t('userProfile.preferences.newsletterDesc')}</div>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input 
@@ -652,8 +654,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
 
                       <div className="flex items-center justify-between p-4 border border-gray-200 hover:border-emerald-600 transition-all">
                         <div>
-                          <div className="font-semibold text-gray-900">Notifications SMS</div>
-                          <div className="text-sm text-gray-600">Alertes par SMS pour les rendez-vous</div>
+                          <div className="font-semibold text-gray-900">{t('userProfile.preferences.smsNotifications')}</div>
+                          <div className="text-sm text-gray-600">{t('userProfile.preferences.smsDesc')}</div>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input 
@@ -671,8 +673,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
 
                       <div className="flex items-center justify-between p-4 border border-gray-200 hover:border-emerald-600 transition-all">
                         <div>
-                          <div className="font-semibold text-gray-900">Alertes Email</div>
-                          <div className="text-sm text-gray-600">Nouveaux biens correspondant à vos critères</div>
+                          <div className="font-semibold text-gray-900">{t('userProfile.preferences.emailAlerts')}</div>
+                          <div className="text-sm text-gray-600">{t('userProfile.preferences.emailAlertsDesc')}</div>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input 
@@ -691,10 +693,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                   </div>
 
                   <div className="bg-white border border-gray-200 p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">Paramètres Régionaux</h3>
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.preferences.regionalSettings')}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Langue</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.preferences.language')}</label>
                         <select
                           value={formData.preferences.language}
                           onChange={(e) => setFormData(prev => ({
@@ -709,7 +711,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                         </select>
                       </div>
                       <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">Devise</label>
+                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.preferences.currency')}</label>
                         <select
                           value={formData.preferences.currency}
                           onChange={(e) => setFormData(prev => ({
@@ -730,46 +732,50 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
 
               {/* Documents Tab */}
               {activeTab === 'documents' && (
-                <div className="space-y-6">
-                  <div className="bg-white border border-gray-200 p-6">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className="w-12 h-12 bg-emerald-600 flex items-center justify-center">
-                        <DocumentTextIcon className="w-6 h-6 text-white" />
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="bg-white border border-gray-200 p-4 sm:p-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4 sm:mb-6">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 flex items-center justify-center flex-shrink-0">
+                        <DocumentTextIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900">Vos Documents</h3>
-                        <p className="text-sm text-gray-600">Gérez vos documents importants</p>
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900">{t('userProfile.documents.title')}</h3>
+                        <p className="text-xs sm:text-sm text-gray-600">{t('userProfile.documents.subtitle')}</p>
                       </div>
                     </div>
 
-                    <div className="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-600">
-                      <p className="text-sm text-gray-700">Tous les fichiers peuvent être téléchargés ou prévisualisés en toute sécurité.</p>
+                    <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-emerald-50 border-l-4 border-emerald-600">
+                      <p className="text-xs sm:text-sm text-gray-700">{t('userProfile.documents.securityNote')}</p>
                     </div>
 
                     <div className="space-y-3">
                       {documents.map((doc, idx) => (
-                        <div key={idx} className="group p-5 border border-gray-200 hover:border-emerald-600 transition-all duration-300 bg-white hover:shadow-md">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-start gap-4 flex-1">
-                              <div className="w-12 h-12 bg-gray-100 group-hover:bg-emerald-50 flex items-center justify-center transition-colors">
-                                <DocumentIcon className="w-6 h-6 text-gray-500 group-hover:text-emerald-600 transition-colors" />
+                        <div key={idx} className="group p-3 sm:p-5 border border-gray-200 hover:border-emerald-600 transition-all duration-300 bg-white hover:shadow-md">
+                          <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-4">
+                            <div className="flex items-start gap-3 sm:gap-4 flex-1 w-full">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 group-hover:bg-emerald-50 flex items-center justify-center transition-colors flex-shrink-0">
+                                <DocumentIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500 group-hover:text-emerald-600 transition-colors" />
                               </div>
-                              <div className="flex-1">
-                                <div className="font-semibold text-gray-900 mb-1">{doc.name}</div>
-                                <div className="text-sm text-gray-500">{doc.type} • {doc.date}</div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-semibold text-gray-900 mb-1 text-sm sm:text-base">{doc.name}</div>
+                                <div className="text-xs sm:text-sm text-gray-500">{doc.type} • {doc.date}</div>
                               </div>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <span className={`px-4 py-1.5 text-xs font-bold uppercase tracking-wide ${doc.status === 'Vérifié' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : doc.status === 'En attente' ? 'bg-yellow-100 text-yellow-700 border border-yellow-200' : 'bg-gray-100 text-gray-700 border border-gray-200'}`}>
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                              <span className={`px-3 sm:px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-center ${
+                                doc.status === 'Vérifié' ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' : 
+                                doc.status === 'En attente' ? 'bg-yellow-100 text-yellow-700 border border-yellow-200' : 
+                                'bg-gray-100 text-gray-700 border border-gray-200'
+                              }`}>
                                 {doc.status}
                               </span>
-                              <button className="px-5 py-2.5 bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all flex items-center gap-2">
+                              <button className="px-3 sm:px-5 py-2 sm:py-2.5 bg-emerald-600 text-white text-xs sm:text-sm font-medium hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
                                 <EyeIcon className="w-4 h-4" />
-                                Voir
+                                {t('userProfile.buttons.view')}
                               </button>
-                              <button className="px-5 py-2.5 border-2 border-emerald-600 text-emerald-600 text-sm font-medium hover:bg-emerald-50 transition-all flex items-center gap-2">
+                              <button className="px-3 sm:px-5 py-2 sm:py-2.5 border-2 border-emerald-600 text-emerald-600 text-xs sm:text-sm font-medium hover:bg-emerald-50 transition-all flex items-center justify-center gap-2">
                                 <ArrowDownTrayIcon className="w-4 h-4" />
-                                Télécharger
+                                {t('userProfile.buttons.download')}
                               </button>
                             </div>
                           </div>
@@ -777,10 +783,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                       ))}
                     </div>
 
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                      <button className="w-full py-4 border-2 border-dashed border-gray-300 text-gray-600 font-medium hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all flex items-center justify-center gap-2">
-                        <PlusIcon className="w-5 h-5" />
-                        Ajouter un nouveau document
+                    <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+                      <button className="w-full py-3 sm:py-4 border-2 border-dashed border-gray-300 text-gray-600 text-sm sm:text-base font-medium hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all flex items-center justify-center gap-2">
+                        <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                        {t('userProfile.buttons.addDocument')}
                       </button>
                     </div>
                   </div>

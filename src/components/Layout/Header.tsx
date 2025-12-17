@@ -1,6 +1,8 @@
 // src/components/Layout/Header.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useLocalization } from '../../contexts/LocalizationContext';
 import {
   HomeModernIcon,
   UserGroupIcon,
@@ -13,7 +15,8 @@ import {
   CogIcon,
   BriefcaseIcon,
   StarIcon,
-  GlobeAltIcon
+  GlobeAltIcon,
+  BuildingStorefrontIcon
 } from '@heroicons/react/24/outline';
 
 const Header: React.FC = () => {
@@ -24,6 +27,8 @@ const Header: React.FC = () => {
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [scrollAlpha, setScrollAlpha] = useState<number>(0);
   const location = useLocation();
+  const { t } = useTranslation();
+  const { isRTL } = useLocalization();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,94 +67,90 @@ const Header: React.FC = () => {
     primary: [
       {
         path: '/properties',
-        label: 'Propriétés',
+        label: t('navigation.properties'),
         Icon: HomeModernIcon,
-        description: 'Propriétés exclusives'
+        description: t('header.exclusiveProperties')
       },
       {
         path: '/owners',
-        label: 'Propriétaires',
+        label: t('navigation.owners'),
         Icon: UserGroupIcon,
-        description: 'Locations prestige'
+        description: t('header.prestigeRentals')
       }
     ],
     properties: [
       {
         path: '/properties',
-        label: 'Toutes les propriétés',
+        label: t('header.allProperties'),
         Icon: HomeModernIcon,
         category: 'properties',
-        description: 'Découvrez notre collection exclusive'
+        description: t('header.discoverCollection')
       }
     ],
     clients: [
       {
-        path: '/confidential',
-        label: 'Sélection confidentielle',
-        Icon: ShieldCheckIcon,
-        category: 'clients',
-        description: 'Propriétés discrètes et prestigieuses'
-      },
-      {
         path: '/traveler',
-        label: 'Espace Voyageurs',
+        label: t('header.travelerSpace'),
         Icon: PaperAirplaneIcon,
         category: 'clients',
-        description: 'Locations de prestige pour vos voyages'
+        description: t('header.prestigeForTravel')
       },
       {
         path: '/auth',
-        label: 'Connexion',
+        label: t('navigation.login'),
         Icon: UserIcon,
         category: 'clients',
-        description: 'Accédez à votre espace personnel'
+        description: t('header.loginDescription')
       },
       {
         path: '/dashboard',
-        label: 'Acquéreurs',
+        label: t('navigation.dashboard'),
         Icon: CogIcon,
         category: 'clients',
-        description: 'Gérez vos interactions et achats'
+        description: t('header.dashboardDescription')
       }
     ],
     company: [
       {
         path: '/agency',
-        label: 'Notre histoire',
+        label: t('navigation.agency'),
         Icon: BuildingOfficeIcon,
         category: 'company',
-        description: 'Découvrez notre histoire et expertise'
+        description: t('header.expertGuidance')
       },
       {
         path: '/services',
-        label: 'Nos services',
+        label: t('navigation.services'),
         Icon: StarIcon,
         category: 'company',
-        description: 'Services et offres pour nos clients, y compris conciergerie'
+        description: t('header.expertGuidance')
       },
       {
         path: '/careers',
-        label: 'Carrières',
+        label: t('navigation.careers'),
         Icon: BriefcaseIcon,
         category: 'company',
-        description: "Rejoignez notre équipe d'experts"
+        description: t('header.expertGuidance')
       },
       {
         path: '/contact',
-        label: 'Contact',
+        label: t('navigation.contact'),
         Icon: PhoneIcon,
         category: 'company',
-        description: 'Échangeons sur vos projets'
+        description: t('header.expertGuidance')
       },
       {
         path: '/mag',
-        label: 'Le Mag',
+        label: t('navigation.magazine'),
         Icon: NewspaperIcon,
         category: 'company',
-        description: 'Actualités et tendances immobilières'
+        description: t('header.expertGuidance')
       }
     ],
   };
+
+  // Feature flag to hide the Clients (Espace Clients) secondary menu section
+  const showClientSection = false;
 
   const isActivePath = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
@@ -340,7 +341,7 @@ const Header: React.FC = () => {
               {/* Company Section */}
               <div>
                 <h3 className="text-gray-800 text-lg sm:text-xl font-bold tracking-widest uppercase mb-6 sm:mb-8">
-                  Agence
+                  {t('navigation.agency')}
                 </h3>
                 <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {navigation.company.map((item, index) => {
@@ -388,54 +389,56 @@ const Header: React.FC = () => {
               </div>
 
               {/* Clients Section */}
-              <div>
-                <h3 className="text-gray-800 text-lg sm:text-xl font-bold tracking-widest uppercase mb-6 sm:mb-8">
-                  Espace Clients
-                </h3>
-                <div className="grid grid-cols-1 gap-3 sm:gap-4">
-                  {navigation.clients.map((item, index) => {
-                    const Icon = item.Icon;
-                    return (
-                      <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`group relative p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-500 border-2 ${
-                          isActivePath(item.path)
-                            ? 'bg-gray-50 border-gray-200 shadow-sm'
-                            : 'bg-white/60 border-gray-100 hover:bg-gray-50 hover:border-gray-200 hover:shadow-sm'
-                        }`}
-                        style={{ transitionDelay: `${index * 100 + 200}ms` }}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <div className="flex items-start space-x-3 sm:space-x-4">
-                          <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 ${
+              {showClientSection && (
+                <div>
+                  <h3 className="text-gray-800 text-lg sm:text-xl font-bold tracking-widest uppercase mb-6 sm:mb-8">
+                    {t('navigation.clientSpace')}
+                  </h3>
+                  <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                    {navigation.clients.map((item, index) => {
+                      const Icon = item.Icon;
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          className={`group relative p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-500 border-2 ${
                             isActivePath(item.path)
-                              ? 'bg-gray-100 text-gray-900 shadow-sm'
-                              : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
-                          }`}>
-                            <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
+                              ? 'bg-gray-50 border-gray-200 shadow-sm'
+                              : 'bg-white/60 border-gray-100 hover:bg-gray-50 hover:border-gray-200 hover:shadow-sm'
+                          }`}
+                          style={{ transitionDelay: `${index * 100 + 200}ms` }}
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <div className="flex items-start space-x-3 sm:space-x-4">
+                            <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 ${
                               isActivePath(item.path)
-                                ? 'text-gray-900'
-                                : 'text-gray-800'
+                                ? 'bg-gray-100 text-gray-900 shadow-sm'
+                                : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
                             }`}>
-                              {item.label}
-                            </span>
-                            <p className="text-xs sm:text-sm text-gray-600 mt-1 transition-colors duration-300 line-clamp-2">
-                              {item.description}
-                            </p>
+                              <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
+                                isActivePath(item.path)
+                                  ? 'text-gray-900'
+                                  : 'text-gray-800'
+                              }`}>
+                                {item.label}
+                              </span>
+                              <p className="text-xs sm:text-sm text-gray-600 mt-1 transition-colors duration-300 line-clamp-2">
+                                {item.description}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="absolute top-4 sm:top-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">
-                          <div className="w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-t-2 border-gray-400 transform rotate-45" />
-                        </div>
-                      </Link>
-                    );
-                  })}
+                          <div className="absolute top-4 sm:top-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-t-2 border-gray-400 transform rotate-45" />
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -470,7 +473,7 @@ const Header: React.FC = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               <UserIcon className="w-5 h-5 mb-0.5" />
-              <span className="text-[10px] font-medium">Connexion</span>
+              <span className="text-[10px] font-medium">{t('navigation.login')}</span>
             </Link>
             <Link
               to="/contact"
@@ -482,7 +485,7 @@ const Header: React.FC = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               <PhoneIcon className="w-5 h-5 mb-0.5" />
-              <span className="text-[10px] font-medium">Contact</span>
+              <span className="text-[10px] font-medium">{t('navigation.contact')}</span>
             </Link>
           </div>
         </div>

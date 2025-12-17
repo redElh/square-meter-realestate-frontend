@@ -1,5 +1,6 @@
 // src/pages/TravelerSpace.tsx
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   KeyIcon,
   WifiIcon,
@@ -34,6 +35,7 @@ import {
 } from '@heroicons/react/24/solid';
 
 const TravelerSpace: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
@@ -71,13 +73,13 @@ const TravelerSpace: React.FC = () => {
   };
 
   const tabs = [
-    { id: 'dashboard', label: 'Tableau de Bord', icon: HomeIcon },
-    { id: 'arrival', label: 'Avant Arrivée', icon: CalendarIcon },
-    { id: 'stay', label: 'Pendant Séjour', icon: StarIcon },
-    { id: 'privilege', label: 'Carte Privilège', icon: GiftIcon },
-    { id: 'activities', label: 'Activités', icon: MapIcon },
-    { id: 'departure', label: 'Au Départ', icon: ArrowRightIcon },
-    { id: 'documents', label: 'Documents', icon: DocumentTextIcon }
+    { id: 'dashboard', label: t('travelerSpace.tabs.dashboard'), icon: HomeIcon },
+    { id: 'arrival', label: t('travelerSpace.tabs.arrival'), icon: CalendarIcon },
+    { id: 'stay', label: t('travelerSpace.tabs.stay'), icon: StarIcon },
+    { id: 'privilege', label: t('travelerSpace.tabs.privilege'), icon: GiftIcon },
+    { id: 'activities', label: t('travelerSpace.tabs.activities'), icon: MapIcon },
+    { id: 'departure', label: t('travelerSpace.tabs.departure'), icon: ArrowRightIcon },
+    { id: 'documents', label: t('travelerSpace.tabs.documents'), icon: DocumentTextIcon }
   ];
 
   const arrivalInfo = {
@@ -90,17 +92,17 @@ const TravelerSpace: React.FC = () => {
   };
 
   const accessCodes = [
-    { name: 'Boîte à clés', code: '1234#', qrCode: true },
-    { name: 'Portail principal', code: '4455', qrCode: true },
-    { name: 'Appartement', code: '5678*', qrCode: true },
-    { name: 'Parking', code: '4455', qrCode: false }
+    { name: t('travelerSpace.accessCodeTypes.keyBox'), code: '1234#', qrCode: true },
+    { name: t('travelerSpace.accessCodeTypes.mainGate'), code: '4455', qrCode: true },
+    { name: t('travelerSpace.accessCodeTypes.apartment'), code: '5678*', qrCode: true },
+    { name: t('travelerSpace.accessCodeTypes.parking'), code: '4455', qrCode: false }
   ];
 
   const checkinSteps = [
-    { step: 1, title: 'Récupération clés', description: 'Utiliser le code 1234# sur la boîte à clés à droite du portail', completed: false },
-    { step: 2, title: 'Accès propriété', description: 'Entrer le code 4455 au portail principal', completed: false },
-    { step: 3, title: 'Entrée villa', description: 'Utiliser la clé bleue sur la porte d\'entrée', completed: false },
-    { step: 4, title: 'Visite guidée', description: 'Suivre les indications dans chaque pièce', completed: false }
+    { step: 1, title: t('travelerSpace.stay.step1Title'), description: t('travelerSpace.stay.step1Desc'), completed: false },
+    { step: 2, title: t('travelerSpace.stay.step2Title'), description: t('travelerSpace.stay.step2Desc'), completed: false },
+    { step: 3, title: t('travelerSpace.stay.step3Title'), description: t('travelerSpace.stay.step3Desc'), completed: false },
+    { step: 4, title: t('travelerSpace.stay.step4Title'), description: t('travelerSpace.stay.step4Desc'), completed: false }
   ];
 
   const wifiInfo = {
@@ -110,35 +112,35 @@ const TravelerSpace: React.FC = () => {
   };
 
   const houseRules = [
-    'Pas de fêtes ni événements',
-    'Animaux non autorisés',
-    'Pas de fumée à l\'intérieur',
-    'Économie d\'énergie requise'
+    t('travelerSpace.houseRules.noParties'),
+    t('travelerSpace.houseRules.noPets'),
+    t('travelerSpace.houseRules.noSmoking'),
+    t('travelerSpace.houseRules.energySaving')
   ];
 
   const activities = [
-    { title: 'Excursion en mer', price: '€450', duration: '4h', available: true },
-    { title: 'Cours de cuisine provençale', price: '€280', duration: '3h', available: true },
-    { title: 'Visite vignoble privé', price: '€320', duration: '5h', available: true },
-    { title: 'Massage spa privatif', price: '€180', duration: '1h30', available: true }
+    { title: t('travelerSpace.sampleActivities.seaExcursion'), price: '€450', duration: '4h', available: true },
+    { title: t('travelerSpace.sampleActivities.cookingClass'), price: '€280', duration: '3h', available: true },
+    { title: t('travelerSpace.sampleActivities.vineyardTour'), price: '€320', duration: '5h', available: true },
+    { title: t('travelerSpace.sampleActivities.spaMessage'), price: '€180', duration: '1h30', available: true }
   ];
 
   const checkoutChecklist = [
-    'Fermer tous les volets et fenêtres',
-    'Couper climatisation/chauffage',
-    'Vider réfrigérateur',
-    'Déposer clés dans la boîte',
-    'Signaler tout dommage',
-    'Confirmer départ via WhatsApp'
+    t('travelerSpace.departure.checklistItem1'),
+    t('travelerSpace.departure.checklistItem2'),
+    t('travelerSpace.departure.checklistItem3'),
+    t('travelerSpace.departure.checklistItem4'),
+    t('travelerSpace.departure.checklistItem5'),
+    t('travelerSpace.departure.checklistItem6')
   ];
 
   const privilegePartners = [
-    { name: 'Restaurant Le Petit Nice', discount: '15%', category: 'GASTRONOMIE' },
-    { name: 'Spa Les Bains de Marrakech', discount: '20%', category: 'BIEN-ÊTRE' },
-    { name: 'Location Yacht Prestige', discount: '10%', category: 'NAUTIQUE' },
-    { name: 'Boutique Hermès', discount: '15%', category: 'SHOPPING' },
-    { name: 'Golf de Saint-Tropez', discount: '25%', category: 'SPORT' },
-    { name: 'Transferts VIP Azur', discount: '30%', category: 'TRANSPORT' }
+    { name: 'Restaurant Le Petit Nice', discount: '15%', category: t('travelerSpace.partnerCategories.gastronomy') },
+    { name: 'Spa Les Bains de Marrakech', discount: '20%', category: t('travelerSpace.partnerCategories.wellness') },
+    { name: 'Location Yacht Prestige', discount: '10%', category: t('travelerSpace.partnerCategories.nautical') },
+    { name: 'Boutique Hermès', discount: '15%', category: t('travelerSpace.partnerCategories.shopping') },
+    { name: 'Golf de Saint-Tropez', discount: '25%', category: t('travelerSpace.partnerCategories.sport') },
+    { name: 'Transferts VIP Azur', discount: '30%', category: t('travelerSpace.partnerCategories.transport') }
   ];
 
   if (!isAuthenticated) {
@@ -148,11 +150,11 @@ const TravelerSpace: React.FC = () => {
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-inter uppercase text-[#023927] mb-4">
-              Espace Voyageurs
+              {t('travelerSpace.auth.title')}
             </h1>
             <div className="h-1 w-24 bg-[#023927] mx-auto mb-6"></div>
             <p className="font-inter text-gray-600 text-lg max-w-3xl mx-auto">
-              Accédez à votre séjour d'exception et découvrez tous les services Square Meter
+              {t('travelerSpace.auth.subtitle')}
             </p>
           </div>
 
@@ -162,17 +164,17 @@ const TravelerSpace: React.FC = () => {
               <div className="text-center mb-8">
                 <KeyIcon className="w-12 h-12 text-[#023927] mx-auto mb-4" />
                 <h2 className="text-2xl font-inter uppercase text-[#023927] mb-4">
-                  Accès à Votre Séjour
+                  {t('travelerSpace.auth.accessTitle')}
                 </h2>
                 <p className="font-inter text-gray-600">
-                  Entrez votre email pour recevoir votre lien d'accès sécurisé
+                  {t('travelerSpace.auth.accessSubtitle')}
                 </p>
               </div>
 
               <form onSubmit={handleMagicLink} className="space-y-6">
                 <div>
                   <label className="block font-inter uppercase text-[#023927] text-sm mb-2">
-                    Email de réservation
+                    {t('travelerSpace.auth.emailLabel')}
                   </label>
                   <input
                     type="email"
@@ -192,11 +194,11 @@ const TravelerSpace: React.FC = () => {
                   {isLoading ? (
                     <>
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                      <span>Envoi en cours...</span>
+                      <span>{t('travelerSpace.auth.sendingLink')}</span>
                     </>
                   ) : (
                     <>
-                      <span>Recevoir mon lien d'accès</span>
+                      <span>{t('travelerSpace.auth.receiveLinkButton')}</span>
                       <ArrowRightIcon className="w-5 h-5" />
                     </>
                   )}
@@ -206,7 +208,7 @@ const TravelerSpace: React.FC = () => {
               <div className="mt-6 text-center">
                 <div className="flex items-center justify-center space-x-2 text-gray-600">
                   <CheckCircleIcon className="w-5 h-5 text-[#023927]" />
-                  <span className="font-inter text-sm">Connexion sécurisée • Données cryptées</span>
+                  <span className="font-inter text-sm">{t('travelerSpace.auth.secureConnection')}</span>
                 </div>
               </div>
             </div>
@@ -222,7 +224,7 @@ const TravelerSpace: React.FC = () => {
         {/* Header with Booking Info */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-inter uppercase text-[#023927] mb-4">
-            Espace Voyageurs
+            {t('travelerSpace.auth.title')}
           </h1>
           
           {/* Booking Summary */}
@@ -237,21 +239,21 @@ const TravelerSpace: React.FC = () => {
               </div>
               
               <div className="text-center">
-                <div className="font-inter uppercase text-[#023927] text-sm mb-1">CHECK-IN</div>
+                <div className="font-inter uppercase text-[#023927] text-sm mb-1">{t('travelerSpace.booking.checkIn')}</div>
                 <div className="font-inter text-[#023927] text-lg">{booking.checkIn}</div>
-                <div className="font-inter text-gray-600 text-sm">À partir de 16h</div>
+                <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.booking.fromTime')}</div>
               </div>
               
               <div className="text-center">
-                <div className="font-inter uppercase text-[#023927] text-sm mb-1">CHECK-OUT</div>
+                <div className="font-inter uppercase text-[#023927] text-sm mb-1">{t('travelerSpace.booking.checkOut')}</div>
                 <div className="font-inter text-[#023927] text-lg">{booking.checkOut}</div>
-                <div className="font-inter text-gray-600 text-sm">Avant 11h</div>
+                <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.booking.beforeTime')}</div>
               </div>
               
               <div className="text-center">
-                <div className="font-inter uppercase text-[#023927] text-sm mb-1">N° CONFIRMATION</div>
+                <div className="font-inter uppercase text-[#023927] text-sm mb-1">{t('travelerSpace.booking.confirmationNumber')}</div>
                 <div className="font-inter text-[#023927] text-sm">{booking.confirmation}</div>
-                <div className="font-inter text-gray-600 text-sm">{booking.guests} voyageur(s)</div>
+                <div className="font-inter text-gray-600 text-sm">{booking.guests} {t('travelerSpace.booking.travelers')}</div>
               </div>
             </div>
           </div>
@@ -288,9 +290,9 @@ const TravelerSpace: React.FC = () => {
               <div className="space-y-8">
                 {/* Welcome Section */}
                 <div className="bg-[#023927] text-white p-6">
-                  <h2 className="text-2xl font-inter uppercase mb-4">Bienvenue à {booking.property}</h2>
+                  <h2 className="text-2xl font-inter uppercase mb-4">{t('travelerSpace.dashboard.welcome')} {booking.property}</h2>
                   <p className="font-inter mb-4">
-                    Votre séjour d'exception commence maintenant. Profitez de chaque instant.
+                    {t('travelerSpace.dashboard.welcomeMessage')}
                   </p>
                   <div className="flex items-center space-x-6">
                     <div className="text-3xl font-inter">
@@ -299,7 +301,7 @@ const TravelerSpace: React.FC = () => {
                     <div className="w-px h-12 bg-white/30"></div>
                     <div>
                       <div className="font-inter">{currentTime.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
-                      <div className="font-inter text-white/80">Séjour en cours</div>
+                      <div className="font-inter text-white/80">{t('travelerSpace.dashboard.stayInProgress')}</div>
                     </div>
                   </div>
                 </div>
@@ -311,8 +313,8 @@ const TravelerSpace: React.FC = () => {
                     className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
                   >
                     <MapPinIcon className="w-8 h-8 text-[#023927] mb-2" />
-                    <h3 className="font-inter uppercase text-[#023927] mb-1">Localisation</h3>
-                    <p className="font-inter text-gray-600 text-sm">Itinéraire et parking</p>
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">{t('travelerSpace.dashboard.location')}</h3>
+                    <p className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.locationDesc')}</p>
                   </button>
 
                   <button 
@@ -320,8 +322,8 @@ const TravelerSpace: React.FC = () => {
                     className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
                   >
                     <KeyIcon className="w-8 h-8 text-[#023927] mb-2" />
-                    <h3 className="font-inter uppercase text-[#023927] mb-1">Codes Accès</h3>
-                    <p className="font-inter text-gray-600 text-sm">Boîte à clés et QR codes</p>
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">{t('travelerSpace.dashboard.accessCodes')}</h3>
+                    <p className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.accessCodesDesc')}</p>
                   </button>
 
                   <a 
@@ -331,8 +333,8 @@ const TravelerSpace: React.FC = () => {
                     className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
                   >
                     <PhoneIcon className="w-8 h-8 text-[#023927] mb-2" />
-                    <h3 className="font-inter uppercase text-[#023927] mb-1">Assistance</h3>
-                    <p className="font-inter text-gray-600 text-sm">WhatsApp 24/7</p>
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">{t('travelerSpace.dashboard.assistance')}</h3>
+                    <p className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.assistanceDesc')}</p>
                   </a>
 
                   <button 
@@ -340,8 +342,8 @@ const TravelerSpace: React.FC = () => {
                     className="bg-white border-2 border-gray-200 p-4 hover:border-[#023927] transition-all duration-300 group"
                   >
                     <ArrowRightIcon className="w-8 h-8 text-[#023927] mb-2" />
-                    <h3 className="font-inter uppercase text-[#023927] mb-1">Check-out</h3>
-                    <p className="font-inter text-gray-600 text-sm">Checklist de départ</p>
+                    <h3 className="font-inter uppercase text-[#023927] mb-1">{t('travelerSpace.dashboard.checkout')}</h3>
+                    <p className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.checkoutDesc')}</p>
                   </button>
                 </div>
 
@@ -352,14 +354,14 @@ const TravelerSpace: React.FC = () => {
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-inter uppercase text-[#023927] text-lg flex items-center space-x-2">
                         <KeyIcon className="w-5 h-5" />
-                        <span>Codes d'Accès</span>
+                        <span>{t('travelerSpace.dashboard.accessCodes')}</span>
                       </h3>
                       <button 
                         onClick={() => setShowCodes(!showCodes)}
                         className="text-[#023927] hover:text-[#01261c] transition-colors duration-300 flex items-center space-x-1"
                       >
                         {showCodes ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
-                        <span className="text-sm">{showCodes ? 'Masquer' : 'Afficher'}</span>
+                        <span className="text-sm">{showCodes ? t('travelerSpace.dashboard.hide') : t('travelerSpace.dashboard.show')}</span>
                       </button>
                     </div>
                     <div className="space-y-3">
@@ -367,7 +369,7 @@ const TravelerSpace: React.FC = () => {
                         <div key={index} className="flex justify-between items-center p-3 bg-gray-50 border border-gray-200">
                           <div>
                             <div className="font-inter font-medium text-gray-900">{item.name}</div>
-                            <div className="font-inter text-gray-600 text-sm">Code: {showCodes ? item.code : '••••'}</div>
+                            <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.code')}: {showCodes ? item.code : '••••'}</div>
                           </div>
                           {item.qrCode && (
                             <button className="text-[#023927] hover:text-[#01261c]">
@@ -383,22 +385,22 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <WifiIcon className="w-5 h-5" />
-                      <span>Connexion WiFi</span>
+                      <span>{t('travelerSpace.dashboard.wifiConnection')}</span>
                     </h3>
                     <div className="space-y-3">
                       <div className="p-3 bg-gray-50 border border-gray-200">
-                        <div className="font-inter text-gray-600 text-sm">Réseau</div>
+                        <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.network')}</div>
                         <div className="font-inter text-[#023927] font-medium">{wifiInfo.network}</div>
                       </div>
                       <div className="p-3 bg-gray-50 border border-gray-200">
-                        <div className="font-inter text-gray-600 text-sm">Mot de passe</div>
+                        <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.password')}</div>
                         <div className="font-inter text-[#023927] font-mono font-medium">{wifiInfo.password}</div>
                       </div>
                     </div>
                     {wifiInfo.qrCode && (
                       <button className="mt-4 flex items-center justify-center space-x-2 text-[#023927] hover:text-[#01261c] w-full py-2 border-2 border-[#023927]">
                         <QrCodeIcon className="w-4 h-4" />
-                        <span className="font-inter uppercase text-sm">Scanner QR Code</span>
+                        <span className="font-inter uppercase text-sm">{t('travelerSpace.dashboard.scanQrCode')}</span>
                       </button>
                     )}
                   </div>
@@ -409,30 +411,30 @@ const TravelerSpace: React.FC = () => {
             {/* Arrival Tab */}
             {activeTab === 'arrival' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Avant l'arrivée</h2>
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">{t('travelerSpace.arrival.title')}</h2>
 
                 {/* Location & Directions */}
                 <div className="bg-white border-2 border-gray-200 p-6">
                   <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                     <MapPinIcon className="w-5 h-5" />
-                    <span>Localisation & Itinéraire</span>
+                    <span>{t('travelerSpace.arrival.locationTitle')}</span>
                   </h3>
                   <div className="space-y-4">
                     <div>
-                      <div className="font-inter text-gray-600 text-sm mb-1">Adresse</div>
+                      <div className="font-inter text-gray-600 text-sm mb-1">{t('travelerSpace.arrival.address')}</div>
                       <div className="font-inter text-gray-900">{arrivalInfo.location}</div>
                     </div>
                     <div>
-                      <div className="font-inter text-gray-600 text-sm mb-1">Parking</div>
+                      <div className="font-inter text-gray-600 text-sm mb-1">{t('travelerSpace.arrival.parking')}</div>
                       <div className="font-inter text-gray-900">{arrivalInfo.parking}</div>
                     </div>
                     <div>
-                      <div className="font-inter text-gray-600 text-sm mb-1">Indications</div>
+                      <div className="font-inter text-gray-600 text-sm mb-1">{t('travelerSpace.arrival.directions')}</div>
                       <div className="font-inter text-gray-900">{arrivalInfo.directions}</div>
                     </div>
                     <button className="mt-4 bg-[#023927] text-white py-3 px-6 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300 flex items-center justify-center space-x-2">
                       <MapIcon className="w-4 h-4" />
-                      <span>Ouvrir dans Google Maps</span>
+                      <span>{t('travelerSpace.arrival.openInMaps')}</span>
                     </button>
                   </div>
                 </div>
@@ -442,16 +444,16 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <ClockIcon className="w-5 h-5" />
-                      <span>Horaires</span>
+                      <span>{t('travelerSpace.arrival.schedule')}</span>
                     </h3>
                     <div className="space-y-4">
                       <div>
-                        <div className="font-inter text-gray-600 text-sm mb-1">Arrivée</div>
-                        <div className="font-inter text-gray-900">À partir de {arrivalInfo.checkInTime}</div>
+                        <div className="font-inter text-gray-600 text-sm mb-1">{t('travelerSpace.arrival.arrivalTime')}</div>
+                        <div className="font-inter text-gray-900">{t('travelerSpace.arrival.fromHour')} {arrivalInfo.checkInTime}</div>
                       </div>
                       <div>
-                        <div className="font-inter text-gray-600 text-sm mb-1">Départ</div>
-                        <div className="font-inter text-gray-900">Avant {arrivalInfo.checkOutTime}</div>
+                        <div className="font-inter text-gray-600 text-sm mb-1">{t('travelerSpace.arrival.departureTime')}</div>
+                        <div className="font-inter text-gray-900">{t('travelerSpace.arrival.beforeHour')} {arrivalInfo.checkOutTime}</div>
                       </div>
                     </div>
                   </div>
@@ -459,10 +461,10 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <DocumentTextIcon className="w-5 h-5" />
-                      <span>Modalités Caution</span>
+                      <span>{t('travelerSpace.arrival.depositTitle')}</span>
                     </h3>
                     <div className="space-y-2">
-                      <div className="font-inter text-gray-900">Montant: {booking.deposit}</div>
+                      <div className="font-inter text-gray-900">{t('travelerSpace.arrival.depositAmount')} {booking.deposit}</div>
                       <div className="font-inter text-gray-600 text-sm">{arrivalInfo.depositProcedure}</div>
                     </div>
                   </div>
@@ -473,13 +475,13 @@ const TravelerSpace: React.FC = () => {
             {/* Stay Tab */}
             {activeTab === 'stay' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Pendant le séjour</h2>
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">{t('travelerSpace.stay.title')}</h2>
 
                 {/* Guided Check-in */}
                 <div className="bg-white border-2 border-gray-200 p-6">
                   <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                     <CheckCircleIcon className="w-5 h-5" />
-                    <span>Check-in Guidé</span>
+                    <span>{t('travelerSpace.stay.guidedCheckinTitle')}</span>
                   </h3>
                   <div className="space-y-4">
                     {checkinSteps.map((step) => (
@@ -506,21 +508,21 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <WifiIcon className="w-5 h-5" />
-                      <span>WiFi</span>
+                      <span>{t('travelerSpace.stay.wifiTitle')}</span>
                     </h3>
                     <div className="space-y-3">
                       <div>
-                        <div className="font-inter text-gray-600 text-sm">Réseau</div>
+                        <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.network')}</div>
                         <div className="font-inter text-[#023927] font-medium">{wifiInfo.network}</div>
                       </div>
                       <div>
-                        <div className="font-inter text-gray-600 text-sm">Mot de passe</div>
+                        <div className="font-inter text-gray-600 text-sm">{t('travelerSpace.dashboard.password')}</div>
                         <div className="font-inter text-[#023927] font-mono font-medium">{wifiInfo.password}</div>
                       </div>
                     </div>
                     <button className="mt-4 w-full border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300 flex items-center justify-center space-x-2">
                       <QrCodeIcon className="w-4 h-4" />
-                      <span>QR Code de Connexion</span>
+                      <span>{t('travelerSpace.stay.qrCodeConnection')}</span>
                     </button>
                   </div>
 
@@ -528,7 +530,7 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <DocumentTextIcon className="w-5 h-5" />
-                      <span>Règles du Logement</span>
+                      <span>{t('travelerSpace.stay.houseRulesTitle')}</span>
                     </h3>
                     <ul className="space-y-2">
                       {houseRules.map((rule, index) => (
@@ -547,11 +549,11 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <PhoneIcon className="w-5 h-5" />
-                      <span>Assistance</span>
+                      <span>{t('travelerSpace.stay.assistanceTitle')}</span>
                     </h3>
                     <div className="space-y-4">
                       <p className="font-inter text-gray-600">
-                        Notre équipe est disponible 24h/24 pour vous assister
+                        {t('travelerSpace.stay.assistanceMessage')}
                       </p>
                       <a 
                         href={`https://wa.me/${booking.contact.replace(/\s/g, '')}`}
@@ -559,10 +561,10 @@ const TravelerSpace: React.FC = () => {
                         rel="noopener noreferrer"
                         className="block bg-green-600 text-white py-3 font-inter uppercase text-sm hover:bg-green-700 transition-all duration-300 text-center"
                       >
-                        WhatsApp Urgent
+                        {t('travelerSpace.stay.urgentWhatsapp')}
                       </a>
                       <button className="block w-full border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300 text-center">
-                        Appel Direct: {booking.contact}
+                        {t('travelerSpace.stay.directCall')} {booking.contact}
                       </button>
                     </div>
                   </div>
@@ -571,42 +573,42 @@ const TravelerSpace: React.FC = () => {
                   <div className="bg-white border-2 border-gray-200 p-6">
                     <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                       <ExclamationTriangleIcon className="w-5 h-5" />
-                      <span>Signalement d'Incident</span>
+                      <span>{t('travelerSpace.stay.incidentTitle')}</span>
                     </h3>
                     {!showIncidentForm ? (
                       <div className="space-y-4">
                         <p className="font-inter text-gray-600">
-                          Signalez tout problème technique ou dommage immédiatement
+                          {t('travelerSpace.stay.incidentMessage')}
                         </p>
                         <button 
                           onClick={() => setShowIncidentForm(true)}
                           className="w-full border-2 border-red-600 text-red-600 py-3 font-inter uppercase text-sm hover:bg-red-600 hover:text-white transition-all duration-300"
                         >
-                          Signaler un Incident
+                          {t('travelerSpace.stay.reportIncident')}
                         </button>
                       </div>
                     ) : (
                       <div className="space-y-4">
                         <div>
-                          <label className="block font-inter text-gray-600 text-sm mb-2">Description</label>
+                          <label className="block font-inter text-gray-600 text-sm mb-2">{t('travelerSpace.stay.description')}</label>
                           <textarea 
                             value={incidentDescription}
                             onChange={(e) => setIncidentDescription(e.target.value)}
                             className="w-full px-3 py-2 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-inter"
                             rows={4}
-                            placeholder="Décrivez l'incident..."
+                            placeholder={t('travelerSpace.stay.descPlaceholder')}
                           />
                         </div>
                         <div className="flex space-x-4">
                           <button className="flex-1 border-2 border-gray-600 text-gray-600 py-2 font-inter uppercase text-sm hover:bg-gray-600 hover:text-white transition-all duration-300">
                             <CameraIcon className="w-4 h-4 inline mr-2" />
-                            Photo
+                            {t('travelerSpace.stay.photo')}
                           </button>
                           <button 
                             onClick={() => setShowIncidentForm(false)}
                             className="flex-1 border-2 border-red-600 text-red-600 py-2 font-inter uppercase text-sm hover:bg-red-600 hover:text-white transition-all duration-300"
                           >
-                            Envoyer Alerte
+                            {t('travelerSpace.stay.sendAlert')}
                           </button>
                         </div>
                       </div>
@@ -618,16 +620,16 @@ const TravelerSpace: React.FC = () => {
                 <div className="bg-[#023927] text-white p-6">
                   <h3 className="font-inter uppercase text-lg mb-4 flex items-center space-x-2">
                     <SparklesIcon className="w-5 h-5" />
-                    <span>Découvrez SquareHoli</span>
+                    <span>{t('travelerSpace.stay.activitiesTeaser')}</span>
                   </h3>
                   <p className="font-inter mb-4">
-                    Notre conciergerie organise vos expériences pour un séjour sans contraintes
+                    {t('travelerSpace.stay.activitiesMessage')}
                   </p>
                   <button 
                     onClick={() => setActiveTab('activities')}
                     className="bg-white text-[#023927] py-3 px-6 font-inter uppercase text-sm hover:bg-gray-100 transition-all duration-300"
                   >
-                    Voir les Activités
+                    {t('travelerSpace.stay.seeActivities')}
                   </button>
                 </div>
               </div>
@@ -638,10 +640,10 @@ const TravelerSpace: React.FC = () => {
               <div className="space-y-8">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-inter uppercase text-[#023927] mb-4">
-                    Carte Privilège Square Meter
+                    {t('travelerSpace.privilege.title')}
                   </h2>
                   <p className="font-inter text-gray-600">
-                    Découvrez vos avantages exclusifs auprès de nos partenaires d'exception
+                    {t('travelerSpace.privilege.subtitle')}
                   </p>
                 </div>
 
@@ -649,26 +651,26 @@ const TravelerSpace: React.FC = () => {
                 <div className="bg-[#023927] text-white p-6 max-w-2xl mx-auto">
                   <div className="flex justify-between items-start mb-6">
                     <div>
-                      <div className="font-inter uppercase text-sm opacity-80">CARTE PRIVILÈGE</div>
+                      <div className="font-inter uppercase text-sm opacity-80">{t('travelerSpace.privilege.cardLabel')}</div>
                       <div className="font-inter text-2xl font-light">VIP {booking.confirmation}</div>
                       <div className="font-inter text-sm opacity-80 mt-1">{booking.property}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-inter uppercase text-sm opacity-80">VALIDE JUSQU'AU</div>
+                      <div className="font-inter uppercase text-sm opacity-80">{t('travelerSpace.privilege.validUntil')}</div>
                       <div className="font-inter text-lg">{booking.checkOut}</div>
                     </div>
                   </div>
                   
                   <div className="bg-white/10 p-4 mb-6">
-                    <div className="font-inter uppercase text-sm mb-2">AVANTAGES EXCLUSIFS</div>
-                    <div className="font-inter">Accès aux partenaires premium • Remises exceptionnelles • Services VIP</div>
+                    <div className="font-inter uppercase text-sm mb-2">{t('travelerSpace.privilege.exclusiveBenefits')}</div>
+                    <div className="font-inter">{t('travelerSpace.privilege.benefitsText')}</div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="font-inter text-sm">Square Meter Experience</div>
+                    <div className="font-inter text-sm">{t('travelerSpace.privilege.experienceLabel')}</div>
                     <button className="bg-white text-[#023927] px-4 py-2 font-inter uppercase text-sm hover:bg-gray-100 transition-all duration-300 flex items-center space-x-2">
                       <ArrowDownTrayIcon className="w-4 h-4" />
-                      <span>Télécharger la carte</span>
+                      <span>{t('travelerSpace.privilege.downloadCard')}</span>
                     </button>
                   </div>
                 </div>
@@ -687,10 +689,10 @@ const TravelerSpace: React.FC = () => {
                       </div>
                       <h3 className="font-inter uppercase text-[#023927] text-sm mb-2">{partner.name}</h3>
                       <p className="font-inter text-gray-600 text-xs mb-3">
-                        Présentez votre carte privilège pour bénéficier de votre remise exclusive
+                        {t('travelerSpace.privilege.presentCard')}
                       </p>
                       <button className="w-full border-2 border-[#023927] text-[#023927] py-2 font-inter uppercase text-xs hover:bg-[#023927] hover:text-white transition-all duration-300">
-                        Voir les détails
+                        {t('travelerSpace.privilege.seeDetails')}
                       </button>
                     </div>
                   ))}
@@ -703,10 +705,10 @@ const TravelerSpace: React.FC = () => {
               <div className="space-y-8">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-inter uppercase text-[#023927] mb-4">
-                    Conciergerie d'Activités
+                    {t('travelerSpace.activities.title')}
                   </h2>
                   <p className="font-inter text-gray-600 max-w-2xl mx-auto">
-                    Notre conciergerie organise vos expériences pour un séjour sans contraintes
+                    {t('travelerSpace.activities.subtitle')}
                   </p>
                 </div>
 
@@ -729,19 +731,19 @@ const TravelerSpace: React.FC = () => {
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-gray-100 text-gray-600'
                         }`}>
-                          {activity.available ? 'Disponible' : 'Complet'}
+                          {activity.available ? t('travelerSpace.activities.available') : t('travelerSpace.activities.full')}
                         </div>
                       </div>
                       <p className="font-inter text-gray-600 text-sm mb-6">
-                        Profitez d'une expérience unique organisée par notre conciergerie
+                        {t('travelerSpace.activities.experienceMessage')}
                       </p>
                       <a 
-                        href={`https://wa.me/${booking.contact.replace(/\s/g, '')}?text=Bonjour, je souhaite réserver: ${activity.title}`}
+                        href={`https://wa.me/${booking.contact.replace(/\s/g, '')}?text=${encodeURIComponent(t('travelerSpace.whatsappMessages.bookActivity'))} ${encodeURIComponent(activity.title)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block w-full bg-[#023927] text-white py-3 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300 text-center"
                       >
-                        Réserver via WhatsApp
+                        {t('travelerSpace.activities.bookViaWhatsapp')}
                       </a>
                     </div>
                   ))}
@@ -752,13 +754,13 @@ const TravelerSpace: React.FC = () => {
             {/* Departure Tab */}
             {activeTab === 'departure' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Au moment du départ</h2>
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">{t('travelerSpace.departure.title')}</h2>
 
                 {/* Checkout Checklist */}
                 <div className="bg-white border-2 border-gray-200 p-6">
                   <h3 className="font-inter uppercase text-[#023927] text-lg mb-4 flex items-center space-x-2">
                     <CheckCircleIcon className="w-5 h-5" />
-                    <span>Checklist de Check-out</span>
+                    <span>{t('travelerSpace.departure.checklistTitle')}</span>
                   </h3>
                   <div className="space-y-3">
                     {checkoutChecklist.map((item, index) => (
@@ -772,7 +774,7 @@ const TravelerSpace: React.FC = () => {
                   </div>
                   <div className="mt-6 bg-green-50 border-2 border-green-200 p-4">
                     <div className="font-inter text-green-800 text-sm">
-                      <strong>Important:</strong> Merci de confirmer votre départ via WhatsApp à {booking.contact}
+                      <strong>{t('travelerSpace.departure.importantNote')}</strong> {t('travelerSpace.departure.confirmMessage')} {booking.contact}
                     </div>
                   </div>
                 </div>
@@ -781,17 +783,17 @@ const TravelerSpace: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Feedback */}
                   <div className="bg-white border-2 border-gray-200 p-6">
-                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Retour d'Expérience</h3>
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">{t('travelerSpace.departure.feedbackTitle')}</h3>
                     {!showCheckoutFeedback ? (
                       <div className="space-y-4">
                         <p className="font-inter text-gray-600">
-                          Partagez votre expérience pour nous aider à améliorer nos services
+                          {t('travelerSpace.departure.feedbackMessage')}
                         </p>
                         <button 
                           onClick={() => setShowCheckoutFeedback(true)}
                           className="w-full bg-[#023927] text-white py-3 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300"
                         >
-                          Donner mon Avis
+                          {t('travelerSpace.departure.giveReview')}
                         </button>
                         <a 
                           href="https://g.page/r/CYOURGOOGLEPAGELINK"
@@ -799,17 +801,17 @@ const TravelerSpace: React.FC = () => {
                           rel="noopener noreferrer"
                           className="block w-full border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300 text-center"
                         >
-                          Laisser un Avis Google
+                          {t('travelerSpace.departure.googleReview')}
                         </a>
                       </div>
                     ) : (
                       <div className="space-y-4">
                         <div>
-                          <label className="block font-inter text-gray-600 text-sm mb-2">Votre avis</label>
+                          <label className="block font-inter text-gray-600 text-sm mb-2">{t('travelerSpace.departure.yourReview')}</label>
                           <textarea 
                             className="w-full px-3 py-2 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-inter"
                             rows={4}
-                            placeholder="Partagez votre expérience..."
+                            placeholder={t('travelerSpace.departure.reviewPlaceholder')}
                           />
                         </div>
                         <div className="flex items-center space-x-2 mb-4">
@@ -820,7 +822,7 @@ const TravelerSpace: React.FC = () => {
                           ))}
                         </div>
                         <button className="w-full bg-[#023927] text-white py-3 font-inter uppercase text-sm hover:bg-[#01261c] transition-all duration-300">
-                          Envoyer mon Avis
+                          {t('travelerSpace.departure.sendReview')}
                         </button>
                       </div>
                     )}
@@ -828,29 +830,29 @@ const TravelerSpace: React.FC = () => {
 
                   {/* Loyalty & Upsell */}
                   <div className="bg-[#023927] text-white p-6">
-                    <h3 className="font-inter uppercase text-lg mb-4">Fidélisation</h3>
+                    <h3 className="font-inter uppercase text-lg mb-4">{t('travelerSpace.departure.loyaltyTitle')}</h3>
                     <div className="space-y-6">
                       <div>
-                        <div className="font-inter uppercase text-sm opacity-80 mb-2">PROLONGER VOTRE SÉJOUR</div>
+                        <div className="font-inter uppercase text-sm opacity-80 mb-2">{t('travelerSpace.departure.extendStayTitle')}</div>
                         <p className="font-inter mb-4">
-                          Souhaitez-vous prolonger votre séjour ? Contactez-nous pour vérifier la disponibilité.
+                          {t('travelerSpace.departure.extendMessage')}
                         </p>
                         <a 
-                          href={`https://wa.me/${booking.contact.replace(/\s/g, '')}?text=Bonjour, je souhaite prolonger mon séjour`}
+                          href={`https://wa.me/${booking.contact.replace(/\s/g, '')}?text=${encodeURIComponent(t('travelerSpace.whatsappMessages.extendStay'))}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="block w-full bg-white text-[#023927] py-3 font-inter uppercase text-sm hover:bg-gray-100 transition-all duration-300 text-center"
                         >
-                          Demander une Prolongation
+                          {t('travelerSpace.departure.requestExtension')}
                         </a>
                       </div>
                       <div className="pt-6 border-t border-white/20">
-                        <div className="font-inter uppercase text-sm opacity-80 mb-2">OFFRE FIDÉLITÉ</div>
+                        <div className="font-inter uppercase text-sm opacity-80 mb-2">{t('travelerSpace.departure.loyaltyOfferTitle')}</div>
                         <p className="font-inter mb-4">
-                          Revenez chez nous et bénéficiez de 10% de réduction sur votre prochain séjour
+                          {t('travelerSpace.departure.loyaltyMessage')}
                         </p>
                         <button className="block w-full border-2 border-white text-white py-3 font-inter uppercase text-sm hover:bg-white hover:text-[#023927] transition-all duration-300 text-center">
-                          Obtenir mon Code Promo
+                          {t('travelerSpace.departure.getPromoCode')}
                         </button>
                       </div>
                     </div>
@@ -862,17 +864,17 @@ const TravelerSpace: React.FC = () => {
             {/* Documents Tab */}
             {activeTab === 'documents' && (
               <div className="space-y-8">
-                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">Documents & Factures</h2>
+                <h2 className="text-2xl font-inter uppercase text-[#023927] mb-6">{t('travelerSpace.documents.title')}</h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-white border-2 border-gray-200 p-6">
-                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Documents du Séjour</h3>
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">{t('travelerSpace.documents.stayDocuments')}</h3>
                     <div className="space-y-3">
                       {[
-                        { name: 'Contrat de Location', date: '2024-06-10', size: '1.2 MB' },
-                        { name: 'Règlement Intérieur', date: '2024-06-10', size: '0.8 MB' },
-                        { name: 'Plan de la Propriété', date: '2024-06-10', size: '2.1 MB' },
-                        { name: 'Assurance Responsabilité', date: '2024-06-10', size: '1.5 MB' }
+                        { name: t('travelerSpace.documents.rentalContract'), date: '2024-06-10', size: '1.2 MB' },
+                        { name: t('travelerSpace.documents.houseRules'), date: '2024-06-10', size: '0.8 MB' },
+                        { name: t('travelerSpace.documents.propertyPlan'), date: '2024-06-10', size: '2.1 MB' },
+                        { name: t('travelerSpace.documents.insurance'), date: '2024-06-10', size: '1.5 MB' }
                       ].map((doc, index) => (
                         <div key={index} className="flex items-center justify-between p-3 border border-gray-200">
                           <div>
@@ -888,12 +890,12 @@ const TravelerSpace: React.FC = () => {
                   </div>
 
                   <div className="bg-white border-2 border-gray-200 p-6">
-                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Factures</h3>
+                    <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">{t('travelerSpace.documents.invoices')}</h3>
                     <div className="space-y-3">
                       {[
-                        { name: 'Facture N° SM2024-0615', amount: '€4,200', status: 'Payée' },
-                        { name: 'Facture Caution', amount: '€3,000', status: 'Bloquée' },
-                        { name: 'Facture Services', amount: '€480', status: 'À régler' }
+                        { name: 'Facture N° SM2024-0615', amount: '€4,200', status: t('travelerSpace.documents.invoicePaid') },
+                        { name: 'Facture Caution', amount: '€3,000', status: t('travelerSpace.documents.invoiceBlocked') },
+                        { name: 'Facture Services', amount: '€480', status: t('travelerSpace.documents.invoiceToSettle') }
                       ].map((invoice, index) => (
                         <div key={index} className="flex items-center justify-between p-3 border border-gray-200">
                           <div>
@@ -901,9 +903,9 @@ const TravelerSpace: React.FC = () => {
                             <div className="font-inter text-gray-600 text-sm">{invoice.amount}</div>
                           </div>
                           <span className={`px-3 py-1 font-inter uppercase text-xs ${
-                            invoice.status === 'Payée' 
+                            invoice.status === t('travelerSpace.documents.invoicePaid') 
                               ? 'bg-green-100 text-green-800'
-                              : invoice.status === 'Bloquée'
+                              : invoice.status === t('travelerSpace.documents.invoiceBlocked')
                               ? 'bg-blue-100 text-blue-800'
                               : 'bg-yellow-100 text-yellow-800'
                           }`}>
@@ -913,19 +915,19 @@ const TravelerSpace: React.FC = () => {
                       ))}
                     </div>
                     <button className="w-full mt-6 border-2 border-[#023927] text-[#023927] py-3 font-inter uppercase text-sm hover:bg-[#023927] hover:text-white transition-all duration-300">
-                      Télécharger Toutes les Factures
+                      {t('travelerSpace.documents.downloadAll')}
                     </button>
                   </div>
                 </div>
 
                 {/* Stay History */}
                 <div className="bg-white border-2 border-gray-200 p-6">
-                  <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">Mes Séjours Passés</h3>
+                  <h3 className="font-inter uppercase text-[#023927] text-lg mb-4">{t('travelerSpace.documents.pastStays')}</h3>
                   <div className="space-y-3">
                     {[
-                      { property: 'Villa Saint-Tropez', dates: '15-22 Juin 2024', status: 'En cours' },
-                      { property: 'Appartement Paris 16e', dates: '10-15 Mars 2024', status: 'Terminé' },
-                      { property: 'Chalet Courchevel', dates: '20-27 Février 2024', status: 'Terminé' }
+                      { property: 'Villa Saint-Tropez', dates: '15-22 Juin 2024', status: t('travelerSpace.documents.stayInProgress') },
+                      { property: 'Appartement Paris 16e', dates: '10-15 Mars 2024', status: t('travelerSpace.documents.stayCompleted') },
+                      { property: 'Chalet Courchevel', dates: '20-27 Février 2024', status: t('travelerSpace.documents.stayCompleted') }
                     ].map((stay, index) => (
                       <div key={index} className="flex items-center justify-between p-3 border border-gray-200">
                         <div>
@@ -933,7 +935,7 @@ const TravelerSpace: React.FC = () => {
                           <div className="font-inter text-gray-600 text-sm">{stay.dates}</div>
                         </div>
                         <span className={`px-3 py-1 font-inter uppercase text-xs ${
-                          stay.status === 'En cours' 
+                          stay.status === t('travelerSpace.documents.stayInProgress') 
                             ? 'bg-[#023927] text-white'
                             : 'bg-gray-100 text-gray-600'
                         }`}>

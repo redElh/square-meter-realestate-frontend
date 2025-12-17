@@ -1,6 +1,7 @@
 // src/pages/SellingMultiStep.tsx
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
   MapPinIcon,
   HomeModernIcon,
@@ -29,6 +30,7 @@ import {
 } from '@heroicons/react/24/solid';
 
 const SellingMultiStep: React.FC = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(parseInt(searchParams.get('step') || '1'));
@@ -55,23 +57,15 @@ const SellingMultiStep: React.FC = () => {
   });
 
   // Premium estimation hero slides - matching Properties style
-  const heroSlides = [
-    {
-      image: "https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      title: "Estimation Prestige",
-      subtitle: "Découvrez la valeur réelle de votre patrimoine immobilier"
-    },
-    {
-      image: "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      title: "Expertise Sur Mesure",
-      subtitle: "Évaluation précise basée sur les dernières tendances du marché"
-    },
-    {
-      image: "https://images.pexels.com/photos/7031612/pexels-photo-7031612.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      title: "Confidentialité Absolue",
-      subtitle: "Votre projet traité avec la plus grande discrétion"
-    }
-  ];
+  const heroSlidesData = t('sellingMultiStep.hero.slides', { returnObjects: true }) as Array<{title: string; subtitle: string}>;
+  const heroSlides = heroSlidesData.map((slide, index) => ({
+    image: [
+      "https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      "https://images.pexels.com/photos/7031612/pexels-photo-7031612.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800"
+    ][index],
+    ...slide
+  }));
 
   useEffect(() => {
     let slideInterval: NodeJS.Timeout;
@@ -91,67 +85,15 @@ const SellingMultiStep: React.FC = () => {
     setActiveSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
   };
 
-  const steps = [
-    { 
-      number: 1, 
-      title: 'Votre Bien', 
-      description: 'Caractéristiques principales'
-    },
-    { 
-      number: 2, 
-      title: 'Équipements', 
-      description: 'Commodités et prestations'
-    },
-    { 
-      number: 3, 
-      title: 'Votre Projet', 
-      description: 'Motivations et délais'
-    },
-    { 
-      number: 4, 
-      title: 'Contact', 
-      description: 'Informations personnelles'
-    }
-  ];
+  const steps = t('sellingMultiStep.steps', { returnObjects: true }) as Array<{number: number; title: string; description: string}>;
 
-  const propertyTypes = [
-    { value: 'apartment', label: 'Appartement' },
-    { value: 'house', label: 'Maison' },
-    { value: 'villa', label: 'Villa' },
-    { value: 'loft', label: 'Loft' },
-    { value: 'penthouse', label: 'Penthouse' },
-    { value: 'castle', label: 'Château' },
-    { value: 'other', label: 'Autre' }
-  ];
+  const propertyTypes = t('sellingMultiStep.propertyTypes', { returnObjects: true }) as Array<{value: string; label: string}>;
 
-  const conditions = [
-    { value: 'excellent', label: 'Excellent état', description: 'Rénovation récente, état neuf' },
-    { value: 'very-good', label: 'Très bon état', description: 'Bien entretenu, prêt à vivre' },
-    { value: 'good', label: 'Bon état', description: 'Quelques travaux de rafraîchissement' },
-    { value: 'renovation', label: 'À rénover', description: 'Projet de rénovation nécessaire' }
-  ];
+  const conditions = t('sellingMultiStep.conditions', { returnObjects: true }) as Array<{value: string; label: string; description: string}>;
 
-  const features = [
-    { value: 'terrace', label: 'Terrasse' },
-    { value: 'balcony', label: 'Balcon' },
-    { value: 'garden', label: 'Jardin' },
-    { value: 'pool', label: 'Piscine' },
-    { value: 'parking', label: 'Parking' },
-    { value: 'elevator', label: 'Ascenseur' },
-    { value: 'fireplace', label: 'Cheminée' },
-    { value: 'ac', label: 'Climatisation' },
-    { value: 'alarm', label: 'Alarme' },
-    { value: 'smart-home', label: 'Domotique' },
-    { value: 'wine-cellar', label: 'Cave à vin' },
-    { value: 'gym', label: 'Salle de sport' }
-  ];
+  const features = t('sellingMultiStep.features', { returnObjects: true }) as Array<{value: string; label: string}>;
 
-  const timelines = [
-    { value: 'urgent', label: 'Urgent (1-3 mois)', description: 'Vente rapide souhaitée' },
-    { value: 'medium', label: 'Moyen (3-6 mois)', description: 'Délai standard' },
-    { value: 'flexible', label: 'Flexible (6+ mois)', description: 'Pas de contrainte de temps' },
-    { value: 'undefined', label: 'À définir', description: 'En fonction du marché' }
-  ];
+  const timelines = t('sellingMultiStep.timelines', { returnObjects: true }) as Array<{value: string; label: string; description: string}>;
 
   const handleNext = () => {
     if (currentStep < steps.length) {
@@ -200,7 +142,7 @@ const SellingMultiStep: React.FC = () => {
             {/* Address Section */}
             <div>
               <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
-                Adresse du bien *
+                {t('sellingMultiStep.step1.addressLabel')}
               </label>
               <input
                 type="text"
@@ -208,7 +150,7 @@ const SellingMultiStep: React.FC = () => {
                 value={formData.address}
                 onChange={handleChange}
                 required
-                placeholder="123 Avenue de Luxe, 75008 Paris"
+                placeholder={t('sellingMultiStep.step1.addressPlaceholder')}
                 className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base lg:text-lg transition-colors duration-300"
                 style={{ borderRadius: '0' }}
               />
@@ -218,7 +160,7 @@ const SellingMultiStep: React.FC = () => {
               {/* Property Type */}
               <div>
                 <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
-                  Type de bien *
+                  {t('sellingMultiStep.step1.typeLabel')}
                 </label>
                 <div className="grid grid-cols-2 gap-2 sm:gap-4">
                   {propertyTypes.map(type => (
@@ -242,7 +184,7 @@ const SellingMultiStep: React.FC = () => {
               <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Surface (m²) *
+                    {t('sellingMultiStep.step1.surfaceLabel')}
                   </label>
                   <input
                     type="number"
@@ -250,7 +192,7 @@ const SellingMultiStep: React.FC = () => {
                     value={formData.surface}
                     onChange={handleChange}
                     required
-                    placeholder="Ex: 120"
+                    placeholder={t('sellingMultiStep.step1.surfacePlaceholder')}
                     className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
@@ -259,7 +201,7 @@ const SellingMultiStep: React.FC = () => {
                 <div className="grid grid-cols-2 gap-3 sm:gap-6">
                   <div>
                     <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                      Pièces *
+                      {t('sellingMultiStep.step1.roomsLabel')}
                     </label>
                     <input
                       type="number"
@@ -267,7 +209,7 @@ const SellingMultiStep: React.FC = () => {
                       value={formData.rooms}
                       onChange={handleChange}
                       required
-                      placeholder="Ex: 5"
+                      placeholder={t('sellingMultiStep.step1.roomsPlaceholder')}
                       className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                       style={{ borderRadius: '0' }}
                     />
@@ -275,7 +217,7 @@ const SellingMultiStep: React.FC = () => {
 
                   <div>
                     <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                      Chambres *
+                      {t('sellingMultiStep.step1.bedroomsLabel')}
                     </label>
                     <input
                       type="number"
@@ -283,7 +225,7 @@ const SellingMultiStep: React.FC = () => {
                       value={formData.bedrooms}
                       onChange={handleChange}
                       required
-                      placeholder="Ex: 3"
+                      placeholder={t('sellingMultiStep.step1.bedroomsPlaceholder')}
                       className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                       style={{ borderRadius: '0' }}
                     />
@@ -295,7 +237,7 @@ const SellingMultiStep: React.FC = () => {
             {/* Condition */}
             <div>
               <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
-                État du bien *
+                {t('sellingMultiStep.step1.conditionLabel')}
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 {conditions.map(condition => (
@@ -327,10 +269,10 @@ const SellingMultiStep: React.FC = () => {
           <div className="space-y-4 sm:space-y-6 lg:space-y-8">
             <div className="text-center mb-4 sm:mb-6 lg:mb-8">
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-light text-gray-900 mb-2 sm:mb-4 px-2">
-                Équipements & Prestations
+                {t('sellingMultiStep.step2.title')}
               </h3>
               <p className="font-light text-gray-600 text-sm sm:text-base lg:text-lg px-4">
-                Sélectionnez les équipements qui valorisent votre bien
+                {t('sellingMultiStep.step2.subtitle')}
               </p>
             </div>
 
@@ -362,7 +304,7 @@ const SellingMultiStep: React.FC = () => {
             {formData.features.length > 0 && (
               <div className="p-4 sm:p-6 border-2 border-gray-100">
                 <h4 className="font-medium text-gray-900 text-base sm:text-lg mb-3 sm:mb-4">
-                  Équipements sélectionnés ({formData.features.length})
+                  {t('sellingMultiStep.step2.selectedSummary', { count: formData.features.length })}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {formData.features.map(featureValue => {
@@ -386,7 +328,7 @@ const SellingMultiStep: React.FC = () => {
               {/* Timeline */}
               <div>
                 <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
-                  Délai de vente souhaité *
+                  {t('sellingMultiStep.step3.timelineLabel')}
                 </label>
                 <div className="space-y-3 sm:space-y-4">
                   {timelines.map(timeline => (
@@ -415,14 +357,14 @@ const SellingMultiStep: React.FC = () => {
               <div className="space-y-4 sm:space-y-6">
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Fourchette de prix envisagée
+                    {t('sellingMultiStep.step3.priceLabel')}
                   </label>
                   <input
                     type="text"
                     name="priceExpectation"
                     value={formData.priceExpectation}
                     onChange={handleChange}
-                    placeholder="Ex: 1,200,000 - 1,500,000 €"
+                    placeholder={t('sellingMultiStep.step3.pricePlaceholder')}
                     className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
@@ -430,14 +372,14 @@ const SellingMultiStep: React.FC = () => {
 
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Disponibilités pour les visites
+                    {t('sellingMultiStep.step3.availabilityLabel')}
                   </label>
                   <input
                     type="text"
                     name="visitAvailability"
                     value={formData.visitAvailability}
                     onChange={handleChange}
-                    placeholder="Ex: Weekends, en semaine après 18h..."
+                    placeholder={t('sellingMultiStep.step3.availabilityPlaceholder')}
                     className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
                     style={{ borderRadius: '0' }}
                   />
@@ -448,7 +390,7 @@ const SellingMultiStep: React.FC = () => {
             {/* Motivation */}
             <div>
               <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-4">
-                Motivation de la vente *
+                {t('sellingMultiStep.step3.motivationLabel')}
               </label>
               <textarea
                 name="motivation"
@@ -456,7 +398,7 @@ const SellingMultiStep: React.FC = () => {
                 onChange={handleChange}
                 required
                 rows={4}
-                placeholder="Décrivez brièvement les raisons de votre projet de vente (déménagement, investissement, succession...)"
+                placeholder={t('sellingMultiStep.step3.motivationPlaceholder')}
                 className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base resize-none transition-colors duration-300 leading-relaxed"
                 style={{ borderRadius: '0' }}
               ></textarea>
@@ -471,12 +413,12 @@ const SellingMultiStep: React.FC = () => {
               {/* Personal Information */}
               <div className="space-y-4 sm:space-y-6">
                 <h3 className="font-medium text-gray-900 text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-6">
-                  Informations personnelles
+                  {t('sellingMultiStep.step4.personalInfoTitle')}
                 </h3>
                 
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Prénom *
+                    {t('sellingMultiStep.step4.firstNameLabel')}
                   </label>
                   <input
                     type="text"
@@ -491,7 +433,7 @@ const SellingMultiStep: React.FC = () => {
 
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Nom *
+                    {t('sellingMultiStep.step4.lastNameLabel')}
                   </label>
                   <input
                     type="text"
@@ -508,12 +450,12 @@ const SellingMultiStep: React.FC = () => {
               {/* Contact Information */}
               <div className="space-y-4 sm:space-y-6">
                 <h3 className="font-medium text-gray-900 text-lg sm:text-xl lg:text-2xl mb-3 sm:mb-6">
-                  Coordonnées
+                  {t('sellingMultiStep.step4.contactInfoTitle')}
                 </h3>
 
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Email *
+                    {t('sellingMultiStep.step4.emailLabel')}
                   </label>
                   <input
                     type="email"
@@ -528,7 +470,7 @@ const SellingMultiStep: React.FC = () => {
 
                 <div>
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
-                    Téléphone *
+                    {t('sellingMultiStep.step4.phoneLabel')}
                   </label>
                   <input
                     type="tel"
@@ -546,25 +488,25 @@ const SellingMultiStep: React.FC = () => {
             {/* Summary Card */}
             <div className="p-4 sm:p-6 lg:p-8 border-2 border-gray-100">
               <h4 className="font-medium text-gray-900 text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6">
-                Récapitulatif de votre demande
+                {t('sellingMultiStep.step4.summaryTitle')}
               </h4>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-sm sm:text-base lg:text-lg">
                 <div>
-                  <div className="font-medium text-gray-900 mb-2 sm:mb-4 text-sm sm:text-base">BIEN IMMOBILIER</div>
+                  <div className="font-medium text-gray-900 mb-2 sm:mb-4 text-sm sm:text-base">{t('sellingMultiStep.step4.propertySection')}</div>
                   <div className="font-light text-gray-700 space-y-1 sm:space-y-2 text-sm sm:text-base">
                     <div>{formData.address}</div>
                     <div>{propertyTypes.find(t => t.value === formData.propertyType)?.label}</div>
-                    <div>{formData.surface} m² • {formData.rooms} pièces • {formData.bedrooms} chambres</div>
+                    <div>{formData.surface} m² • {formData.rooms} {t('sellingMultiStep.step1.roomsLabel').replace(' *', '')} • {formData.bedrooms} {t('sellingMultiStep.step1.bedroomsLabel').replace(' *', '')}</div>
                   </div>
                 </div>
                 
                 <div>
-                  <div className="font-medium text-gray-900 mb-4">VOTRE PROJET</div>
+                  <div className="font-medium text-gray-900 mb-4">{t('sellingMultiStep.step4.projectSection')}</div>
                   <div className="font-light text-gray-700 space-y-2">
                     <div>{timelines.find(t => t.value === formData.timeline)?.label}</div>
-                    <div>{formData.priceExpectation && `Budget: ${formData.priceExpectation}`}</div>
-                    <div>{formData.features.length} équipements sélectionnés</div>
+                    <div>{formData.priceExpectation && `${t('sellingMultiStep.step4.budgetPrefix')} ${formData.priceExpectation}`}</div>
+                    <div>{t('sellingMultiStep.step4.amenitiesCount', { count: formData.features.length })}</div>
                   </div>
                 </div>
               </div>
@@ -643,8 +585,8 @@ const SellingMultiStep: React.FC = () => {
         {/* Progress Indicator */}
         <div className="absolute bottom-16 sm:bottom-24 left-1/2 transform -translate-x-1/2 z-30 max-w-md w-full px-4">
           <div className="flex justify-between text-xs sm:text-sm text-white mb-2">
-            <span>Étape {currentStep} sur {steps.length}</span>
-            <span className="hidden sm:inline">{Math.round((currentStep / steps.length) * 100)}% complété</span>
+            <span>{t('sellingMultiStep.progress.step')} {currentStep} {t('sellingMultiStep.progress.of')} {steps.length}</span>
+            <span className="hidden sm:inline">{Math.round((currentStep / steps.length) * 100)}% {t('sellingMultiStep.progress.completed')}</span>
           </div>
           <div className="w-full bg-white/20">
             <div 
@@ -719,7 +661,7 @@ const SellingMultiStep: React.FC = () => {
                 >
                   <span className="flex items-center space-x-1 sm:space-x-3">
                     <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                    <span className="hidden sm:inline">Précédent</span>
+                    <span className="hidden sm:inline">{t('sellingMultiStep.navigation.previous')}</span>
                   </span>
                 </button>
 
@@ -732,16 +674,16 @@ const SellingMultiStep: React.FC = () => {
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent animate-spin" />
-                        <span className="hidden sm:inline">Traitement...</span>
+                        <span className="hidden sm:inline">{t('sellingMultiStep.navigation.processing')}</span>
                       </>
                     ) : currentStep === steps.length ? (
                       <>
-                        <span>Soumettre</span>
+                        <span>{t('sellingMultiStep.navigation.submit')}</span>
                         <CheckCircleIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </>
                     ) : (
                       <>
-                        <span>Continuer</span>
+                        <span>{t('sellingMultiStep.navigation.continue')}</span>
                         <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </>
                     )}
