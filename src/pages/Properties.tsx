@@ -17,30 +17,12 @@ import {
 import {
   HeartIcon as HeartIconSolid
 } from '@heroicons/react/24/solid';
-
-interface Property {
-  id: number;
-  title: string;
-  description: string;
-  type: 'buy' | 'rent' | 'seasonal';
-  price: number;
-  location: string;
-  surface: number;
-  bedrooms: number;
-  bathrooms: number;
-  images: string[];
-  confidential?: boolean;
-  featured?: boolean;
-  yearBuilt?: number;
-  features?: string[];
-  reference?: string;
-  titleKey?: string;
-  locationKey?: string;
-}
+import { apimoService, Property } from '../services/apimoService';
+import { useCurrency } from '../hooks/useCurrency';
 
 const Properties: React.FC = () => {
   const { t } = useTranslation();
-  const { formatPrice: formatPriceFromContext } = useLocalization();
+  const { format: formatCurrencyPrice } = useCurrency();
   const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
@@ -51,6 +33,10 @@ const Properties: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
+  
+  // Get current language from i18n
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
   // Exclusive properties hero images
   const heroProperties = [
@@ -100,147 +86,38 @@ const Properties: React.FC = () => {
 
   useEffect(() => {
     const fetchProperties = async () => {
+      console.log('🔍 Starting to fetch properties...');
       setLoading(true);
-      // Premium property images from Pexels
-      const propertyImages = [
-        "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800"
-      ];
-      // Enhanced mock data with real images - Updated to match reference
-      const mockProperties: Property[] = [
-        {
-          id: 1,
-          title: 'Appartement Haussmannien',
-          titleKey: 'properties.mock.titles.haussmannApartment',
-          description: 'Exceptionnel appartement haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
-          type: 'buy',
-          price: 3595000,
-          location: 'Paris 16ème',
-          locationKey: 'properties.mock.locations.paris16',
-          surface: 216.96,
-          bedrooms: 5,
-          bathrooms: 4,
-          images: [propertyImages[4], propertyImages[5], propertyImages[6]],
-          featured: true,
-          yearBuilt: 1850,
-          features: ['Terrasse privative', 'Vue Tour Eiffel', 'Parquet Versailles', 'Hauteur sous plafond', 'Cheminée d\'origine', 'Ascenseur privatif'],
-          reference: '86198435'
-        },
-        {
-          id: 2,
-          title: 'Villa Méditerranéenne Exceptionnelle',
-          titleKey: 'properties.mock.titles.mediterraneanVilla',
-          description: 'Magnifique villa contemporaine avec vue panoramique sur la Méditerranée, piscine à débordement et jardin paysager conçu par un architecte renommé.',
-          type: 'buy',
-          price: 3850000,
-          location: 'Saint-Tropez',
-          locationKey: 'properties.mock.locations.saintTropez',
-          surface: 420,
-          bedrooms: 6,
-          bathrooms: 5,
-          images: [propertyImages[0], propertyImages[1], propertyImages[2]],
-          featured: true,
-          yearBuilt: 2020,
-          features: ['Piscine à débordement', 'Vue mer', 'Jardin paysager', 'Salle de sport', 'Home cinéma', 'Cave à vin'],
-          reference: '86198436'
-        },
-        {
-          id: 3,
-          title: 'Penthouse Prestige',
-          titleKey: 'properties.mock.titles.penthousePrestige',
-          description: 'Exceptionnel penthouse haussmannien rénové avec soin, parquet Versailles, moulures d\'origine et terrasse privative avec vue sur la Tour Eiffel.',
-          type: 'rent',
-          price: 28000,
-          location: 'Paris 8ème',
-          locationKey: 'properties.mock.locations.paris8',
-          surface: 220,
-          bedrooms: 4,
-          bathrooms: 3,
-          images: [propertyImages[3], propertyImages[4], propertyImages[5]],
-          yearBuilt: 1850,
-          features: ['Terrasse privative', 'Vue Tour Eiffel', 'Parquet Versailles', 'Sécurité 24/7', 'Conciergerie', 'Parking privé'],
-          reference: '86198437'
-        },
-        {
-          id: 4,
-          title: 'Domaine Provençal Historique',
-          titleKey: 'properties.mock.titles.provencalEstate',
-          description: 'Authentique mas provençal du 18ème siècle entièrement rénové avec piscine chauffée, oliveraie centenaire et dépendances.',
-          type: 'buy',
-          price: 5200000,
-          location: 'Gordes',
-          locationKey: 'properties.mock.locations.gordes',
-          surface: 650,
-          bedrooms: 8,
-          bathrooms: 6,
-          images: [propertyImages[6], propertyImages[7], propertyImages[0]],
-          confidential: true,
-          yearBuilt: 1780,
-          features: ['Oliveraie centenaire', 'Piscine chauffée', 'Dépendances', 'Vignoble', 'Écuries', 'Court de tennis'],
-          reference: '86198438'
-        },
-        {
-          id: 5,
-          title: 'Villa Contemporaine Côte d\'Azur',
-          titleKey: 'properties.mock.titles.contemporaryVilla',
-          description: 'Architecture contemporaine signée, vue mer imprenable, piscine infinity et accès plage privée.',
-          type: 'seasonal',
-          price: 45000,
-          location: 'Saint-Jean-Cap-Ferrat',
-          locationKey: 'properties.mock.locations.saintJeanCapFerrat',
-          surface: 380,
-          bedrooms: 5,
-          bathrooms: 4,
-          images: [propertyImages[1], propertyImages[2], propertyImages[3]],
-          featured: true,
-          yearBuilt: 2018,
-          features: ['Piscine infinity', 'Accès plage privée', 'Architecture contemporaine', 'Spa', 'Héliport', 'Marina privée'],
-          reference: '86198439'
-        },
-        {
-          id: 6,
-          title: 'Appartement Design Marais',
-          titleKey: 'properties.mock.titles.maraisApartment',
-          description: 'Loft design dans le Marais, hauteur sous plafond exceptionnelle, verrière et équipements haut de gamme.',
-          type: 'rent',
-          price: 12500,
-          location: 'Paris 4ème',
-          locationKey: 'properties.mock.locations.paris4',
-          surface: 95,
-          bedrooms: 2,
-          bathrooms: 2,
-          images: [propertyImages[4], propertyImages[5], propertyImages[6]],
-          yearBuilt: 2015,
-          features: ['Hauteur sous plafond', 'Verrière', 'Design contemporain', 'Terrasse', 'Cuisine équipée', 'Mezzanine'],
-          reference: '86198440'
-        }
-      ];
-      
-      setTimeout(() => {
-        setProperties(mockProperties);
+      try {
+        // Fetch properties from Apimo CRM API
+        console.log('📡 Calling apimoService.getProperties...');
+        const { properties: apimoProperties } = await apimoService.getProperties({
+          limit: 1000, // Get all properties
+        }, t, currentLanguage);
+        
+        console.log('✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length, apimoProperties);
+        setProperties(apimoProperties);
+      } catch (error) {
+        console.error('❌ Error loading properties from Apimo:', error);
+        // Set empty array to show "no properties" message
+        setProperties([]);
+      } finally {
         setLoading(false);
-      }, 1500);
+        console.log('🏁 Finished loading properties');
+      }
     };
 
     fetchProperties();
-  }, []);
+  }, [t, currentLanguage]);
 
   const filteredProperties = properties.filter(property => {
     const typeMatch = filter === 'all' || property.type === filter;
     const locationMatch = !locationFilter || 
-      property.location.toLowerCase().includes(locationFilter.toLowerCase()) ||
-      (property.locationKey && t(property.locationKey).toLowerCase().includes(locationFilter.toLowerCase()));
+      property.location.toLowerCase().includes(locationFilter.toLowerCase());
     const bedroomsMatch = !bedroomsFilter || property.bedrooms >= bedroomsFilter;
     const searchMatch = !searchQuery || 
-      (property.titleKey ? t(property.titleKey).toLowerCase().includes(searchQuery.toLowerCase()) : property.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       property.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (property.locationKey && t(property.locationKey).toLowerCase().includes(searchQuery.toLowerCase())) ||
       property.description.toLowerCase().includes(searchQuery.toLowerCase());
     
     return typeMatch && locationMatch && bedroomsMatch && searchMatch;
@@ -280,14 +157,14 @@ const Properties: React.FC = () => {
   
 
   const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal') => {
-    // Convert property type to period type for formatPrice context function
+    const formattedPrice = formatCurrencyPrice(price);
     if (type === 'rent') {
-      return formatPriceFromContext(price, true); // true means rental/monthly
+      return `${formattedPrice}/${t('common.month') || 'month'}`;
     }
     if (type === 'seasonal') {
-      return `${price.toLocaleString('fr-FR')} €/semaine`; // Keep seasonal as is for now
+      return `${formattedPrice}/${t('common.week') || 'week'}`;
     }
-    return formatPriceFromContext(price, false); // false means sale
+    return formattedPrice;
   };
 
   return (
@@ -637,21 +514,21 @@ const Properties: React.FC = () => {
                               : 'bg-purple-50 text-purple-800 border border-purple-200'
                           }`}>{property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
 
-                          <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.titleKey ? t(property.titleKey) : property.title}</h3>
+                          <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
 
-                          <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.locationKey ? t(property.locationKey) : property.location}</span>
+                          <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
                         </div>
                       </div>
 
                       <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
-                        <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.bedrooms}</span></div>
-                        <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.bathrooms}</span></div>
+                        <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.rooms || 0}</span></div>
+                        <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.floors || 0}</span></div>
                         <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
                       </div>
 
                       <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.bedrooms}</span></div>
-                        <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.bathrooms}</span></div>
+                        <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.rooms || 0}</span></div>
+                        <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.floors || 0}</span></div>
                         <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
                       </div>
 

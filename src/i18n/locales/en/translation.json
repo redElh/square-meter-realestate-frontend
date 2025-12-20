@@ -64,7 +64,12 @@
     "sellProperty": "Sell Your Property",
     "buyersSupport": "Manage your interactions and purchases",
     "loginDescription": "Access your personal space",
-    "dashboardDescription": "Manage your interactions and purchases"
+    "dashboardDescription": "Manage your interactions and purchases",
+    "agencyDescription": "Expert guidance in luxury real estate",
+    "servicesDescription": "Premium services for your projects",
+    "careersDescription": "Join our team of excellence",
+    "contactDescription": "Let's discuss your real estate projects",
+    "magazineDescription": "News and trends in luxury real estate"
   },
   "home": {
     "hero": {
@@ -249,6 +254,8 @@
     "stats": {
       "surface": "Surface",
       "land": "Land",
+      "rooms": "Rooms",
+      "floors": "Floors",
       "bedrooms": "Bedrooms",
       "bathrooms": "Bathrooms",
       "year": "Year"
@@ -256,7 +263,22 @@
     "sections": {
       "description": "Exclusive Description",
       "features": "Amenities & Features",
-      "environment": "Environment & Services"
+      "environment": "Environment & Services",
+      "rooms": "Rooms"
+    },
+    "roomTypes": {
+      "bedroom": "Bedroom",
+      "living": "Living Room",
+      "kitchen": "Kitchen",
+      "bathroom": "Bathroom",
+      "showerRoom": "Shower Room",
+      "parking": "Parking",
+      "entrance": "Entrance",
+      "lounge": "Lounge",
+      "wc": "WC",
+      "terrace": "Terrace",
+      "services": "services",
+      "type": "Type"
     },
     "actions": {
       "privateVisit": "Private Visit",
@@ -268,7 +290,8 @@
       "title": "Exclusive Visit",
       "advisor": "Your Dedicated Advisor",
       "experience": "years of experience",
-      "propertiesSold": "properties sold"
+      "propertiesSold": "properties sold",
+      "realEstateAdvisor": "Real Estate Advisor"
     },
     "similar": {
       "title": "Similar Properties",
@@ -474,6 +497,8 @@
       "price": "Price",
       "location": "Location",
       "surface": "Surface",
+      "rooms": "Rooms",
+      "floors": "Floors",
       "bedrooms": "Bedrooms",
       "bathrooms": "Bathrooms",
       "yearBuilt": "Year Built",
@@ -1898,6 +1923,19 @@
           "description": "Support until the transaction"
         }
       }
+    }
+  },
+  "locations": {
+    "Essaouira": "Essaouira"
+  },
+  "apiProperties": {
+    "86379445": {
+      "title": "Cosy Riad",
+      "description": "EXCLUSIVE - MEDINA - RIAD TITLE FOR SALE\n\nLocated in the heart of the medina, this charming riad of approximately 25 m² of floor space is spread over 3 floors plus a terrace with a pleasant open view.\nThe property includes 2 bedrooms, 2 bathrooms, and a perfect terrace to relax.\nThis riad is currently operated as a seasonal rental on Airbnb, making it a turnkey investment opportunity.\nIts privileged location in the medina, close to amenities, makes it an ideal property for tourist rental or as a personal pied-à-terre.\nA riad ready to generate immediate income.\n\nIf you are interested in this property, please do not hesitate to contact us\nAgency fee 2.5% excl. VAT"
+    },
+    "86380226": {
+      "title": "Dia House",
+      "description": "ESSAOUIRA - RARE PROPERTY TITLE - OCEAN VIEW\nLocated close to Essaouira, in the second row facing the ocean, this 115 m² single-storey house offers a privileged location in one of the most sought-after villages on the outskirts of Essaouira.\nThe property, in need of complete renovation, allows for the construction of two additional levels, eventually offering unobstructed ocean views.\nAn ideal project for: a real estate investment, a quiet main residence, or the creation of a tourist property with character.\nAs opportunities in this sector are very rare, this property represents a real opportunity not to be missed for lovers of Essaouira and its authenticity.\n\nIf you are interested in this property, please do not hesitate to contact us.\nAgency fee 2.5% excl. VAT"
     }
   }
 }

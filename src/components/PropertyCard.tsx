@@ -21,6 +21,8 @@ interface PropertyCardProps {
   surface: number;
   bedrooms: number;
   bathrooms: number;
+  rooms?: number;
+  floors?: number;
   images: string[];
   type: 'buy' | 'rent';
   isFavorite?: boolean;
@@ -36,6 +38,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   surface,
   bedrooms,
   bathrooms,
+  rooms,
+  floors,
   images,
   type,
   isFavorite = false,
@@ -48,7 +52,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <div 
       dir={isRTL ? 'rtl' : 'ltr'}
-      className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+      className="group relative bg-white rounded-none overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
     >
       {/* Image */}
       <div className="relative h-64 overflow-hidden">
@@ -105,12 +109,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <span>{surface} m²</span>
           </div>
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <span className="font-medium">{bedrooms}</span>
-            <span className={isRTL ? 'mr-1' : 'ml-1'}>{t('properties.details.bedrooms')}</span>
+            <span className="font-medium">{rooms || 0}</span>
+            <span className={isRTL ? 'mr-1' : 'ml-1'}>{t('properties.details.rooms')}</span>
           </div>
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <span className="font-medium">{bathrooms}</span>
-            <span className={isRTL ? 'mr-1' : 'ml-1'}>{t('properties.details.bathrooms')}</span>
+            <span className="font-medium">{floors || 0}</span>
+            <span className={isRTL ? 'mr-1' : 'ml-1'}>{t('properties.details.floors')}</span>
           </div>
         </div>
 
@@ -127,7 +131,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
 
           <Link
             to={`/properties/${id}`}
-            className={`flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
+            className={`flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-none hover:bg-gray-800 transition-colors ${isRTL ? 'flex-row-reverse' : ''}`}
           >
             <span>{t('common.view')}</span>
             <ArrowRightIcon className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />

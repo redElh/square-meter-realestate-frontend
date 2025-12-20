@@ -116,35 +116,35 @@ const Header: React.FC = () => {
         label: t('navigation.agency'),
         Icon: BuildingOfficeIcon,
         category: 'company',
-        description: t('header.expertGuidance')
+        description: t('header.agencyDescription')
       },
       {
         path: '/services',
         label: t('navigation.services'),
         Icon: StarIcon,
         category: 'company',
-        description: t('header.expertGuidance')
+        description: t('header.servicesDescription')
       },
       {
         path: '/careers',
         label: t('navigation.careers'),
         Icon: BriefcaseIcon,
         category: 'company',
-        description: t('header.expertGuidance')
+        description: t('header.careersDescription')
       },
       {
         path: '/contact',
         label: t('navigation.contact'),
         Icon: PhoneIcon,
         category: 'company',
-        description: t('header.expertGuidance')
+        description: t('header.contactDescription')
       },
       {
         path: '/mag',
         label: t('navigation.magazine'),
         Icon: NewspaperIcon,
         category: 'company',
-        description: t('header.expertGuidance')
+        description: t('header.magazineDescription')
       }
     ],
   };

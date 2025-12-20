@@ -64,7 +64,12 @@
     "sellProperty": "Vender tu propiedad",
     "buyersSupport": "Gestione sus interacciones y compras",
     "loginDescription": "Acceda a su espacio personal",
-    "dashboardDescription": "Gestione sus interacciones y compras"
+    "dashboardDescription": "Gestione sus interacciones y compras",
+    "agencyDescription": "Asesoramiento experto en inmobiliaria de lujo",
+    "servicesDescription": "Servicios premium para sus proyectos",
+    "careersDescription": "Únase a nuestro equipo de excelencia",
+    "contactDescription": "Hablemos de sus proyectos inmobiliarios",
+    "magazineDescription": "Noticias y tendencias en inmobiliaria de lujo"
   },
   "home": {
     "hero": {
@@ -248,6 +253,8 @@
     "stats": {
       "surface": "Superficie",
       "land": "Terreno",
+      "rooms": "Habitaciones",
+      "floors": "Plantas",
       "bedrooms": "Habitaciones",
       "bathrooms": "Baños",
       "year": "Año"
@@ -255,7 +262,22 @@
     "sections": {
       "description": "Descripción Exclusiva",
       "features": "Equipamiento & Prestaciones",
-      "environment": "Entorno & Servicios"
+      "environment": "Entorno & Servicios",
+      "rooms": "Habitaciones"
+    },
+    "roomTypes": {
+      "bedroom": "Dormitorio",
+      "living": "Salón",
+      "kitchen": "Cocina",
+      "bathroom": "Baño",
+      "showerRoom": "Cuarto de ducha",
+      "parking": "Aparcamiento",
+      "entrance": "Entrada",
+      "lounge": "Salón de estar",
+      "wc": "WC",
+      "terrace": "Terraza",
+      "services": "servicios",
+      "type": "Tipo"
     },
     "actions": {
       "privateVisit": "Visita Privada",
@@ -267,7 +289,8 @@
       "title": "Visita Exclusiva",
       "advisor": "Su Asesor Dedicado",
       "experience": "años de experiencia",
-      "propertiesSold": "propiedades vendidas"
+      "propertiesSold": "propiedades vendidas",
+      "realEstateAdvisor": "Asesor Inmobiliario"
     },
     "similar": {
       "title": "Propiedades Similares",
@@ -472,6 +495,8 @@
       "price": "Precio",
       "location": "Ubicación",
       "surface": "Superficie",
+      "rooms": "Habitaciones",
+      "floors": "Plantas",
       "bedrooms": "Habitaciones",
       "bathrooms": "Baños",
       "yearBuilt": "Año de construcción",
@@ -1925,6 +1950,19 @@
           "description": "Soporte hasta la transacción"
         }
       }
+    }
+  },
+  "locations": {
+    "Essaouira": "Esauira"
+  },
+  "apiProperties": {
+    "86379445": {
+      "title": "Riad Acogedor",
+      "description": "EXCLUSIVA - MEDINA - RIAD TÍTULO EN VENTA\n\nUbicado en el corazón de la medina, este encantador riad de aproximadamente 25 m² de superficie se desarrolla en 3 plantas más una terraza con una agradable vista despejada.\nLa propiedad incluye 2 habitaciones, 2 baños y una terraza perfecta para relajarse.\nEste riad se explota actualmente como alquiler de temporada en Airbnb, lo que lo convierte en una oportunidad de inversión llave en mano.\nSu ubicación privilegiada en la medina, cerca de los servicios, lo convierte en una propiedad ideal para alquiler turístico o como pied-à-terre personal.\nUn riad listo para generar ingresos inmediatos.\n\nSi está interesado en esta propiedad, no dude en contactarnos\nHonorarios de agencia 2,5% sin IVA"
+    },
+    "86380226": {
+      "title": "Casa Dia",
+      "description": "ESSAOUIRA - PROPIEDAD RARA CON TÍTULO - VISTA AL OCÉANO\nUbicada cerca de Essaouira, en segunda línea frente al océano, esta casa de una sola planta de 115 m² ofrece una ubicación privilegiada en uno de los pueblos más buscados en las afueras de Essaouira.\nLa propiedad, que necesita una renovación completa, permite la construcción de dos niveles adicionales, ofreciendo eventualmente vistas despejadas al océano.\nUn proyecto ideal para: una inversión inmobiliaria, una residencia principal tranquila o la creación de una propiedad turística con carácter.\nComo las oportunidades en este sector son muy raras, esta propiedad representa una verdadera oportunidad que no debe perderse para los amantes de Essaouira y su autenticidad.\n\nSi está interesado en esta propiedad, no dude en contactarnos\nHonorarios de agencia 2,5% sin IVA"
     }
   }
 }

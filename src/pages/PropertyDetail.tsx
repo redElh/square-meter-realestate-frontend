@@ -22,103 +22,99 @@ import {
   HeartIcon as HeartIconSolid,
   MapPinIcon as MapPinIconSolid
 } from '@heroicons/react/24/solid';
+import { apimoService, Property } from '../services/apimoService';
+import PropertyCard from '../components/PropertyCard';
+import { useCurrency } from '../hooks/useCurrency';
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+  const { format: formatPrice } = useCurrency();
+  const [property, setProperty] = useState<Property | null>(null);
+  const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showAllFeatures, setShowAllFeatures] = useState(false);
 
-  // Premium property images from Pexels
-  const propertyImages = [
-    "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920",
-    "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=1920",
-    "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920",
-    "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1920",
-    "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=1920"
-  ];
+  useEffect(() => {
+    const fetchPropertyData = async () => {
+      if (!id) return;
+      
+      setLoading(true);
+      try {
+        // Fetch the specific property
+        const propertyData = await apimoService.getPropertyById(Number(id), t, currentLanguage);
+        setProperty(propertyData);
 
-  const property = {
-    id: 1,
-    title: t('propertyDetail.mock.property.title'),
-    description: t('propertyDetail.mock.property.description'),
-    price: 3850000,
-    location: t('propertyDetail.mock.property.location'),
-    surface: 420,
-    land: 20000,
-    bedrooms: 6,
-    bathrooms: 5,
-    yearBuilt: 2020,
-    type: 'Villa Contemporaine',
-    status: 'Exclusivité',
-    features: t('propertyDetail.mock.features', { returnObjects: true }) as string[],
-    amenities: t('propertyDetail.mock.amenities', { returnObjects: true }) as string[],
-    images: propertyImages,
-    agent: {
-      name: t('propertyDetail.mock.property.agentName'),
-      title: t('propertyDetail.mock.property.agentTitle'),
-      phone: '+33 1 23 45 67 89',
-      email: 's.laurent@squaremeter.com',
-      image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=400',
-      experience: '15 ans',
-      properties: '120+'
-    }
-  };
+        // Fetch all properties to get similar ones
+        const { properties: allProperties } = await apimoService.getProperties({ limit: 1000 }, t, currentLanguage);
+        
+        // Get similar properties (same type, different id, limit to 3)
+        if (propertyData) {
+          const similar = allProperties
+            .filter(p => p.type === propertyData.type && p.id !== propertyData.id)
+            .slice(0, 3);
+          setSimilarProperties(similar);
+        }
+      } catch (error) {
+        console.error('Error fetching property details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const similarPropertiesData = t('propertyDetail.mock.similarProperties', { returnObjects: true }) as Array<{title: string; location: string}>;
-  
-  const similarProperties = [
-    {
-      id: 2,
-      title: similarPropertiesData[0].title,
-      location: similarPropertiesData[0].location,
-      price: 3200000,
-      surface: 380,
-      bedrooms: 5,
-      image: 'https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600'
-    },
-    {
-      id: 3,
-      title: similarPropertiesData[1].title,
-      location: similarPropertiesData[1].location,
-      price: 4500000,
-      surface: 550,
-      bedrooms: 7,
-      image: 'https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=600'
-    },
-    {
-      id: 4,
-      title: similarPropertiesData[2].title,
-      location: similarPropertiesData[2].location,
-      price: 5200000,
-      surface: 280,
-      bedrooms: 4,
-      image: 'https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=600'
-    }
-  ];
+    fetchPropertyData();
+  }, [id]);
 
   // Carousel autoplay effect
   useEffect(() => {
     let slideInterval: NodeJS.Timeout;
-    if (isPlaying && property.images.length > 1) {
+    if (isPlaying && property && property.images.length > 1) {
       slideInterval = setInterval(() => {
         setActiveImage(prev => (prev + 1) % property.images.length);
       }, 5000);
     }
     return () => clearInterval(slideInterval);
-  }, [isPlaying, property.images.length]);
+  }, [isPlaying, property]);
 
   const nextImage = () => {
+    if (!property) return;
     setActiveImage(prev => (prev + 1) % property.images.length);
   };
 
   const prevImage = () => {
+    if (!property) return;
     setActiveImage(prev => (prev - 1 + property.images.length) % property.images.length);
   };
 
-  const visibleFeatures = showAllFeatures ? property.features : property.features.slice(0, 8);
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#023927]"></div>
+          <p className="mt-4 text-gray-600">{t('common.loading') || 'Chargement...'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!property) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-inter text-gray-900 mb-4">Propriété non trouvée</h2>
+          <Link to="/properties" className="text-[#023927] hover:underline">
+            Retour aux propriétés
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const visibleFeatures = showAllFeatures ? (property.features || []) : (property.features || []).slice(0, 8);
 
   return (
     <div className="min-h-screen bg-white">
@@ -135,7 +131,7 @@ const PropertyDetail: React.FC = () => {
             >
               <img
                 src={image}
-                alt={`${t('propertyDetail.mock.property.title')} - Vue ${index + 1}`}
+                alt={`${property.title} - Vue ${index + 1}`}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -189,17 +185,17 @@ const PropertyDetail: React.FC = () => {
               </div>
 
               <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-2 sm:mb-4 leading-tight">
-                {t('propertyDetail.mock.property.title')}
+                {property.title}
               </h1>
               
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-white">
                 <div className="flex items-center space-x-2">
                   <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="font-inter text-sm sm:text-base">{t('propertyDetail.mock.property.location')}</span>
+                  <span className="font-inter text-sm sm:text-base">{property.location}</span>
                 </div>
                 <div className="hidden sm:block w-px h-6 bg-white/30"></div>
                 <div className="text-xl sm:text-2xl lg:text-3xl font-serif font-light text-white">
-                  {property.price.toLocaleString('fr-FR')} €
+                  {formatPrice(property.price || 0)}
                 </div>
               </div>
             </div>
@@ -216,10 +212,10 @@ const PropertyDetail: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 text-center items-center">
             {[
               { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
-              { value: `${property.land} m²`, label: t('propertyDetail.stats.land') },
-              { value: property.bedrooms, label: t('propertyDetail.stats.bedrooms') },
-              { value: property.bathrooms, label: t('propertyDetail.stats.bathrooms') },
-              { value: property.yearBuilt, label: t('propertyDetail.stats.year') }
+              { value: property.landSurface ? `${property.landSurface} m²` : '-', label: t('propertyDetail.stats.land') },
+              { value: property.rooms || 0, label: t('propertyDetail.stats.rooms') },
+              { value: property.floors || 0, label: t('propertyDetail.stats.floors') },
+              { value: property.yearBuilt || '-', label: t('propertyDetail.stats.year') }
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-base sm:text-lg lg:text-xl font-inter font-medium mb-1">
@@ -247,46 +243,52 @@ const PropertyDetail: React.FC = () => {
                 
                 <div className="mb-8 sm:mb-12">
                   <p className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed mb-4 sm:mb-8">
-                    {t('propertyDetail.mock.property.description')}
+                    {property.description}
                   </p>
                 </div>
 
                 {/* Features Grid */}
-                <div className="mb-8 sm:mb-12">
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
-                    {t('propertyDetail.sections.features')}
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
-                    {visibleFeatures.map((feature, index) => (
-                      <div key={index} className="flex items-center p-2 sm:p-3 border border-gray-100 hover:bg-gray-50 transition-colors duration-300">
-                        <CheckIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#023927] mr-2 sm:mr-3 flex-shrink-0" />
-                        <span className="text-gray-700 text-sm sm:text-base">{feature}</span>
-                      </div>
-                    ))}
+                {property.features && property.features.length > 0 && (
+                  <div className="mb-8 sm:mb-12">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
+                      {t('propertyDetail.sections.features')}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+                      {visibleFeatures.map((feature, index) => (
+                        <div key={index} className="flex items-center p-2 sm:p-3 border border-gray-100 hover:bg-gray-50 transition-colors duration-300">
+                          <CheckIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#023927] mr-2 sm:mr-3 flex-shrink-0" />
+                          <span className="text-gray-700 text-sm sm:text-base">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {property.features.length > 8 && (
+                      <button
+                        onClick={() => setShowAllFeatures(!showAllFeatures)}
+                        className="mt-4 sm:mt-6 text-[#023927] hover:text-[#023927]/80 font-inter text-xs sm:text-sm transition-colors duration-300 border-b border-[#023927] pb-1"
+                      >
+                        {showAllFeatures ? t('propertyDetail.actions.showLess') : t('propertyDetail.actions.showMore', { count: property.features.length - 8 })}
+                      </button>
+                    )}
                   </div>
-                  {property.features.length > 8 && (
-                    <button
-                      onClick={() => setShowAllFeatures(!showAllFeatures)}
-                      className="mt-4 sm:mt-6 text-[#023927] hover:text-[#023927]/80 font-inter text-xs sm:text-sm transition-colors duration-300 border-b border-[#023927] pb-1"
-                    >
-                      {showAllFeatures ? t('propertyDetail.actions.showLess') : t('propertyDetail.actions.showMore', { count: property.features.length - 8 })}
-                    </button>
-                  )}
-                </div>
+                )}
 
-                {/* Amenities */}
-                <div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
-                    {t('propertyDetail.sections.environment')}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {property.amenities.map((amenity, index) => (
-                      <span key={index} className="bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 font-inter text-xs sm:text-sm border border-gray-200">
-                        {amenity}
-                      </span>
-                    ))}
+                {/* Areas/Rooms from Apimo */}
+                {property.areas && property.areas.length > 0 && (
+                  <div className="mb-8 sm:mb-12">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
+                      {t('propertyDetail.sections.rooms') || 'Pièces'}
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {property.areas.map((area, index) => (
+                        <div key={index} className="p-3 border border-gray-200 bg-gray-50">
+                          <div className="font-medium text-gray-900">{area.type} {area.number && area.number > 1 ? `(${area.number})` : ''}</div>
+                          {area.area && <div className="text-sm text-gray-600">{area.area} m²</div>}
+                          {area.description && <div className="text-xs text-gray-500 mt-1">{area.description}</div>}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Contact Sidebar - Clean green & white theme */}
@@ -318,40 +320,50 @@ const PropertyDetail: React.FC = () => {
                   </div>
 
                   {/* Agent Profile */}
-                  <div className="border-t border-gray-200 pt-4 sm:pt-6">
-                    <h4 className="font-inter text-gray-900 text-xs sm:text-sm mb-3 sm:mb-4 text-center uppercase tracking-wider">
-                      {t('propertyDetail.contact.advisor')}
-                    </h4>
-                    <div className="text-center">
-                      <div className="mb-3 sm:mb-4">
-                        <img
-                          src={property.agent.image}
-                          alt={property.agent.name}
-                          className="w-16 h-16 sm:w-20 sm:h-20 object-cover mx-auto border-2 border-gray-300"
-                        />
-                      </div>
-                      <div className="font-inter text-gray-900 text-base sm:text-lg mb-1">
-                        {t('propertyDetail.mock.property.agentName')}
-                      </div>
-                      <div className="text-[#023927] text-xs sm:text-sm mb-2 sm:mb-3">
-                        {t('propertyDetail.mock.property.agentTitle')}
-                      </div>
-                      <div className="text-[10px] sm:text-xs text-gray-600 space-y-1 mb-3 sm:mb-4">
-                        <div>{property.agent.experience} {t('propertyDetail.contact.experience')}</div>
-                        <div>{property.agent.properties} {t('propertyDetail.contact.propertiesSold')}</div>
-                      </div>
-                      <div className="space-y-1.5 sm:space-y-2">
-                        <a href={`tel:${property.agent.phone}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm">
-                          <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span>{property.agent.phone}</span>
-                        </a>
-                        <a href={`mailto:${property.agent.email}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm break-all">
-                          <EnvelopeIcon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                          <span className="text-[10px] sm:text-sm">{property.agent.email}</span>
-                        </a>
+                  {property.agent && (
+                    <div className="border-t border-gray-200 pt-4 sm:pt-6">
+                      <h4 className="font-inter text-gray-900 text-xs sm:text-sm mb-3 sm:mb-4 text-center uppercase tracking-wider">
+                        {t('propertyDetail.contact.advisor')}
+                      </h4>
+                      <div className="text-center">
+                        {property.agent.image && (
+                          <div className="mb-3 sm:mb-4">
+                            <img
+                              src={property.agent.image}
+                              alt={property.agent.name}
+                              className="w-16 h-16 sm:w-20 sm:h-20 object-cover mx-auto border-2 border-gray-300"
+                            />
+                          </div>
+                        )}
+                        <div className="font-inter text-gray-900 text-base sm:text-lg mb-1">
+                          {property.agent.name}
+                        </div>
+                        <div className="text-[#023927] text-xs sm:text-sm mb-2 sm:mb-3">
+                          {t('propertyDetail.contact.realEstateAdvisor') || 'Conseiller Immobilier'}
+                        </div>
+                        <div className="space-y-1.5 sm:space-y-2">
+                          {property.agent.phone && (
+                            <a href={`tel:${property.agent.phone}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm">
+                              <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>{property.agent.phone}</span>
+                            </a>
+                          )}
+                          {property.agent.mobile && (
+                            <a href={`tel:${property.agent.mobile}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm">
+                              <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span>{property.agent.mobile}</span>
+                            </a>
+                          )}
+                          {property.agent.email && (
+                            <a href={`mailto:${property.agent.email}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm break-all">
+                              <EnvelopeIcon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                              <span className="text-[10px] sm:text-sm">{property.agent.email}</span>
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -360,59 +372,41 @@ const PropertyDetail: React.FC = () => {
       </section>
 
       {/* Similar Properties */}
-      <section className="py-8 sm:py-16 bg-white border-t border-gray-200">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="mb-6 sm:mb-12">
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-2 sm:mb-4">
-              {t('propertyDetail.similar.title')}
-            </h2>
-            <p className="text-gray-600 text-sm sm:text-base">
-              {t('propertyDetail.similar.subtitle')}
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-            {similarProperties.map((similar) => (
-              <Link
-                key={similar.id}
-                to={`/properties/${similar.id}`}
-                className="group bg-white border-2 border-gray-100 hover:border-gray-200 transition-all duration-300 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)]"
-              >
-                <div className="relative overflow-hidden h-40 sm:h-48">
-                  <img
-                    src={similar.image}
-                    alt={similar.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      {similarProperties.length > 0 && (
+        <section className="py-8 sm:py-16 bg-white border-t border-gray-200">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="mb-6 sm:mb-12">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-2 sm:mb-4">
+                {t('propertyDetail.similar.title')}
+              </h2>
+              <p className="text-gray-600 text-sm sm:text-base">
+                {t('propertyDetail.similar.subtitle')}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+              {similarProperties.map(similar => (
+                <div key={similar.id} className="w-full">
+                  <PropertyCard
+                    id={similar.id}
+                    title={similar.title}
+                    description={similar.description || ''}
+                    price={similar.price || 0}
+                    location={similar.location || ''}
+                    surface={similar.surface || 0}
+                    bedrooms={similar.bedrooms || 0}
+                    bathrooms={similar.bathrooms || 0}
+                    rooms={similar.rooms}
+                    floors={similar.floors}
+                    images={similar.images && similar.images.length > 0 ? similar.images : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800']}
+                    type={(similar.type as 'buy' | 'rent') || 'buy'}
                   />
-                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4">
-                    <span className="bg-[#023927] text-white px-2 sm:px-3 py-1 font-inter uppercase text-[10px] sm:text-xs tracking-wide">
-                      {t('propertyDetail.exclusive')}
-                    </span>
-                  </div>
                 </div>
-                
-                <div className="p-4 sm:p-6">
-                  <h3 className="font-inter text-gray-900 text-base sm:text-lg mb-2 group-hover:text-[#023927] transition-colors duration-300">
-                    {similar.title}
-                  </h3>
-                  <div className="flex items-center text-gray-600 mb-3 text-sm sm:text-base">
-                    <MapPinIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-                    <span>{similar.location}</span>
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                    <span className="text-lg sm:text-xl font-serif text-[#023927] font-semibold">
-                      {similar.price.toLocaleString('fr-FR')} €
-                    </span>
-                    <span className="text-gray-600 text-xs sm:text-sm">
-                      {similar.surface} m² • {similar.bedrooms} ch.
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 };

@@ -64,7 +64,12 @@
     "sellProperty": "Ihre Immobilie verkaufen",
     "buyersSupport": "Verwalten Sie Ihre Interaktionen und Käufe",
     "loginDescription": "Greifen Sie auf Ihren persönlichen Bereich zu",
-    "dashboardDescription": "Verwalten Sie Ihre Interaktionen und Käufe"
+    "dashboardDescription": "Verwalten Sie Ihre Interaktionen und Käufe",
+    "agencyDescription": "Expertenberatung für Luxusimmobilien",
+    "servicesDescription": "Premium-Dienstleistungen für Ihre Projekte",
+    "careersDescription": "Werden Sie Teil unseres Exzellenz-Teams",
+    "contactDescription": "Sprechen wir über Ihre Immobilienprojekte",
+    "magazineDescription": "Nachrichten und Trends bei Luxusimmobilien"
   },
   "home": {
     "hero": {
@@ -259,6 +264,8 @@
     "stats": {
       "surface": "Fläche",
       "land": "Grundstück",
+      "rooms": "Zimmer",
+      "floors": "Etagen",
       "bedrooms": "Schlafzimmer",
       "bathrooms": "Badezimmer",
       "year": "Jahr"
@@ -266,7 +273,22 @@
     "sections": {
       "description": "Exklusive Beschreibung",
       "features": "Ausstattung & Leistungen",
-      "environment": "Umgebung & Dienstleistungen"
+      "environment": "Umgebung & Dienstleistungen",
+      "rooms": "Zimmer"
+    },
+    "roomTypes": {
+      "bedroom": "Schlafzimmer",
+      "living": "Wohnzimmer",
+      "kitchen": "Küche",
+      "bathroom": "Badezimmer",
+      "showerRoom": "Duschraum",
+      "parking": "Parkplatz",
+      "entrance": "Eingang",
+      "lounge": "Aufenthaltsraum",
+      "wc": "WC",
+      "terrace": "Terrasse",
+      "services": "Dienstleistungen",
+      "type": "Typ"
     },
     "actions": {
       "privateVisit": "Private Besichtigung",
@@ -278,7 +300,8 @@
       "title": "Exklusive Besichtigung",
       "advisor": "Ihr persönlicher Berater",
       "experience": "Jahre Erfahrung",
-      "propertiesSold": "verkaufte Immobilien"
+      "propertiesSold": "verkaufte Immobilien",
+      "realEstateAdvisor": "Immobilienberater"
     },
     "similar": {
       "title": "Ähnliche Immobilien",
@@ -484,6 +507,8 @@
       "price": "Preis",
       "location": "Standort",
       "surface": "Fläche",
+      "rooms": "Zimmer",
+      "floors": "Etagen",
       "bedrooms": "Schlafzimmer",
       "bathrooms": "Badezimmer",
       "yearBuilt": "Baujahr",
@@ -1908,6 +1933,19 @@
           "description": "Unterstützung bis zur Transaktion"
         }
       }
+    }
+  },
+  "locations": {
+    "Essaouira": "Essaouira"
+  },
+  "apiProperties": {
+    "86379445": {
+      "title": "Gemütlicher Riad",
+      "description": "EXKLUSIV - MEDINA - RIAD MIT TITEL ZU VERKAUFEN\n\nIm Herzen der Medina gelegen, erstreckt sich dieser charmante Riad mit ca. 25 m² Grundfläche über 3 Etagen plus eine Terrasse mit angenehmer, freier Aussicht.\nDie Immobilie umfasst 2 Schlafzimmer, 2 Badezimmer und eine perfekte Terrasse zum Entspannen.\nDieser Riad wird derzeit als saisonale Vermietung über Airbnb betrieben, was ihn zu einer schlüsselfertigen Investitionsmöglichkeit macht.\nSeine privilegierte Lage in der Medina, in der Nähe von Annehmlichkeiten, macht ihn zu einer idealen Immobilie für touristische Vermietung oder als persönliches Pied-à-terre.\nEin Riad, der bereit ist, sofortige Einnahmen zu generieren.\n\nWenn Sie an dieser Immobilie interessiert sind, zögern Sie bitte nicht, uns zu kontaktieren\nMaklergebühr 2,5% ohne MwSt."
+    },
+    "86380226": {
+      "title": "Dia Haus",
+      "description": "ESSAOUIRA - SELTENE IMMOBILIE MIT TITEL - MEERBLICK\nIn der Nähe von Essaouira gelegen, in zweiter Reihe mit Blick auf den Ozean, bietet dieses einstöckige Haus von 115 m² eine privilegierte Lage in einem der begehrtesten Dörfer vor den Toren von Essaouira.\nDie Immobilie, die komplett renoviert werden muss, ermöglicht den Bau von zwei zusätzlichen Ebenen und bietet letztendlich einen freien Blick auf den Ozean.\nEin ideales Projekt für: eine Immobilieninvestition, einen ruhigen Hauptwohnsitz oder die Schaffung einer touristischen Immobilie mit Charakter.\nDa Gelegenheiten in diesem Sektor sehr selten sind, stellt diese Immobilie eine echte Gelegenheit dar, die Liebhaber von Essaouira und seiner Authentizität nicht verpassen sollten.\n\nWenn Sie an dieser Immobilie interessiert sind, zögern Sie bitte nicht, uns zu kontaktieren\nMaklergebühr 2,5% ohne MwSt."
     }
   }
 }

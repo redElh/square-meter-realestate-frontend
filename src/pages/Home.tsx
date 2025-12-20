@@ -19,10 +19,13 @@ import {
 import {
   HeartIcon as HeartIconSolid
 } from '@heroicons/react/24/solid';
+import { apimoService, Property } from '../services/apimoService';
+import { useCurrency } from '../hooks/useCurrency';
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
-  const { formatPrice: formatCurrency } = useLocalization();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+  const { format: formatCurrencyPrice } = useCurrency();
   
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -30,6 +33,8 @@ const Home: React.FC = () => {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [featuredAutoPlay, setFeaturedAutoPlay] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
+  const [loadingProperties, setLoadingProperties] = useState(true);
 
   const heroSlides = [
     {
@@ -52,63 +57,27 @@ const Home: React.FC = () => {
     }
   ];
 
-  const featuredProperties = [
-    {
-      id: 1,
-      title: t('home.featured.properties.villa.title'),
-      description: t('home.featured.properties.villa.description'),
-      type: 'buy' as const,
-      price: 3500000,
-      location: t('home.featured.properties.villa.location'),
-      surface: 420,
-      bedrooms: 5,
-      bathrooms: 4,
-      images: [
-        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800"
-      ],
-      featured: true,
-      yearBuilt: 2020
-    },
-    {
-      id: 2,
-      title: t('home.featured.properties.apartment.title'),
-      description: t('home.featured.properties.apartment.description'),
-      type: 'buy' as const,
-      price: 1800000,
-      location: t('home.featured.properties.apartment.location'),
-      surface: 180,
-      bedrooms: 3,
-      bathrooms: 2,
-      images: [
-        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800"
-      ],
-      featured: false,
-      yearBuilt: 1880
-    },
-    {
-      id: 3,
-      title: t('home.featured.properties.chateau.title'),
-      description: t('home.featured.properties.chateau.description'),
-      type: 'buy' as const,
-      price: 6200000,
-      location: t('home.featured.properties.chateau.location'),
-      surface: 950,
-      bedrooms: 8,
-      bathrooms: 6,
-      images: [
-        "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800"
-      ],
-      featured: true,
-      confidential: true,
-      yearBuilt: 1580
-    }
-  ];
+  // Fetch featured properties from API
+  useEffect(() => {
+    const fetchFeaturedProperties = async () => {
+      setLoadingProperties(true);
+      try {
+        const { properties: apiProperties } = await apimoService.getProperties({
+          limit: 1000,
+        }, t, currentLanguage);
+        
+        // Use all available properties for featured section
+        setFeaturedProperties(apiProperties);
+      } catch (error) {
+        console.error('Error loading featured properties:', error);
+        setFeaturedProperties([]);
+      } finally {
+        setLoadingProperties(false);
+      }
+    };
+
+    fetchFeaturedProperties();
+  }, [t, currentLanguage]);
 
   const clientTestimonials = [
     {
@@ -178,7 +147,7 @@ const Home: React.FC = () => {
   };
 
   const formatPrice = (price: number, type?: string) => {
-    const formattedPrice = formatCurrency(price, true);
+    const formattedPrice = formatCurrencyPrice(price);
     if (type === 'rent') {
       return `${formattedPrice}/${t('common.month') || 'month'}`;
     }
@@ -263,7 +232,7 @@ const Home: React.FC = () => {
                   </div>
                   <div className="w-px h-6 bg-white/30"></div>
                   <div className="font-serif text-white text-sm sm:text-sm font-medium">
-                    {formatCurrency(heroSlides[activeSlide].price, true)}
+                    {formatCurrencyPrice(heroSlides[activeSlide].price)}
                   </div>
                 </div>
               </div>
@@ -524,14 +493,14 @@ const Home: React.FC = () => {
                           </div>
 
                           <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
-                            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.bedrooms}</span></div>
-                            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.bathrooms}</span></div>
+                            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.rooms || 0}</span></div>
+                            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.floors || 0}</span></div>
                             <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
                           </div>
 
                           <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
-                            <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.bedrooms}</span></div>
-                            <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.bathrooms}</span></div>
+                            <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.rooms || 0}</span></div>
+                            <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.floors || 0}</span></div>
                             <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
                           </div>
 

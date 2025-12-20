@@ -64,7 +64,12 @@
     "sellProperty": "Vendre votre propriété",
     "buyersSupport": "Gérez vos interactions et achats",
     "loginDescription": "Accédez à votre espace personnel",
-    "dashboardDescription": "Gérez vos interactions et achats"
+    "dashboardDescription": "Gérez vos interactions et achats",
+    "agencyDescription": "Accompagnement expert en immobilier de luxe",
+    "servicesDescription": "Services haut de gamme pour vos projets",
+    "careersDescription": "Rejoignez notre équipe d'excellence",
+    "contactDescription": "Échangeons sur vos projets immobiliers",
+    "magazineDescription": "Actualités et tendances du luxe immobilier"
   },
   "home": {
     "hero": {
@@ -249,6 +254,8 @@
     "stats": {
       "surface": "Surface",
       "land": "Terrain",
+      "rooms": "Pièces",
+      "floors": "Étages",
       "bedrooms": "Chambres",
       "bathrooms": "Salles de bain",
       "year": "Année"
@@ -256,7 +263,22 @@
     "sections": {
       "description": "Description Exclusive",
       "features": "Équipements & Prestations",
-      "environment": "Environnement & Prestations"
+      "environment": "Environnement & Prestations",
+      "rooms": "Pièces"
+    },
+    "roomTypes": {
+      "bedroom": "Chambre",
+      "living": "Salon",
+      "kitchen": "Cuisine",
+      "bathroom": "Salle de bain",
+      "showerRoom": "Salle d'eau",
+      "parking": "Parking",
+      "entrance": "Entrée",
+      "lounge": "Séjour",
+      "wc": "WC",
+      "terrace": "Terrasse",
+      "services": "services",
+      "type": "Type"
     },
     "actions": {
       "privateVisit": "Visite Privée",
@@ -268,7 +290,8 @@
       "title": "Visite Exclusive",
       "advisor": "Votre Conseiller Dédié",
       "experience": "d'expérience",
-      "propertiesSold": "propriétés vendues"
+      "propertiesSold": "propriétés vendues",
+      "realEstateAdvisor": "Conseiller Immobilier"
     },
     "similar": {
       "title": "Propriétés Similaires",
@@ -474,6 +497,8 @@
       "price": "Prix",
       "location": "Localisation",
       "surface": "Surface",
+      "rooms": "Pièces",
+      "floors": "Étages",
       "bedrooms": "Chambres",
       "bathrooms": "Salles de bain",
       "yearBuilt": "Année de construction",
@@ -1920,6 +1945,19 @@
           "description": "Support jusqu'à la transaction"
         }
       }
+    }
+  },
+  "locations": {
+    "Essaouira": "Essaouira"
+  },
+  "apiProperties": {
+    "86379445": {
+      "title": "Cosy Riad",
+      "description": "EXCLUSIVITE - MEDINA - RIAD TITRE A VENDRE\n\nSitué au cœur de la médina, ce charmant riad d'environ 25 m² au sol se développe sur 3 étages plus une terrasse avec une agréable vue dégagée.\nLe bien comprend 2 chambres, 2 salles de bain, et une terrasse parfaite pour se détendre.\nCe riad est actuellement exploité en location saisonnière sur Airbnb, ce qui en fait une opportunité d'investissement clé en main.\nSa situation privilégiée dans la médina, proche des commodités, en fait un bien idéal pour la location touristique comme pour un pied-à-terre personnel.\nUn riad prêt à générer un revenu immédiat.\n\nCe bien vous intéresse, n'hésitez pas à nous contacter\nHonoraire agence 2,5% HT"
+    },
+    "86380226": {
+      "title": "Dia House",
+      "description": "ESSAOUIRA - BIEN RARE TITRE - VUE OCEAN\nSituée à proximité d'Essaouira, en deuxième ligne face à l'océan, cette maison de plain-pied de 115 m² offre un emplacement privilégié dans l'un des villages les plus recherchés aux portes d'Essaouira.\nLe bien, entièrement à rénover, permet la construction de deux niveaux supplémentaires, offrant à terme une vue dégagée sur l'océan.\nUn projet idéal pour : un investissement immobilier, une résidence principale au calme, ou la création d'un bien touristique de caractère.\nLes opportunités dans ce secteur étant très rares, ce bien représente une véritable occasion à ne pas manquer pour les amoureux d'Essaouira et de son authenticité.\n\nCe bien vous intéresse n'hésitez pas à nous contacter\nHonoraire agence 2,5% HT"
     }
   }
 }

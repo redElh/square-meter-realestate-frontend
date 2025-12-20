@@ -38,7 +38,8 @@ const LanguageCurrency: React.FC = () => {
     setIsApplying(false);
     
     setTimeout(() => {
-      navigate('/', { replace: true });
+      // Go back to previous page instead of redirecting to home
+      navigate(-1);
     }, 1500);
   };
 
