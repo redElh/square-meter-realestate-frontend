@@ -2,8 +2,8 @@
 // Documentation: https://apimo.net/fr/api/webservice/
 
 const APIMO_CONFIG = {
-  // Use proxy in development to avoid CORS issues
-  baseUrl: process.env.NODE_ENV === 'production' ? 'https://api.apimo.pro' : '/api/apimo',
+  // Use proxy in development and Vercel serverless function in production
+  baseUrl: '/api/apimo',
   agencyId: '25311',
   providerId: '4567',
   token: 'd07da6e744bb033d1299469f1f6f7334531ec05c',
