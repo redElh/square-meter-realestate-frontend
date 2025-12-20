@@ -22,11 +22,17 @@ export default async function handler(req, res) {
   const credentials = `${providerId}:${token}`;
   const base64Credentials = Buffer.from(credentials).toString('base64');
 
-  // Get the path from the query parameter
-  const path = req.query.path || req.url.replace('/api/apimo', '');
-  const apiUrl = `https://api.apimo.pro${path}`;
+  // Extract the path after /api/apimo
+  // req.url will be like: /api/apimo/agencies/25311/properties?limit=1000
+  const urlParts = req.url.split('?');
+  const path = urlParts[0].replace('/api/apimo', '');
+  const queryString = urlParts[1] || '';
+  const apiUrl = `https://api.apimo.pro${path}${queryString ? '?' + queryString : ''}`;
 
-  console.log('🔗 Proxying request to:', apiUrl);
+  console.log('🔗 Incoming URL:', req.url);
+  console.log('🔗 Extracted path:', path);
+  console.log('🔗 Query string:', queryString);
+  console.log('🔗 Final API URL:', apiUrl);
 
   try {
     const response = await fetch(apiUrl, {

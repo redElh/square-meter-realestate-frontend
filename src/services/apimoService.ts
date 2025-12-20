@@ -495,18 +495,11 @@ class ApimoService {
       console.log('🌐 Environment:', process.env.NODE_ENV);
       console.log('🔑 Base URL:', APIMO_CONFIG.baseUrl);
 
-      // In development, proxy handles auth. In production, send auth header
+      // The proxy/serverless function handles authentication
       const headers: HeadersInit = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       };
-      
-      if (process.env.NODE_ENV === 'production') {
-        headers['Authorization'] = this.getAuthHeader();
-        console.log('🔐 Added auth header for production');
-      } else {
-        console.log('🔓 Using proxy for development (no auth header)');
-      }
 
       console.log('📤 Sending request...');
       const response = await fetch(url, {
