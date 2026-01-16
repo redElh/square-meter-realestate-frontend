@@ -3,30 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
-  MapPinIcon,
-  HomeModernIcon,
-  ArrowsPointingOutIcon,
-  BuildingStorefrontIcon,
-  SparklesIcon,
-  CalendarIcon,
-  UserIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  DocumentTextIcon,
   CheckCircleIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
   ShieldCheckIcon,
-  CurrencyEuroIcon,
-  HomeIcon,
-  BuildingLibraryIcon,
-  BuildingOfficeIcon,
-  BuildingStorefrontIcon as CastleIcon,
-  CubeIcon,
-  BuildingOffice2Icon
 } from '@heroicons/react/24/outline';
 import {
-  CheckCircleIcon as CheckCircleIconSolid
+  CheckCircleIcon as CheckCircleIconSolid,
+  XMarkIcon,
+  PaperAirplaneIcon
 } from '@heroicons/react/24/solid';
 
 const SellingMultiStep: React.FC = () => {
@@ -36,7 +21,16 @@ const SellingMultiStep: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(parseInt(searchParams.get('step') || '1'));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying] = useState(true);
+  const [showEmailPreview, setShowEmailPreview] = useState(false);
+  const [emailContent, setEmailContent] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const [formData, setFormData] = useState({
     address: searchParams.get('address') || '',
@@ -56,13 +50,13 @@ const SellingMultiStep: React.FC = () => {
     visitAvailability: ''
   });
 
-  // Premium estimation hero slides - matching Properties style
+  // Premium estimation hero slides - matching Owners page style with local images
   const heroSlidesData = t('sellingMultiStep.hero.slides', { returnObjects: true }) as Array<{title: string; subtitle: string}>;
   const heroSlides = heroSlidesData.map((slide, index) => ({
     image: [
-      "https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
-      "https://images.pexels.com/photos/7031612/pexels-photo-7031612.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800"
+      "/photo-4.jfif",
+      "/photo-5.jfif",
+      "/photo-6.jfif"
     ][index],
     ...slide
   }));
@@ -75,7 +69,7 @@ const SellingMultiStep: React.FC = () => {
       }, 5000);
     }
     return () => clearInterval(slideInterval);
-  }, [isPlaying]);
+  }, [isPlaying, heroSlides.length]);
 
   const nextSlide = () => {
     setActiveSlide((prev) => (prev + 1) % heroSlides.length);
@@ -95,7 +89,147 @@ const SellingMultiStep: React.FC = () => {
 
   const timelines = t('sellingMultiStep.timelines', { returnObjects: true }) as Array<{value: string; label: string; description: string}>;
 
+  // Validation functions
+  const validateField = (name: string, value: any): string => {
+    // Address validation
+    if (name === 'address') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 5) return t('validation.minLength', { min: 5 });
+      if (value.trim().length > 200) return t('validation.maxLength', { max: 200 });
+    }
+
+    // Property type validation
+    if (name === 'propertyType') {
+      if (!value || value === '') return t('validation.required');
+    }
+
+    // Surface validation
+    if (name === 'surface') {
+      if (!value || value === '') return t('validation.required');
+      const numValue = parseFloat(value);
+      if (isNaN(numValue)) return t('validation.number');
+      if (numValue <= 0) return t('validation.positive');
+      if (numValue > 10000) return t('validation.maxLength', { max: 10000 });
+    }
+
+    // Rooms validation
+    if (name === 'rooms') {
+      if (!value || value === '') return t('validation.required');
+      const numValue = parseFloat(value);
+      if (isNaN(numValue)) return t('validation.number');
+      if (numValue <= 0) return t('validation.positive');
+      if (numValue % 1 !== 0) return t('validation.integer');
+      if (numValue > 50) return t('validation.maxLength', { max: 50 });
+    }
+
+    // Bedrooms validation
+    if (name === 'bedrooms') {
+      if (!value || value === '') return t('validation.required');
+      const numValue = parseFloat(value);
+      if (isNaN(numValue)) return t('validation.number');
+      if (numValue < 0) return t('validation.positive');
+      if (numValue % 1 !== 0) return t('validation.integer');
+      if (numValue > 20) return t('validation.maxLength', { max: 20 });
+    }
+
+    // Condition validation
+    if (name === 'condition') {
+      if (!value || value === '') return t('validation.required');
+    }
+
+    // Timeline validation
+    if (name === 'timeline') {
+      if (!value || value === '') return t('validation.required');
+    }
+
+    // Motivation validation
+    if (name === 'motivation') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 10) return t('validation.minLength', { min: 10 });
+      if (value.trim().length > 1000) return t('validation.maxLength', { max: 1000 });
+    }
+
+    // First name validation
+    if (name === 'firstName') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 2) return t('validation.minLength', { min: 2 });
+      if (value.trim().length > 50) return t('validation.maxLength', { max: 50 });
+      if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(value)) return t('validation.lettersOnly');
+    }
+
+    // Last name validation
+    if (name === 'lastName') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 2) return t('validation.minLength', { min: 2 });
+      if (value.trim().length > 50) return t('validation.maxLength', { max: 50 });
+      if (!/^[a-zA-ZÀ-ÿ\s'-]+$/.test(value)) return t('validation.lettersOnly');
+    }
+
+    // Email validation
+    if (name === 'email') {
+      if (!value || value.trim() === '') return t('validation.required');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return t('validation.email');
+      if (value.length > 100) return t('validation.maxLength', { max: 100 });
+    }
+
+    // Phone validation
+    if (name === 'phone') {
+      if (!value || value.trim() === '') return t('validation.required');
+      const phoneRegex = /^[\d\s\-\+\(\)]{8,20}$/;
+      if (!phoneRegex.test(value)) return t('validation.phone');
+    }
+
+    return '';
+  };
+
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+    
+    if (step === 1) {
+      const fields = ['address', 'propertyType', 'surface', 'rooms', 'bedrooms', 'condition'];
+      fields.forEach(field => {
+        const error = validateField(field, formData[field as keyof typeof formData]);
+        if (error) newErrors[field] = error;
+      });
+    } else if (step === 2) {
+      // Features are optional
+    } else if (step === 3) {
+      const fields = ['timeline', 'motivation'];
+      fields.forEach(field => {
+        const error = validateField(field, formData[field as keyof typeof formData]);
+        if (error) newErrors[field] = error;
+      });
+    } else if (step === 4) {
+      const fields = ['firstName', 'lastName', 'email', 'phone'];
+      fields.forEach(field => {
+        const error = validateField(field, formData[field as keyof typeof formData]);
+        if (error) newErrors[field] = error;
+      });
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleNext = () => {
+    if (!validateStep(currentStep)) {
+      // Mark all fields as touched to show errors
+      const stepFields: Record<number, string[]> = {
+        1: ['address', 'propertyType', 'surface', 'rooms', 'bedrooms', 'condition'],
+        2: [],
+        3: ['timeline', 'motivation'],
+        4: ['firstName', 'lastName', 'email', 'phone']
+      };
+      
+      const newTouched = { ...touched };
+      stepFields[currentStep]?.forEach(field => {
+        newTouched[field] = true;
+      });
+      setTouched(newTouched);
+      return;
+    }
+
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
       navigate(`/selling-multistep?address=${encodeURIComponent(formData.address)}&step=${currentStep + 1}`, { replace: true });
@@ -111,18 +245,167 @@ const SellingMultiStep: React.FC = () => {
     }
   };
 
+  const generateEmailContent = () => {
+    // Generate email in the current language
+    const subject = t('sellingMultiStep.email.subject', { address: formData.address });
+    const greeting = t('sellingMultiStep.email.greeting');
+    const intro = t('sellingMultiStep.email.intro');
+    
+    const propertyLabel = propertyTypes.find(pt => pt.value === formData.propertyType)?.label || formData.propertyType;
+    const conditionLabel = conditions.find(c => c.value === formData.condition)?.label || formData.condition;
+    const timelineLabel = timelines.find(tl => tl.value === formData.timeline)?.label || formData.timeline;
+    const featuresLabels = formData.features.map(f => features.find(feat => feat.value === f)?.label || f).join(', ');
+    
+    const content = `
+${greeting}
+
+${intro}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${t('sellingMultiStep.email.propertyDetails')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 ${t('sellingMultiStep.step1.addressLabel')}: ${formData.address}
+🏠 ${t('sellingMultiStep.step1.typeLabel')}: ${propertyLabel}
+📐 ${t('sellingMultiStep.step1.surfaceLabel')}: ${formData.surface} m²
+🚪 ${t('sellingMultiStep.step1.roomsLabel')}: ${formData.rooms}
+🛏️ ${t('sellingMultiStep.step1.bedroomsLabel')}: ${formData.bedrooms}
+✨ ${t('sellingMultiStep.step1.conditionLabel')}: ${conditionLabel}
+
+${formData.features.length > 0 ? `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${t('sellingMultiStep.email.features')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${featuresLabels}
+
+` : ''}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${t('sellingMultiStep.email.projectInfo')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 ${t('sellingMultiStep.step3.timelineLabel')}: ${timelineLabel}
+${formData.priceExpectation ? `💰 ${t('sellingMultiStep.step3.priceLabel')}: ${formData.priceExpectation}\n` : ''}${formData.visitAvailability ? `🗓️ ${t('sellingMultiStep.step3.availabilityLabel')}: ${formData.visitAvailability}\n` : ''}${formData.motivation ? `💭 ${t('sellingMultiStep.step3.motivationLabel')}: ${formData.motivation}\n` : ''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${t('sellingMultiStep.email.contactInfo')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 ${t('sellingMultiStep.email.name')}: ${formData.firstName} ${formData.lastName}
+📧 ${t('sellingMultiStep.email.emailLabel')}: ${formData.email}
+📞 ${t('sellingMultiStep.email.phoneLabel')}: ${formData.phone}
+
+${t('sellingMultiStep.email.closing')}
+
+${t('sellingMultiStep.email.signature', { name: formData.firstName + ' ' + formData.lastName })}
+    `.trim();
+    
+    return { subject, content };
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+    // Generate email content
+    const { subject, content } = generateEmailContent();
+    setEmailSubject(subject);
+    setEmailContent(content);
+    
     setIsSubmitting(false);
-    navigate('/contact?type=estimation&submitted=true');
+    setShowEmailPreview(true);
+  };
+
+  const handleSendEmail = async () => {
+    setIsSendingEmail(true);
+    
+    try {
+      // Translate to French for sending
+      const response = await fetch('/api/send-property-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          subject: emailSubject,
+          content: emailContent,
+          formData: formData,
+          currentLanguage: localStorage.getItem('appLanguage') || 'en'
+        }),
+      });
+      
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        // API endpoint not available (development mode or not deployed)
+        console.warn('API endpoint not available. Email data:', {
+          subject: emailSubject,
+          content: emailContent,
+          formData: formData
+        });
+        
+        // Simulate success in development
+        setAlertType('success');
+        setAlertMessage(t('sellingMultiStep.email.successMessage'));
+        setShowAlert(true);
+        setShowEmailPreview(false);
+        
+        // Redirect after 3 seconds
+        setTimeout(() => {
+          navigate('/owners');
+        }, 3000);
+        return;
+      }
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        // Close modal first
+        setShowEmailPreview(false);
+        
+        // Show success alert
+        setAlertType('success');
+        setAlertMessage(t('sellingMultiStep.email.successMessage'));
+        setShowAlert(true);
+        
+        // Redirect after 3 seconds
+        setTimeout(() => {
+          navigate('/owners');
+        }, 3000);
+      } else {
+        throw new Error(result.error || 'Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setAlertType('error');
+      setAlertMessage(t('sellingMultiStep.email.errorMessage'));
+      setShowAlert(true);
+    } finally {
+      setIsSendingEmail(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
+    const error = validateField(name, value);
+    if (error) {
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
   };
 
   const handleFeatureToggle = (feature: string) => {
@@ -149,11 +432,22 @@ const SellingMultiStep: React.FC = () => {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 required
                 placeholder={t('sellingMultiStep.step1.addressPlaceholder')}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base lg:text-lg transition-colors duration-300"
+                className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base lg:text-lg transition-colors duration-300 ${
+                  touched.address && errors.address 
+                    ? 'border-red-500 focus:border-red-600' 
+                    : 'border-gray-300 focus:border-[#023927]'
+                }`}
                 style={{ borderRadius: '0' }}
               />
+              {touched.address && errors.address && (
+                <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                  <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                  <span>{errors.address}</span>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
@@ -167,10 +461,22 @@ const SellingMultiStep: React.FC = () => {
                     <button
                       key={type.value}
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, propertyType: type.value }))}
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, propertyType: type.value }));
+                        setTouched(prev => ({ ...prev, propertyType: true }));
+                        if (errors.propertyType) {
+                          setErrors(prev => {
+                            const newErrors = { ...prev };
+                            delete newErrors.propertyType;
+                            return newErrors;
+                          });
+                        }
+                      }}
                       className={`py-3 sm:py-4 border-2 transition-all duration-500 text-sm sm:text-base font-medium ${
                         formData.propertyType === type.value
                           ? 'border-[#023927] bg-white text-[#023927]'
+                          : touched.propertyType && errors.propertyType
+                          ? 'border-red-300 bg-white text-gray-700 hover:border-red-500'
                           : 'border-gray-300 bg-white text-gray-700 hover:border-gray-900 hover:text-[#023927]'
                       }`}
                     >
@@ -178,6 +484,12 @@ const SellingMultiStep: React.FC = () => {
                     </button>
                   ))}
                 </div>
+                {touched.propertyType && errors.propertyType && (
+                  <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                    <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                    <span>{errors.propertyType}</span>
+                  </div>
+                )}
               </div>
 
               {/* Surface & Rooms */}
@@ -191,11 +503,22 @@ const SellingMultiStep: React.FC = () => {
                     name="surface"
                     value={formData.surface}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
                     placeholder={t('sellingMultiStep.step1.surfacePlaceholder')}
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                    className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                      touched.surface && errors.surface 
+                        ? 'border-red-500 focus:border-red-600' 
+                        : 'border-gray-300 focus:border-[#023927]'
+                    }`}
                     style={{ borderRadius: '0' }}
                   />
+                  {touched.surface && errors.surface && (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.surface}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 sm:gap-6">
@@ -208,11 +531,22 @@ const SellingMultiStep: React.FC = () => {
                       name="rooms"
                       value={formData.rooms}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       required
                       placeholder={t('sellingMultiStep.step1.roomsPlaceholder')}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                        touched.rooms && errors.rooms 
+                          ? 'border-red-500 focus:border-red-600' 
+                          : 'border-gray-300 focus:border-[#023927]'
+                      }`}
                       style={{ borderRadius: '0' }}
                     />
+                    {touched.rooms && errors.rooms && (
+                      <div className="mt-1 flex items-center space-x-1 text-red-600 text-xs animate-fade-in">
+                        <XMarkIcon className="w-3 h-3 flex-shrink-0" />
+                        <span>{errors.rooms}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -224,11 +558,22 @@ const SellingMultiStep: React.FC = () => {
                       name="bedrooms"
                       value={formData.bedrooms}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       required
                       placeholder={t('sellingMultiStep.step1.bedroomsPlaceholder')}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                        touched.bedrooms && errors.bedrooms 
+                          ? 'border-red-500 focus:border-red-600' 
+                          : 'border-gray-300 focus:border-[#023927]'
+                      }`}
                       style={{ borderRadius: '0' }}
                     />
+                    {touched.bedrooms && errors.bedrooms && (
+                      <div className="mt-1 flex items-center space-x-1 text-red-600 text-xs animate-fade-in">
+                        <XMarkIcon className="w-3 h-3 flex-shrink-0" />
+                        <span>{errors.bedrooms}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -244,10 +589,15 @@ const SellingMultiStep: React.FC = () => {
                   <button
                     key={condition.value}
                     type="button"
-                    onClick={() => setFormData(prev => ({ ...prev, condition: condition.value }))}
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, condition: condition.value }));
+                      setErrors(prev => ({ ...prev, condition: '' }));
+                    }}
                     className={`p-4 sm:p-6 border-2 text-left transition-all duration-500 ${
                       formData.condition === condition.value
                         ? 'border-[#023927] bg-white text-[#023927]'
+                        : touched.condition && errors.condition
+                        ? 'border-red-500 hover:border-red-600'
                         : 'border-gray-300 hover:border-gray-900'
                     }`}
                   >
@@ -260,6 +610,12 @@ const SellingMultiStep: React.FC = () => {
                   </button>
                 ))}
               </div>
+              {touched.condition && errors.condition && (
+                <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                  <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                  <span>{errors.condition}</span>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -335,10 +691,15 @@ const SellingMultiStep: React.FC = () => {
                     <button
                       key={timeline.value}
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, timeline: timeline.value }))}
+                      onClick={() => {
+                        setFormData(prev => ({ ...prev, timeline: timeline.value }));
+                        setErrors(prev => ({ ...prev, timeline: '' }));
+                      }}
                       className={`w-full p-4 sm:p-6 border-2 text-left transition-all duration-500 ${
                         formData.timeline === timeline.value
                           ? 'border-[#023927] bg-white text-[#023927]'
+                          : touched.timeline && errors.timeline
+                          ? 'border-red-500 hover:border-red-600'
                           : 'border-gray-300 hover:border-gray-900'
                       }`}
                     >
@@ -351,6 +712,12 @@ const SellingMultiStep: React.FC = () => {
                     </button>
                   ))}
                 </div>
+                {touched.timeline && errors.timeline && (
+                  <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                    <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                    <span>{errors.timeline}</span>
+                  </div>
+                )}
               </div>
 
               {/* Price Expectation */}
@@ -396,12 +763,23 @@ const SellingMultiStep: React.FC = () => {
                 name="motivation"
                 value={formData.motivation}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 required
                 rows={4}
                 placeholder={t('sellingMultiStep.step3.motivationPlaceholder')}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base resize-none transition-colors duration-300 leading-relaxed"
+                className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base resize-none transition-colors duration-300 leading-relaxed ${
+                  touched.motivation && errors.motivation
+                    ? 'border-red-500 focus:border-red-600'
+                    : 'border-gray-300 focus:border-[#023927]'
+                }`}
                 style={{ borderRadius: '0' }}
               ></textarea>
+              {touched.motivation && errors.motivation && (
+                <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                  <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                  <span>{errors.motivation}</span>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -425,10 +803,21 @@ const SellingMultiStep: React.FC = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                    className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                      touched.firstName && errors.firstName
+                        ? 'border-red-500 focus:border-red-600'
+                        : 'border-gray-300 focus:border-[#023927]'
+                    }`}
                     style={{ borderRadius: '0' }}
                   />
+                  {touched.firstName && errors.firstName && (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.firstName}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -440,10 +829,21 @@ const SellingMultiStep: React.FC = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                    className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                      touched.lastName && errors.lastName
+                        ? 'border-red-500 focus:border-red-600'
+                        : 'border-gray-300 focus:border-[#023927]'
+                    }`}
                     style={{ borderRadius: '0' }}
                   />
+                  {touched.lastName && errors.lastName && (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.lastName}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -462,10 +862,21 @@ const SellingMultiStep: React.FC = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                    className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                      touched.email && errors.email
+                        ? 'border-red-500 focus:border-red-600'
+                        : 'border-gray-300 focus:border-[#023927]'
+                    }`}
                     style={{ borderRadius: '0' }}
                   />
+                  {touched.email && errors.email && (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.email}</span>
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -477,10 +888,21 @@ const SellingMultiStep: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     required
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                    className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                      touched.phone && errors.phone
+                        ? 'border-red-500 focus:border-red-600'
+                        : 'border-gray-300 focus:border-[#023927]'
+                    }`}
                     style={{ borderRadius: '0' }}
                   />
+                  {touched.phone && errors.phone && (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.phone}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -521,8 +943,137 @@ const SellingMultiStep: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section - Matching Properties Style */}
-      <section className="relative h-[60vh] sm:h-[70vh] overflow-hidden bg-white">
+      {/* Alert Notification */}
+      {showAlert && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className={`px-8 py-6 border-2 shadow-2xl max-w-md w-full ${
+            alertType === 'success' 
+              ? 'bg-white border-green-600' 
+              : 'bg-white border-red-600'
+          }`}>
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="flex-shrink-0">
+                {alertType === 'success' ? (
+                  <CheckCircleIconSolid className="w-16 h-16 text-green-600" />
+                ) : (
+                  <XMarkIcon className="w-16 h-16 text-red-600" />
+                )}
+              </div>
+              <div className={`font-light text-lg ${
+                alertType === 'success' ? 'text-green-800' : 'text-red-800'
+              }`}>{alertMessage}</div>
+              <button
+                onClick={() => setShowAlert(false)}
+                className={`px-8 py-3 font-medium uppercase tracking-wider text-sm transition-all duration-300 border-2 ${
+                  alertType === 'success'
+                    ? 'border-green-600 text-green-700 hover:bg-green-600 hover:text-white'
+                    : 'border-red-600 text-red-700 hover:bg-red-600 hover:text-white'
+                }`}
+              >
+                {t('sellingMultiStep.email.closeButton')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Email Preview Modal */}
+      {showEmailPreview && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white border-2 border-gray-900 max-w-4xl w-full my-8 max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="border-b-2 border-gray-200 p-6 flex items-center justify-between sticky top-0 bg-white z-10">
+              <div>
+                <h2 className="text-2xl font-medium text-gray-900 mb-2">
+                  {t('sellingMultiStep.email.previewTitle')}
+                </h2>
+                <p className="font-light text-gray-600 text-sm">
+                  {t('sellingMultiStep.email.previewSubtitle')}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowEmailPreview(false)}
+                className="p-2 hover:bg-gray-100 transition-colors duration-300"
+              >
+                <XMarkIcon className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Email Content */}
+            <div className="p-6">
+              {/* Subject */}
+              <div className="mb-6">
+                <label className="block font-medium text-gray-900 text-sm mb-2">
+                  {t('sellingMultiStep.email.subjectLabel')}
+                </label>
+                <input
+                  type="text"
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-base transition-colors duration-300"
+                  style={{ borderRadius: '0' }}
+                />
+              </div>
+
+              {/* Message Body */}
+              <div className="mb-6">
+                <label className="block font-medium text-gray-900 text-sm mb-2">
+                  {t('sellingMultiStep.email.messageLabel')}
+                </label>
+                <textarea
+                  value={emailContent}
+                  onChange={(e) => setEmailContent(e.target.value)}
+                  rows={20}
+                  className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm resize-none transition-colors duration-300 font-mono"
+                  style={{ borderRadius: '0', lineHeight: '1.6' }}
+                />
+              </div>
+
+              {/* Info Banner */}
+              <div className="bg-blue-50 border-2 border-blue-200 p-4 mb-6">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    <ShieldCheckIcon className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div className="flex-1 font-light text-sm text-blue-800">
+                    <p className="font-medium mb-1">{t('sellingMultiStep.email.infoTitle')}</p>
+                    <p>{t('sellingMultiStep.email.infoMessage')}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="border-t-2 border-gray-200 p-6 flex items-center justify-between bg-gray-50">
+              <button
+                onClick={() => setShowEmailPreview(false)}
+                className="px-6 py-3 border-2 border-gray-400 text-gray-700 font-medium uppercase tracking-wider text-sm hover:border-gray-600 hover:text-gray-900 transition-all duration-300"
+              >
+                {t('sellingMultiStep.email.cancelButton')}
+              </button>
+              <button
+                onClick={handleSendEmail}
+                disabled={isSendingEmail}
+                className="bg-[#023927] text-white px-8 py-3 font-medium uppercase tracking-wider text-sm hover:bg-white hover:text-[#023927] transition-all duration-500 border-2 border-[#023927] flex items-center space-x-3"
+              >
+                {isSendingEmail ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin" />
+                    <span>{t('sellingMultiStep.email.sendingButton')}</span>
+                  </>
+                ) : (
+                  <>
+                    <PaperAirplaneIcon className="w-5 h-5" />
+                    <span>{t('sellingMultiStep.email.sendButton')}</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Hero Section - Matching Owners Page Style */}
+      <section className="relative -mt-24 sm:-mt-32 h-[70vh] sm:h-screen overflow-hidden bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (

@@ -4,5 +4,16 @@
       "source": "/api/apimo/:path*",
       "destination": "/api/apimo"
     }
-  ]
+  ],
+  "functions": {
+    "api/send-property-inquiry.js": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  },
+  "api": {
+    "bodyParser": {
+      "sizeLimit": "20mb"
+    }
+  }
 }

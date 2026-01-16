@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalization } from '../../contexts/LocalizationContext';
+import { useCurrency } from '../../hooks/useCurrency';
 import {
   HomeModernIcon,
   UserGroupIcon,
@@ -13,10 +14,8 @@ import {
   ShieldCheckIcon,
   UserIcon,
   CogIcon,
-  BriefcaseIcon,
   StarIcon,
-  GlobeAltIcon,
-  BuildingStorefrontIcon
+  GlobeAltIcon
 } from '@heroicons/react/24/outline';
 
 const Header: React.FC = () => {
@@ -27,8 +26,9 @@ const Header: React.FC = () => {
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [scrollAlpha, setScrollAlpha] = useState<number>(0);
   const location = useLocation();
-  const { t } = useTranslation();
-  const { isRTL } = useLocalization();
+  const { t, i18n } = useTranslation();
+  useLocalization();
+  const { getSymbol } = useCurrency();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,17 +63,19 @@ const Header: React.FC = () => {
     setHeaderHeight(h);
   }, [isScrolled]);
 
+  const upper = (s: string) => (s ? s.toLocaleUpperCase(i18n.language) : s);
+
   const navigation = {
     primary: [
       {
         path: '/properties',
-        label: t('navigation.properties'),
+        label: upper(t('navigation.properties')),
         Icon: HomeModernIcon,
         description: t('header.exclusiveProperties')
       },
       {
         path: '/owners',
-        label: t('navigation.owners'),
+        label: upper(t('navigation.owners')),
         Icon: UserGroupIcon,
         description: t('header.prestigeRentals')
       }
@@ -126,13 +128,6 @@ const Header: React.FC = () => {
         description: t('header.servicesDescription')
       },
       {
-        path: '/careers',
-        label: t('navigation.careers'),
-        Icon: BriefcaseIcon,
-        category: 'company',
-        description: t('header.careersDescription')
-      },
-      {
         path: '/contact',
         label: t('navigation.contact'),
         Icon: PhoneIcon,
@@ -178,10 +173,23 @@ const Header: React.FC = () => {
         <div className="container mx-auto px-2 sm:px-6 relative">
           <div className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? 'py-2 sm:py-3' : 'py-3 sm:py-5'}`}>
 
-            {/* Left Corner - Language Selector */}
-            <div className="w-8 h-8 sm:w-14 sm:h-14 flex items-center justify-center">
-              <Link to="/settings" className="relative group p-1.5 sm:p-3 rounded-lg sm:rounded-2xl bg-transparent hover:bg-white/10 transition-all duration-200 border border-gray-200" onClick={() => setActiveHover('lang')} onMouseEnter={() => setActiveHover('lang')} onMouseLeave={() => setActiveHover(null)}>
-                <GlobeAltIcon className="w-4 h-4 sm:w-6 sm:h-6 text-gray-800 relative z-10 transition-colors duration-200" />
+            {/* Left Corner - Language & Currency Selector */}
+            <div className="flex items-center justify-center">
+              <Link 
+                to="/settings" 
+                className="relative group px-2 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-white/80 hover:bg-white border-2 border-gray-200 hover:border-[#023927] transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-1.5 sm:gap-2" 
+                onClick={() => setActiveHover('lang')} 
+                onMouseEnter={() => setActiveHover('lang')} 
+                onMouseLeave={() => setActiveHover(null)}
+              >
+                <GlobeAltIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-[#023927] transition-colors duration-200" />
+                <span className="text-xs sm:text-sm font-semibold text-gray-800 group-hover:text-[#023927] uppercase transition-colors duration-200">
+                  {i18n.language.split('-')[0]}
+                </span>
+                <div className="hidden sm:block w-px h-4 bg-gray-300 group-hover:bg-[#023927]/30 transition-colors duration-200"></div>
+                <span className="hidden sm:inline text-xs font-medium text-gray-600 group-hover:text-[#023927] transition-colors duration-200">
+                  {getSymbol()}
+                </span>
               </Link>
             </div>
 
@@ -214,19 +222,20 @@ const Header: React.FC = () => {
               <div className="flex flex-col items-center">
                 <div className={`relative transform group-hover:scale-105 transition-all duration-400 ${isScrolled ? 'scale-90 sm:scale-95' : 'scale-95 sm:scale-100'}`}>
                   <div className={`relative ${
-                    isScrolled ? 'w-10 h-10 sm:w-14 sm:h-14' : 'w-12 h-12 sm:w-20 sm:h-20'
-                  } bg-white/60 rounded-lg sm:rounded-2xl shadow-md transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden border border-gray-200 backdrop-blur-sm`}>
+                    isScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-20 h-20 sm:w-32 sm:h-32'
+                  } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden`}>
                     <img 
-                      src="/logo-m2.jpg" 
+                      src="/logo-m2.png" 
                       alt="Square Meter logo" 
-                      className="w-full h-full object-contain p-0.5 sm:p-0" 
+                      className="w-full h-full object-contain p-0 bg-transparent" 
+                      style={{ background: 'transparent' }}
                       loading="eager"
                     />
                   </div>
                 </div>
 
                 {/* Brand Text - Hidden on small mobile, shown on larger mobile/tablet */}
-                <div className={`mt-1.5 sm:mt-3 text-center transition-all duration-500 hidden xs:block ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : 'scale-90 sm:scale-100 opacity-100'}`}>
+                <div className={`-mt-1 sm:-mt-2 text-center transition-all duration-500 hidden xs:block ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : '-translate-y-0.5 scale-90 sm:scale-100 opacity-100'}`}>
                   <div className="flex flex-col items-center space-y-0 sm:space-y-1">
                     <span className={`text-[10px] sm:text-sm font-semibold tracking-[0.15em] sm:tracking-[0.3em] uppercase transition-all duration-500 ${
                       activeHover === 'logo'
@@ -236,7 +245,7 @@ const Header: React.FC = () => {
                       SQUARE METER
                     </span>
                     <span className="text-[9px] sm:text-xs text-gray-500 tracking-[0.1em] sm:tracking-[0.2em] transition-all duration-500 font-medium">
-                      IMMOBILIER
+                      {t('brand.subtitle')}
                     </span>
                   </div>
                 </div>
@@ -308,9 +317,9 @@ const Header: React.FC = () => {
       })()}
 
       {/* Floating Menu Panel (full-width on mobile) */}
-      <div className={`fixed inset-0 z-40 transition-all duration-700 pointer-events-none ${
+      <div className={`fixed inset-0 z-60 transition-all duration-700 pointer-events-none ${
         isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-      }`}>
+      }`} style={{ zIndex: 99999 }}>
         {/* backdrop */}
         <div
           className={`absolute inset-0 bg-black/20 transition-all duration-700 ${
@@ -320,11 +329,11 @@ const Header: React.FC = () => {
         />
 
         <div
-          className={`absolute right-0 w-full sm:max-w-2xl transform transition-transform duration-500 pointer-events-auto ${
+          className={`fixed right-0 w-full sm:max-w-2xl transform transition-all duration-500 pointer-events-auto ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           style={{
-            top: headerHeight ? `${headerHeight}px` : 0,
+            top: headerHeight ? `${headerHeight}px` : '96px',
             height: headerHeight ? `calc(100vh - ${headerHeight}px)` : 'calc(100vh - 96px)',
             background: isScrolled
               ? 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(250,250,255,0.99) 100%)'
@@ -333,7 +342,9 @@ const Header: React.FC = () => {
             borderLeft: '1px solid rgba(0,0,0,0.06)',
             boxShadow: '-4px 0 20px rgba(0,0,0,0.06)',
             overflowY: 'auto',
-            WebkitOverflowScrolling: 'touch' // Smooth scrolling on iOS
+            WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+            transition: 'top 500ms ease, height 500ms ease, background-color 260ms ease, backdrop-filter 260ms ease, background-image 260ms ease',
+            zIndex: 100000
           }}
         >
           <div className="h-full">
@@ -341,7 +352,7 @@ const Header: React.FC = () => {
               {/* Company Section */}
               <div>
                 <h3 className="text-gray-800 text-lg sm:text-xl font-bold tracking-widest uppercase mb-6 sm:mb-8">
-                  {t('navigation.agency')}
+                  {t('header.companyMenuTitle')}
                 </h3>
                 <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {navigation.company.map((item, index) => {

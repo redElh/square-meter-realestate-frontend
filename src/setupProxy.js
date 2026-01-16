@@ -2,6 +2,7 @@
 // This file is automatically picked up by CRA's dev server
 
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const express = require('express');
 
 module.exports = function(app) {
   const credentials = '4567:d07da6e744bb033d1299469f1f6f7334531ec05c';
@@ -9,6 +10,11 @@ module.exports = function(app) {
   
   console.log('🚀 Setting up proxy middleware...');
   console.log('🔑 Authorization header will be:', `Basic ${base64Credentials}`);
+  
+  // CRITICAL: Add body parser middleware FIRST before any routes
+  // This ensures req.body is populated for all POST requests
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
   
   app.use(
     '/api/apimo',
@@ -33,4 +39,38 @@ module.exports = function(app) {
       logLevel: 'debug',
     })
   );
+
+  // FREE Google Reviews - Puppeteer scraping (NO API KEY, NO BILLING)
+  app.use('/api/scrape-reviews', async (req, res, next) => {
+    const handler = require('../api/scrape-reviews.js');
+    await handler(req, res);
+  });
+
+  // Property inquiry email sending
+  // Apply JSON body parser specifically to this route
+  const jsonParser = express.json({ limit: '50mb' });
+  app.post('/api/send-property-inquiry', jsonParser, async (req, res) => {
+    try {
+      console.log('📧 Email endpoint called');
+      console.log('📦 Request body:', req.body);
+      console.log('📦 Request headers:', req.headers);
+      console.log('📦 Content-Type:', req.get('Content-Type'));
+      
+      // Check if body was parsed
+      if (!req.body || Object.keys(req.body).length === 0) {
+        console.error('❌ req.body is empty or undefined!');
+        console.error('❌ This might be because Content-Type header is not application/json');
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Request body is empty. Make sure Content-Type is application/json' 
+        });
+      }
+      
+      const handler = require('../api/send-property-inquiry.js');
+      await handler(req, res);
+    } catch (error) {
+      console.error('Error in email handler:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  });
 };

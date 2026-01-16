@@ -28,6 +28,9 @@
     "month": "mes",
     "week": "semana"
   },
+  "brand": {
+    "subtitle": "INMOBILIARIA"
+  },
   "navigation": {
     "home": "Inicio",
     "properties": "Propiedades",
@@ -53,6 +56,7 @@
     "confidential": "Selección confidencial"
   },
   "header": {
+    "companyMenuTitle": "Square Meter",
     "exclusiveProperties": "Propiedades exclusivas",
     "prestigeRentals": "Alquileres de prestigio",
     "allProperties": "Todas las propiedades",
@@ -232,13 +236,13 @@
       "subtitle": "Te damos la bienvenida a nuestro espacio prestigioso",
       "agency": "Nuestra Agencia",
       "address": "Dirección",
-      "addressValue": "123 Prestige Avenue, París 75008, Francia",
+      "addressValue": "461 lotissement Argana, Technopark bureau 017, 44000 Essaouira",
       "hours": "Horario",
-      "hoursValue": "Lunes - Sábado: 9:00 - 19:00",
+      "hoursValue": "Lun - Vie: 9:30 - 20h | Sáb: 10 - 17h",
       "email": "Email",
-      "emailValue": "contact@squaremeter.com",
+      "emailValue": "Essaouira@m2squaremeter.com",
       "phone": "Teléfono",
-      "phoneValue": "+33 1 23 45 67 89",
+      "phoneValue": "+212 7 00 00 06 44",
       "brandTitle": "SQUARE METER",
       "tagline": "Tu socio en bienes raíces excepcionales",
       "ctaButton": "Programar una Cita"
@@ -609,17 +613,17 @@
       "title": "Nuestros Datos de Contacto",
       "email": {
         "title": "Email",
-        "details": "contact@squaremeter.com",
+        "details": "Essaouira@m2squaremeter.com",
         "description": "Respuesta en 24h"
       },
       "phone": {
         "title": "Teléfono",
-        "details": "+33 1 23 45 67 89",
-        "description": "Lun - Vie, 9h - 18h"
+        "details": "+212 7 00 00 06 44",
+        "description": "Lun - Vie, 9:30 - 20h | Sáb, 10 - 17h"
       },
       "office": {
         "title": "Oficina",
-        "details": "123 Avenida de Lujo, 75008 París",
+        "details": "461 lotissement Argana, Technopark bureau 017, 44000 Essaouira",
         "description": "Con cita previa"
       }
     },
@@ -652,7 +656,7 @@
       "email": "Email *",
       "emailPlaceholder": "su@email.com",
       "phone": "Teléfono",
-      "phonePlaceholder": "+33 1 23 45 67 89",
+      "phonePlaceholder": "+212 6 23 09 42 46",
       "company": "Empresa",
       "companyPlaceholder": "Nombre de su empresa",
       "subject": "Asunto *",
@@ -666,6 +670,8 @@
       "submitting": "Enviando..."
     },
     "subjects": {
+      "visit": "Visita privada",
+      "info": "Solicitud de información",
       "buy": "Comprar una propiedad",
       "sell": "Vender una propiedad",
       "rent": "Alquilar una propiedad",
@@ -689,7 +695,8 @@
       "villa": "Villa",
       "house": "Casa",
       "land": "Terreno",
-      "commercial": "Comercial"
+      "commercial": "Comercial",
+      "other": "Otro"
     },
     "budgets": {
       "1M": "1M€ - 2M€",
@@ -739,6 +746,11 @@
         "title": "Seguimiento",
         "description": "Apoyo hasta la realización"
       }
+    },
+    "email": {
+      "successMessage": "¡Su mensaje ha sido enviado con éxito! Será redirigido a la página de inicio.",
+      "errorMessage": "Se ha producido un error al enviar el mensaje. Por favor, inténtelo de nuevo.",
+      "closeButton": "Cerrar"
     }
   },
   "sellingMultiStep": {
@@ -864,6 +876,32 @@
       "continue": "Continuar",
       "submit": "Enviar",
       "processing": "Procesando..."
+    },
+    "email": {
+      "subject": "Solicitud de Valoración Inmobiliaria - {{address}}",
+      "greeting": "Estimado equipo de Square Meter,",
+      "intro": "Me gustaría solicitar una valoración profesional de mi propiedad. A continuación encontrará todos los detalles relevantes:",
+      "propertyDetails": "DETALLES DE LA PROPIEDAD",
+      "features": "CARACTERÍSTICAS Y COMODIDADES",
+      "projectInfo": "MI PROYECTO",
+      "contactInfo": "MIS DATOS DE CONTACTO",
+      "name": "Nombre Completo",
+      "emailLabel": "Email",
+      "phoneLabel": "Teléfono",
+      "closing": "Quedo a su disposición para discutir la evaluación de mi propiedad.",
+      "signature": "Saludos cordiales,\n{{name}}",
+      "previewTitle": "Revisar su Mensaje",
+      "previewSubtitle": "Revise y modifique el mensaje antes de enviarlo",
+      "subjectLabel": "Asunto",
+      "messageLabel": "Mensaje",
+      "infoTitle": "Información Importante",
+      "infoMessage": "Este mensaje será traducido automáticamente al francés antes de enviarse, independientemente del idioma de visualización actual.",
+      "cancelButton": "Cancelar",
+      "sendButton": "Enviar Mensaje",
+      "sendingButton": "Enviando...",
+      "successMessage": "¡Su mensaje ha sido enviado con éxito! Nos pondremos en contacto pronto.",
+      "errorMessage": "Error al enviar el mensaje. Por favor, inténtelo de nuevo.",
+      "closeButton": "Cerrar"
     }
   },
   "footer": {
@@ -879,10 +917,10 @@
     },
     "social": {
       "title": "SIGA LA EXCELENCIA",
-      "facebook": "Únase a nuestra comunidad",
+      "linktree": "Todos nuestros enlaces",
       "instagram": "Descubra nuestras propiedades",
-      "linkedin": "Conectemos profesionalmente",
-      "pinterest": "Inspiraciones y tendencias"
+      "facebook": "Únase a nuestra comunidad",
+      "google": "Nuestras reseñas de Google"
     },
     "sections": {
       "properties": "PROPIEDADES",
@@ -902,10 +940,10 @@
       "contact": "Contacto"
     },
     "contactInfo": {
-      "address": "123 Avenue de Luxe",
-      "city": "75008 París, Francia",
-      "phone": "+33 1 23 45 67 89",
-      "email": "contact@squaremeter.com"
+      "address": "461 lotissement Argana, Technopark bureau 017",
+      "city": "44000 Essaouira, Marruecos",
+      "phone": "+212 7 00 00 06 44",
+      "email": "Essaouira@m2squaremeter.com"
     },
     "newsletter": {
       "title": "BOLETÍN EXCLUSIVO",
@@ -967,6 +1005,15 @@
       "description": "Toda su información está protegida mediante cifrado de nivel bancario. Nunca compartimos sus datos con terceros."
     },
     "validation": {
+      "required": "Este campo es obligatorio",
+      "minLength": "Mínimo {{min}} caracteres requeridos",
+      "maxLength": "Máximo {{max}} caracteres permitidos",
+      "email": "Por favor ingrese un correo electrónico válido",
+      "phone": "Por favor ingrese un número de teléfono válido",
+      "number": "Por favor ingrese un número válido",
+      "positive": "Debe ser un número positivo",
+      "integer": "Debe ser un número entero",
+      "lettersOnly": "Solo se permiten letras y espacios",
       "invalidEmail": "Correo electrónico no válido",
       "passwordTooShort": "Contraseña demasiado corta",
       "firstNameRequired": "Nombre requerido",
@@ -984,6 +1031,24 @@
       "strong": "Fuerte",
       "veryStrong": "Muy fuerte"
     }
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "minLength": "Mínimo {{min}} caracteres requeridos",
+    "maxLength": "Máximo {{max}} caracteres permitidos",
+    "email": "Por favor ingrese un correo electrónico válido",
+    "emailInvalid": "Por favor ingrese un correo electrónico válido",
+    "emailTooLong": "El correo es demasiado largo (máx 100 caracteres)",
+    "phone": "Por favor ingrese un número de teléfono válido",
+    "number": "Por favor ingrese un número válido",
+    "positive": "Debe ser un número positivo",
+    "integer": "Debe ser un número entero",
+    "lettersOnly": "Solo se permiten letras y espacios",
+    "nameLengthError": "El nombre debe tener entre 2 y 50 caracteres",
+    "cvTooLarge": "El archivo CV es demasiado grande (máx 15MB)",
+    "cvInvalidFormat": "Formato inválido. Por favor suba un archivo PDF, DOC o DOCX",
+    "pleaseFixErrors": "Por favor corrija los errores antes de enviar",
+    "submissionError": "Ocurrió un error al enviar. Por favor intente de nuevo."
   },
   "dashboard": {
     "loading": "Cargando...",
@@ -1499,60 +1564,44 @@
       "slide1": "Excelencia Inmobiliaria",
       "slide2": "Red Internacional",
       "slide3": "Experiencia Exclusiva",
-      "meetTeamButton": "Conocer nuestro equipo",
+      "meetTeamButton": "Únete a nosotros",
       "discoverPropertiesButton": "Descubrir nuestras propiedades"
     },
     "team": {
       "title": "Nuestro Equipo de Expertos",
       "subtitle": "Profesionales apasionados, unidos por la excelencia y dedicados a realizar sus proyectos más ambiciosos",
-      "specialties": "Especialidades",
-      "experience": "Experiencia",
-      "properties": "Propiedades",
-      "languages": "Idiomas",
+      "specialty": "Especialidad",
+      "languages": "Idiomas hablados",
       "members": {
+        "myriam": {
+          "name": "Ababou Myriam",
+          "role": "Co-fundadora",
+          "specialty": "Especialidad transacción y alquiler de larga duración",
+          "quote": "La excelencia en cada transacción."
+        },
         "dimitri": {
-          "name": "Dimitri Martin",
-          "role": "Fundador y CEO",
-          "description": "Experto en inmobiliaria de lujo con 15 años de experiencia internacional",
-          "specialty1": "Estrategia de adquisición",
-          "specialty2": "Negociación compleja",
-          "specialty3": "Mercados internacionales",
-          "experience": "15 años",
-          "properties": "120+",
-          "quote": "La excelencia no es un acto, sino un hábito."
+          "name": "Dimitri Djedje",
+          "role": "Co-fundador",
+          "specialty": "Especialidad alquiler de corta duración",
+          "quote": "Creando experiencias únicas para nuestros clientes."
         },
-        "sophie": {
-          "name": "Sophie Laurent",
-          "role": "Directora de Ventas",
-          "description": "Especialista en propiedades excepcionales en la Costa Azul y París",
-          "specialty1": "Propiedades costeras",
-          "specialty2": "Arquitectura contemporánea",
-          "specialty3": "Clientela internacional",
-          "experience": "12 años",
-          "properties": "85+",
-          "quote": "Cada propiedad cuenta una historia única."
+        "virginie": {
+          "name": "Virginie Oudades",
+          "role": "Asesora Inmobiliaria",
+          "specialty": "Especialidad transacción y alquiler de larga duración",
+          "quote": "Su satisfacción es mi prioridad."
         },
-        "thomas": {
-          "name": "Thomas Moreau",
-          "role": "Gerente de Conserjería",
-          "description": "Guardián de la experiencia premium del cliente y servicios a medida",
-          "specialty1": "Servicios de conserjería",
-          "specialty2": "Gestión patrimonial",
-          "specialty3": "Relaciones con proveedores",
-          "experience": "10 años",
-          "properties": "200+",
-          "quote": "El lujo reside en los detalles."
+        "hayat": {
+          "name": "Hayat Ouakrim",
+          "role": "Asesora Inmobiliaria",
+          "specialty": "Especialidad transacción y alquiler de larga duración",
+          "quote": "Acompañando a cada cliente con profesionalismo."
         },
-        "marie": {
-          "name": "Marie-Claire de Villiers",
-          "role": "Directora de Arte",
-          "description": "Arquitecta de interiores y experta en valorización patrimonial",
-          "specialty1": "Staging premium",
-          "specialty2": "Arquitectura de interiores",
-          "specialty3": "Diseño contemporáneo",
-          "experience": "8 años",
-          "properties": "60+",
-          "quote": "El espacio debe inspirar emoción."
+        "yasmine": {
+          "name": "Yasmine AATIC",
+          "role": "Asesora Inmobiliaria",
+          "specialty": "Especialidad transacción y alquiler de larga duración",
+          "quote": "Inmobiliaria con pasión y dedicación."
         }
       }
     },

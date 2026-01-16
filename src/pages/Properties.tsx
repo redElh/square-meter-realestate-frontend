@@ -41,21 +41,21 @@ const Properties: React.FC = () => {
   // Exclusive properties hero images
   const heroProperties = [
     {
-      image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-1.jfif",
       title: "Villa Azure",
       location: "Côte d'Azur, France",
       price: "4,200,000 €",
       type: "buy"
     },
     {
-      image: "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-2.jfif",
       title: "Château de la Renaissance",
       location: "Loire Valley, France",
       price: "8,500,000 €",
       type: "buy"
     },
     {
-      image: "https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-3.jfif",
       title: "Penthouse Skyline",
       location: "Paris 16ème, France",
       price: "12,500 €/mois",
@@ -191,7 +191,7 @@ const Properties: React.FC = () => {
         </div>
 
         {/* Centered Search Bar - Moved down 40px */}
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 sm:px-6 mt-40">
+        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 sm:px-6 mt-48">
           <div className="w-full max-w-4xl">
             <div className="relative">
               <input
@@ -212,38 +212,7 @@ const Properties: React.FC = () => {
               </div>
             </div>
             
-            {/* Search Suggestions - Updated hover effects */}
-            <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3 justify-center">
-              <span className="text-white/90 text-xs sm:text-sm hidden sm:inline">{t('properties.search.suggestions')} :</span>
-              <button 
-                onClick={() => setLocationFilter('Paris')}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
-                style={{ borderRadius: '0' }}
-              >
-                {t('properties.search.paris')}
-              </button>
-              <button 
-                onClick={() => setBedroomsFilter(3)}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
-                style={{ borderRadius: '0' }}
-              >
-                {t('properties.search.bedrooms3Plus')}
-              </button>
-              <button 
-                onClick={() => setFilter('buy')}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white transition-all duration-500"
-                style={{ borderRadius: '0' }}
-              >
-                {t('properties.search.toBuy')}
-              </button>
-              <button 
-                onClick={() => setFilter('seasonal')}
-                className="px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm hover:text-[#023927] hover:bg-white"
-                style={{ borderRadius: '0' }}
-              >
-                {t('properties.search.vacation')}
-              </button>
-            </div>
+            {/* Suggestions removed per request */}
           </div>
         </div>
 

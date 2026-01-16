@@ -2,12 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useLocalization } from '../contexts/LocalizationContext';
 import { 
   ChevronLeftIcon, 
   ChevronRightIcon,
-  PlayIcon,
-  PauseIcon,
   ArrowRightIcon,
   HeartIcon,
   CameraIcon,
@@ -21,41 +18,35 @@ import {
 } from '@heroicons/react/24/solid';
 import { apimoService, Property } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
+import { useReviews } from '../contexts/ReviewsContext';
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const { format: formatCurrencyPrice } = useCurrency();
+  const { reviews: googleReviews, loading: loadingReviews } = useReviews();
   
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [featuredAutoPlay, setFeaturedAutoPlay] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
 
-  const heroSlides = [
-    {
-      image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      title: t('home.hero.slides.villa.title'),
-      location: t('home.hero.slides.villa.location'),
-      price: 2500000
-    },
-    {
-      image: "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      title: t('home.hero.slides.penthouse.title'),
-      location: t('home.hero.slides.penthouse.location'),
-      price: 3200000
-    },
-    {
-      image: "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
-      title: t('home.hero.slides.estate.title'),
-      location: t('home.hero.slides.estate.location'),
-      price: 4800000
-    }
+  // Homepage hero images
+  const heroImages = [
+    '/photo-9.jfif',
+    '/photo-8.jfif',
+    '/photo-7.jfif'
   ];
+
+  // Homepage hero carousel auto-play
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
 
   // Fetch featured properties from API
   useEffect(() => {
@@ -95,19 +86,6 @@ const Home: React.FC = () => {
   ];
 
   useEffect(() => {
-    setIsVisible(true);
-    
-    let slideInterval: NodeJS.Timeout;
-    if (isPlaying) {
-      slideInterval = setInterval(() => {
-        setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-      }, 5000);
-    }
-
-    return () => clearInterval(slideInterval);
-  }, [isPlaying, heroSlides.length]);
-
-  useEffect(() => {
     let featuredInterval: NodeJS.Timeout;
     if (featuredAutoPlay) {
       featuredInterval = setInterval(() => {
@@ -117,18 +95,6 @@ const Home: React.FC = () => {
 
     return () => clearInterval(featuredInterval);
   }, [featuredAutoPlay, featuredProperties.length]);
-
-  const nextSlide = () => {
-    setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const prevSlide = () => {
-    setActiveSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  };
-
-  const goToSlide = (index: number) => {
-    setActiveSlide(index);
-  };
 
   const nextFeatured = () => {
     setFeaturedIndex((prev) => (prev + 1) % featuredProperties.length);
@@ -161,23 +127,24 @@ const Home: React.FC = () => {
     <div className="min-h-screen">
       {/* Hero Section - Épurée */}
       <section className="relative h-[70vh] sm:h-screen overflow-hidden">
-        {/* Background Carousel */}
+        {/* Image Carousel Background (replaces video) */}
         <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
+          {heroImages.map((image, index) => (
             <div
               key={index}
               className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === activeSlide ? 'opacity-100' : 'opacity-0'
+                index === heroSlideIndex ? 'opacity-100' : 'opacity-0'
               }`}
             >
               <img
-                src={slide.image}
-                alt={slide.title}
+                src={image}
+                alt={`Hero slide ${index + 1}`}
                 className="w-full h-full object-cover"
+                style={{ filter: 'brightness(0.85)' }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
             </div>
           ))}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
         </div>
 
         {/* Logo Minimaliste en haut à gauche */}
@@ -196,9 +163,7 @@ const Home: React.FC = () => {
         {/* Contenu Hero - Positionné en bas */}
         <div className="absolute bottom-12 sm:bottom-20 left-0 right-0 z-20">
           <div className="container mx-auto px-4 sm:px-6">
-            <div className={`transform transition-all duration-1000 delay-300 ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-            }`}>
+            <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
               
               {/* Boutons d'action - Nouveau design */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
@@ -223,67 +188,40 @@ const Home: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Info de la slide actuelle - Discrète */}
-              <div className="text-center">
-                <div className="inline-flex items-center space-x-4 sm:space-x-6 bg-black/40 backdrop-blur-sm px-4 py-2 sm:px-6 sm:py-3">
-                  <div className="text-white">
-                    <div className="font-inter uppercase tracking-widest text-sm">{heroSlides[activeSlide].title}</div>
-                    <div className="font-serif text-xs sm:text-xs text-gray-300">{heroSlides[activeSlide].location}</div>
-                  </div>
-                  <div className="w-px h-6 bg-white/30"></div>
-                  <div className="font-serif text-white text-sm sm:text-sm font-medium">
-                    {formatCurrencyPrice(heroSlides[activeSlide].price)}
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
 
-        {/* Contrôles Carousel - Positionné en bas à droite */}
-        <div className="absolute bottom-8 right-4 z-30 hidden sm:flex items-center space-x-4">
-          {/* Navigation Arrows */}
-          <div className="flex space-x-2">
-            <button
-              onClick={prevSlide}
-              className="w-10 h-10 bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors duration-300"
-            >
-              <ChevronLeftIcon className="w-5 h-5" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="w-10 h-10 bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors duration-300"
-            >
-              <ChevronRightIcon className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Slide Indicators */}
-          <div className="flex space-x-2">
-            {heroSlides.map((_, index) => (
+        {/* Carousel Navigation */}
+        <div className="absolute bottom-8 right-8 flex items-center gap-4 z-30">
+          <button
+            onClick={() => setHeroSlideIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length)}
+            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-2 transition-all duration-300"
+          >
+            <ChevronLeftIcon className="w-6 h-6 text-white" />
+          </button>
+          <div className="flex gap-2">
+            {heroImages.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`w-6 sm:w-8 h-1 transition-all duration-300 ${
-                  index === activeSlide 
-                    ? 'bg-[#023927]' 
-                    : 'bg-white/50 hover:bg-white/80'
+                onClick={() => setHeroSlideIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === heroSlideIndex ? 'bg-white w-8' : 'bg-white/50'
                 }`}
               />
             ))}
           </div>
-
-          {/* Play/Pause */}
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="w-10 h-10 bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors duration-300"
+            onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroImages.length)}
+            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-2 transition-all duration-300"
           >
-            {isPlaying ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
+            <ChevronRightIcon className="w-6 h-6 text-white" />
           </button>
         </div>
 
         {/* Indicateur de scroll */}
-        <div className="hidden sm:block absolute bottom-8 left-4 sm:left-8 animate-pulse">
+        <div className="hidden sm:block absolute bottom-8 left-4 sm:left-8 animate-pulse z-30">
           <div className="text-white text-xs font-inter uppercase tracking-widest rotate-[-90deg] origin-left">
             {t('home.hero.scroll')}
           </div>
@@ -566,7 +504,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Client Testimonials */}
+      {/* Client Testimonials - REAL Google Maps Reviews */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -577,21 +515,71 @@ const Home: React.FC = () => {
             <p className="text-gray-600">{t('home.testimonials.subtitle')}</p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {clientTestimonials.map((testimonial, index) => (
-              <div 
-                key={index}
-                className="bg-white p-6 shadow-sm hover:shadow-md transition-shadow duration-300"
-              >
-                <div className="text-[#023927] text-4xl md:text-5xl mb-4">"</div>
-                <p className="text-gray-600 italic mb-6 leading-relaxed text-base md:text-lg">
-                  {testimonial.text}
-                </p>
-                <p className="font-inter text-gray-900 font-medium border-t border-gray-100 pt-4">
-                  {testimonial.name}
-                </p>
-              </div>
-            ))}
+          {loadingReviews ? (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#023927]"></div>
+              <p className="mt-4 text-gray-600">Chargement des avis Google Maps...</p>
+            </div>
+          ) : googleReviews.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {googleReviews.slice(0, 6).map((review, index) => (
+                <div 
+                  key={index}
+                  className="bg-white p-6 shadow-sm hover:shadow-md transition-shadow duration-300"
+                >
+                  {/* Author profile */}
+                  <div className="flex items-center mb-4">
+                    <img 
+                      src={review.profile_photo_url} 
+                      alt={review.author_name}
+                      className="w-12 h-12 rounded-full object-cover mr-3"
+                    />
+                    <div>
+                      <p className="font-inter text-gray-900 font-medium">{review.author_name}</p>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <svg 
+                            key={i}
+                            className={`w-4 h-4 ${i < review.rating ? 'text-green-400' : 'text-gray-300'}`}
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Review text */}
+                  <p className="text-gray-600 italic mb-4 leading-relaxed text-base">
+                    "{review.text}"
+                  </p>
+                  
+                  {/* Time */}
+                  <p className="text-sm text-gray-500 border-t border-gray-100 pt-3">
+                    {review.relative_time_description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Aucun avis disponible pour le moment.</p>
+            </div>
+          )}
+          
+          {/* Google Maps Link */}
+          <div className="text-center mt-12">
+            <a 
+              href="https://www.google.com/maps/place/M%C2%B2+Square+Meter/@31.4938096,-9.7575766,17z/data=!4m8!3m7!1s0x6b0f78fc73018673:0x9f971ab9cce20129!8m2!3d31.4938051!4d-9.7550017!9m1!1b1!16s%2Fg%2F11wth7gqpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 text-[#023927] hover:text-[#035937] font-medium transition-colors"
+            >
+              <span>Voir tous les avis sur Google Maps</span>
+              <ArrowTopRightOnSquareIcon className="w-5 h-5" />
+            </a>
           </div>
         </div>
       </section>
@@ -606,40 +594,40 @@ const Home: React.FC = () => {
             <div className="w-16 h-0.5 bg-[#023927] mx-auto mb-6"></div>
           </div>
           
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
-                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group h-full flex flex-col">
+                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium text-center">
                   {t('home.values.excellence.title')}
                 </h3>
-                <p className="text-gray-600 group-hover:text-[#023927]">
+                <p className="text-gray-600 group-hover:text-[#023927] text-center mt-2 flex-1">
                   {t('home.values.excellence.description')}
                 </p>
               </div>
               
-              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
-                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
+              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group h-full flex flex-col">
+                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium text-center">
                   {t('home.values.humanity.title')}
                 </h3>
-                <p className="text-gray-600 group-hover:text-[#023927]">
+                <p className="text-gray-600 group-hover:text-[#023927] text-center mt-2 flex-1">
                   {t('home.values.humanity.description')}
                 </p>
               </div>
               
-              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
-                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
+              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group h-full flex flex-col">
+                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium text-center">
                   {t('home.values.innovation.title')}
                 </h3>
-                <p className="text-gray-600 group-hover:text-[#023927]">
+                <p className="text-gray-600 group-hover:text-[#023927] text-center mt-2 flex-1">
                   {t('home.values.innovation.description')}
                 </p>
               </div>
               
-              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group">
-                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium">
+              <div className="p-6 border border-gray-100 hover:border-[#023927] transition-colors duration-300 group h-full flex flex-col">
+                <h3 className="font-inter uppercase text-gray-900 group-hover:text-[#023927] text-lg mb-2 font-medium text-center">
                   {t('home.values.responsibility.title')}
                 </h3>
-                <p className="text-gray-600 group-hover:text-[#023927]">
+                <p className="text-gray-600 group-hover:text-[#023927] text-center mt-2 flex-1">
                   {t('home.values.responsibility.description')}
                 </p>
               </div>
@@ -714,7 +702,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-16 bg-white border-t border-gray-100">
+      <section className="py-16 bg-[#023927] text-white">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
@@ -724,10 +712,10 @@ const Home: React.FC = () => {
               { number: "12", label: t('home.stats.countriesServed') }
             ].map((stat, index) => (
               <div key={index} className="group">
-                <div className="text-3xl md:text-4xl font-inter text-[#023927] font-light mb-2 group-hover:scale-110 transition-transform duration-300">
+                <div className="text-3xl md:text-4xl font-inter text-white font-light mb-2 group-hover:scale-110 transition-transform duration-300">
                   {stat.number}
                 </div>
-                <div className="text-gray-600 font-medium">
+                <div className="text-white/90 font-medium">
                   {stat.label}
                 </div>
               </div>

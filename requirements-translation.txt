@@ -1,0 +1,23 @@
+# Python dependencies for translation service
+# Install with: pip install -r requirements-translation.txt
+
+# Core dependencies
+flask==3.0.0
+flask-cors==4.0.0
+requests==2.31.0
+
+# Translation libraries (install at least one)
+# LibreTranslate client (free, open-source)
+libretranslate==1.3.0
+
+# Optional: Google Translate (unofficial, not recommended for production)
+googletrans==4.0.0rc1
+
+# Optional: DeepL (requires API key)
+deepl==1.16.1
+
+# Optional: Azure Translator (requires subscription)
+azure-ai-translation-text==1.0.0
+
+# Development dependencies
+python-dotenv==1.0.0

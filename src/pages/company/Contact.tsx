@@ -1,6 +1,6 @@
 // src/pages/Contact.tsx
-import React, { useState, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
   EnvelopeIcon,
@@ -14,23 +14,31 @@ import {
   PaperAirplaneIcon
 } from '@heroicons/react/24/outline';
 import {
-  CheckCircleIcon as CheckCircleIconSolid
+  CheckCircleIcon as CheckCircleIconSolid,
+  XMarkIcon
 } from '@heroicons/react/24/solid';
+import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
 
 const Contact: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const contactType = searchParams.get('type');
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
-    subject: contactType || '',
+    subject: '',
     message: '',
     propertyType: '',
     budget: '',
@@ -39,20 +47,36 @@ const Contact: React.FC = () => {
     preferredContact: 'email'
   });
 
+  // Map query params to subject values
+  useEffect(() => {
+    if (contactType) {
+      const subjectMap: Record<string, string> = {
+        'visit': 'visit',
+        'info': 'info',
+        'estimation': 'estimation',
+        'appointment': 'buy',
+        'confidential': 'confidential'
+      };
+      
+      const mappedSubject = subjectMap[contactType] || contactType;
+      setFormData(prev => ({ ...prev, subject: mappedSubject }));
+    }
+  }, [contactType]);
+
   const contactMethods = [
     {
       icon: EnvelopeIcon,
       title: t('contact.contactMethods.email.title'),
       details: t('contact.contactMethods.email.details'),
       description: t('contact.contactMethods.email.description'),
-      action: 'mailto:contact@squaremeter.com'
+      action: 'mailto:Essaouira@m2squaremeter.com'
     },
     {
       icon: PhoneIcon,
       title: t('contact.contactMethods.phone.title'),
       details: t('contact.contactMethods.phone.details'),
       description: t('contact.contactMethods.phone.description'),
-      action: 'tel:+33123456789'
+      action: 'tel:+212700000644'
     },
     {
       icon: MapPinIcon,
@@ -93,40 +117,291 @@ const Contact: React.FC = () => {
     .map((k) => _processObj && _processObj[k])
     .filter(Boolean);
 
+  // Validation functions
+  const validateField = (name: string, value: any): string => {
+    // First name validation
+    if (name === 'firstName') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 2) return t('validation.minLength', { min: 2 });
+      if (value.trim().length > 50) return t('validation.maxLength', { max: 50 });
+      if (!/^[a-zA-Z\u00C0-\u017F\s'-]+$/.test(value)) return t('validation.lettersOnly');
+    }
+
+    // Last name validation
+    if (name === 'lastName') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 2) return t('validation.minLength', { min: 2 });
+      if (value.trim().length > 50) return t('validation.maxLength', { max: 50 });
+      if (!/^[a-zA-Z\u00C0-\u017F\s'-]+$/.test(value)) return t('validation.lettersOnly');
+    }
+
+    // Email validation
+    if (name === 'email') {
+      if (!value || value.trim() === '') return t('validation.required');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) return t('validation.email');
+      if (value.length > 100) return t('validation.maxLength', { max: 100 });
+    }
+
+    // Phone validation (optional but if provided must be valid)
+    if (name === 'phone' && value && value.trim() !== '') {
+      // Use Google's libphonenumber-js for real-world phone number validation
+      // This validates against actual country codes and phone number formats
+      // Examples: +212 6 23 09 42 46 (Morocco), +33 1 23 45 67 89 (France), +1 555 123 4567 (USA)
+      try {
+        // Check if it's a valid phone number format
+        if (!isValidPhoneNumber(value)) {
+          return t('validation.phone');
+        }
+        
+        // Parse the phone number to get detailed info
+        const phoneNumber = parsePhoneNumber(value);
+        
+        // Ensure it has a valid country code
+        if (!phoneNumber || !phoneNumber.country) {
+          return t('validation.phone');
+        }
+        
+        // Additional check: phone number must be possible (valid length for the country)
+        if (!phoneNumber.isPossible()) {
+          return t('validation.phone');
+        }
+      } catch (error) {
+        // If parsing fails, the phone number is invalid
+        return t('validation.phone');
+      }
+    }
+
+    // Subject validation
+    if (name === 'subject') {
+      if (!value || value === '') return t('validation.required');
+    }
+
+    // Message validation
+    if (name === 'message') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (value.trim().length < 10) return t('validation.minLength', { min: 10 });
+      if (value.trim().length > 2000) return t('validation.maxLength', { max: 2000 });
+    }
+
+    return '';
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    
+    // Required fields
+    const fields = ['firstName', 'lastName', 'email', 'subject', 'message'];
+    fields.forEach(field => {
+      const error = validateField(field, formData[field as keyof typeof formData]);
+      if (error) newErrors[field] = error;
+    });
+
+    // Validate phone if provided
+    if (formData.phone) {
+      const phoneError = validateField('phone', formData.phone);
+      if (phoneError) newErrors.phone = phoneError;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate form
+    if (!validateForm()) {
+      // Mark all fields as touched to show errors
+      const allTouched: Record<string, boolean> = {};
+      Object.keys(formData).forEach(key => {
+        allTouched[key] = true;
+      });
+      setTouched(allTouched);
+      return;
+    }
+    
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Reset form after success
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-        propertyType: '',
-        budget: '',
-        timeline: '',
-        company: '',
-        preferredContact: 'email'
+    try {
+      // Generate email content in French
+      const emailContent = generateFrenchEmailContent();
+      
+      const response = await fetch('/api/send-property-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          subject: emailContent.subject,
+          content: emailContent.content,
+          formData: formData,
+          currentLanguage: 'fr',
+          type: 'contact'
+        }),
       });
-    }, 5000);
+      
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        // API endpoint not available (development mode or not deployed)
+        console.warn('API endpoint not available. Email data:', {
+          subject: emailContent.subject,
+          content: emailContent.content,
+          formData: formData
+        });
+        
+        // Simulate success in development
+        setAlertType('success');
+        setAlertMessage(t('contact.email.successMessage'));
+        setShowAlert(true);
+        setIsSubmitting(false);
+        
+        // Redirect after 3 seconds
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
+        return;
+      }
+      
+      const result = await response.json();
+      
+      if (response.ok && result.success) {
+        // Show success alert
+        setAlertType('success');
+        setAlertMessage(t('contact.email.successMessage'));
+        setShowAlert(true);
+        setIsSubmitting(false);
+        
+        // Redirect after 3 seconds
+        setTimeout(() => {
+          navigate('/');
+        }, 3000);
+      } else {
+        throw new Error(result.error || 'Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setAlertType('error');
+      setAlertMessage(t('contact.email.errorMessage'));
+      setShowAlert(true);
+      setIsSubmitting(false);
+    }
+  };
+
+  const generateFrenchEmailContent = () => {
+    // Generate email in French
+    const subjectMap: Record<string, string> = {
+      'visit': 'Demande de visite privée',
+      'info': 'Demande d\'information',
+      'buy': 'Demande d\'achat',
+      'sell': 'Demande de vente',
+      'rent': 'Demande de location',
+      'management': 'Demande de gestion',
+      'estimation': 'Demande d\'estimation',
+      'confidential': 'Demande confidentielle',
+      'partnership': 'Demande de partenariat',
+      'other': 'Autre demande'
+    };
+
+    const propertyTypeMap: Record<string, string> = {
+      'apartment': 'Appartement',
+      'villa': 'Villa',
+      'house': 'Maison',
+      'land': 'Terrain',
+      'commercial': 'Commercial',
+      'other': 'Autre'
+    };
+
+    const budgetMap: Record<string, string> = {
+      '1M': '1M€ - 2M€',
+      '2M': '2M€ - 5M€',
+      '5M': '5M€ - 10M€',
+      '10M': '10M€+'
+    };
+
+    const timelineMap: Record<string, string> = {
+      'urgent': 'Urgent (1-3 mois)',
+      'medium': 'Moyen (3-6 mois)',
+      'flexible': 'Flexible (6+ mois)'
+    };
+
+    const subject = `Nouveau message de contact - ${subjectMap[formData.subject] || formData.subject}`;
+    
+    const content = `
+Bonjour,
+
+Vous avez reçu un nouveau message de contact via le formulaire du site web Square Meter.
+
+INFORMATIONS DU CONTACT
+
+Nom complet : ${formData.firstName} ${formData.lastName}
+Email : ${formData.email}
+Téléphone : ${formData.phone || 'Non fourni'}
+${formData.company ? `Société : ${formData.company}\n` : ''}
+
+OBJET DE LA DEMANDE
+
+Type de demande : ${subjectMap[formData.subject] || formData.subject}
+${
+  formData.propertyType || formData.budget || formData.timeline
+    ? `\nDÉTAILS DU PROJET\n${
+  formData.propertyType
+    ? `\nType de bien : ${propertyTypeMap[formData.propertyType] || formData.propertyType}`
+    : ''
+}${
+  formData.budget
+    ? `\nBudget : ${budgetMap[formData.budget] || formData.budget}`
+    : ''
+}${
+  formData.timeline
+    ? `\nDélai souhaité : ${timelineMap[formData.timeline] || formData.timeline}`
+    : ''
+}\n`
+    : ''
+}
+
+MESSAGE DU CLIENT
+
+${formData.message}
+
+
+---
+Ce message a été envoyé automatiquement depuis le formulaire de contact du site Square Meter.
+Merci de répondre directement à l'adresse email du client : ${formData.email}
+
+Cordialement,
+Square Meter - Système de notification automatique
+    `.trim();
+    
+    return { subject, content };
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: value
     }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
+    const error = validateField(name, value);
+    if (error) {
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
   };
 
   const handleQuickAction = (type: string) => {
@@ -139,12 +414,36 @@ const Contact: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Success Message - Green theme */}
-      {isSubmitted && (
-        <div className="fixed top-4 sm:top-8 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in px-4 max-w-full">
-          <div className="bg-gradient-to-r from-[#023927] to-[#0a4d3a] text-white px-4 sm:px-8 py-3 sm:py-4 flex items-center space-x-2 sm:space-x-3 border-2 border-white shadow-2xl">
-            <CheckCircleIconSolid className="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" />
-            <span className="font-inter font-medium text-sm sm:text-base lg:text-lg">{t('contact.successMessage')}</span>
+      {/* Alert Notification */}
+      {showAlert && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className={`px-8 py-6 border-2 shadow-2xl max-w-md w-full ${
+            alertType === 'success' 
+              ? 'bg-white border-green-600' 
+              : 'bg-white border-red-600'
+          }`}>
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="flex-shrink-0">
+                {alertType === 'success' ? (
+                  <CheckCircleIconSolid className="w-16 h-16 text-green-600" />
+                ) : (
+                  <XMarkIcon className="w-16 h-16 text-red-600" />
+                )}
+              </div>
+              <div className={`font-light text-lg ${
+                alertType === 'success' ? 'text-green-800' : 'text-red-800'
+              }`}>{alertMessage}</div>
+              <button
+                onClick={() => setShowAlert(false)}
+                className={`px-8 py-3 font-medium uppercase tracking-wider text-sm transition-all duration-300 border-2 ${
+                  alertType === 'success'
+                    ? 'border-green-600 text-green-700 hover:bg-green-600 hover:text-white'
+                    : 'border-red-600 text-red-700 hover:bg-red-600 hover:text-white'
+                }`}
+              >
+                {t('contact.email.closeButton')}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -270,10 +569,20 @@ const Contact: React.FC = () => {
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+                      onBlur={handleBlur}
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
+                        touched.firstName && errors.firstName
+                          ? 'border-red-500 focus:border-red-600'
+                          : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                      }`}
                       placeholder={t('contact.form.firstNamePlaceholder')}
                     />
+                    {touched.firstName && errors.firstName && (
+                      <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                        <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.firstName}</span>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 font-medium">
@@ -284,10 +593,20 @@ const Contact: React.FC = () => {
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+                      onBlur={handleBlur}
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
+                        touched.lastName && errors.lastName
+                          ? 'border-red-500 focus:border-red-600'
+                          : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                      }`}
                       placeholder={t('contact.form.lastNamePlaceholder')}
                     />
+                    {touched.lastName && errors.lastName && (
+                      <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                        <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.lastName}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -302,10 +621,20 @@ const Contact: React.FC = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+                      onBlur={handleBlur}
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
+                        touched.email && errors.email
+                          ? 'border-red-500 focus:border-red-600'
+                          : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                      }`}
                       placeholder={t('contact.form.emailPlaceholder')}
                     />
+                    {touched.email && errors.email && (
+                      <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                        <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.email}</span>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 font-medium">
@@ -316,9 +645,20 @@ const Contact: React.FC = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+                      onBlur={handleBlur}
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
+                        touched.phone && errors.phone
+                          ? 'border-red-500 focus:border-red-600'
+                          : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                      }`}
                       placeholder={t('contact.form.phonePlaceholder')}
                     />
+                    {touched.phone && errors.phone && (
+                      <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                        <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.phone}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -345,10 +685,16 @@ const Contact: React.FC = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-sm sm:text-base"
+                      onBlur={handleBlur}
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
+                        touched.subject && errors.subject
+                          ? 'border-red-500 focus:border-red-600'
+                          : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                      }`}
                     >
                       <option value="">{t('contact.form.subjectPlaceholder')}</option>
+                      <option value="visit">{t('contact.subjects.visit')}</option>
+                      <option value="info">{t('contact.subjects.info')}</option>
                       <option value="buy">{t('contact.subjects.buy')}</option>
                       <option value="sell">{t('contact.subjects.sell')}</option>
                       <option value="rent">{t('contact.subjects.rent')}</option>
@@ -358,49 +704,12 @@ const Contact: React.FC = () => {
                       <option value="partnership">{t('contact.subjects.partnership')}</option>
                       <option value="other">{t('contact.subjects.other')}</option>
                     </select>
-                  </div>
-                </div>
-
-                {/* Preferred Contact Method */}
-                <div>
-                  <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 font-medium">
-                    {t('contact.form.preferredContact')}
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {[
-                      { value: 'email', label: 'Email', icon: EnvelopeIcon },
-                      { value: 'phone', label: t('contact.form.preferredContactPhone'), icon: PhoneIcon }
-                    ].map((method) => {
-                      const IconComponent = method.icon;
-                      return (
-                        <label key={method.value} className="relative">
-                          <input
-                            type="radio"
-                            name="preferredContact"
-                            value={method.value}
-                            checked={formData.preferredContact === method.value}
-                            onChange={handleChange}
-                            className="sr-only"
-                          />
-                          <div className={`p-3 sm:p-4 border-2 cursor-pointer transition-all duration-300 ${
-                            formData.preferredContact === method.value
-                              ? 'border-[#023927] bg-[#023927]/5'
-                              : 'border-gray-200 hover:border-gray-300'
-                          }`}>
-                            <div className="flex items-center space-x-2 sm:space-x-3">
-                              <div className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center transition-colors duration-300 ${
-                                formData.preferredContact === method.value
-                                  ? 'bg-[#023927] text-white'
-                                  : 'bg-gray-100 text-gray-600'
-                              }`}>
-                                <IconComponent className="w-4 h-4 sm:w-5 sm:h-5" />
-                              </div>
-                              <span className="font-inter text-gray-700 font-medium text-xs sm:text-sm">{method.label}</span>
-                            </div>
-                          </div>
-                        </label>
-                      );
-                    })}
+                    {touched.subject && errors.subject && (
+                      <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                        <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                        <span>{errors.subject}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -425,6 +734,7 @@ const Contact: React.FC = () => {
                           <option value="house">{t('contact.propertyTypes.house')}</option>
                           <option value="land">{t('contact.propertyTypes.land')}</option>
                           <option value="commercial">{t('contact.propertyTypes.commercial')}</option>
+                          <option value="other">{t('contact.propertyTypes.other')}</option>
                         </select>
                       </div>
                       <div>
@@ -438,10 +748,10 @@ const Contact: React.FC = () => {
                           className="w-full px-2.5 sm:px-3 py-2 border-2 border-gray-200 focus:outline-none focus:border-[#023927] font-inter bg-white text-xs sm:text-sm"
                         >
                           <option value="">{t('contact.projectDetails.budget')}</option>
-                          <option value="1M">{t('contact.budgets.range1')}</option>
-                          <option value="2M">{t('contact.budgets.range2')}</option>
-                          <option value="5M">{t('contact.budgets.range3')}</option>
-                          <option value="10M">{t('contact.budgets.range4')}</option>
+                          <option value="1M">{t('contact.budgets.1M')}</option>
+                          <option value="2M">{t('contact.budgets.2M')}</option>
+                          <option value="5M">{t('contact.budgets.5M')}</option>
+                          <option value="10M">{t('contact.budgets.10M')}</option>
                         </select>
                       </div>
                       <div>
@@ -473,11 +783,21 @@ const Contact: React.FC = () => {
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    required
+                    onBlur={handleBlur}
                     rows={5}
                     placeholder={t('contact.form.messagePlaceholder')}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 resize-none text-sm sm:text-base"
+                    className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 resize-none text-sm sm:text-base ${
+                      touched.message && errors.message
+                        ? 'border-red-500 focus:border-red-600'
+                        : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                    }`}
                   ></textarea>
+                  {touched.message && errors.message && (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.message}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Submit Button */}

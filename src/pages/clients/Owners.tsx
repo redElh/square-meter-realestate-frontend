@@ -30,17 +30,17 @@ const Owners: React.FC = () => {
   
   const heroSlides = [
     {
-      image: "https://images.pexels.com/photos/7031607/pexels-photo-7031607.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-4.jfif",
       title: heroSlidesData[0].title,
       subtitle: heroSlidesData[0].subtitle
     },
     {
-      image: "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-5.jfif",
       title: heroSlidesData[1].title,
       subtitle: heroSlidesData[1].subtitle
     },
     {
-      image: "https://images.pexels.com/photos/7031612/pexels-photo-7031612.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-6.jfif",
       title: heroSlidesData[2].title,
       subtitle: heroSlidesData[2].subtitle
     }

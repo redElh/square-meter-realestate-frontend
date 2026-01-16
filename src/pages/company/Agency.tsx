@@ -43,51 +43,48 @@ const Agency: React.FC = () => {
   const teamMembers = [
     {
       id: 1,
-      name: t('agency.team.members.dimitri.name'),
-      role: t('agency.team.members.dimitri.role'),
-      image: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: t('agency.team.members.dimitri.description'),
-      specialties: [t('agency.team.members.dimitri.specialty1'), t('agency.team.members.dimitri.specialty2'), t('agency.team.members.dimitri.specialty3')],
-      experience: t('agency.team.members.dimitri.experience'),
-      properties: t('agency.team.members.dimitri.properties'),
-      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.ar')],
-      quote: t('agency.team.members.dimitri.quote')
+      name: t('agency.team.members.myriam.name'),
+      role: t('agency.team.members.myriam.role'),
+      image: '/member-1.jfif',
+      specialty: t('agency.team.members.myriam.specialty'),
+      languages: [t('languageNames.fr'), t('languageNames.ar'), t('languageNames.en')],
+      quote: t('agency.team.members.myriam.quote')
     },
     {
       id: 2,
-      name: t('agency.team.members.sophie.name'),
-      role: t('agency.team.members.sophie.role'),
-      image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: t('agency.team.members.sophie.description'),
-      specialties: [t('agency.team.members.sophie.specialty1'), t('agency.team.members.sophie.specialty2'), t('agency.team.members.sophie.specialty3')],
-      experience: t('agency.team.members.sophie.experience'),
-      properties: t('agency.team.members.sophie.properties'),
-      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.es')],
-      quote: t('agency.team.members.sophie.quote')
+      name: t('agency.team.members.dimitri.name'),
+      role: t('agency.team.members.dimitri.role'),
+      image: null, // No photo for now
+      specialty: t('agency.team.members.dimitri.specialty'),
+      languages: [t('languageNames.fr'), t('languageNames.en')],
+      quote: t('agency.team.members.dimitri.quote')
     },
     {
       id: 3,
-      name: t('agency.team.members.thomas.name'),
-      role: t('agency.team.members.thomas.role'),
-      image: 'https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: t('agency.team.members.thomas.description'),
-      specialties: [t('agency.team.members.thomas.specialty1'), t('agency.team.members.thomas.specialty2'), t('agency.team.members.thomas.specialty3')],
-      experience: t('agency.team.members.thomas.experience'),
-      properties: t('agency.team.members.thomas.properties'),
-      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.de')],
-      quote: t('agency.team.members.thomas.quote')
+      name: t('agency.team.members.virginie.name'),
+      role: t('agency.team.members.virginie.role'),
+      image: '/member-3.jfif',
+      specialty: t('agency.team.members.virginie.specialty'),
+      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.es')],
+      quote: t('agency.team.members.virginie.quote')
     },
     {
       id: 4,
-      name: t('agency.team.members.marie.name'),
-      role: t('agency.team.members.marie.role'),
-      image: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=800',
-      description: t('agency.team.members.marie.description'),
-      specialties: [t('agency.team.members.marie.specialty1'), t('agency.team.members.marie.specialty2'), t('agency.team.members.marie.specialty3')],
-      experience: t('agency.team.members.marie.experience'),
-      properties: t('agency.team.members.marie.properties'),
-      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.ru')],
-      quote: t('agency.team.members.marie.quote')
+      name: t('agency.team.members.hayat.name'),
+      role: t('agency.team.members.hayat.role'),
+      image: '/member-4.jfif',
+      specialty: t('agency.team.members.hayat.specialty'),
+      languages: [t('languageNames.fr'), t('languageNames.ar'), t('languageNames.en')],
+      quote: t('agency.team.members.hayat.quote')
+    },
+    {
+      id: 5,
+      name: t('agency.team.members.yasmine.name'),
+      role: t('agency.team.members.yasmine.role'),
+      image: '/member-5.jfif',
+      specialty: t('agency.team.members.yasmine.specialty'),
+      languages: [t('languageNames.fr'), t('languageNames.ar'), t('languageNames.en')],
+      quote: t('agency.team.members.yasmine.quote')
     }
   ];
 
@@ -143,10 +140,18 @@ const Agency: React.FC = () => {
     setActiveTeamMember((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
   };
 
+  // Auto-animate team carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTeamMember((prev) => (prev + 1) % teamMembers.length);
+    }, 8000); // Change every 8 seconds
+    return () => clearInterval(interval);
+  }, [teamMembers.length]);
+
   return (
     <div className="min-h-screen bg-white font-inter text-base">
       {/* Hero Section - match Properties page height and spacing */}
-      <section className="relative h-[60vh] sm:h-[70vh] overflow-hidden bg-white">
+      <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white -mt-24 sm:-mt-32">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
@@ -199,11 +204,11 @@ const Agency: React.FC = () => {
           </div>
         </div>
 
-        {/* Buttons Container - Centered at bottom */}
-        <div className="absolute bottom-16 sm:bottom-12 lg:bottom-16 left-0 right-0 z-20 flex justify-center px-4">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        {/* Buttons Container - centered vertically */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center px-4 pointer-events-none">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pointer-events-auto transform translate-y-[100px]">
             <Link 
-              to="/contact" 
+              to="/careers" 
               className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
             >
               <span className="flex items-center justify-center space-x-2">
@@ -243,23 +248,32 @@ const Agency: React.FC = () => {
             <div className="bg-white border-2 border-gray-100 shadow-sm">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
                 {/* Team Member Image */}
-                <div className="relative h-[350px] sm:h-[400px] md:h-[500px] lg:h-auto">
-                  <img
-                    src={teamMembers[activeTeamMember].image}
-                    alt={teamMembers[activeTeamMember].name}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="relative h-[280px] sm:h-[320px] md:h-[350px] lg:h-auto lg:max-h-[450px] bg-gray-50">
+                  {teamMembers[activeTeamMember].image ? (
+                    <img
+                      src={teamMembers[activeTeamMember].image ?? undefined}
+                      alt={teamMembers[activeTeamMember].name}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <UserGroupIcon className="w-24 h-24 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-500 font-inter text-lg">{teamMembers[activeTeamMember].name}</p>
+                      </div>
+                    </div>
+                  )}
                   
                   {/* Navigation Arrows */}
                   <button
                     onClick={prevTeamMember}
-                    className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+                    className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-[#023927]/80 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#023927] transition-colors duration-300 border-2 border-white shadow-lg"
                   >
                     <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
                   <button
                     onClick={nextTeamMember}
-                    className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+                    className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-[#023927]/80 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#023927] transition-colors duration-300 border-2 border-white shadow-lg"
                   >
                     <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </button>
@@ -268,39 +282,20 @@ const Agency: React.FC = () => {
                 {/* Team Member Info */}
                 <div className="p-6 sm:p-8 lg:p-12 flex flex-col justify-center">
                   <div className="mb-6 sm:mb-8">
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter font-medium text-gray-900 mb-2">
+                      {teamMembers[activeTeamMember].name}
+                    </h3>
                     <span className="inline-block px-2 sm:px-3 py-1 bg-gray-100 text-gray-800 font-inter uppercase text-xs tracking-wide mb-3 sm:mb-4 border border-gray-300">
                       {teamMembers[activeTeamMember].role}
                     </span>
-                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter font-medium text-gray-900 mb-3 sm:mb-4">
-                      {teamMembers[activeTeamMember].name}
-                    </h3>
-                    <p className="text-gray-600 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base lg:text-lg">
-                      {teamMembers[activeTeamMember].description}
-                    </p>
                   </div>
 
-                  {/* Specialties */}
+                  {/* Specialty */}
                   <div className="mb-6 sm:mb-8">
-                    <h4 className="font-inter uppercase text-gray-700 text-xs sm:text-sm mb-3 sm:mb-4 font-medium">{t('agency.team.specialties')}</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {teamMembers[activeTeamMember].specialties.map((specialty, index) => (
-                        <span key={index} className="px-2 sm:px-3 py-1 bg-[#023927]/10 text-[#023927] font-medium text-xs sm:text-sm border border-[#023927]/20">
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Stats */}
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
-                    <div className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
-                      <div className="font-inter text-[#023927] text-lg sm:text-xl font-semibold">{teamMembers[activeTeamMember].experience}</div>
-                      <div className="text-gray-600 text-xs sm:text-sm">{t('agency.team.experience')}</div>
-                    </div>
-                    <div className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
-                      <div className="font-inter text-[#023927] text-lg sm:text-xl font-semibold">{teamMembers[activeTeamMember].properties}</div>
-                      <div className="text-gray-600 text-xs sm:text-sm">{t('agency.team.properties')}</div>
-                    </div>
+                    <h4 className="font-inter uppercase text-gray-700 text-xs sm:text-sm mb-2 font-medium">{t('agency.team.specialty')}</h4>
+                    <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
+                      {teamMembers[activeTeamMember].specialty}
+                    </p>
                   </div>
 
                   {/* Languages */}

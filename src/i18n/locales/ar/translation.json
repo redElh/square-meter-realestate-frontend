@@ -28,6 +28,9 @@
     "month": "شهر",
     "week": "أسبوع"
   },
+  "brand": {
+    "subtitle": "العقارات"
+  },
   "navigation": {
     "home": "الرئيسية",
     "properties": "العقارات",
@@ -53,6 +56,7 @@
     "confidential": "مجموعة سرية"
   },
   "header": {
+    "companyMenuTitle": "Square Meter",
     "exclusiveProperties": "عقارات حصرية",
     "prestigeRentals": "إيجارات فاخرة",
     "allProperties": "جميع العقارات",
@@ -232,13 +236,13 @@
       "subtitle": "نرحب بك في مساحتنا المرموقة",
       "agency": "وكالتنا",
       "address": "العنوان",
-      "addressValue": "123 Prestige Avenue، باريس 75008، فرنسا",
+      "addressValue": "461 lotissement Argana, Technopark bureau 017, 44000 Essaouira",
       "hours": "ساعات العمل",
-      "hoursValue": "الإثنين - السبت: 9:00 - 19:00",
+      "hoursValue": "الإثنين - الجمعة: 9:30 ص - 8 م | السبت: 10 ص - 5 م",
       "email": "البريد الإلكتروني",
-      "emailValue": "contact@squaremeter.com",
+      "emailValue": "Essaouira@m2squaremeter.com",
       "phone": "الهاتف",
-      "phoneValue": "+33 1 23 45 67 89",
+      "phoneValue": "+212 7 00 00 06 44",
       "brandTitle": "SQUARE METER",
       "tagline": "شريكك في العقارات الاستثنائية",
       "ctaButton": "حدد موعداً"
@@ -607,17 +611,17 @@
       "title": "تفاصيل الاتصال",
       "email": {
         "title": "البريد الإلكتروني",
-        "details": "contact@squaremeter.com",
+        "details": "Essaouira@m2squaremeter.com",
         "description": "الرد خلال 24 ساعة"
       },
       "phone": {
         "title": "الهاتف",
-        "details": "+33 1 23 45 67 89",
-        "description": "الإثنين - الجمعة، 9 ص - 6 م"
+        "details": "+212 7 00 00 06 44",
+        "description": "الإثنين - الجمعة، 9:30 ص - 8 م | السبت، 10 ص - 5 م"
       },
       "office": {
         "title": "المكتب",
-        "details": "123 شارع الفخامة، 75008 باريس",
+        "details": "461 lotissement Argana, Technopark bureau 017, 44000 Essaouira",
         "description": "بموعد مسبق"
       }
     },
@@ -650,7 +654,7 @@
       "email": "البريد الإلكتروني *",
       "emailPlaceholder": "your@email.com",
       "phone": "الهاتف",
-      "phonePlaceholder": "+33 1 23 45 67 89",
+      "phonePlaceholder": "+212 6 23 09 42 46",
       "company": "الشركة",
       "companyPlaceholder": "اسم شركتك",
       "subject": "الموضوع *",
@@ -664,6 +668,8 @@
       "submitting": "جارٍ الإرسال..."
     },
     "subjects": {
+      "visit": "زيارة خاصة",
+      "info": "طلب معلومات",
       "buy": "شراء عقار",
       "sell": "بيع عقار",
       "rent": "استئجار عقار",
@@ -687,7 +693,8 @@
       "villa": "فيلا",
       "house": "منزل",
       "land": "أرض",
-      "commercial": "تجاري"
+      "commercial": "تجاري",
+      "other": "أخرى"
     },
     "budgets": {
       "1M": "1 مليون يورو - 2 مليون يورو",
@@ -737,6 +744,11 @@
         "title": "المتابعة",
         "description": "الدعم حتى التحقيق"
       }
+    },
+    "email": {
+      "successMessage": "تم إرسال رسالتك بنجاح! سيتم إعادة توجيهك إلى الصفحة الرئيسية.",
+      "errorMessage": "حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.",
+      "closeButton": "إغلاق"
     }
   },
   "sellingMultiStep": {
@@ -862,6 +874,32 @@
       "continue": "متابعة",
       "submit": "إرسال",
       "processing": "جارٍ المعالجة..."
+    },
+    "email": {
+      "subject": "طلب تقييم عقاري - {{address}}",
+      "greeting": "فريق Square Meter المحترم،",
+      "intro": "أود طلب تقييم احترافي لعقاري. فيما يلي جميع التفاصيل ذات الصلة:",
+      "propertyDetails": "تفاصيل العقار",
+      "features": "الميزات والمرافق",
+      "projectInfo": "مشروعي",
+      "contactInfo": "بيانات الاتصال الخاصة بي",
+      "name": "الاسم الكامل",
+      "emailLabel": "البريد الإلكتروني",
+      "phoneLabel": "الهاتف",
+      "closing": "أتطلع إلى التواصل معكم ومناقشة تقييم عقاري.",
+      "signature": "مع أطيب التحيات،\n{{name}}",
+      "previewTitle": "مراجعة رسالتك",
+      "previewSubtitle": "راجع وعدّل الرسالة قبل الإرسال",
+      "subjectLabel": "الموضوع",
+      "messageLabel": "الرسالة",
+      "infoTitle": "معلومات مهمة",
+      "infoMessage": "سيتم ترجمة هذه الرسالة تلقائياً إلى الفرنسية قبل الإرسال، بغض النظر عن لغة العرض الحالية.",
+      "cancelButton": "إلغاء",
+      "sendButton": "إرسال الرسالة",
+      "sendingButton": "جارٍ الإرسال...",
+      "successMessage": "تم إرسال رسالتك بنجاح! سنعود إليك قريباً.",
+      "errorMessage": "فشل إرسال الرسالة. الرجاء المحاولة مرة أخرى.",
+      "closeButton": "إغلاق"
     }
   },
   "footer": {
@@ -878,10 +916,10 @@
     },
     "social": {
       "title": "تابع التميّز",
-      "facebook": "انضم إلى مجتمعنا",
+      "linktree": "جميع روابطنا",
       "instagram": "اكتشف عقاراتنا",
-      "linkedin": "لنتواصل مهنيًا",
-      "pinterest": "الإلهام والاتجاهات"
+      "facebook": "انضم إلى مجتمعنا",
+      "google": "مراجعات جوجل الخاصة بنا"
     },
     "sections": {
       "properties": "العقارات",
@@ -901,10 +939,10 @@
       "contact": "الاتصال"
     },
     "contactInfo": {
-      "address": "123 Avenue de Luxe",
-      "city": "75008 باريس، فرنسا",
-      "phone": "+33 1 23 45 67 89",
-      "email": "contact@squaremeter.com"
+      "address": "461 lotissement Argana, Technopark bureau 017",
+      "city": "44000 Essaouira، المغرب",
+      "phone": "+212 7 00 00 06 44",
+      "email": "Essaouira@m2squaremeter.com"
     },
     "newsletter": {
       "title": "نشرة إخبارية حصرية",
@@ -966,6 +1004,15 @@
       "description": "جميع معلوماتك محمية بتشفير على مستوى البنوك. نحن لن نشارك بياناتك مع أطراف ثالثة أبدًا."
     },
     "validation": {
+      "required": "هذا الحقل مطلوب",
+      "minLength": "الحد الأدنى {{min}} أحرف مطلوبة",
+      "maxLength": "الحد الأقصى {{max}} أحرف مسموح به",
+      "email": "يرجى إدخال عنوان بريد إلكتروني صالح",
+      "phone": "يرجى إدخال رقم هاتف صالح",
+      "number": "يرجى إدخال رقم صالح",
+      "positive": "يجب أن يكون رقماً موجباً",
+      "integer": "يجب أن يكون رقماً صحيحاً",
+      "lettersOnly": "يُسمح بالحروف والمسافات فقط",
       "invalidEmail": "بريد إلكتروني غير صالح",
       "passwordTooShort": "كلمة المرور قصيرة جدًا",
       "firstNameRequired": "الاسم الأول مطلوب",
@@ -983,6 +1030,24 @@
       "strong": "قوية",
       "veryStrong": "قوية جدًا"
     }
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "minLength": "الحد الأدنى {{min}} أحرف مطلوبة",
+    "maxLength": "الحد الأقصى {{max}} أحرف مسموح به",
+    "email": "يرجى إدخال عنوان بريد إلكتروني صالح",
+    "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صالح",
+    "emailTooLong": "البريد الإلكتروني طويل جدًا (الحد الأقصى 100 حرف)",
+    "phone": "يرجى إدخال رقم هاتف صالح",
+    "number": "يرجى إدخال رقم صالح",
+    "positive": "يجب أن يكون رقماً موجباً",
+    "integer": "يجب أن يكون رقماً صحيحاً",
+    "lettersOnly": "يُسمح بالحروف والمسافات فقط",
+    "nameLengthError": "يجب أن يكون الاسم بين 2 و50 حرفًا",
+    "cvTooLarge": "ملف السيرة الذاتية كبير جدًا (الحد الأقصى 15MB)",
+    "cvInvalidFormat": "تنسيق غير صالح. يرجى تحميل ملف PDF أو DOC أو DOCX",
+    "pleaseFixErrors": "يرجى إصلاح الأخطاء قبل الإرسال",
+    "submissionError": "حدث خطأ أثناء الإرسال. يرجى المحاولة مرة أخرى."
   },
   "dashboard": {
     "loading": "جاري التحميل...",
@@ -1498,60 +1563,44 @@
       "slide1": "التميز العقاري",
       "slide2": "شبكة دولية",
       "slide3": "خبرة حصرية",
-      "meetTeamButton": "لقاء فريقنا",
+      "meetTeamButton": "انضم إلينا",
       "discoverPropertiesButton": "اكتشف عقاراتنا"
     },
     "team": {
       "title": "فريق الخبراء لدينا",
       "subtitle": "محترفون متحمسون، موحدون بالتميز ومكرسون لتحقيق مشاريعك الأكثر طموحًا",
-      "specialties": "التخصصات",
-      "experience": "الخبرة",
-      "properties": "العقارات",
-      "languages": "اللغات",
+      "specialty": "التخصص",
+      "languages": "اللغات المنطوقة",
       "members": {
+        "myriam": {
+          "name": "أبابو مريم",
+          "role": "مؤسس مشارك",
+          "specialty": "تخصص في المعاملات والإيجار الطويل الأجل",
+          "quote": "التميز في كل معاملة."
+        },
         "dimitri": {
-          "name": "ديمتري مارتن",
-          "role": "المؤسس والرئيس التنفيذي",
-          "description": "خبير عقارات فاخرة مع 15 عامًا من الخبرة الدولية",
-          "specialty1": "استراتيجية الاستحواذ",
-          "specialty2": "التفاوض المعقد",
-          "specialty3": "الأسواق الدولية",
-          "experience": "15 سنة",
-          "properties": "+120",
-          "quote": "التميز ليس فعلاً، بل عادة."
+          "name": "ديمتري دجيدجي",
+          "role": "موسس مشارك",
+          "specialty": "تخصص في الإيجار القصير الأجل",
+          "quote": "خلق تجارب فريدة لعملائنا."
         },
-        "sophie": {
-          "name": "صوفي لوران",
-          "role": "مديرة المبيعات",
-          "description": "متخصصة في العقارات الاستثنائية على الريفيرا الفرنسية وباريس",
-          "specialty1": "العقارات الساحلية",
-          "specialty2": "الهندسة المعمارية المعاصرة",
-          "specialty3": "العملاء الدوليون",
-          "experience": "12 سنة",
-          "properties": "+85",
-          "quote": "كل عقار يروي قصة فريدة."
+        "virginie": {
+          "name": "فيرجيني أودادس",
+          "role": "مستشار عقاري",
+          "specialty": "تخصص في المعاملات والإيجار الطويل الأجل",
+          "quote": "رضاك هو أولويتي."
         },
-        "thomas": {
-          "name": "توماس مورو",
-          "role": "مدير خدمة الكونسيرج",
-          "description": "ضامن تجربة العملاء المميزة والخدمات المصممة خصيصًا",
-          "specialty1": "خدمات الكونسيرج",
-          "specialty2": "إدارة الأصول",
-          "specialty3": "علاقات الموردين",
-          "experience": "10 سنوات",
-          "properties": "+200",
-          "quote": "الفخامة تكمن في التفاصيل."
+        "hayat": {
+          "name": "حياة وكريم",
+          "role": "مستشار عقاري",
+          "specialty": "تخصص في المعاملات والإيجار الطويل الأجل",
+          "quote": "مرافقة كل عميل باحترافية."
         },
-        "marie": {
-          "name": "ماري-كلير دو فيلييه",
-          "role": "المديرة الفنية",
-          "description": "مهندسة معمارية داخلية وخبيرة في تعزيز التراث",
-          "specialty1": "تنسيق مميز",
-          "specialty2": "الهندسة المعمارية الداخلية",
-          "specialty3": "التصميم المعاصر",
-          "experience": "8 سنوات",
-          "properties": "+60",
-          "quote": "يجب أن يلهم الفضاء العاطفة."
+        "yasmine": {
+          "name": "ياسمين عاطيك",
+          "role": "مستشار عقاري",
+          "specialty": "تخصص في المعاملات والإيجار الطويل الأجل",
+          "quote": "العقارات بشغف وتفاني."
         }
       }
     },

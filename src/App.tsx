@@ -2,9 +2,9 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { LocalizationProvider } from './contexts/LocalizationContext';
+import { ReviewsProvider } from './contexts/ReviewsContext';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
-import EnhancedAIAssistant from './components/AIAssistant/EnhancedAIAssistant';
 import Home from './pages/Home';
 import Properties from './pages/Properties';
 import Owners from './pages/clients/Owners';
@@ -27,7 +27,7 @@ import Concierge from './pages/special-pages/Concierge';
 import Success from './pages/special-pages/Success';
 import Careers from './pages/special-pages/Careers';
 import LanguageCurrency from './pages/Settings/LanguageCurrency';
-import AIFeaturesDemo from './pages/AIFeaturesDemo';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
@@ -39,9 +39,10 @@ function App() {
             <p className="text-gray-600">Loading...</p>
           </div>
         </div>
-      }>
-        <Router>
-          <div className="min-h-screen bg-ivory">
+      }>        <Router>
+          <ReviewsProvider>
+            <ScrollToTop />
+            <div className="min-h-screen bg-ivory">
             <Header />
             <main>
               <Routes>
@@ -66,13 +67,12 @@ function App() {
             <Route path="/success" element={<Success />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/settings" element={<LanguageCurrency />} />
-            <Route path="/ai-demo" element={<AIFeaturesDemo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
             </main>
             <Footer />
-            <EnhancedAIAssistant />
           </div>
+          </ReviewsProvider>
         </Router>
       </Suspense>
     </LocalizationProvider>

@@ -14,12 +14,11 @@ import {
   CameraIcon,
   BuildingLibraryIcon,
   HeartIcon,
-  StarIcon,
-  GlobeAltIcon,
   UserGroupIcon,
   BuildingOfficeIcon,
   NewspaperIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  StarIcon
 } from '@heroicons/react/24/outline';
 
 const Footer: React.FC = () => {
@@ -70,28 +69,28 @@ const Footer: React.FC = () => {
 
   const socialLinks = [
     { 
-      name: 'Facebook', 
-      href: '#', 
-      Icon: ChatBubbleLeftRightIcon,
-      label: t('footer.social.facebook')
+      name: 'Linktree', 
+      href: 'https://linktr.ee/qr/13bde000-f522-45a2-9377-8822c9295274?utm_source=qr_code', 
+      image: '/linktree.png',
+      label: t('footer.social.linktree')
     },
     { 
       name: 'Instagram', 
-      href: '#', 
-      Icon: CameraIcon,
+      href: 'https://www.instagram.com/squaremeteressaouira?igsh=dGJzc2E4bWhwenN5&utm_source=qr', 
+      image: '/instagram.png',
       label: t('footer.social.instagram')
     },
     { 
-      name: 'LinkedIn', 
-      href: '#', 
-      Icon: BuildingLibraryIcon,
-      label: t('footer.social.linkedin')
+      name: 'Facebook', 
+      href: 'https://www.facebook.com/share/1GB85Fgz2j/?mibextid=wwXIfr', 
+      image: '/facebook.png',
+      label: t('footer.social.facebook')
     },
     { 
-      name: 'Pinterest', 
-      href: '#', 
-      Icon: HeartIcon,
-      label: t('footer.social.pinterest')
+      name: 'Google', 
+      href: 'https://share.google/4Gx34x0fGmMnTP29b', 
+      image: '/google.png',
+      label: t('footer.social.google')
     }
   ];
 
@@ -138,7 +137,7 @@ const Footer: React.FC = () => {
                     SQUARE METER
                   </span>
                   <span className="text-[10px] sm:text-xs text-gray-500 tracking-[0.15em] sm:tracking-[0.2em] transition-transform duration-300 font-medium">
-                    IMMOBILIER
+                    {t('brand.subtitle')}
                   </span>
                 </div>
               </div>
@@ -163,7 +162,11 @@ const Footer: React.FC = () => {
                   >
                     <div className="relative p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl border border-gray-200 shadow-sm hover:shadow-md backdrop-blur-sm transition-all duration-300 hover:bg-gray-50 group-hover:scale-110 group-hover:-translate-y-0.5">
                       <div className="relative">
-                        <social.Icon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 transform transition-all duration-300 group-hover:text-gray-900" />
+                        <img 
+                          src={social.image} 
+                          alt={social.name}
+                          className="w-4 h-4 sm:w-5 sm:h-5 object-contain transform transition-all duration-300"
+                        />
                       </div>
                       
                       {/* Hover Tooltip */}
@@ -322,13 +325,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          {/* Language selector matching header */}
-          <div className="mt-0">
-            <button className="relative group flex items-center space-x-2 p-1.5 sm:p-2 rounded-lg bg-gray-100 border border-gray-200 hover:bg-gray-200 transition-all duration-200">
-              <GlobeAltIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-700" />
-              <span className="text-xs sm:text-sm text-gray-700 font-medium">FR</span>
-            </button>
-          </div>
+          {/* Language selector removed — all messaging via email; kept layout intact */}
         </div>
 
         {/* Subtle brand element */}
