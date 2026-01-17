@@ -176,7 +176,7 @@ const SellingMultiStep: React.FC = () => {
     // Phone validation
     if (name === 'phone') {
       if (!value || value.trim() === '') return t('validation.required');
-      const phoneRegex = /^[\d\s\-\+\(\)]{8,20}$/;
+      const phoneRegex = /^[\d\s\-+()]{8,20}$/;
       if (!phoneRegex.test(value)) return t('validation.phone');
     }
 
