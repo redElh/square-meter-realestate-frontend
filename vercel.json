@@ -9,11 +9,10 @@
     "api/send-property-inquiry.js": {
       "maxDuration": 30,
       "memory": 1024
-    }
-  },
-  "api": {
-    "bodyParser": {
-      "sizeLimit": "20mb"
+    },
+    "api/debug-careers.js": {
+      "maxDuration": 30,
+      "memory": 1024
     }
   }
 }
