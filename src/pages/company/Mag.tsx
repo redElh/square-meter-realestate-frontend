@@ -10,7 +10,6 @@ import {
   ShareIcon,
   MagnifyingGlassIcon,
   ArrowRightIcon,
-  FireIcon,
   StarIcon,
   ChartBarIcon,
   BuildingStorefrontIcon,
@@ -21,7 +20,6 @@ import {
 } from '@heroicons/react/24/outline';
 import {
   BookmarkIcon as BookmarkIconSolid,
-  StarIcon as StarIconSolid,
   FireIcon as FireIconSolid
 } from '@heroicons/react/24/solid';
 
@@ -47,7 +45,7 @@ const Mag: React.FC = () => {
   const [savedArticles, setSavedArticles] = useState<number[]>([]);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
-  const [isHeroPlaying, setIsHeroPlaying] = useState(true);
+  const [isHeroPlaying] = useState(true);
 
   // Hero slides for magazine
   const heroSlides = [

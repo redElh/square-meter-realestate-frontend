@@ -14,7 +14,6 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Privacy: React.FC = () => {
-  const { t } = useTranslation();
 
   const privacyPrinciples = [
     {

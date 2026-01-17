@@ -13,7 +13,6 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Terms: React.FC = () => {
-  const { t } = useTranslation();
 
   const services = [
     'Consultation de propriétés immobilières de prestige',
