@@ -49,15 +49,11 @@ const Footer: React.FC = () => {
 
   const navigation = {
     properties: [
-      { path: '/properties', label: t('footer.navigation.allProperties'), Icon: BuildingStorefrontIcon },
-      { path: '/confidential', label: t('footer.navigation.confidentialSelection'), Icon: ShieldCheckIcon },
-      { path: '/investment', label: t('footer.navigation.investment'), Icon: ChartBarIcon }
+      { path: '/properties', label: t('footer.navigation.allProperties'), Icon: BuildingStorefrontIcon }
     ],
     clients: [
       { path: '/owners', label: t('footer.navigation.owners'), Icon: UserGroupIcon },
-      { path: '/selling-multistep', label: t('footer.navigation.sellYourProperty'), Icon: BuildingStorefrontIcon },
-      { path: '/traveler', label: t('footer.navigation.travelerSpace'), Icon: PaperAirplaneIcon },
-      
+      { path: '/selling-multistep', label: t('footer.navigation.sellYourProperty'), Icon: BuildingStorefrontIcon }
     ],
     company: [
       { path: '/agency', label: t('footer.navigation.agency'), Icon: BuildingOfficeIcon },
@@ -157,6 +153,8 @@ const Footer: React.FC = () => {
                   <a
                     key={social.name}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="relative group"
                     title={social.label}
                   >
@@ -258,7 +256,7 @@ const Footer: React.FC = () => {
                   <div className="p-1 sm:p-1.5 bg-gray-100 rounded-lg border border-gray-200">
                     <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
                   </div>
-                  <a href={`tel:${t('footer.contactInfo.phone')}`} className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium text-xs sm:text-sm">
+                  <a href={`https://wa.me/${t('footer.contactInfo.phone').replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900 transition-colors duration-300 font-medium text-xs sm:text-sm">
                     {t('footer.contactInfo.phone')}
                   </a>
                 </div>
@@ -274,7 +272,8 @@ const Footer: React.FC = () => {
               </address>
             </div>
 
-            {/* Newsletter - Minimal design */}
+            {/* Newsletter - Minimal design - HIDDEN */}
+            {false && (
             <div className="pt-3 sm:pt-4">
               <div className="flex items-center space-x-2 mb-2 sm:mb-3">
                 <StarIcon className="w-3 h-3 text-gray-500" />
@@ -291,6 +290,7 @@ const Footer: React.FC = () => {
                 </button>
               </div>
             </div>
+            )}
           </div>
         </div>
 

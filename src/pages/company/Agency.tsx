@@ -54,7 +54,7 @@ const Agency: React.FC = () => {
       id: 2,
       name: t('agency.team.members.dimitri.name'),
       role: t('agency.team.members.dimitri.role'),
-      image: null, // No photo for now
+      image: '/member-2.jfif',
       specialty: t('agency.team.members.dimitri.specialty'),
       languages: [t('languageNames.fr'), t('languageNames.en')],
       quote: t('agency.team.members.dimitri.quote')

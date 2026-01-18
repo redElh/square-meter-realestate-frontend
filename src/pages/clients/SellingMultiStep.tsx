@@ -1,7 +1,8 @@
 // src/pages/SellingMultiStep.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
 import { 
   CheckCircleIcon,
   ChevronRightIcon,
@@ -18,6 +19,7 @@ const SellingMultiStep: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const stepsRef = useRef<HTMLDivElement>(null);
   const [currentStep, setCurrentStep] = useState(parseInt(searchParams.get('step') || '1'));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -44,6 +46,7 @@ const SellingMultiStep: React.FC = () => {
     lastName: '',
     email: '',
     phone: '',
+    countryCode: '+212',
     timeline: '',
     motivation: '',
     priceExpectation: '',
@@ -70,6 +73,13 @@ const SellingMultiStep: React.FC = () => {
     }
     return () => clearInterval(slideInterval);
   }, [isPlaying, heroSlides.length]);
+
+  // Scroll to steps section whenever step changes
+  useEffect(() => {
+    if (stepsRef.current) {
+      stepsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [currentStep]);
 
   const nextSlide = () => {
     setActiveSlide((prev) => (prev + 1) % heroSlides.length);
@@ -176,8 +186,32 @@ const SellingMultiStep: React.FC = () => {
     // Phone validation
     if (name === 'phone') {
       if (!value || value.trim() === '') return t('validation.required');
-      const phoneRegex = /^[\d\s\-+()]{8,20}$/;
-      if (!phoneRegex.test(value)) return t('validation.phone');
+      
+      // Combine country code with phone number for validation
+      const fullPhone = formData.countryCode + value;
+      
+      try {
+        // Check if it's a valid phone number format
+        if (!isValidPhoneNumber(fullPhone)) {
+          return t('validation.phone');
+        }
+        
+        // Parse the phone number to get detailed info
+        const phoneNumber = parsePhoneNumber(fullPhone);
+        
+        // Ensure it has a valid country code
+        if (!phoneNumber || !phoneNumber.country) {
+          return t('validation.phone');
+        }
+        
+        // Additional check: phone number must be possible (valid length for the country)
+        if (!phoneNumber.isPossible()) {
+          return t('validation.phone');
+        }
+      } catch (error) {
+        // If parsing fails, the phone number is invalid
+        return t('validation.phone');
+      }
     }
 
     return '';
@@ -883,20 +917,44 @@ ${t('sellingMultiStep.email.signature', { name: formData.firstName + ' ' + formD
                   <label className="block font-medium text-gray-900 text-base sm:text-lg mb-2 sm:mb-3">
                     {t('sellingMultiStep.step4.phoneLabel')}
                   </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    required
-                    className={`w-full px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
-                      touched.phone && errors.phone
-                        ? 'border-red-500 focus:border-red-600'
-                        : 'border-gray-300 focus:border-[#023927]'
-                    }`}
-                    style={{ borderRadius: '0' }}
-                  />
+                  <div className="flex gap-2">
+                    <select
+                      name="countryCode"
+                      value={formData.countryCode}
+                      onChange={handleChange}
+                      className="w-32 px-2 sm:px-3 py-3 sm:py-4 border-2 border-gray-300 focus:outline-none focus:border-[#023927] font-light text-sm sm:text-base transition-colors duration-300"
+                      style={{ borderRadius: '0' }}
+                    >
+                      <option value="+212">🇲🇦 +212</option>
+                      <option value="+33">🇫🇷 +33</option>
+                      <option value="+34">🇪🇸 +34</option>
+                      <option value="+39">🇮🇹 +39</option>
+                      <option value="+49">🇩🇪 +49</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+971">🇦🇪 +971</option>
+                      <option value="+966">🇸🇦 +966</option>
+                      <option value="+41">🇨🇭 +41</option>
+                      <option value="+32">🇧🇪 +32</option>
+                      <option value="+31">🇳🇱 +31</option>
+                      <option value="+351">🇵🇹 +351</option>
+                    </select>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      required
+                      placeholder="6 12 34 56 78"
+                      className={`flex-1 px-4 sm:px-6 py-3 sm:py-4 border-2 focus:outline-none font-light text-sm sm:text-base transition-colors duration-300 ${
+                        touched.phone && errors.phone
+                          ? 'border-red-500 focus:border-red-600'
+                          : 'border-gray-300 focus:border-[#023927]'
+                      }`}
+                      style={{ borderRadius: '0' }}
+                    />
+                  </div>
                   {touched.phone && errors.phone && (
                     <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
                       <XMarkIcon className="w-4 h-4 flex-shrink-0" />
@@ -1155,7 +1213,7 @@ ${t('sellingMultiStep.email.signature', { name: formData.firstName + ' ' + formD
       <section className="py-8 sm:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           {/* Steps Progress */}
-          <div className="mb-6 sm:mb-8 lg:mb-12">
+          <div ref={stepsRef} className="mb-6 sm:mb-8 lg:mb-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {steps.map((step, index) => {
                 const isCompleted = currentStep > step.number;
