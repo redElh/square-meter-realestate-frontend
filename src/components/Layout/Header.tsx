@@ -133,14 +133,15 @@ const Header: React.FC = () => {
         Icon: PhoneIcon,
         category: 'company',
         description: t('header.contactDescription')
-      },
-      {
-        path: '/mag',
-        label: t('navigation.magazine'),
-        Icon: NewspaperIcon,
-        category: 'company',
-        description: t('header.magazineDescription')
       }
+      // Magazine temporarily hidden
+      // {
+      //   path: '/mag',
+      //   label: t('navigation.magazine'),
+      //   Icon: NewspaperIcon,
+      //   category: 'company',
+      //   description: t('header.magazineDescription')
+      // }
     ],
   };
 
