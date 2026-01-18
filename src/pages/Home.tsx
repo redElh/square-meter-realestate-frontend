@@ -1,5 +1,5 @@
 // src/pages/Home.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -32,6 +32,10 @@ const Home: React.FC = () => {
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
   const [loadingProperties, setLoadingProperties] = useState(true);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+  const [countersStarted, setCountersStarted] = useState(false);
+  const [yearsCount, setYearsCount] = useState(0);
+  const [countriesCount, setCountriesCount] = useState(0);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   // Homepage hero images
   const heroImages = [
@@ -47,6 +51,64 @@ const Home: React.FC = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [heroImages.length]);
+
+  // Animated counters with Intersection Observer
+  useEffect(() => {
+    const currentStatsRef = statsRef.current;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !countersStarted) {
+            setCountersStarted(true);
+            
+            // Animate years counter (0 to 10)
+            let yearsStart = 0;
+            const yearsEnd = 10;
+            const yearsDuration = 2000;
+            const yearsIncrement = yearsEnd / (yearsDuration / 50);
+            
+            const yearsTimer = setInterval(() => {
+              yearsStart += yearsIncrement;
+              if (yearsStart >= yearsEnd) {
+                setYearsCount(yearsEnd);
+                clearInterval(yearsTimer);
+              } else {
+                setYearsCount(Math.floor(yearsStart));
+              }
+            }, 50);
+            
+            // Animate countries counter (0 to 1)
+            let countriesStart = 0;
+            const countriesEnd = 1;
+            const countriesDuration = 1500;
+            const countriesIncrement = countriesEnd / (countriesDuration / 100);
+            
+            const countriesTimer = setInterval(() => {
+              countriesStart += countriesIncrement;
+              if (countriesStart >= countriesEnd) {
+                setCountriesCount(countriesEnd);
+                clearInterval(countriesTimer);
+              } else {
+                setCountriesCount(Math.floor(countriesStart));
+              }
+            }, 100);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (currentStatsRef) {
+      observer.observe(currentStatsRef);
+    }
+
+    return () => {
+      if (currentStatsRef) {
+        observer.unobserve(currentStatsRef);
+      }
+    };
+  }, [countersStarted]);
 
   // Fetch featured properties from API
   useEffect(() => {
@@ -702,14 +764,13 @@ const Home: React.FC = () => {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-16 bg-[#023927] text-white">
+      <section ref={statsRef} className="py-16 bg-[#023927] text-white">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {[
-              { number: "250+", label: t('home.stats.exclusiveProperties') },
-              { number: "15", label: t('home.stats.yearsExperience') },
-              { number: "98%", label: t('home.stats.satisfiedClients') },
-              { number: "12", label: t('home.stats.countriesServed') }
+              { number: yearsCount.toString(), label: t('home.stats.yearsExperience'), animated: true },
+              { number: "98%", label: t('home.stats.satisfiedClients'), animated: false },
+              { number: countriesCount.toString(), label: t('home.stats.countriesServed'), animated: true }
             ].map((stat, index) => (
               <div key={index} className="group">
                 <div className="text-3xl md:text-4xl font-inter text-white font-light mb-2 group-hover:scale-110 transition-transform duration-300">
