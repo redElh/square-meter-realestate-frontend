@@ -223,15 +223,15 @@ const Home: React.FC = () => {
         </div>
 
         {/* Contenu Hero - Positionné en bas */}
-        <div className="absolute bottom-12 sm:bottom-20 left-0 right-0 z-20">
+        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
               
               {/* Boutons d'action - Nouveau design */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
                 <Link 
                   to="/properties?type=buy" 
-                  className="group relative bg-white text-gray-900 px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center"
+                  className="group relative bg-white text-gray-900 px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
                 >
                   <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative z-10 group-hover:text-white transition-colors duration-500">
@@ -241,7 +241,7 @@ const Home: React.FC = () => {
                 
                 <Link 
                   to="/properties?type=rent" 
-                  className="group relative border-2 border-white text-white px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center"
+                  className="group relative border-2 border-white text-white px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
                 >
                   <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                   <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
@@ -256,29 +256,29 @@ const Home: React.FC = () => {
         </div>
 
         {/* Carousel Navigation */}
-        <div className="absolute bottom-8 right-8 flex items-center gap-4 z-30">
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-center gap-2 sm:gap-4 z-30">
           <button
             onClick={() => setHeroSlideIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length)}
-            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-2 transition-all duration-300"
+            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-1.5 sm:p-2 transition-all duration-300"
           >
-            <ChevronLeftIcon className="w-6 h-6 text-white" />
+            <ChevronLeftIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
           </button>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 sm:gap-2">
             {heroImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setHeroSlideIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === heroSlideIndex ? 'bg-white w-8' : 'bg-white/50'
+                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${
+                  index === heroSlideIndex ? 'bg-white w-6 sm:w-8' : 'bg-white/50'
                 }`}
               />
             ))}
           </div>
           <button
             onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroImages.length)}
-            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-2 transition-all duration-300"
+            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-1.5 sm:p-2 transition-all duration-300"
           >
-            <ChevronRightIcon className="w-6 h-6 text-white" />
+            <ChevronRightIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
           </button>
         </div>
 

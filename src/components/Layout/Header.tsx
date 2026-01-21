@@ -171,20 +171,20 @@ const Header: React.FC = () => {
           transition: 'background-color 260ms ease, backdrop-filter 260ms ease, background-image 260ms ease, box-shadow 260ms ease'
         }}
       >
-        <div className="container mx-auto px-2 sm:px-6 relative">
-          <div className={`flex items-center justify-between transition-all duration-500 ${isScrolled ? 'py-2 sm:py-3' : 'py-3 sm:py-5'}`}>
+        <div className="container mx-auto px-1.5 sm:px-6 relative">
+          <div className={`flex items-center justify-between gap-1 sm:gap-4 transition-all duration-500 ${isScrolled ? 'py-1.5 sm:py-3' : 'py-2 sm:py-5'}`}>
 
             {/* Left Corner - Language & Currency Selector */}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center flex-shrink-0">
               <Link 
                 to="/settings" 
-                className="relative group px-2 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-white/80 hover:bg-white border-2 border-gray-200 hover:border-[#023927] transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-1.5 sm:gap-2" 
+                className="relative group px-1 py-1 sm:px-4 sm:py-2.5 rounded-md sm:rounded-xl bg-white/80 hover:bg-white border border-gray-200 sm:border-2 hover:border-[#023927] transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-0.5 sm:gap-2" 
                 onClick={() => setActiveHover('lang')} 
                 onMouseEnter={() => setActiveHover('lang')} 
                 onMouseLeave={() => setActiveHover(null)}
               >
-                <GlobeAltIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 group-hover:text-[#023927] transition-colors duration-200" />
-                <span className="text-xs sm:text-sm font-semibold text-gray-800 group-hover:text-[#023927] uppercase transition-colors duration-200">
+                <GlobeAltIcon className="w-3 h-3 sm:w-5 sm:h-5 text-gray-700 group-hover:text-[#023927] transition-colors duration-200" />
+                <span className="text-[10px] sm:text-sm font-semibold text-gray-800 group-hover:text-[#023927] uppercase transition-colors duration-200">
                   {i18n.language.split('-')[0]}
                 </span>
                 <div className="hidden sm:block w-px h-4 bg-gray-300 group-hover:bg-[#023927]/30 transition-colors duration-200"></div>
@@ -204,8 +204,8 @@ const Header: React.FC = () => {
                   onMouseLeave={() => setActiveHover(null)}
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
-                  <div className="px-2 py-1.5 sm:px-6 sm:py-3 mx-0.5 sm:mx-2 rounded-lg sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
-                    <span className="text-gray-800 text-xs sm:text-lg font-medium tracking-wide transition-colors duration-200">
+                  <div className="px-1 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
+                    <span className="text-gray-800 text-[9px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200">
                       {navigation.primary[0].label}
                     </span>
                   </div>
@@ -216,14 +216,14 @@ const Header: React.FC = () => {
             {/* Centered Logo - Mobile Optimized */}
             <Link
               to="/"
-              className="group flex-shrink-0"
+              className="group flex-shrink-0 mx-0 sm:mx-2"
               onMouseEnter={() => setActiveHover('logo')}
               onMouseLeave={() => setActiveHover(null)}
             >
               <div className="flex flex-col items-center">
                 <div className={`relative transform group-hover:scale-105 transition-all duration-400 ${isScrolled ? 'scale-90 sm:scale-95' : 'scale-95 sm:scale-100'}`}>
                   <div className={`relative ${
-                    isScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-20 h-20 sm:w-32 sm:h-32'
+                    isScrolled ? 'w-10 h-10 sm:w-20 sm:h-20' : 'w-12 h-12 sm:w-32 sm:h-32'
                   } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden`}>
                     <img 
                       src="/logo-m2.png" 
@@ -235,17 +235,17 @@ const Header: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Brand Text - Hidden on small mobile, shown on larger mobile/tablet */}
-                <div className={`-mt-1 sm:-mt-2 text-center transition-all duration-500 hidden xs:block ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : '-translate-y-0.5 scale-90 sm:scale-100 opacity-100'}`}>
+                {/* Brand Text - Always visible */}
+                <div className={`-mt-0.5 sm:-mt-2 text-center transition-all duration-500 ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : '-translate-y-0.5 scale-[0.6] sm:scale-100 opacity-100'}`}>
                   <div className="flex flex-col items-center space-y-0 sm:space-y-1">
-                    <span className={`text-[10px] sm:text-sm font-semibold tracking-[0.15em] sm:tracking-[0.3em] uppercase transition-all duration-500 ${
+                    <span className={`text-[7px] sm:text-sm font-semibold tracking-[0.05em] sm:tracking-[0.3em] uppercase transition-all duration-500 whitespace-nowrap ${
                       activeHover === 'logo'
                         ? 'text-gray-900'
                         : 'text-gray-700'
                     }`}>
                       SQUARE METER
                     </span>
-                    <span className="text-[9px] sm:text-xs text-gray-500 tracking-[0.1em] sm:tracking-[0.2em] transition-all duration-500 font-medium">
+                    <span className="text-[6px] sm:text-xs text-gray-500 tracking-[0.05em] sm:tracking-[0.2em] transition-all duration-500 font-medium whitespace-nowrap">
                       {t('brand.subtitle')}
                     </span>
                   </div>
@@ -263,8 +263,8 @@ const Header: React.FC = () => {
                   onMouseLeave={() => setActiveHover(null)}
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
-                  <div className="px-2 py-1.5 sm:px-6 sm:py-3 mx-0.5 sm:mx-2 rounded-lg sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
-                    <span className="text-gray-800 text-xs sm:text-lg font-medium tracking-wide transition-colors duration-200">
+                  <div className="px-1 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
+                    <span className="text-gray-800 text-[9px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200">
                       {navigation.primary[1].label}
                     </span>
                   </div>
@@ -278,12 +278,12 @@ const Header: React.FC = () => {
               aria-expanded={isMenuOpen}
               aria-controls="site-menu"
               aria-label="Menu principal"
-              className="relative w-8 h-8 sm:w-14 sm:h-14 flex items-center justify-center group bg-transparent hover:bg-white/10 rounded-lg sm:rounded-2xl border border-gray-200 shadow-sm transition-all duration-200"
+              className="relative w-7 h-7 sm:w-14 sm:h-14 flex items-center justify-center group bg-transparent hover:bg-white/10 rounded-md sm:rounded-2xl border border-gray-200 shadow-sm transition-all duration-200 flex-shrink-0"
             >
-              <div className="absolute inset-0 rounded-lg sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              <div className="absolute inset-0 rounded-md sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
               {/* Transform between hamburger and close icon */}
-              <div className="relative w-4 h-4 sm:w-6 sm:h-6">
+              <div className="relative w-3.5 h-3.5 sm:w-6 sm:h-6">
                 {!isMenuOpen ? (
                   // Hamburger icon
                   <>
@@ -456,52 +456,7 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Bar (Bottom Navigation for primary actions) */}
-      {!isMenuOpen && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden bg-white/95 backdrop-blur-md border-t border-gray-200 py-1.5 px-2 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
-          <div className="flex justify-around items-center">
-            {navigation.primary.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex flex-col items-center py-1.5 px-2 rounded-lg transition-all duration-200 ${
-                  isActivePath(item.path)
-                    ? 'text-gray-900 bg-gray-50'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                }`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <item.Icon className="w-5 h-5 mb-0.5" />
-                <span className="text-[10px] font-medium">{item.label}</span>
-              </Link>
-            ))}
-            <Link
-              to="/auth"
-              className={`flex flex-col items-center py-1.5 px-2 rounded-lg transition-all duration-200 ${
-                isActivePath('/auth')
-                  ? 'text-gray-900 bg-gray-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <UserIcon className="w-5 h-5 mb-0.5" />
-              <span className="text-[10px] font-medium">{t('navigation.login')}</span>
-            </Link>
-            <Link
-              to="/contact"
-              className={`flex flex-col items-center py-1.5 px-2 rounded-lg transition-all duration-200 ${
-                isActivePath('/contact')
-                  ? 'text-gray-900 bg-gray-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <PhoneIcon className="w-5 h-5 mb-0.5" />
-              <span className="text-[10px] font-medium">{t('navigation.contact')}</span>
-            </Link>
-          </div>
-        </div>
-      )}
+
 
       {/* Add custom animations to your global CSS */}
       <style>{`
@@ -518,12 +473,6 @@ const Header: React.FC = () => {
         }
         .animate-spin-slow {
           animation: spin-slow 8s linear infinite;
-        }
-        /* Mobile responsive utilities */
-        @media (min-width: 475px) {
-          .xs\\:block {
-            display: block !important;
-          }
         }
         /* Line clamp for description text */
         .line-clamp-2 {
