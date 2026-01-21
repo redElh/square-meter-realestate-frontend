@@ -1780,6 +1780,8 @@
       "successMessage": "¡Solicitud enviada con éxito!"
     },
     "regions": {
+      "essaouira": "Essaouira",
+      "provinceEssaouira": "Provincia de Essaouira",
       "paris": "París",
       "coteDazur": "Costa Azul",
       "paca": "Provenza-Alpes-Costa Azul",

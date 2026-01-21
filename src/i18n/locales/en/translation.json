@@ -1744,6 +1744,8 @@
       "successMessage": "Application sent successfully!"
     },
     "regions": {
+      "essaouira": "Essaouira",
+      "provinceEssaouira": "Essaouira Province",
       "paris": "Paris",
       "coteDazur": "French Riviera",
       "paca": "Provence-Alpes-Côte d'Azur",

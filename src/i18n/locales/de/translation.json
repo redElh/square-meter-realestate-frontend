@@ -1763,6 +1763,8 @@
       "successMessage": "Bewerbung erfolgreich gesendet!"
     },
     "regions": {
+      "essaouira": "Essaouira",
+      "provinceEssaouira": "Provinz Essaouira",
       "paris": "Paris",
       "coteDazur": "Französische Riviera",
       "paca": "Provence-Alpes-Côte d'Azur",

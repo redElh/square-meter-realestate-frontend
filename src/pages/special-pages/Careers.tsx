@@ -69,8 +69,8 @@ const Careers: React.FC = () => {
   ];
 
   const regions = [
-    'Essaouira',
-    'Province Essaouira'
+    { key: 'essaouira', label: t('careers.regions.essaouira') },
+    { key: 'provinceEssaouira', label: t('careers.regions.provinceEssaouira') },
   ];
 
   const experienceOptions = [
@@ -573,7 +573,7 @@ Square Meter - Service de candidature
                   >
                     <option value="">{t('careers.form.regionPlaceholder')}</option>
                     {regions.map(region => (
-                      <option key={region} value={region}>{region}</option>
+                      <option key={region.key} value={region.label}>{region.label}</option>
                     ))}
                   </select>
                 </div>

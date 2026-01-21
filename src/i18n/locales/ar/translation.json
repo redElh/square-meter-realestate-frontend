@@ -1779,6 +1779,8 @@
       "successMessage": "تم إرسال الطلب بنجاح!"
     },
     "regions": {
+      "essaouira": "الصويرة",
+      "provinceEssaouira": "إقليم الصويرة",
       "paris": "باريس",
       "coteDazur": "الريفييرا الفرنسية",
       "paca": "بروفانس-ألب-كوت دازور",

@@ -35,12 +35,13 @@ interface LocalizationContextType {
 const LocalizationContext = createContext<LocalizationContextType | undefined>(undefined);
 
 // Currency exchange rates (base: MAD)
+// Updated: January 2026
 const CURRENCIES: CurrencyInfo[] = [
   { code: 'MAD', symbol: 'DH', name: 'Dirham Marocain', rate: 1 },
-  { code: 'AED', symbol: 'د.إ', name: 'Dirham Emirati', rate: 0.37 },
-  { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.092 },
-  { code: 'USD', symbol: '$', name: 'US Dollar', rate: 0.10 },
-  { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.078 },
+  { code: 'AED', symbol: 'د.إ', name: 'Dirham Emirati', rate: 0.368 }, // 1 MAD = 0.368 AED, or 1 AED = 2.72 MAD
+  { code: 'EUR', symbol: '€', name: 'Euro', rate: 0.091 }, // 1 MAD = 0.091 EUR, or 1 EUR = 10.99 MAD
+  { code: 'USD', symbol: '$', name: 'US Dollar', rate: 0.100 }, // 1 MAD = 0.100 USD, or 1 USD = 10.00 MAD
+  { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.077 }, // 1 MAD = 0.077 GBP, or 1 GBP = 12.99 MAD
 ];
 
 // Language configurations

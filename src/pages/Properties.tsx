@@ -28,6 +28,7 @@ const Properties: React.FC = () => {
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
   const [locationFilter, setLocationFilter] = useState('');
   const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<string>('relevance');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -96,7 +97,18 @@ const Properties: React.FC = () => {
         }, t, currentLanguage);
         
         console.log('✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length, apimoProperties);
-        setProperties(apimoProperties);
+        
+        // Filter out incomplete properties (missing essential data)
+        const validProperties = apimoProperties.filter(prop => 
+          prop.title && 
+          prop.location && 
+          prop.price > 0 && 
+          prop.surface > 0 &&
+          prop.images.length > 0
+        );
+        
+        console.log(`🔍 Filtered ${apimoProperties.length - validProperties.length} incomplete properties`);
+        setProperties(validProperties);
       } catch (error) {
         console.error('❌ Error loading properties from Apimo:', error);
         // Set empty array to show "no properties" message
@@ -110,18 +122,45 @@ const Properties: React.FC = () => {
     fetchProperties();
   }, [t, currentLanguage]);
 
-  const filteredProperties = properties.filter(property => {
-    const typeMatch = filter === 'all' || property.type === filter;
-    const locationMatch = !locationFilter || 
-      property.location.toLowerCase().includes(locationFilter.toLowerCase());
-    const bedroomsMatch = !bedroomsFilter || property.bedrooms >= bedroomsFilter;
-    const searchMatch = !searchQuery || 
-      property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return typeMatch && locationMatch && bedroomsMatch && searchMatch;
-  });
+  const filteredAndSortedProperties = (() => {
+    // First, filter the properties
+    const filtered = properties.filter(property => {
+      const typeMatch = filter === 'all' || property.type === filter;
+      const locationMatch = !locationFilter || 
+        property.location.toLowerCase().includes(locationFilter.toLowerCase());
+      const roomsMatch = !bedroomsFilter || (property.rooms && property.rooms >= bedroomsFilter);
+      const searchMatch = !searchQuery || 
+        property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        property.description.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      return typeMatch && locationMatch && roomsMatch && searchMatch;
+    });
+
+    // Then, sort the filtered properties
+    const sorted = [...filtered];
+    switch (sortBy) {
+      case 'priceAsc':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'priceDesc':
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case 'surface':
+        sorted.sort((a, b) => b.surface - a.surface);
+        break;
+      case 'newest':
+        // Sort by ID (assuming higher IDs are newer)
+        sorted.sort((a, b) => b.id - a.id);
+        break;
+      case 'relevance':
+      default:
+        // Keep original order for relevance
+        break;
+    }
+
+    return sorted;
+  })();
 
   const toggleFavorite = (propertyId: number) => {
     setFavorites(prev => 
@@ -145,6 +184,7 @@ const Properties: React.FC = () => {
     setLocationFilter('');
     setBedroomsFilter(null);
     setSearchQuery('');
+    setSortBy('relevance');
   };
 
   const activeFiltersCount = [
@@ -156,8 +196,13 @@ const Properties: React.FC = () => {
 
   
 
-  const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal') => {
-    const formattedPrice = formatCurrencyPrice(price);
+  const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal', sourceCurrency: string = 'MAD') => {
+    // Convert the source currency string to SupportedCurrency type
+    const currency = (sourceCurrency === 'EUR' || sourceCurrency === 'USD' || sourceCurrency === 'GBP' || sourceCurrency === 'AED' || sourceCurrency === 'MAD') 
+      ? sourceCurrency 
+      : 'MAD';
+    
+    const formattedPrice = formatCurrencyPrice(price, currency as any);
     if (type === 'rent') {
       return `${formattedPrice}/${t('common.month') || 'month'}`;
     }
@@ -207,7 +252,7 @@ const Properties: React.FC = () => {
               </div>
               <div className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2">
                 <span className="text-xs sm:text-sm text-gray-500 font-medium px-2 sm:px-3 py-1 bg-white/80">
-                  {filteredProperties.length} {t('properties.search.results')}
+                  {filteredAndSortedProperties.length} {t('properties.search.results')}
                 </span>
               </div>
             </div>
@@ -366,16 +411,20 @@ const Properties: React.FC = () => {
           <div className="mb-6 sm:mb-12">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
               <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
-                {filteredProperties.length} {t('properties.listing.available')}
+                {filteredAndSortedProperties.length} {t('properties.listing.available')}
               </h3>
               <div className="flex items-center space-x-2 sm:space-x-3">
                 <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
-                <select className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]">
-                  <option>{t('properties.listing.relevance')}</option>
-                  <option>{t('properties.listing.priceAsc')}</option>
-                  <option>{t('properties.listing.priceDesc')}</option>
-                  <option>{t('properties.listing.surface')}</option>
-                  <option>{t('properties.listing.newest')}</option>
+                <select 
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]"
+                >
+                  <option value="relevance">{t('properties.listing.relevance')}</option>
+                  <option value="priceAsc">{t('properties.listing.priceAsc')}</option>
+                  <option value="priceDesc">{t('properties.listing.priceDesc')}</option>
+                  <option value="surface">{t('properties.listing.surface')}</option>
+                  <option value="newest">{t('properties.listing.newest')}</option>
                 </select>
               </div>
             </div>
@@ -394,7 +443,7 @@ const Properties: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
-              {filteredProperties.map((property, index) => (
+              {filteredAndSortedProperties.map((property, index) => (
                 <div
                   key={property.id}
                   className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
@@ -502,7 +551,7 @@ const Properties: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPropertyPrice(property.price, property.type)}</div>
+                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPropertyPrice(property.price, property.type, property.currency)}</div>
                         <Link
                           to={`/properties/${property.id}`}
                           className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
@@ -519,7 +568,7 @@ const Properties: React.FC = () => {
           )}
 
           {/* Empty State */}
-          {!loading && filteredProperties.length === 0 && (
+          {!loading && filteredAndSortedProperties.length === 0 && (
             <div className="text-center py-16 sm:py-32 bg-gray-50 border-2 border-gray-200 max-w-4xl mx-auto">
               <div className="text-5xl sm:text-8xl mb-6 sm:mb-10 opacity-20">🏠</div>
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter text-gray-900 mb-4 sm:mb-8 font-light px-4">
@@ -546,7 +595,7 @@ const Properties: React.FC = () => {
           )}
 
           {/* Load More */}
-          {filteredProperties.length > 0 && (
+          {filteredAndSortedProperties.length > 0 && (
             <div className="text-center mt-8 sm:mt-16">
               <button className="border-2 border-gray-900 text-gray-900 px-8 sm:px-14 py-3 sm:py-5 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500 focus:outline-none">
                 <span>{t('properties.listing.loadMore')}</span>
