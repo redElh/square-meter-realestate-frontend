@@ -87,6 +87,10 @@ const Properties: React.FC = () => {
 
   useEffect(() => {
     const fetchProperties = async () => {
+      console.log('\n\n🔄 ===============================================');
+      console.log('🔄 LANGUAGE CHANGED - RELOADING PROPERTIES');
+      console.log('🔄 ===============================================');
+      console.log(`🌍 Current Language: ${currentLanguage}`);
       console.log('🔍 Starting to fetch properties...');
       setLoading(true);
       try {
@@ -96,7 +100,11 @@ const Properties: React.FC = () => {
           limit: 1000, // Get all properties
         }, t, currentLanguage);
         
-        console.log('✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length, apimoProperties);
+        console.log('\n✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length);
+        console.log('\n📋 ALL PROPERTY NAMES LOADED:');
+        apimoProperties.forEach((prop, index) => {
+          console.log(`  ${index + 1}. [ID: ${prop.id}] "${prop.title}"`);
+        });
         
         // Filter out incomplete properties (missing essential data)
         const validProperties = apimoProperties.filter(prop => 
@@ -107,7 +115,12 @@ const Properties: React.FC = () => {
           prop.images.length > 0
         );
         
-        console.log(`🔍 Filtered ${apimoProperties.length - validProperties.length} incomplete properties`);
+        console.log(`\n🔍 Filtered ${apimoProperties.length - validProperties.length} incomplete properties`);
+        console.log('\n📋 FINAL VALID PROPERTY NAMES:');
+        validProperties.forEach((prop, index) => {
+          console.log(`  ${index + 1}. [ID: ${prop.id}] "${prop.title}"`);
+        });
+        console.log('\n');
         setProperties(validProperties);
       } catch (error) {
         console.error('❌ Error loading properties from Apimo:', error);

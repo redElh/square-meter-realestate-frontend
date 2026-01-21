@@ -328,27 +328,15 @@ const getPropertyTypeLabel = (type: number, subtype: number): string => {
 };
 
 const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr', t?: any): Property => {
-  // Try to get translated title and description from i18n first
-  let title = '';
-  let description = '';
+  // Get title directly from API (in English or French) - we'll translate it later
+  const comment = apimoProperty.comments?.find(c => c.language === 'en') || 
+                  apimoProperty.comments?.find(c => c.language === 'fr') || 
+                  apimoProperty.comments?.[0];
   
-  if (t) {
-    // Check if translation exists for this property ID
-    const translatedTitle = t(`apiProperties.${apimoProperty.id}.title`, { defaultValue: '' });
-    const translatedDescription = t(`apiProperties.${apimoProperty.id}.description`, { defaultValue: '' });
-    
-    if (translatedTitle) {
-      title = translatedTitle;
-      description = translatedDescription;
-    }
-  }
+  const title = comment?.title || getPropertyTypeLabel(apimoProperty.type, apimoProperty.subtype);
+  const description = comment?.comment_full || comment?.comment || comment?.hook || '';
   
-  // Fallback to API comments if no translation found
-  if (!title) {
-    const comment = apimoProperty.comments?.find(c => c.language === language) || apimoProperty.comments?.[0];
-    title = comment?.title || getPropertyTypeLabel(apimoProperty.type, apimoProperty.subtype);
-    description = comment?.comment_full || comment?.comment || comment?.hook || '';
-  }
+  console.log(`📋 [${apimoProperty.id}] API Title: "${title}"`);
   
   // Get location - try to translate city name if translation function is available
   let cityName = apimoProperty.city?.name || '';
@@ -521,7 +509,11 @@ class ApimoService {
       
       console.log('🔄 Mapping properties...');
       const properties = data.properties.map(prop => mapApimoToProperty(prop, language || 'fr', t));
-      console.log('✨ Mapped properties:', properties);
+      
+      // Translate property names for all non-English languages
+      if (language && language !== 'en') {
+        await this.translatePropertyNames(properties, language);
+      }
 
       return {
         properties,
@@ -530,6 +522,40 @@ class ApimoService {
     } catch (error) {
       console.error('💥 Error fetching properties from Apimo:', error);
       throw error;
+    }
+  }
+
+  /**
+   * Translate property names using browser-side Google Translate
+   */
+  async translatePropertyNames(properties: Property[], targetLang: string): Promise<void> {
+    try {
+      const { translateBatch } = await import('./browserTranslationService');
+      
+      // Get all property titles
+      const titles = properties.map(prop => prop.title);
+      
+      // Translate all titles
+      const translatedTitles = await translateBatch(titles, targetLang, 'auto');
+      
+      // Update property titles
+      let translatedCount = 0;
+      properties.forEach((prop, index) => {
+        const originalTitle = prop.title;
+        const translatedTitle = translatedTitles[index];
+        
+        if (translatedTitle && translatedTitle !== originalTitle) {
+          prop.title = translatedTitle;
+          translatedCount++;
+        }
+      });
+      
+      if (translatedCount > 0) {
+        console.log(`✅ Translated ${translatedCount} property names to ${targetLang}`);
+      }
+    } catch (error) {
+      console.error('Translation error:', error);
+      // Fail gracefully - keep original names
     }
   }
 
