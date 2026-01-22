@@ -1979,5 +1979,195 @@
       "title": "Dia House",
       "description": "ESSAOUIRA - RARE PROPERTY TITLE - OCEAN VIEW\nLocated close to Essaouira, in the second row facing the ocean, this 115 m² single-storey house offers a privileged location in one of the most sought-after villages on the outskirts of Essaouira.\nThe property, in need of complete renovation, allows for the construction of two additional levels, eventually offering unobstructed ocean views.\nAn ideal project for: a real estate investment, a quiet main residence, or the creation of a tourist property with character.\nAs opportunities in this sector are very rare, this property represents a real opportunity not to be missed for lovers of Essaouira and its authenticity.\n\nIf you are interested in this property, please do not hesitate to contact us.\nAgency fee 2.5% excl. VAT"
     }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "subtitle": "Welcome to Square Meter. By using our platform, you accept these terms of service which govern our premium services.",
+    "lastUpdated": "Last updated: January 16, 2026",
+    "keyArticlesTitle": "Key Articles",
+    "servicesTitle": "Services Offered",
+    "confidentialityTitle": "Commitment to Discretion",
+    "confidentialityDescription": "Square Meter is committed to strict confidentiality regarding:",
+    "responsibilitiesTitle": "Responsibilities",
+    "companyResponsibilitiesTitle": "Square Meter's Responsibilities",
+    "companyResponsibilitiesText": "Square Meter implements all reasonable means to ensure the accuracy of published information. However, the User acknowledges that this information may contain inaccuracies. Square Meter cannot be held responsible for indirect damages resulting from the use of the site.",
+    "userResponsibilitiesTitle": "User Responsibilities",
+    "userResponsibilitiesText": "The User undertakes to provide accurate and complete information during registration and to keep it up to date. They also undertake to use the services in a legal, ethical manner and in accordance with these Terms of Service.",
+    "questionsTitle": "Questions About Our Terms?",
+    "questionsDescription": "Our legal team is available to answer all your questions regarding our terms of service.",
+    "contactLegal": "Contact our legal department",
+    "services": {
+      "service1": "Consultation of prestigious real estate properties",
+      "service2": "Connection with specialized advisors",
+      "service3": "Valuation and assessment services",
+      "service4": "Support in real estate transactions",
+      "service5": "Management and concierge services"
+    },
+    "confidentiality": {
+      "item1": "Users' personal information",
+      "item2": "Properties presented in confidential selection",
+      "item3": "Ongoing negotiations and transactions",
+      "item4": "Identity of owners and buyers"
+    },
+    "keyArticles": {
+      "article1": {
+        "number": "Article 1",
+        "title": "Purpose",
+        "description": "These terms of service (ToS) aim to provide the legal framework for the provision of Square Meter's services and their use by the User."
+      },
+      "article2": {
+        "number": "Article 2",
+        "title": "Services Offered",
+        "description": "Square Meter offers premium services to support your prestigious real estate projects, including consultation, valuation, and management of exceptional properties."
+      },
+      "article3": {
+        "number": "Article 3",
+        "title": "Commitment to Discretion",
+        "description": "Square Meter is committed to strict confidentiality regarding your information, the properties presented, and all ongoing transactions."
+      },
+      "article4": {
+        "number": "Article 4",
+        "title": "Responsibilities",
+        "description": "Square Meter implements all reasonable means to ensure the accuracy of published information. The User undertakes to provide accurate information and to use the services in compliance."
+      },
+      "article5": {
+        "number": "Article 5",
+        "title": "Intellectual Property",
+        "description": "All elements of the Square Meter site (texts, images, photographs, logos) are protected by copyright. Any unauthorized reproduction is prohibited."
+      },
+      "article6": {
+        "number": "Article 6",
+        "title": "Personal Data",
+        "description": "The processing of personal data is governed by our Privacy Policy, which is an integral part of these ToS. We are committed to protecting your data in accordance with GDPR and applicable laws."
+      },
+      "article7": {
+        "number": "Article 7",
+        "title": "Limitations of Liability",
+        "description": "Square Meter's liability cannot be engaged in the event of force majeure or unforeseeable and irresistible acts of a third party. Square Meter does not guarantee permanent site availability and reserves the right to interrupt the service for maintenance."
+      },
+      "article8": {
+        "number": "Article 8",
+        "title": "Modifications to the ToS",
+        "description": "Square Meter reserves the right to modify these ToS at any time. Users will be informed of significant changes by email or via the platform. Continued use of the service after notification constitutes acceptance of the new terms."
+      },
+      "article9": {
+        "number": "Article 9",
+        "title": "Applicable Law",
+        "description": "These ToS are governed by French law. In the event of a dispute, the courts of Paris shall have sole jurisdiction."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "subtitle": "At Square Meter, the protection of your personal data is our absolute priority. Discover how we guarantee the confidentiality and security of your information.",
+    "lastUpdated": "Last updated: January 16, 2026",
+    "commitmentsTitle": "Our Commitments",
+    "dataCollectionTitle": "Information Collected",
+    "dataUsageTitle": "Use of Information",
+    "dataRetentionTitle": "Data Retention",
+    "dataRetentionDescription": "We retain your information for the period strictly necessary to achieve the purposes for which it is collected.",
+    "yourRightsTitle": "Your Rights",
+    "yourRightsDescription": "In accordance with GDPR, you have extensive rights over your personal data",
+    "exerciseRightsTitle": "Exercise Your Rights",
+    "exerciseRightsDescription": "For any questions or requests concerning your personal data, contact our Data Protection Officer",
+    "responseTime": "We are committed to responding to any request within a maximum of 30 days",
+    "principles": {
+      "principle1": {
+        "title": "Maximum Protection",
+        "description": "Your data is protected by banking-level security systems with end-to-end encryption."
+      },
+      "principle2": {
+        "title": "Absolute Confidentiality",
+        "description": "We never share your information with third parties without your explicit consent."
+      },
+      "principle3": {
+        "title": "GDPR Compliance",
+        "description": "We strictly comply with all European data protection regulations."
+      },
+      "principle4": {
+        "title": "Total Transparency",
+        "description": "You have complete control over your data and can consult or delete it at any time."
+      }
+    },
+    "dataCategories": {
+      "category1": {
+        "title": "Identification Information",
+        "items": {
+          "item1": "First and last name",
+          "item2": "Email address",
+          "item3": "Phone number",
+          "item4": "Postal address"
+        }
+      },
+      "category2": {
+        "title": "Professional Information",
+        "items": {
+          "item1": "Company",
+          "item2": "Position",
+          "item3": "Industry sector"
+        }
+      },
+      "category3": {
+        "title": "Real Estate Preferences",
+        "items": {
+          "item1": "Budget",
+          "item2": "Desired location",
+          "item3": "Property type",
+          "item4": "Specific criteria"
+        }
+      },
+      "category4": {
+        "title": "Browsing Data",
+        "items": {
+          "item1": "Search history",
+          "item2": "Properties viewed",
+          "item3": "Visit time",
+          "item4": "Saved preferences"
+        }
+      }
+    },
+    "dataUsage": {
+      "usage1": "Offer you properties that perfectly match your criteria",
+      "usage2": "Personalize your experience on our premium platform",
+      "usage3": "Continuously improve our services and your satisfaction",
+      "usage4": "Comply with our legal and regulatory obligations",
+      "usage5": "Ensure security and prevent fraud"
+    },
+    "dataRetention": {
+      "item1": "Contact data: duration of the business relationship",
+      "item2": "Browsing history: 13 months maximum",
+      "item3": "Legal documents: in accordance with legal obligations"
+    },
+    "rights": {
+      "right1": {
+        "title": "Right of Access",
+        "description": "Consult all your personal data at any time"
+      },
+      "right2": {
+        "title": "Right of Rectification",
+        "description": "Correct your inaccurate or incomplete information"
+      },
+      "right3": {
+        "title": "Right to Erasure",
+        "description": "Request the deletion of your personal data"
+      },
+      "right4": {
+        "title": "Right to Restriction",
+        "description": "Limit the processing of your information"
+      },
+      "right5": {
+        "title": "Right to Portability",
+        "description": "Retrieve your data in a structured format"
+      },
+      "right6": {
+        "title": "Right to Object",
+        "description": "Object to the processing of your data"
+      }
+    },
+    "contact": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address"
+    }
   }
 }

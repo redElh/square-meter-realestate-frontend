@@ -14,56 +14,57 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Privacy: React.FC = () => {
+  const { t } = useTranslation();
 
   const privacyPrinciples = [
     {
       icon: ShieldCheckIcon,
-      title: 'Protection Maximale',
-      description: 'Vos données sont protégées par des systèmes de sécurité de niveau bancaire avec cryptage end-to-end.'
+      title: t('privacy.principles.principle1.title'),
+      description: t('privacy.principles.principle1.description')
     },
     {
       icon: EyeSlashIcon,
-      title: 'Confidentialité Absolue',
-      description: 'Nous ne partageons jamais vos informations avec des tiers sans votre consentement explicite.'
+      title: t('privacy.principles.principle2.title'),
+      description: t('privacy.principles.principle2.description')
     },
     {
       icon: LockClosedIcon,
-      title: 'Conformité RGPD',
-      description: 'Nous respectons scrupuleusement toutes les réglementations européennes sur la protection des données.'
+      title: t('privacy.principles.principle3.title'),
+      description: t('privacy.principles.principle3.description')
     },
     {
       icon: DocumentCheckIcon,
-      title: 'Transparence Totale',
-      description: 'Vous avez un contrôle complet sur vos données et pouvez les consulter ou les supprimer à tout moment.'
+      title: t('privacy.principles.principle4.title'),
+      description: t('privacy.principles.principle4.description')
     }
   ];
 
   const dataCategories = [
     {
-      title: 'Informations d\'Identification',
-      items: ['Nom et prénom', 'Adresse email', 'Numéro de téléphone', 'Adresse postale']
+      title: t('privacy.dataCategories.category1.title'),
+      items: [t('privacy.dataCategories.category1.items.item1'), t('privacy.dataCategories.category1.items.item2'), t('privacy.dataCategories.category1.items.item3'), t('privacy.dataCategories.category1.items.item4')]
     },
     {
-      title: 'Informations Professionnelles',
-      items: ['Société', 'Poste occupé', 'Secteur d\'activité']
+      title: t('privacy.dataCategories.category2.title'),
+      items: [t('privacy.dataCategories.category2.items.item1'), t('privacy.dataCategories.category2.items.item2'), t('privacy.dataCategories.category2.items.item3')]
     },
     {
-      title: 'Préférences Immobilières',
-      items: ['Budget', 'Localisation recherchée', 'Type de bien', 'Critères spécifiques']
+      title: t('privacy.dataCategories.category3.title'),
+      items: [t('privacy.dataCategories.category3.items.item1'), t('privacy.dataCategories.category3.items.item2'), t('privacy.dataCategories.category3.items.item3'), t('privacy.dataCategories.category3.items.item4')]
     },
     {
-      title: 'Données de Navigation',
-      items: ['Historique de recherche', 'Propriétés consultées', 'Temps de visite', 'Préférences sauvegardées']
+      title: t('privacy.dataCategories.category4.title'),
+      items: [t('privacy.dataCategories.category4.items.item1'), t('privacy.dataCategories.category4.items.item2'), t('privacy.dataCategories.category4.items.item3'), t('privacy.dataCategories.category4.items.item4')]
     }
   ];
 
   const yourRights = [
-    { icon: UserCircleIcon, title: 'Droit d\'accès', description: 'Consultez toutes vos données personnelles à tout moment' },
-    { icon: DocumentCheckIcon, title: 'Droit de rectification', description: 'Corrigez vos informations inexactes ou incomplètes' },
-    { icon: EyeSlashIcon, title: 'Droit à l\'effacement', description: 'Demandez la suppression de vos données personnelles' },
-    { icon: LockClosedIcon, title: 'Droit à la limitation', description: 'Limitez le traitement de vos informations' },
-    { icon: ShieldCheckIcon, title: 'Droit à la portabilité', description: 'Récupérez vos données dans un format structuré' },
-    { icon: ClockIcon, title: 'Droit d\'opposition', description: 'Opposez-vous au traitement de vos données' }
+    { icon: UserCircleIcon, title: t('privacy.rights.right1.title'), description: t('privacy.rights.right1.description') },
+    { icon: DocumentCheckIcon, title: t('privacy.rights.right2.title'), description: t('privacy.rights.right2.description') },
+    { icon: EyeSlashIcon, title: t('privacy.rights.right3.title'), description: t('privacy.rights.right3.description') },
+    { icon: LockClosedIcon, title: t('privacy.rights.right4.title'), description: t('privacy.rights.right4.description') },
+    { icon: ShieldCheckIcon, title: t('privacy.rights.right5.title'), description: t('privacy.rights.right5.description') },
+    { icon: ClockIcon, title: t('privacy.rights.right6.title'), description: t('privacy.rights.right6.description') }
   ];
 
   return (
@@ -76,16 +77,15 @@ const Privacy: React.FC = () => {
               <ShieldCheckIcon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
-              Politique de Confidentialité
+              {t('privacy.title')}
             </h1>
             <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-6 sm:mb-8"></div>
             <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
-              Chez Square Meter, la protection de vos données personnelles est notre priorité absolue. 
-              Découvrez comment nous garantissons la confidentialité et la sécurité de vos informations.
+              {t('privacy.subtitle')}
             </p>
             <div className="mt-6 sm:mt-8 flex items-center justify-center space-x-2 text-white/70 text-sm sm:text-base">
               <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Dernière mise à jour : 16 janvier 2026</span>
+              <span>{t('privacy.lastUpdated')}</span>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ const Privacy: React.FC = () => {
         <div className="max-w-6xl mx-auto mb-16 sm:mb-20 lg:mb-24">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-4">
-              Nos Engagements
+              {t('privacy.commitmentsTitle')}
             </h2>
             <div className="h-1 bg-[#023927] w-24 mx-auto"></div>
           </div>
@@ -132,7 +132,7 @@ const Privacy: React.FC = () => {
         <div className="max-w-6xl mx-auto mb-16 sm:mb-20 lg:mb-24">
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-8 sm:p-12 border-l-4 border-[#023927]">
             <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-8 sm:mb-12">
-              Informations Collectées
+              {t('privacy.dataCollectionTitle')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {dataCategories.map((category, index) => (
@@ -162,15 +162,15 @@ const Privacy: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
             <div>
               <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-6">
-                Utilisation des Informations
+                {t('privacy.dataUsageTitle')}
               </h2>
               <div className="space-y-4">
                 {[
-                  'Vous proposer des propriétés correspondant parfaitement à vos critères',
-                  'Personnaliser votre expérience sur notre plateforme premium',
-                  'Améliorer continuellement nos services et votre satisfaction',
-                  'Respecter nos obligations légales et réglementaires',
-                  'Assurer la sécurité et prévenir les fraudes'
+                  t('privacy.dataUsage.usage1'),
+                  t('privacy.dataUsage.usage2'),
+                  t('privacy.dataUsage.usage3'),
+                  t('privacy.dataUsage.usage4'),
+                  t('privacy.dataUsage.usage5')
                 ].map((item, index) => (
                   <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 border-l-2 border-[#023927]">
                     <ShieldCheckIcon className="w-5 h-5 text-[#023927] flex-shrink-0 mt-0.5" />
@@ -182,26 +182,25 @@ const Privacy: React.FC = () => {
 
             <div>
               <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-6">
-                Conservation des Données
+                {t('privacy.dataRetentionTitle')}
               </h2>
               <div className="bg-gradient-to-br from-[#023927] to-[#0a4d3a] p-8 text-white">
                 <ClockIcon className="w-12 h-12 mb-6 opacity-80" />
                 <p className="text-base sm:text-lg leading-relaxed mb-6">
-                  Nous conservons vos informations pendant la durée strictement nécessaire 
-                  à la réalisation des finalités pour lesquelles elles sont collectées.
+                  {t('privacy.dataRetentionDescription')}
                 </p>
                 <div className="space-y-3 text-sm sm:text-base">
                   <div className="flex items-start space-x-3">
                     <span className="text-white/70">•</span>
-                    <span className="text-white/90">Données de contact : durée de la relation commerciale</span>
+                    <span className="text-white/90">{t('privacy.dataRetention.item1')}</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="text-white/70">•</span>
-                    <span className="text-white/90">Historique de navigation : 13 mois maximum</span>
+                    <span className="text-white/90">{t('privacy.dataRetention.item2')}</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="text-white/70">•</span>
-                    <span className="text-white/90">Documents légaux : conformément aux obligations légales</span>
+                    <span className="text-white/90">{t('privacy.dataRetention.item3')}</span>
                   </div>
                 </div>
               </div>
@@ -213,11 +212,11 @@ const Privacy: React.FC = () => {
         <div className="max-w-6xl mx-auto mb-16 sm:mb-20">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-4">
-              Vos Droits
+              {t('privacy.yourRightsTitle')}
             </h2>
             <div className="h-1 bg-[#023927] w-24 mx-auto mb-6"></div>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              Conformément au RGPD, vous disposez de droits étendus sur vos données personnelles
+              {t('privacy.yourRightsDescription')}
             </p>
           </div>
 
@@ -249,34 +248,33 @@ const Privacy: React.FC = () => {
           <div className="bg-gradient-to-r from-[#023927] to-[#0a4d3a] p-8 sm:p-12 text-white">
             <div className="text-center mb-8">
               <h2 className="text-2xl sm:text-3xl font-inter font-light mb-4">
-                Exercez Vos Droits
+                {t('privacy.exerciseRightsTitle')}
               </h2>
               <p className="text-white/90 text-base sm:text-lg">
-                Pour toute question ou demande concernant vos données personnelles, 
-                contactez notre Délégué à la Protection des Données
+                {t('privacy.exerciseRightsDescription')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white/10 backdrop-blur-sm p-6 border-2 border-white/30">
               <div className="text-center">
                 <EnvelopeIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
-                <div className="text-sm text-white/70 mb-1">Email</div>
+                <div className="text-sm text-white/70 mb-1">{t('privacy.contact.email')}</div>
                 <div className="text-base font-medium">redaelhiri9@gmail.com</div>
               </div>
               <div className="text-center border-l border-r border-white/20">
                 <PhoneIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
-                <div className="text-sm text-white/70 mb-1">Téléphone</div>
+                <div className="text-sm text-white/70 mb-1">{t('privacy.contact.phone')}</div>
                 <div className="text-base font-medium">+212 6 23 09 42 46</div>
               </div>
               <div className="text-center">
                 <MapPinIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
-                <div className="text-sm text-white/70 mb-1">Adresse</div>
+                <div className="text-sm text-white/70 mb-1">{t('privacy.contact.address')}</div>
                 <div className="text-base font-medium">Rue Abou Moussa Al Achaari<br/>44000 Essaouira</div>
               </div>
             </div>
 
             <div className="mt-8 text-center text-sm text-white/80">
-              <p>Nous nous engageons à répondre à toute demande dans un délai maximum de 30 jours</p>
+              <p>{t('privacy.responseTime')}</p>
             </div>
           </div>
         </div>

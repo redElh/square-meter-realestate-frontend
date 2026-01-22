@@ -13,58 +13,59 @@ import {
 } from '@heroicons/react/24/outline';
 
 const Terms: React.FC = () => {
+  const { t } = useTranslation();
 
   const services = [
-    'Consultation de propriétés immobilières de prestige',
-    'Mise en relation avec des conseillers spécialisés',
-    'Services d\'estimation et de valorisation',
-    'Accompagnement dans les transactions immobilières',
-    'Services de gestion et conciergerie'
+    t('terms.services.service1'),
+    t('terms.services.service2'),
+    t('terms.services.service3'),
+    t('terms.services.service4'),
+    t('terms.services.service5')
   ];
 
   const confidentialityCommitments = [
-    'Les informations personnelles des Utilisateurs',
-    'Les propriétés présentées en sélection confidentielle',
-    'Les négociations et transactions en cours',
-    'L\'identité des propriétaires et acquéreurs'
+    t('terms.confidentiality.item1'),
+    t('terms.confidentiality.item2'),
+    t('terms.confidentiality.item3'),
+    t('terms.confidentiality.item4')
   ];
 
   const keyArticles = [
     {
       icon: DocumentTextIcon,
-      article: 'Article 1',
-      title: 'Objet',
-      description: 'Les présentes conditions générales d\'utilisation (CGU) ont pour objet l\'encadrement juridique des modalités de mise à disposition des services du site Square Meter et leur utilisation par l\'Utilisateur.'
+      article: t('terms.keyArticles.article1.number'),
+      title: t('terms.keyArticles.article1.title'),
+      description: t('terms.keyArticles.article1.description')
     },
     {
       icon: BuildingOffice2Icon,
-      article: 'Article 2',
-      title: 'Services Proposés',
-      description: 'Square Meter propose des services premium d\'accompagnement dans vos projets immobiliers de prestige, incluant la consultation, l\'estimation, et la gestion de propriétés d\'exception.'
+      article: t('terms.keyArticles.article2.number'),
+      title: t('terms.keyArticles.article2.title'),
+      description: t('terms.keyArticles.article2.description')
     },
     {
       icon: LockClosedIcon,
-      article: 'Article 3',
-      title: 'Engagement de Discrétion',
-      description: 'Square Meter s\'engage à respecter une stricte confidentialité concernant vos informations, les propriétés présentées, et l\'ensemble des transactions en cours.'
+      article: t('terms.keyArticles.article3.number'),
+      title: t('terms.keyArticles.article3.title'),
+      description: t('terms.keyArticles.article3.description')
     },
     {
       icon: UserCircleIcon,
-      article: 'Article 4',
-      title: 'Responsabilités',
-      description: 'Square Meter met en œuvre tous les moyens raisonnables pour assurer l\'exactitude des informations publiées. L\'Utilisateur s\'engage à fournir des informations exactes et à utiliser les services de manière conforme.'
+      article: t('terms.keyArticles.article4.number'),
+      title: t('terms.keyArticles.article4.title'),
+      description: t('terms.keyArticles.article4.description')
     },
     {
       icon: ShieldCheckIcon,
-      article: 'Article 5',
-      title: 'Propriété Intellectuelle',
-      description: 'Tous les éléments du site Square Meter (textes, images, photographies, logos) sont protégés par le droit d\'auteur. Toute reproduction non autorisée est interdite.'
+      article: t('terms.keyArticles.article5.number'),
+      title: t('terms.keyArticles.article5.title'),
+      description: t('terms.keyArticles.article5.description')
     },
     {
       icon: ScaleIcon,
-      article: 'Article 9',
-      title: 'Droit Applicable',
-      description: 'Les présentes CGU sont régies par le droit français. En cas de litige, les tribunaux de Paris seront seuls compétents.'
+      article: t('terms.keyArticles.article9.number'),
+      title: t('terms.keyArticles.article9.title'),
+      description: t('terms.keyArticles.article9.description')
     }
   ];
 
@@ -78,16 +79,15 @@ const Terms: React.FC = () => {
               <DocumentTextIcon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
-              Conditions Générales d'Utilisation
+              {t('terms.title')}
             </h1>
             <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-6 sm:mb-8"></div>
             <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
-              Bienvenue chez Square Meter. En utilisant notre plateforme, vous acceptez les présentes 
-              conditions générales d'utilisation qui encadrent nos services premium.
+              {t('terms.subtitle')}
             </p>
             <div className="mt-6 sm:mt-8 flex items-center justify-center space-x-2 text-white/70 text-sm sm:text-base">
               <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span>Dernière mise à jour : 16 janvier 2026</span>
+              <span>{t('terms.lastUpdated')}</span>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ const Terms: React.FC = () => {
         <div className="max-w-6xl mx-auto mb-16 sm:mb-20 lg:mb-24">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-4">
-              Articles Principaux
+              {t('terms.keyArticlesTitle')}
             </h2>
             <div className="h-1 bg-[#023927] w-24 mx-auto"></div>
           </div>
@@ -139,7 +139,7 @@ const Terms: React.FC = () => {
             <div className="bg-gradient-to-br from-[#023927] to-[#0a4d3a] p-8 sm:p-10 text-white">
               <BuildingOffice2Icon className="w-12 h-12 mb-6 opacity-80" />
               <h2 className="text-2xl sm:text-3xl font-inter font-light mb-6">
-                Services Proposés
+                {t('terms.servicesTitle')}
               </h2>
               <div className="space-y-3">
                 {services.map((service, index) => (
@@ -154,10 +154,10 @@ const Terms: React.FC = () => {
             <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-8 sm:p-10 border-l-4 border-[#023927]">
               <LockClosedIcon className="w-12 h-12 text-[#023927] mb-6" />
               <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-6">
-                Engagement de Discrétion
+                {t('terms.confidentialityTitle')}
               </h2>
               <p className="text-gray-700 mb-6 text-sm sm:text-base leading-relaxed">
-                Square Meter s'engage à respecter une stricte confidentialité concernant :
+                {t('terms.confidentialityDescription')}
               </p>
               <div className="space-y-3">
                 {confidentialityCommitments.map((commitment, index) => (
@@ -176,30 +176,25 @@ const Terms: React.FC = () => {
           <div className="bg-white border-2 border-gray-200 p-8 sm:p-12">
             <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-8 flex items-center">
               <UserCircleIcon className="w-8 h-8 sm:w-10 sm:h-10 text-[#023927] mr-4" />
-              Responsabilités
+              {t('terms.responsibilitiesTitle')}
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <h3 className="font-inter font-medium text-[#023927] text-lg mb-4">
-                  Responsabilités de Square Meter
+                  {t('terms.companyResponsibilitiesTitle')}
                 </h3>
                 <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  Square Meter met en œuvre tous les moyens raisonnables pour assurer l'exactitude 
-                  des informations publiées. Cependant, l'Utilisateur reconnaît que ces informations 
-                  peuvent contenir des imprécisions. Square Meter ne pourra être tenu responsable 
-                  des dommages indirects résultant de l'utilisation du site.
+                  {t('terms.companyResponsibilitiesText')}
                 </p>
               </div>
               
               <div>
                 <h3 className="font-inter font-medium text-[#023927] text-lg mb-4">
-                  Responsabilités de l'Utilisateur
+                  {t('terms.userResponsibilitiesTitle')}
                 </h3>
                 <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                  L'Utilisateur s'engage à fournir des informations exactes et complètes lors 
-                  de son inscription et à les maintenir à jour. Il s'engage également à utiliser 
-                  les services de manière légale, conforme à l'éthique et respectueuse des présentes CGU.
+                  {t('terms.userResponsibilitiesText')}
                 </p>
               </div>
             </div>
@@ -216,12 +211,10 @@ const Terms: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-inter font-medium text-gray-900 text-lg mb-3">
-                    Article 6 - Données Personnelles
+                    {t('terms.keyArticles.article6.number')} - {t('terms.keyArticles.article6.title')}
                   </h3>
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                    Le traitement des données personnelles est régi par notre Politique de Confidentialité, 
-                    qui constitue une partie intégrante des présentes CGU. Nous nous engageons à protéger 
-                    vos données conformément au RGPD et aux lois applicables.
+                    {t('terms.keyArticles.article6.description')}
                   </p>
                 </div>
               </div>
@@ -234,13 +227,10 @@ const Terms: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-inter font-medium text-gray-900 text-lg mb-3">
-                    Article 7 - Limitations de Responsabilité
+                    {t('terms.keyArticles.article7.number')} - {t('terms.keyArticles.article7.title')}
                   </h3>
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                    La responsabilité de Square Meter ne saurait être engagée en cas de force majeure 
-                    ou de fait imprévisible et irrésistible d'un tiers. Square Meter ne garantit pas 
-                    la disponibilité permanente du site et se réserve le droit d'interrompre le service 
-                    pour maintenance.
+                    {t('terms.keyArticles.article7.description')}
                   </p>
                 </div>
               </div>
@@ -253,14 +243,11 @@ const Terms: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-inter font-medium text-gray-900 text-lg mb-3 flex items-center">
-                    Article 8 - Modifications des CGU
+                    {t('terms.keyArticles.article8.number')} - {t('terms.keyArticles.article8.title')}
                     <BellAlertIcon className="w-5 h-5 ml-2 text-[#023927]" />
                   </h3>
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                    Square Meter se réserve le droit de modifier les présentes CGU à tout moment. 
-                    Les Utilisateurs seront informés des modifications significatives par email ou 
-                    via la plateforme. L'utilisation continue du service après notification vaut 
-                    acceptation des nouvelles conditions.
+                    {t('terms.keyArticles.article8.description')}
                   </p>
                 </div>
               </div>
@@ -273,14 +260,13 @@ const Terms: React.FC = () => {
           <div className="bg-gradient-to-r from-[#023927] to-[#0a4d3a] p-8 sm:p-12 text-white text-center">
             <ScaleIcon className="w-12 h-12 mx-auto mb-6 opacity-80" />
             <h2 className="text-2xl sm:text-3xl font-inter font-light mb-4">
-              Questions sur nos Conditions ?
+              {t('terms.questionsTitle')}
             </h2>
             <p className="text-white/90 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
-              Notre équipe juridique est à votre disposition pour répondre à toutes 
-              vos questions concernant nos conditions générales d'utilisation.
+              {t('terms.questionsDescription')}
             </p>
             <div className="bg-white/10 backdrop-blur-sm p-6 border-2 border-white/30 inline-block">
-              <p className="text-sm text-white/70 mb-2">Contactez notre service juridique</p>
+              <p className="text-sm text-white/70 mb-2">{t('terms.contactLegal')}</p>
               <p className="text-lg font-medium">Essaouira@m2squaremeter.com</p>
               <p className="text-base mt-2">+212 7 00 00 06 44</p>
             </div>

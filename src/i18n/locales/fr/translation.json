@@ -2010,5 +2010,195 @@
       "title": "Dia House",
       "description": "ESSAOUIRA - BIEN RARE TITRE - VUE OCEAN\nSituée à proximité d'Essaouira, en deuxième ligne face à l'océan, cette maison de plain-pied de 115 m² offre un emplacement privilégié dans l'un des villages les plus recherchés aux portes d'Essaouira.\nLe bien, entièrement à rénover, permet la construction de deux niveaux supplémentaires, offrant à terme une vue dégagée sur l'océan.\nUn projet idéal pour : un investissement immobilier, une résidence principale au calme, ou la création d'un bien touristique de caractère.\nLes opportunités dans ce secteur étant très rares, ce bien représente une véritable occasion à ne pas manquer pour les amoureux d'Essaouira et de son authenticité.\n\nCe bien vous intéresse n'hésitez pas à nous contacter\nHonoraire agence 2,5% HT"
     }
+  },
+  "terms": {
+    "title": "Conditions Générales d'Utilisation",
+    "subtitle": "Bienvenue chez Square Meter. En utilisant notre plateforme, vous acceptez les présentes conditions générales d'utilisation qui encadrent nos services premium.",
+    "lastUpdated": "Dernière mise à jour : 16 janvier 2026",
+    "keyArticlesTitle": "Articles Principaux",
+    "servicesTitle": "Services Proposés",
+    "confidentialityTitle": "Engagement de Discrétion",
+    "confidentialityDescription": "Square Meter s'engage à respecter une stricte confidentialité concernant :",
+    "responsibilitiesTitle": "Responsabilités",
+    "companyResponsibilitiesTitle": "Responsabilités de Square Meter",
+    "companyResponsibilitiesText": "Square Meter met en œuvre tous les moyens raisonnables pour assurer l'exactitude des informations publiées. Cependant, l'Utilisateur reconnaît que ces informations peuvent contenir des imprécisions. Square Meter ne pourra être tenu responsable des dommages indirects résultant de l'utilisation du site.",
+    "userResponsibilitiesTitle": "Responsabilités de l'Utilisateur",
+    "userResponsibilitiesText": "L'Utilisateur s'engage à fournir des informations exactes et complètes lors de son inscription et à les maintenir à jour. Il s'engage également à utiliser les services de manière légale, conforme à l'éthique et respectueuse des présentes CGU.",
+    "questionsTitle": "Questions sur nos Conditions ?",
+    "questionsDescription": "Notre équipe juridique est à votre disposition pour répondre à toutes vos questions concernant nos conditions générales d'utilisation.",
+    "contactLegal": "Contactez notre service juridique",
+    "services": {
+      "service1": "Consultation de propriétés immobilières de prestige",
+      "service2": "Mise en relation avec des conseillers spécialisés",
+      "service3": "Services d'estimation et de valorisation",
+      "service4": "Accompagnement dans les transactions immobilières",
+      "service5": "Services de gestion et conciergerie"
+    },
+    "confidentiality": {
+      "item1": "Les informations personnelles des Utilisateurs",
+      "item2": "Les propriétés présentées en sélection confidentielle",
+      "item3": "Les négociations et transactions en cours",
+      "item4": "L'identité des propriétaires et acquéreurs"
+    },
+    "keyArticles": {
+      "article1": {
+        "number": "Article 1",
+        "title": "Objet",
+        "description": "Les présentes conditions générales d'utilisation (CGU) ont pour objet l'encadrement juridique des modalités de mise à disposition des services du site Square Meter et leur utilisation par l'Utilisateur."
+      },
+      "article2": {
+        "number": "Article 2",
+        "title": "Services Proposés",
+        "description": "Square Meter propose des services premium d'accompagnement dans vos projets immobiliers de prestige, incluant la consultation, l'estimation, et la gestion de propriétés d'exception."
+      },
+      "article3": {
+        "number": "Article 3",
+        "title": "Engagement de Discrétion",
+        "description": "Square Meter s'engage à respecter une stricte confidentialité concernant vos informations, les propriétés présentées, et l'ensemble des transactions en cours."
+      },
+      "article4": {
+        "number": "Article 4",
+        "title": "Responsabilités",
+        "description": "Square Meter met en œuvre tous les moyens raisonnables pour assurer l'exactitude des informations publiées. L'Utilisateur s'engage à fournir des informations exactes et à utiliser les services de manière conforme."
+      },
+      "article5": {
+        "number": "Article 5",
+        "title": "Propriété Intellectuelle",
+        "description": "Tous les éléments du site Square Meter (textes, images, photographies, logos) sont protégés par le droit d'auteur. Toute reproduction non autorisée est interdite."
+      },
+      "article6": {
+        "number": "Article 6",
+        "title": "Données Personnelles",
+        "description": "Le traitement des données personnelles est régi par notre Politique de Confidentialité, qui constitue une partie intégrante des présentes CGU. Nous nous engageons à protéger vos données conformément au RGPD et aux lois applicables."
+      },
+      "article7": {
+        "number": "Article 7",
+        "title": "Limitations de Responsabilité",
+        "description": "La responsabilité de Square Meter ne saurait être engagée en cas de force majeure ou de fait imprévisible et irrésistible d'un tiers. Square Meter ne garantit pas la disponibilité permanente du site et se réserve le droit d'interrompre le service pour maintenance."
+      },
+      "article8": {
+        "number": "Article 8",
+        "title": "Modifications des CGU",
+        "description": "Square Meter se réserve le droit de modifier les présentes CGU à tout moment. Les Utilisateurs seront informés des modifications significatives par email ou via la plateforme. L'utilisation continue du service après notification vaut acceptation des nouvelles conditions."
+      },
+      "article9": {
+        "number": "Article 9",
+        "title": "Droit Applicable",
+        "description": "Les présentes CGU sont régies par le droit français. En cas de litige, les tribunaux de Paris seront seuls compétents."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Politique de Confidentialité",
+    "subtitle": "Chez Square Meter, la protection de vos données personnelles est notre priorité absolue. Découvrez comment nous garantissons la confidentialité et la sécurité de vos informations.",
+    "lastUpdated": "Dernière mise à jour : 16 janvier 2026",
+    "commitmentsTitle": "Nos Engagements",
+    "dataCollectionTitle": "Informations Collectées",
+    "dataUsageTitle": "Utilisation des Informations",
+    "dataRetentionTitle": "Conservation des Données",
+    "dataRetentionDescription": "Nous conservons vos informations pendant la durée strictement nécessaire à la réalisation des finalités pour lesquelles elles sont collectées.",
+    "yourRightsTitle": "Vos Droits",
+    "yourRightsDescription": "Conformément au RGPD, vous disposez de droits étendus sur vos données personnelles",
+    "exerciseRightsTitle": "Exercez Vos Droits",
+    "exerciseRightsDescription": "Pour toute question ou demande concernant vos données personnelles, contactez notre Délégué à la Protection des Données",
+    "responseTime": "Nous nous engageons à répondre à toute demande dans un délai maximum de 30 jours",
+    "principles": {
+      "principle1": {
+        "title": "Protection Maximale",
+        "description": "Vos données sont protégées par des systèmes de sécurité de niveau bancaire avec cryptage end-to-end."
+      },
+      "principle2": {
+        "title": "Confidentialité Absolue",
+        "description": "Nous ne partageons jamais vos informations avec des tiers sans votre consentement explicite."
+      },
+      "principle3": {
+        "title": "Conformité RGPD",
+        "description": "Nous respectons scrupuleusement toutes les réglementations européennes sur la protection des données."
+      },
+      "principle4": {
+        "title": "Transparence Totale",
+        "description": "Vous avez un contrôle complet sur vos données et pouvez les consulter ou les supprimer à tout moment."
+      }
+    },
+    "dataCategories": {
+      "category1": {
+        "title": "Informations d'Identification",
+        "items": {
+          "item1": "Nom et prénom",
+          "item2": "Adresse email",
+          "item3": "Numéro de téléphone",
+          "item4": "Adresse postale"
+        }
+      },
+      "category2": {
+        "title": "Informations Professionnelles",
+        "items": {
+          "item1": "Société",
+          "item2": "Poste occupé",
+          "item3": "Secteur d'activité"
+        }
+      },
+      "category3": {
+        "title": "Préférences Immobilières",
+        "items": {
+          "item1": "Budget",
+          "item2": "Localisation recherchée",
+          "item3": "Type de bien",
+          "item4": "Critères spécifiques"
+        }
+      },
+      "category4": {
+        "title": "Données de Navigation",
+        "items": {
+          "item1": "Historique de recherche",
+          "item2": "Propriétés consultées",
+          "item3": "Temps de visite",
+          "item4": "Préférences sauvegardées"
+        }
+      }
+    },
+    "dataUsage": {
+      "usage1": "Vous proposer des propriétés correspondant parfaitement à vos critères",
+      "usage2": "Personnaliser votre expérience sur notre plateforme premium",
+      "usage3": "Améliorer continuellement nos services et votre satisfaction",
+      "usage4": "Respecter nos obligations légales et réglementaires",
+      "usage5": "Assurer la sécurité et prévenir les fraudes"
+    },
+    "dataRetention": {
+      "item1": "Données de contact : durée de la relation commerciale",
+      "item2": "Historique de navigation : 13 mois maximum",
+      "item3": "Documents légaux : conformément aux obligations légales"
+    },
+    "rights": {
+      "right1": {
+        "title": "Droit d'accès",
+        "description": "Consultez toutes vos données personnelles à tout moment"
+      },
+      "right2": {
+        "title": "Droit de rectification",
+        "description": "Corrigez vos informations inexactes ou incomplètes"
+      },
+      "right3": {
+        "title": "Droit à l'effacement",
+        "description": "Demandez la suppression de vos données personnelles"
+      },
+      "right4": {
+        "title": "Droit à la limitation",
+        "description": "Limitez le traitement de vos informations"
+      },
+      "right5": {
+        "title": "Droit à la portabilité",
+        "description": "Récupérez vos données dans un format structuré"
+      },
+      "right6": {
+        "title": "Droit d'opposition",
+        "description": "Opposez-vous au traitement de vos données"
+      }
+    },
+    "contact": {
+      "email": "Email",
+      "phone": "Téléphone",
+      "address": "Adresse"
+    }
   }
 }
