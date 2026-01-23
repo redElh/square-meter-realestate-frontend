@@ -92,19 +92,15 @@ const Owners: React.FC = () => {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-              
-              {/* Title Overlay - Bottom Left */}
-              <div className="absolute bottom-8 sm:bottom-16 left-4 sm:left-12 text-white max-w-2xl px-2">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-2 sm:mb-4">{slide.title}</h1>
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light opacity-90">{slide.subtitle}</p>
-              </div>
             </div>
           ))}
         </div>
 
-        {/* CTA Buttons - Centered */}
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 mt-40">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
+        {/* CTA Buttons */}
+        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-8 sm:mb-12">
             <Link 
               to="/selling-multistep?step=1"
               className="bg-white text-[#023927] px-6 sm:px-12 py-3 sm:py-5 font-medium uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-[#023927] hover:text-white transition-all duration-500 border-2 border-white text-center"
@@ -117,6 +113,8 @@ const Owners: React.FC = () => {
             >
               {t('owners.hero.manageButton')}
             </Link>
+          </div>
+          </div>
           </div>
         </div>
 

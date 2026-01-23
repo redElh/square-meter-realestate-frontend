@@ -204,9 +204,11 @@ const Agency: React.FC = () => {
           </div>
         </div>
 
-        {/* Buttons Container - centered vertically */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center px-4 pointer-events-none">
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pointer-events-auto transform translate-y-[100px]">
+        {/* Buttons Container */}
+        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
             <Link 
               to="/careers" 
               className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
@@ -222,6 +224,8 @@ const Agency: React.FC = () => {
             >
               <span>{t('agency.hero.discoverPropertiesButton')}</span>
             </Link>
+          </div>
+          </div>
           </div>
         </div>
 

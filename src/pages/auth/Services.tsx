@@ -157,20 +157,11 @@ const Services: React.FC = () => {
         </div>
 
         {/* Centered Content */}
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 sm:px-6">
-          <div className="w-full max-w-4xl text-center">
-            <div className="mb-4 sm:mb-8">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
-                {t('services.hero.title')}
-              </h1>
-              <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-4 sm:mb-8"></div>
-              <p className="text-base sm:text-lg lg:text-xl font-inter text-white/90 max-w-3xl mx-auto leading-relaxed px-4">
-                {t('services.hero.description')}
-              </p>
-            </div>
-
+        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
             {/* CTA Buttons */}
-            <div className="mt-6 sm:mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
               <Link 
                 to="/contact" 
                 className="px-6 sm:px-8 py-3 sm:py-4 bg-white/95 backdrop-blur-sm text-[#023927] border-2 border-white hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-all duration-500 font-inter font-medium text-sm sm:text-base lg:text-lg"
@@ -185,6 +176,7 @@ const Services: React.FC = () => {
               >
                 {t('services.hero.ctaMeetTeam')}
               </Link>
+            </div>
             </div>
           </div>
         </div>
