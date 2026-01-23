@@ -195,7 +195,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* Left Navigation - Propriétés */}
-            <div className="flex-1 flex justify-start sm:justify-center">
+            <div className="flex-1 flex justify-start sm:justify-center items-center pl-2 sm:pl-0">
               {navigation.primary[0] && (
                 <Link
                   to={navigation.primary[0].path}
@@ -204,8 +204,8 @@ const Header: React.FC = () => {
                   onMouseLeave={() => setActiveHover(null)}
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
-                  <div className="px-1 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
-                    <span className="text-gray-800 text-[9px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200">
+                  <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
+                    <span className="text-gray-800 text-[11px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200">
                       {navigation.primary[0].label}
                     </span>
                   </div>
@@ -221,9 +221,9 @@ const Header: React.FC = () => {
               onMouseLeave={() => setActiveHover(null)}
             >
               <div className="flex flex-col items-center">
-                <div className={`relative transform group-hover:scale-105 transition-all duration-400 ${isScrolled ? 'scale-90 sm:scale-95' : 'scale-95 sm:scale-100'}`}>
+                <div className={`relative transform group-hover:scale-105 transition-all duration-400 ${isScrolled ? 'scale-90 sm:scale-95' : 'scale-100 sm:scale-100'}`}>
                   <div className={`relative ${
-                    isScrolled ? 'w-10 h-10 sm:w-20 sm:h-20' : 'w-12 h-12 sm:w-32 sm:h-32'
+                    isScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-16 h-16 sm:w-32 sm:h-32'
                   } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden`}>
                     <img 
                       src="/logo-m2.png" 
@@ -236,16 +236,16 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Brand Text - Always visible */}
-                <div className={`-mt-0.5 sm:-mt-2 text-center transition-all duration-500 ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : '-translate-y-0.5 scale-[0.6] sm:scale-100 opacity-100'}`}>
+                <div className={`mt-0.5 sm:-mt-2 text-center transition-all duration-500 ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : 'scale-100 sm:scale-100 opacity-100'}`}>
                   <div className="flex flex-col items-center space-y-0 sm:space-y-1">
-                    <span className={`text-[7px] sm:text-sm font-semibold tracking-[0.05em] sm:tracking-[0.3em] uppercase transition-all duration-500 whitespace-nowrap ${
+                    <span className={`text-[9px] sm:text-sm font-semibold tracking-[0.1em] sm:tracking-[0.3em] uppercase transition-all duration-500 whitespace-nowrap ${
                       activeHover === 'logo'
                         ? 'text-gray-900'
                         : 'text-gray-700'
                     }`}>
                       SQUARE METER
                     </span>
-                    <span className="text-[6px] sm:text-xs text-gray-500 tracking-[0.05em] sm:tracking-[0.2em] transition-all duration-500 font-medium whitespace-nowrap">
+                    <span className="text-[8px] sm:text-xs text-gray-500 tracking-[0.08em] sm:tracking-[0.2em] transition-all duration-500 font-medium whitespace-nowrap">
                       {t('brand.subtitle')}
                     </span>
                   </div>
@@ -254,7 +254,7 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Right Navigation - Propriétaires */}
-            <div className="flex-1 flex justify-end sm:justify-center">
+            <div className="flex-1 flex justify-end sm:justify-center items-center pr-2 sm:pr-0">
               {navigation.primary[1] && (
                 <Link
                   to={navigation.primary[1].path}
@@ -263,8 +263,8 @@ const Header: React.FC = () => {
                   onMouseLeave={() => setActiveHover(null)}
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
-                  <div className="px-1 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
-                    <span className="text-gray-800 text-[9px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200">
+                  <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
+                    <span className="text-gray-800 text-[11px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200">
                       {navigation.primary[1].label}
                     </span>
                   </div>
