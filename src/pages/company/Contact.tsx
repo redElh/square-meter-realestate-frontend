@@ -862,7 +862,7 @@ Square Meter - Système de notification automatique
             {processSteps.map((process: any, index: number) => (
               <div key={index} className="relative">
                 <div className="text-center">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-[#023927] to-[#0a4d3a] text-white flex items-center justify-center text-lg sm:text-2xl font-inter font-medium mb-3 sm:mb-4 mx-auto">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-[#023927] to-[#0a4d3a] text-white flex items-center justify-center text-lg sm:text-2xl font-inter font-medium mb-3 sm:mb-4 mx-auto relative z-10">
                     {String(index + 1).padStart(2, '0')}
                   </div>
                   <h4 className="font-inter font-medium text-gray-900 mb-2 text-sm sm:text-base">
@@ -873,7 +873,7 @@ Square Meter - Système de notification automatique
                   </p>
                 </div>
                 {index < 3 && (
-                  <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gray-300 transform -translate-x-1/2"></div>
+                  <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gray-300 transform -translate-x-1/2 z-0"></div>
                 )}
               </div>
             ))}

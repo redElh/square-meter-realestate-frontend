@@ -1,5 +1,5 @@
 // src/pages/Properties.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalization } from '../contexts/LocalizationContext';
@@ -34,6 +34,8 @@ const Properties: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
+  const propertiesListRef = useRef<HTMLDivElement>(null);
+  
   
   // Get current language from i18n
   const { i18n } = useTranslation();
@@ -142,10 +144,25 @@ const Properties: React.FC = () => {
       const locationMatch = !locationFilter || 
         property.location.toLowerCase().includes(locationFilter.toLowerCase());
       const roomsMatch = !bedroomsFilter || (property.rooms && property.rooms >= bedroomsFilter);
-      const searchMatch = !searchQuery || 
-        property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        property.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        property.description.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // Enhanced intelligent search - searches across multiple fields
+      const searchMatch = !searchQuery || (() => {
+        const query = searchQuery.toLowerCase().trim();
+        const searchFields = [
+          property.title?.toLowerCase() || '',
+          property.location?.toLowerCase() || '',
+          property.description?.toLowerCase() || '',
+          property.type?.toLowerCase() || '',
+          property.rooms?.toString() || '',
+          property.surface?.toString() || '',
+          `${property.rooms} ${t('common.rooms')}`.toLowerCase(),
+          `${property.surface} m²`,
+        ].join(' ');
+        
+        // Split query into words and check if all words are found
+        const queryWords = query.split(/\s+/).filter(word => word.length > 0);
+        return queryWords.every(word => searchFields.includes(word));
+      })();
       
       return typeMatch && locationMatch && roomsMatch && searchMatch;
     });
@@ -256,6 +273,16 @@ const Properties: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    // Smooth scroll to properties list
+                    propertiesListRef.current?.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'start' 
+                    });
+                  }
+                }}
                 placeholder={t('properties.search.placeholder')}
                 className="w-full px-4 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-lg font-light transition-all duration-300"
                 style={{ borderRadius: '0' }}
@@ -418,7 +445,7 @@ const Properties: React.FC = () => {
       </section>
 
       {/* Property Cards Section - REVOLUTIONARY NEW LAYOUT */}
-      <section className="py-6 sm:py-12 bg-white">
+      <section ref={propertiesListRef} className="py-6 sm:py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           {/* Results Header */}
           <div className="mb-6 sm:mb-12">

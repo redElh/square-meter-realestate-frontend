@@ -309,7 +309,12 @@ const Home: React.FC = () => {
               </p>
               <p>
                 {t('home.essence.paragraph2')}
-                <span className="text-[#023927] font-medium"> {t('home.essence.conviction')}</span>
+              </p>
+              <p>
+                {t('home.essence.paragraph3')}
+              </p>
+              <p className="font-medium text-[#023927]">
+                {t('home.essence.paragraph4')}
               </p>
             </div>
             

@@ -49,10 +49,18 @@ export async function translateText(
     
     const data = await response.json();
     
-    if (data && data[0] && data[0][0] && data[0][0][0]) {
-      const translated = data[0][0][0];
-      cache[cacheKey] = translated;
-      return translated;
+    // Google Translate can return multiple parts for long texts
+    // Combine all parts into a single translated text
+    if (data && data[0] && Array.isArray(data[0])) {
+      const translatedParts = data[0]
+        .filter((item: any) => item && item[0])
+        .map((item: any) => item[0]);
+      
+      if (translatedParts.length > 0) {
+        const translated = translatedParts.join('');
+        cache[cacheKey] = translated;
+        return translated;
+      }
     }
     
     // If translation fails, return original

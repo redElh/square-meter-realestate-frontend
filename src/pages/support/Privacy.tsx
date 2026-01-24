@@ -255,21 +255,16 @@ const Privacy: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white/10 backdrop-blur-sm p-6 border-2 border-white/30">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/10 backdrop-blur-sm p-8 border-2 border-white/30">
               <div className="text-center">
                 <EnvelopeIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
                 <div className="text-sm text-white/70 mb-1">{t('privacy.contact.email')}</div>
-                <div className="text-base font-medium">redaelhiri9@gmail.com</div>
-              </div>
-              <div className="text-center border-l border-r border-white/20">
-                <PhoneIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
-                <div className="text-sm text-white/70 mb-1">{t('privacy.contact.phone')}</div>
-                <div className="text-base font-medium">+212 6 23 09 42 46</div>
+                <div className="text-base font-medium">Essaouira@m2squaremeter.com</div>
               </div>
               <div className="text-center">
-                <MapPinIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
-                <div className="text-sm text-white/70 mb-1">{t('privacy.contact.address')}</div>
-                <div className="text-base font-medium">Rue Abou Moussa Al Achaari<br/>44000 Essaouira</div>
+                <PhoneIcon className="w-8 h-8 mx-auto mb-3 text-white/80" />
+                <div className="text-sm text-white/70 mb-1">{t('privacy.contact.phone')}</div>
+                <div className="text-base font-medium">+212 7 00 00 06 44</div>
               </div>
             </div>
 

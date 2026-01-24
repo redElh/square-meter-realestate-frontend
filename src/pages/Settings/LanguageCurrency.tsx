@@ -77,7 +77,7 @@ const LanguageCurrency: React.FC = () => {
               className="flex items-center text-white/80 hover:text-white mb-8 transition-colors group"
             >
               <ArrowLeftIcon className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" />
-              <span className="font-inter text-sm">{t('settings.back')}</span>
+              <span className="font-inter text-sm">{t('common.back') || 'Back'}</span>
             </button>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
@@ -228,28 +228,6 @@ const LanguageCurrency: React.FC = () => {
                       )}
                     </button>
                   ))}
-                </div>
-
-                {/* Currency Preview */}
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <h3 className="font-inter font-medium text-gray-900 mb-4 text-sm">
-                    Price Preview
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {[2500000, 5000000, 10000000].map((price, index) => (
-                      <div 
-                        key={index}
-                        className="border-2 border-gray-200 p-4 hover:border-gray-300 transition-colors"
-                      >
-                        <div className="text-gray-500 font-inter text-xs mb-2">
-                          {['Luxury Apartment', 'Villa', 'Estate'][index]}
-                        </div>
-                        <div className="font-inter font-medium text-gray-900 text-lg">
-                          {formatPrice(price)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>

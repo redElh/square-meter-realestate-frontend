@@ -108,10 +108,11 @@
     },
     "essence": {
       "title": "The Art of Exceptional Real Estate",
-      "tagline": "Curating Prestige Since 2010",
-      "paragraph1": "For over a decade, we have been the trusted partner of discerning clients seeking properties that transcend the ordinary. Our expertise lies in understanding that a home is more than an address—it's a reflection of your aspirations and achievements.",
-      "paragraph2": "Each property in our portfolio is carefully selected to meet the highest standards of excellence, architectural beauty, and unique character.",
-      "conviction": "This is our conviction, our signature.",
+      "tagline": "In Essaouira, every place tells a story. Yours begins here.",
+      "paragraph1": "Square Meter is an independent real estate agency in Essaouira, born from a contemporary vision of real estate. Behind every property, we see much more than square footage: potential, atmosphere, an intention to reveal.",
+      "paragraph2": "We support those who wish to live, invest or settle in Essaouira, with an approach combining local expertise, strategic vision and innovative tools. Buying, selling, renting or investing becomes a fluid, thoughtful experience aligned with your projects.",
+      "paragraph3": "Because real estate is not just about square meters, we design each project as a meeting between a place and a story to be written.",
+      "paragraph4": "Let's meet, and talk about yours.",
       "ctaDiscover": "Discover Our Selection",
       "ctaValuation": "Property Valuation"
     },
@@ -265,7 +266,7 @@
       "year": "Year"
     },
     "sections": {
-      "description": "Exclusive Description",
+      "description": "Description",
       "features": "Amenities & Features",
       "environment": "Environment & Services",
       "rooms": "Rooms"
@@ -556,6 +557,7 @@
     "language": "Language",
     "currency": "Currency",
     "apply": "Apply Settings",
+    "applying": "Applying...",
     "cancel": "Cancel",
     "success": "Settings updated successfully",
     "languageDesc": "Select your preferred display language",
@@ -1566,6 +1568,12 @@
           "role": "Real Estate Advisor",
           "specialty": "Specialty transaction and long-term rental",
           "quote": "Real estate with passion and dedication."
+        },
+        "zineb": {
+          "name": "Zineb Amzgane",
+          "role": "Real Estate Advisor",
+          "specialty": "Transaction and long-term rental",
+          "quote": "Your real estate project is our priority."
         }
       }
     },

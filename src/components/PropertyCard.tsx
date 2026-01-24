@@ -52,7 +52,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <div 
       dir={isRTL ? 'rtl' : 'ltr'}
-      className="group relative bg-white rounded-none overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+      className="group relative bg-white rounded-none overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col"
     >
       {/* Image */}
       <div className="relative h-64 overflow-hidden">
@@ -85,7 +85,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="p-6 flex-1 flex flex-col">
         {/* Title */}
         <h3 className={`text-xl font-bold text-gray-900 mb-2 ${isRTL ? 'text-right' : ''}`}>
           {title}
@@ -119,7 +119,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* Price and CTA */}
-        <div className={`flex items-center justify-between pt-4 border-t border-gray-200 ${isRTL ? 'flex-row-reverse' : ''}`}>
+        <div className={`mt-auto flex items-center justify-between pt-4 border-t border-gray-200 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <div className={isRTL ? 'text-right' : ''}>
             <p className="text-xs text-gray-500 mb-1">
               {t('properties.details.price')}

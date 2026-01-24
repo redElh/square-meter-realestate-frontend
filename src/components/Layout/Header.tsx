@@ -220,11 +220,11 @@ const Header: React.FC = () => {
               onMouseEnter={() => setActiveHover('logo')}
               onMouseLeave={() => setActiveHover(null)}
             >
-              <div className="flex flex-col items-center">
-                <div className={`relative transform group-hover:scale-105 transition-all duration-400 ${isScrolled ? 'scale-90 sm:scale-95' : 'scale-100 sm:scale-100'}`}>
+              <div className="flex flex-col items-center justify-center">
+                <div className={`relative transform group-hover:scale-105 transition-all duration-400 flex items-center justify-center ${isScrolled ? 'scale-90 sm:scale-95' : 'scale-100 sm:scale-100'}`}>
                   <div className={`relative ${
                     isScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-16 h-16 sm:w-32 sm:h-32'
-                  } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden`}>
+                  } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden mx-auto`}>
                     <img 
                       src="/logo-m2.png" 
                       alt="Square Meter logo" 
@@ -236,8 +236,8 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Brand Text - Always visible */}
-                <div className={`mt-0.5 sm:-mt-2 text-center transition-all duration-500 ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : 'scale-100 sm:scale-100 opacity-100'}`}>
-                  <div className="flex flex-col items-center space-y-0 sm:space-y-1">
+                <div className={`mt-0.5 sm:-mt-2 text-center transition-all duration-500 w-full flex items-center justify-center ${isScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : 'scale-100 sm:scale-100 opacity-100'}`}>
+                  <div className="flex flex-col items-center justify-center space-y-0 sm:space-y-1">
                     <span className={`text-[9px] sm:text-sm font-semibold tracking-[0.1em] sm:tracking-[0.3em] uppercase transition-all duration-500 whitespace-nowrap ${
                       activeHover === 'logo'
                         ? 'text-gray-900'

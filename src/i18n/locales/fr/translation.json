@@ -108,10 +108,11 @@
     },
     "essence": {
       "title": "L'Art de l'Immobilier d'Exception",
-      "tagline": "L'Excellence Depuis 2010",
-      "paragraph1": "Depuis plus d'une décennie, nous sommes le partenaire privilégié de clients exigeants à la recherche de propriétés qui transcendent l'ordinaire. Notre expertise réside dans la compréhension qu'une maison est plus qu'une adresse—c'est le reflet de vos aspirations et de vos accomplissements.",
-      "paragraph2": "Chaque propriété de notre portfolio est soigneusement sélectionnée pour répondre aux plus hauts standards d'excellence, de beauté architecturale et de caractère unique.",
-      "conviction": "C'est notre conviction, notre signature.",
+      "tagline": "À Essaouira, chaque lieu raconte une histoire. La vôtre commence ici.",
+      "paragraph1": "Square Meter est une agence immobilière indépendante à Essaouira, née d'une vision contemporaine de l'immobilier. Derrière chaque bien, nous voyons bien plus qu'une surface : un potentiel, une atmosphère, une intention à révéler.",
+      "paragraph2": "Nous accompagnons celles et ceux qui souhaitent vivre, investir ou s'ancrer à Essaouira, avec une approche mêlant expertise locale, regard stratégique et outils innovants. Acheter, vendre, louer ou investir devient une expérience fluide, réfléchie et alignée avec vos projets.",
+      "paragraph3": "Parce que l'immobilier ne se résume pas à des mètres carrés, nous concevons chaque projet comme une rencontre entre un lieu et une histoire à écrire.",
+      "paragraph4": "Rencontrons-nous, et parlons de la vôtre.",
       "ctaDiscover": "Découvrir Notre Sélection",
       "ctaValuation": "Estimation de Propriété"
     },
@@ -265,7 +266,7 @@
       "year": "Année"
     },
     "sections": {
-      "description": "Description Exclusive",
+      "description": "Description",
       "features": "Équipements & Prestations",
       "environment": "Environnement & Prestations",
       "rooms": "Pièces"
@@ -556,6 +557,7 @@
     "language": "Langue",
     "currency": "Devise",
     "apply": "Appliquer",
+    "applying": "Application en cours...",
     "cancel": "Annuler",
     "success": "Paramètres mis à jour avec succès",
     "languageDesc": "Sélectionnez votre langue d'affichage préférée",
@@ -1597,6 +1599,12 @@
           "role": "Conseiller en immobilier",
           "specialty": "Spécialité transaction et location longue durée",
           "quote": "L'immobilier avec passion et dévouement."
+        },
+        "zineb": {
+          "name": "Zineb Amzgane",
+          "role": "Conseiller en immobilier",
+          "specialty": "Transaction et location longue durée",
+          "quote": "Votre projet immobilier est notre priorité."
         }
       }
     },

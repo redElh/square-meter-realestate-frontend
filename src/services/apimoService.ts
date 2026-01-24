@@ -526,36 +526,49 @@ class ApimoService {
   }
 
   /**
-   * Translate property names using browser-side Google Translate
+   * Translate property names and descriptions using browser-side Google Translate
    */
   async translatePropertyNames(properties: Property[], targetLang: string): Promise<void> {
     try {
       const { translateBatch } = await import('./browserTranslationService');
       
-      // Get all property titles
+      // Get all property titles and descriptions
       const titles = properties.map(prop => prop.title);
+      const descriptions = properties.map(prop => prop.description);
       
-      // Translate all titles
-      const translatedTitles = await translateBatch(titles, targetLang, 'auto');
+      // Translate all titles and descriptions in parallel
+      const [translatedTitles, translatedDescriptions] = await Promise.all([
+        translateBatch(titles, targetLang, 'auto'),
+        translateBatch(descriptions, targetLang, 'auto')
+      ]);
       
-      // Update property titles
-      let translatedCount = 0;
+      // Update property titles and descriptions
+      let translatedTitleCount = 0;
+      let translatedDescCount = 0;
       properties.forEach((prop, index) => {
         const originalTitle = prop.title;
         const translatedTitle = translatedTitles[index];
         
         if (translatedTitle && translatedTitle !== originalTitle) {
           prop.title = translatedTitle;
-          translatedCount++;
+          translatedTitleCount++;
+        }
+        
+        const originalDesc = prop.description;
+        const translatedDesc = translatedDescriptions[index];
+        
+        if (translatedDesc && translatedDesc !== originalDesc) {
+          prop.description = translatedDesc;
+          translatedDescCount++;
         }
       });
       
-      if (translatedCount > 0) {
-        console.log(`✅ Translated ${translatedCount} property names to ${targetLang}`);
+      if (translatedTitleCount > 0 || translatedDescCount > 0) {
+        console.log(`✅ Translated ${translatedTitleCount} property titles and ${translatedDescCount} descriptions to ${targetLang}`);
       }
     } catch (error) {
       console.error('Translation error:', error);
-      // Fail gracefully - keep original names
+      // Fail gracefully - keep original names and descriptions
     }
   }
 

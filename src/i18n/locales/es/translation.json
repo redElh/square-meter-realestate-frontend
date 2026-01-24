@@ -108,10 +108,11 @@
     },
     "essence": {
       "title": "El Arte de lo Inmobiliario Excepcional",
-      "tagline": "Curando el Prestigio Desde 2010",
-      "paragraph1": "Durante más de una década, hemos sido el socio de confianza de clientes exigentes que buscan propiedades que trascienden lo ordinario. Nuestra experiencia radica en entender que una casa es más que una dirección: es un reflejo de tus aspiraciones y logros.",
-      "paragraph2": "Cada propiedad en nuestro portafolio es cuidadosamente seleccionada para cumplir con los más altos estándares de excelencia, belleza arquitectónica y carácter único.",
-      "conviction": "Esta es nuestra convicción, nuestra firma.",
+      "tagline": "En Essaouira, cada lugar cuenta una historia. La suya comienza aquí.",
+      "paragraph1": "Square Meter es una agencia inmobiliaria independiente en Essaouira, nacida de una visión contemporánea del inmobiliario. Detrás de cada propiedad, vemos mucho más que una superficie: un potencial, una atmósfera, una intención a revelar.",
+      "paragraph2": "Acompañamos a quienes desean vivir, invertir o establecerse en Essaouira, con un enfoque que combina experiencia local, visión estratégica y herramientas innovadoras. Comprar, vender, alquilar o invertir se convierte en una experiencia fluida, reflexiva y alineada con sus proyectos.",
+      "paragraph3": "Porque el inmobiliario no se resume en metros cuadrados, concebimos cada proyecto como un encuentro entre un lugar y una historia por escribir.",
+      "paragraph4": "Reunámonos y hablemos de la suya.",
       "ctaDiscover": "Descubrir Nuestra Selección",
       "ctaValuation": "Valoración de Propiedad"
     },
@@ -264,7 +265,7 @@
       "year": "Año"
     },
     "sections": {
-      "description": "Descripción Exclusiva",
+      "description": "Descripción",
       "features": "Equipamiento & Prestaciones",
       "environment": "Entorno & Servicios",
       "rooms": "Habitaciones"
@@ -554,6 +555,7 @@
     "language": "Idioma",
     "currency": "Moneda",
     "apply": "Aplicar configuración",
+    "applying": "Aplicando...",
     "cancel": "Cancelar",
     "success": "Configuración actualizada con éxito",
     "languageDesc": "Selecciona tu idioma de visualización preferido",
@@ -1602,6 +1604,12 @@
           "role": "Asesora Inmobiliaria",
           "specialty": "Especialidad transacción y alquiler de larga duración",
           "quote": "Inmobiliaria con pasión y dedicación."
+        },
+        "zineb": {
+          "name": "Zineb Amzgane",
+          "role": "Asesora Inmobiliaria",
+          "specialty": "Transacción y alquiler de larga duración",
+          "quote": "Su proyecto inmobiliario es nuestra prioridad."
         }
       }
     },

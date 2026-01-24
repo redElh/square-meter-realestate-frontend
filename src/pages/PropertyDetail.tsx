@@ -118,10 +118,12 @@ const PropertyDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO CAROUSEL - Updated to match Properties page style */}
-      <section className="relative h-[50vh] sm:h-[60vh] lg:h-[80vh] overflow-hidden bg-white">
-        {/* Background Carousel */}
-        <div className="absolute inset-0">
+      {/* HERO SECTION - Includes carousel and stats bar */}
+      <div className="h-[70vh] sm:h-screen flex flex-col">
+        {/* HERO CAROUSEL */}
+        <section className="relative flex-1 overflow-hidden bg-white">
+          {/* Background Carousel */}
+          <div className="absolute inset-0">
           {property.images.map((image, index) => (
             <div
               key={index}
@@ -203,11 +205,11 @@ const PropertyDetail: React.FC = () => {
         </div>
 
         {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#023927] via-[#023927]/50 to-transparent"></div>
       </section>
 
-      {/* Quick Stats Bar - Green theme */}
-      <section className="bg-[#023927] text-white py-4 sm:py-6">
+      {/* Quick Stats Bar - Green theme - Part of hero section */}
+      <section className="bg-[#023927] text-white py-4 sm:py-6 flex-shrink-0">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 text-center items-center">
             {[
@@ -229,143 +231,91 @@ const PropertyDetail: React.FC = () => {
           </div>
         </div>
       </section>
+      </div>
 
-      {/* Description & Details */}
-      <section className="py-8 sm:py-16 bg-white">
+      {/* Description & Contact - Redesigned compact layout */}
+      <section className="py-8 sm:py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-12">
-              {/* Main Content */}
-              <div className="lg:col-span-2">
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-8 pb-3 sm:pb-4 border-b border-gray-200">
-                  {t('propertyDetail.sections.description')}
-                </h2>
-                
-                <div className="mb-8 sm:mb-12">
-                  <p className="text-gray-700 text-sm sm:text-base lg:text-lg leading-relaxed mb-4 sm:mb-8">
-                    {property.description}
-                  </p>
-                </div>
+          <div className="max-w-6xl mx-auto">
+            {/* Description - Full width */}
+            <div className="mb-8 sm:mb-10">
+              <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-3 border-b border-gray-200">
+                {t('propertyDetail.sections.description')}
+              </h2>
+              <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+                {property.description}
+              </p>
+            </div>
 
-                {/* Features Grid */}
-                {property.features && property.features.length > 0 && (
-                  <div className="mb-8 sm:mb-12">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
-                      {t('propertyDetail.sections.features')}
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
-                      {visibleFeatures.map((feature, index) => (
-                        <div key={index} className="flex items-center p-2 sm:p-3 border border-gray-100 hover:bg-gray-50 transition-colors duration-300">
-                          <CheckIcon className="w-3 h-3 sm:w-4 sm:h-4 text-[#023927] mr-2 sm:mr-3 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm sm:text-base">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    {property.features.length > 8 && (
-                      <button
-                        onClick={() => setShowAllFeatures(!showAllFeatures)}
-                        className="mt-4 sm:mt-6 text-[#023927] hover:text-[#023927]/80 font-inter text-xs sm:text-sm transition-colors duration-300 border-b border-[#023927] pb-1"
-                      >
-                        {showAllFeatures ? t('propertyDetail.actions.showLess') : t('propertyDetail.actions.showMore', { count: property.features.length - 8 })}
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {/* Areas/Rooms from Apimo */}
-                {property.areas && property.areas.length > 0 && (
-                  <div className="mb-8 sm:mb-12">
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-2 sm:pb-3 border-b border-gray-200">
-                      {t('propertyDetail.sections.rooms') || 'Pièces'}
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {property.areas.map((area, index) => (
-                        <div key={index} className="p-3 border border-gray-200 bg-gray-50">
-                          <div className="font-medium text-gray-900">{area.type} {area.number && area.number > 1 ? `(${area.number})` : ''}</div>
-                          {area.area && <div className="text-sm text-gray-600">{area.area} m²</div>}
-                          {area.description && <div className="text-xs text-gray-500 mt-1">{area.description}</div>}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+            {/* Contact Section - Horizontal layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+              {/* Contact Actions */}
+              <div className="space-y-3 sm:space-y-4">
+                <Link
+                  to="/contact?type=visit&property=1"
+                  className="block w-full bg-[#023927] text-white text-center py-4 font-inter hover:bg-[#023927]/90 transition-all duration-300 text-sm sm:text-base"
+                >
+                  <span className="flex items-center justify-center space-x-2">
+                    <CalendarIcon className="w-5 h-5" />
+                    <span>{t('propertyDetail.actions.privateVisit')}</span>
+                  </span>
+                </Link>
+                <Link
+                  to="/contact?type=info&property=1"
+                  className="block w-full border-2 border-[#023927] text-[#023927] text-center py-4 font-inter hover:bg-[#023927] hover:text-white transition-all duration-300 text-sm sm:text-base"
+                >
+                  <span className="flex items-center justify-center space-x-2">
+                    <DocumentTextIcon className="w-5 h-5" />
+                    <span>{t('propertyDetail.actions.completeFile')}</span>
+                  </span>
+                </Link>
               </div>
 
-              {/* Contact Sidebar - Clean green & white theme */}
-              <div className="lg:col-span-1">
-                <div className="bg-white border-2 border-gray-200 p-4 sm:p-6 lg:p-8 lg:sticky lg:top-8">
-                  <h3 className="font-inter text-gray-900 text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 text-center pb-2 sm:pb-3 border-b border-gray-200">
-                    {t('propertyDetail.contact.title')}
-                  </h3>
-                  
-                  <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                    <Link
-                      to="/contact?type=visit&property=1"
-                      className="block w-full bg-[#023927] text-white text-center py-3 sm:py-4 font-inter hover:bg-[#023927]/90 transition-all duration-300 border-2 border-[#023927] text-sm sm:text-base"
-                    >
-                      <span className="flex items-center justify-center space-x-2">
-                        <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>{t('propertyDetail.actions.privateVisit')}</span>
-                      </span>
-                    </Link>
-                    <Link
-                      to="/contact?type=info&property=1"
-                      className="block w-full border-2 border-[#023927] text-[#023927] text-center py-3 sm:py-4 font-inter hover:bg-[#023927] hover:text-white transition-all duration-300 text-sm sm:text-base"
-                    >
-                      <span className="flex items-center justify-center space-x-2">
-                        <DocumentTextIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>{t('propertyDetail.actions.completeFile')}</span>
-                      </span>
-                    </Link>
-                  </div>
-
-                  {/* Agent Profile */}
-                  {property.agent && (
-                    <div className="border-t border-gray-200 pt-4 sm:pt-6">
-                      <h4 className="font-inter text-gray-900 text-xs sm:text-sm mb-3 sm:mb-4 text-center uppercase tracking-wider">
-                        {t('propertyDetail.contact.advisor')}
-                      </h4>
-                      <div className="text-center">
-                        {property.agent.image && (
-                          <div className="mb-3 sm:mb-4">
-                            <img
-                              src={property.agent.image}
-                              alt={property.agent.name}
-                              className="w-16 h-16 sm:w-20 sm:h-20 object-cover mx-auto border-2 border-gray-300"
-                            />
-                          </div>
+              {/* Agent Profile - Horizontal card */}
+              {property.agent && (
+                <div className="bg-gray-50 p-6 border-l-4 border-[#023927]">
+                  <h4 className="font-inter text-gray-900 text-xs uppercase tracking-wider mb-4">
+                    {t('propertyDetail.contact.advisor')}
+                  </h4>
+                  <div className="flex items-center gap-4">
+                    {property.agent.image && (
+                      <img
+                        src={property.agent.image}
+                        alt={property.agent.name}
+                        className="w-20 h-20 sm:w-24 sm:h-24 object-contain flex-shrink-0"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <div className="font-inter text-gray-900 text-lg mb-1">
+                        {property.agent.name}
+                      </div>
+                      <div className="text-[#023927] text-sm mb-3">
+                        {t('propertyDetail.contact.realEstateAdvisor') || 'Conseiller Immobilier'}
+                      </div>
+                      <div className="space-y-1.5">
+                        {property.agent.phone && (
+                          <a href={`tel:${property.agent.phone}`} className="flex items-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors text-sm">
+                            <PhoneIcon className="w-4 h-4" />
+                            <span>{property.agent.phone}</span>
+                          </a>
                         )}
-                        <div className="font-inter text-gray-900 text-base sm:text-lg mb-1">
-                          {property.agent.name}
-                        </div>
-                        <div className="text-[#023927] text-xs sm:text-sm mb-2 sm:mb-3">
-                          {t('propertyDetail.contact.realEstateAdvisor') || 'Conseiller Immobilier'}
-                        </div>
-                        <div className="space-y-1.5 sm:space-y-2">
-                          {property.agent.phone && (
-                            <a href={`tel:${property.agent.phone}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm">
-                              <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                              <span>{property.agent.phone}</span>
-                            </a>
-                          )}
-                          {property.agent.mobile && (
-                            <a href={`tel:${property.agent.mobile}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm">
-                              <PhoneIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                              <span>{property.agent.mobile}</span>
-                            </a>
-                          )}
-                          {property.agent.email && (
-                            <a href={`mailto:${property.agent.email}`} className="flex items-center justify-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors duration-300 text-xs sm:text-sm break-all">
-                              <EnvelopeIcon className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                              <span className="text-[10px] sm:text-sm">{property.agent.email}</span>
-                            </a>
-                          )}
-                        </div>
+                        {property.agent.mobile && (
+                          <a href={`tel:${property.agent.mobile}`} className="flex items-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors text-sm">
+                            <PhoneIcon className="w-4 h-4" />
+                            <span>{property.agent.mobile}</span>
+                          </a>
+                        )}
+                        {property.agent.email && (
+                          <a href={`mailto:${property.agent.email}`} className="flex items-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors text-sm break-all">
+                            <EnvelopeIcon className="w-4 h-4 flex-shrink-0" />
+                            <span className="text-xs sm:text-sm">{property.agent.email}</span>
+                          </a>
+                        )}
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -384,9 +334,9 @@ const PropertyDetail: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 items-stretch">
               {similarProperties.map(similar => (
-                <div key={similar.id} className="w-full">
+                <div key={similar.id} className="w-full h-full">
                   <PropertyCard
                     id={similar.id}
                     title={similar.title}

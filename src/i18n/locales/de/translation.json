@@ -108,10 +108,11 @@
     },
     "essence": {
       "title": "Die Kunst der außergewöhnlichen Immobilien",
-      "tagline": "Prestige kuratieren seit 2010",
-      "paragraph1": "Seit über einem Jahrzehnt sind wir der vertrauenswürdige Partner anspruchsvoller Klienten, die außergewöhnliche Immobilien suchen. Unser Team aus erfahrenen Beratern widmet sich der Kunst, die prestigeträchtigsten Residenzen zu finden und zu präsentieren.",
-      "paragraph2": "Jede Immobilie in unserem Portfolio wird sorgfältig nach strengen Kriterien von Exzellenz ausgewählt: privilegierte Lage, außergewöhnliche Architektur, edle Materialien und unvergleichliche Dienstleistungen. Wir glauben, dass eine außergewöhnliche Immobilie nicht nur eine Investition, sondern eine Lebenskunst ist.",
-      "conviction": "Das ist unsere Überzeugung, unsere Signatur.",
+      "tagline": "In Essaouira erzählt jeder Ort eine Geschichte. Ihre beginnt hier.",
+      "paragraph1": "Square Meter ist eine unabhängige Immobilienagentur in Essaouira, geboren aus einer zeitgemäßen Vision der Immobilie. Hinter jeder Immobilie sehen wir viel mehr als eine Fläche: ein Potenzial, eine Atmosphäre, eine Absicht zu enthüllen.",
+      "paragraph2": "Wir begleiten diejenigen, die in Essaouira leben, investieren oder sich niederlassen möchten, mit einem Ansatz, der lokale Expertise, strategische Vision und innovative Werkzeuge verbindet. Kaufen, verkaufen, mieten oder investieren wird zu einer fließenden, durchdachten und auf Ihre Projekte abgestimmten Erfahrung.",
+      "paragraph3": "Weil Immobilien nicht nur aus Quadratmetern bestehen, konzipieren wir jedes Projekt als ein Treffen zwischen einem Ort und einer zu schreibenden Geschichte.",
+      "paragraph4": "Treffen wir uns und sprechen wir über Ihre.",
       "ctaDiscover": "Unsere Auswahl entdecken",
       "ctaValuation": "Immobilienbewertung"
     },
@@ -275,7 +276,7 @@
       "year": "Jahr"
     },
     "sections": {
-      "description": "Exklusive Beschreibung",
+      "description": "Beschreibung",
       "features": "Ausstattung & Leistungen",
       "environment": "Umgebung & Dienstleistungen",
       "rooms": "Zimmer"
@@ -566,6 +567,7 @@
     "language": "Sprache",
     "currency": "Währung",
     "apply": "Einstellungen anwenden",
+    "applying": "Wird angewendet...",
     "cancel": "Abbrechen",
     "success": "Einstellungen erfolgreich aktualisiert",
     "languageDesc": "Wählen Sie Ihre bevorzugte Anzeigesprache",
@@ -1585,6 +1587,12 @@
           "role": "Immobilienberater",
           "specialty": "Spezialgebiet Transaktion und Langzeitmiete",
           "quote": "Immobilien mit Leidenschaft und Hingabe."
+        },
+        "zineb": {
+          "name": "Zineb Amzgane",
+          "role": "Immobilienberater",
+          "specialty": "Transaktion und Langzeitmiete",
+          "quote": "Ihr Immobilienprojekt ist unsere Priorität."
         }
       }
     },

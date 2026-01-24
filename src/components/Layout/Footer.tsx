@@ -117,13 +117,13 @@ const Footer: React.FC = () => {
               <div className="flex items-center space-x-3 sm:space-x-4">
                 {/* Logo matching header */}
                 <div className="relative transform group-hover:scale-105 transition-all duration-400">
-                  <div className="relative w-12 h-12 sm:w-16 sm:h-16 bg-white/80 rounded-xl sm:rounded-2xl shadow-sm transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden border border-gray-200 backdrop-blur-sm">
+                  <div className="relative w-14 h-14 sm:w-20 sm:h-20 bg-white/80 shadow-sm transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden border border-gray-200 backdrop-blur-sm">
                     {/* Subtle shimmer */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1500" />
                     
                     {/* Logo Content (use same image as header) */}
                     <div className="relative z-10 w-full h-full flex items-center justify-center">
-                      <img src="/logo-m2.jpg" alt="Square Meter logo" className="w-full h-full object-contain" />
+                      <img src="/logo-m2.png" alt="Square Meter logo" className="w-full h-full object-contain" />
                     </div>
                   </div>
                 </div>

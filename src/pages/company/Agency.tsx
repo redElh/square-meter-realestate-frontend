@@ -85,6 +85,15 @@ const Agency: React.FC = () => {
       specialty: t('agency.team.members.yasmine.specialty'),
       languages: [t('languageNames.fr'), t('languageNames.ar'), t('languageNames.en')],
       quote: t('agency.team.members.yasmine.quote')
+    },
+    {
+      id: 6,
+      name: t('agency.team.members.zineb.name'),
+      role: t('agency.team.members.zineb.role'),
+      image: '/member-6.jfif',
+      specialty: t('agency.team.members.zineb.specialty'),
+      languages: [t('languageNames.ar'), t('languageNames.fr'), t('languageNames.en')],
+      quote: t('agency.team.members.zineb.quote')
     }
   ];
 
