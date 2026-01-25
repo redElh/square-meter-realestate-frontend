@@ -123,7 +123,7 @@ const PropertyDetail: React.FC = () => {
         {/* HERO CAROUSEL */}
         <section className="relative flex-1 overflow-hidden bg-white">
           {/* Background Carousel */}
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 mt-24 md:mt-28 lg:mt-32">
           {property.images.map((image, index) => (
             <div
               key={index}
@@ -131,40 +131,50 @@ const PropertyDetail: React.FC = () => {
                 activeImage === index ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              <img
-                src={image}
-                alt={`${property.title} - Vue ${index + 1}`}
-                className="w-full h-full object-cover"
+              {/* Blurred background to fill empty space when main image is object-contain */}
+              <div
+                className="hidden sm:block absolute inset-0 bg-center bg-cover filter blur-xl scale-105 brightness-75 z-0"
+                style={{ backgroundImage: `url(${image})` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+
+              {/* Main image centered on top */}
+              <div className="relative z-10 w-full h-full flex items-center justify-center">
+                <img
+                  src={image}
+                  alt={`${property.title} - Vue ${index + 1}`}
+                  className="w-full h-full object-cover sm:object-contain object-center"
+                />
+              </div>
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-20"></div>
             </div>
           ))}
         </div>
 
         {/* Carousel Controls - Positioned like Properties page */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-2 sm:space-x-4">
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-1.5 sm:space-x-4">
           <button
             onClick={prevImage}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
             style={{ borderRadius: '0' }}
           >
-            <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <ChevronLeftIcon className="w-3 h-3 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={nextImage}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
+            className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
             style={{ borderRadius: '0' }}
           >
-            <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            <ChevronRightIcon className="w-3 h-3 sm:w-5 sm:h-5" />
           </button>
           
           {/* Slide Indicators */}
-          <div className="flex space-x-1.5 sm:space-x-2">
+          <div className="flex space-x-1 sm:space-x-2">
             {property.images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveImage(index)}
-                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 transition-all duration-300 ${
+                className={`w-1 h-1 sm:w-2 sm:h-2 transition-all duration-300 ${
                   activeImage === index 
                     ? 'bg-white scale-125' 
                     : 'bg-white/60 hover:bg-white/80'
@@ -176,27 +186,27 @@ const PropertyDetail: React.FC = () => {
         </div>
 
         {/* Property Title Overlay - Simplified */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 p-4 sm:p-8 lg:p-12">
-          <div className="container mx-auto px-4">
+        <div className="absolute bottom-0 left-0 right-0 z-20 p-3 sm:p-8 lg:p-12">
+          <div className="container mx-auto px-2 sm:px-4">
             <div className="max-w-6xl">
               {/* Status Badge - Green theme */}
-              <div className="inline-block mb-2 sm:mb-4">
+              <div className="inline-block mb-1 sm:mb-4">
                 <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider">
                   {t('propertyDetail.exclusive')}
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-2 sm:mb-4 leading-tight">
+              <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-1 sm:mb-4 leading-tight">
                 {property.title}
               </h1>
               
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-white">
-                <div className="flex items-center space-x-2">
-                  <MapPinIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  <span className="font-inter text-sm sm:text-base">{property.location}</span>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-white">
+                <div className="flex items-center space-x-1 sm:space-x-2">
+                  <MapPinIcon className="w-3 h-3 sm:w-5 sm:h-5" />
+                  <span className="font-inter text-xs sm:text-base">{property.location}</span>
                 </div>
                 <div className="hidden sm:block w-px h-6 bg-white/30"></div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-serif font-light text-white">
+                <div className="text-lg sm:text-2xl lg:text-3xl font-serif font-light text-white">
                   {formatPrice(property.price || 0)}
                 </div>
               </div>
@@ -204,14 +214,13 @@ const PropertyDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#023927] via-[#023927]/50 to-transparent"></div>
+        {/* Bottom Gradient removed per design request */}
       </section>
 
       {/* Quick Stats Bar - Green theme - Part of hero section */}
-      <section className="bg-[#023927] text-white py-4 sm:py-6 flex-shrink-0">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 text-center items-center">
+      <section className="bg-[#023927] text-white py-3 sm:py-6 flex-shrink-0">
+        <div className="container mx-auto px-3 sm:px-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6 text-center items-center">
             {[
               { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
               { value: property.landSurface ? `${property.landSurface} m²` : '-', label: t('propertyDetail.stats.land') },
@@ -220,10 +229,10 @@ const PropertyDetail: React.FC = () => {
               { value: property.yearBuilt || '-', label: t('propertyDetail.stats.year') }
             ].map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-base sm:text-lg lg:text-xl font-inter font-medium mb-1">
+                <div className="text-sm sm:text-lg lg:text-xl font-inter font-medium mb-0.5 sm:mb-1">
                   {stat.value}
                 </div>
-                <div className="text-xs sm:text-sm text-white/80 tracking-wide">
+                <div className="text-[10px] sm:text-sm text-white/80 tracking-wide">
                   {stat.label}
                 </div>
               </div>

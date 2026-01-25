@@ -284,7 +284,7 @@ const Properties: React.FC = () => {
                   }
                 }}
                 placeholder={t('properties.search.placeholder')}
-                className="w-full px-4 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-lg font-light transition-all duration-300"
+                className="w-full px-4 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 pr-20 sm:pr-12 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-lg font-light transition-all duration-300 truncate"
                 style={{ borderRadius: '0' }}
               />
               <div className="absolute left-4 sm:left-8 top-1/2 transform -translate-y-1/2">

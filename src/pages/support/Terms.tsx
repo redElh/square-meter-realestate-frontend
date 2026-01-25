@@ -265,9 +265,9 @@ const Terms: React.FC = () => {
             <p className="text-white/90 text-base sm:text-lg mb-8 max-w-2xl mx-auto">
               {t('terms.questionsDescription')}
             </p>
-            <div className="bg-white/10 backdrop-blur-sm p-6 border-2 border-white/30 inline-block">
+            <div className="bg-white/10 backdrop-blur-sm p-6 border-2 border-white/30 w-full sm:inline-block sm:max-w-md mx-auto">
               <p className="text-sm text-white/70 mb-2">{t('terms.contactLegal')}</p>
-              <p className="text-lg font-medium">Essaouira@m2squaremeter.com</p>
+              <p className="text-sm sm:text-lg font-medium whitespace-nowrap">Essaouira@m2squaremeter.com</p>
               <p className="text-base mt-2">+212 7 00 00 06 44</p>
             </div>
           </div>
