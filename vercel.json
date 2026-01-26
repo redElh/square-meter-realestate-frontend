@@ -15,8 +15,8 @@
       "memory": 1024
     },
     "api/chatbot.js": {
-      "maxDuration": 60,
-      "memory": 3008
+      "maxDuration": 30,
+      "memory": 1024
     }
   },
   "env": {
