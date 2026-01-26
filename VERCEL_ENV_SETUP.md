@@ -8,9 +8,10 @@ Before deploying to Vercel, make sure to add these environment variables in your
 
 1. **REACT_APP_GEMINI_API_KEY**
    - Google Gemini AI API key for the chatbot
-   - Value: `AIzaSyC42wqPiC9ZmLXpGCgyVLYywyNLr2MWhnc`
+   - Value: `YOUR_GEMINI_API_KEY_HERE`
    - Get from: https://aistudio.google.com/app/apikey
-   - Note: This is a FREE API key
+   - Note: Generate a new FREE API key and add it to Vercel environment variables
+   - ⚠️ NEVER commit this key to the repository
 
 ### Email Configuration
 

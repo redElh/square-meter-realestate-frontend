@@ -25,8 +25,13 @@ Go to your Vercel project dashboard and add these environment variables:
 
 #### Required for AI Assistant
 ```
-REACT_APP_GEMINI_API_KEY=AIzaSyC42wqPiC9ZmLXpGCgyVLYywyNLr2MWhnc
+REACT_APP_GEMINI_API_KEY=your_new_gemini_api_key_here
 ```
+
+**⚠️ SECURITY NOTE:** 
+- Get a NEW API key from: https://aistudio.google.com/app/apikey
+- The previous key was leaked and must be replaced
+- Add ONLY to Vercel environment variables, NEVER commit to git
 
 #### Required for Email (already configured)
 ```

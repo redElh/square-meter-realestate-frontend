@@ -29,6 +29,10 @@ public/Homepage-video.mp4
 chroma.log
 chromadb.log
 
-# Test files (keep in repo but could be excluded if needed)
-# test-*.js
-# test-*.html
+# Test files with hardcoded API keys (DO NOT COMMIT)
+test-*.js
+test-*.mjs
+test-*.html
+check-api-key.js
+public/test-*.js
+public/test-*.html
