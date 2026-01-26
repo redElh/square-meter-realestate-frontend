@@ -69,10 +69,7 @@
     "buyersSupport": "Gérez vos interactions et achats",
     "loginDescription": "Accédez à votre espace personnel",
     "dashboardDescription": "Gérez vos interactions et achats",
-    "agencyDescription": "Accompagnement expert en immobilier de luxe",
-    "servicesDescription": "Services haut de gamme pour vos projets",
     "careersDescription": "Rejoignez notre équipe d'excellence",
-    "contactDescription": "Échangeons sur vos projets immobiliers",
     "magazineDescription": "Actualités et tendances du luxe immobilier"
   },
   "home": {
@@ -107,7 +104,7 @@
       }
     },
     "essence": {
-      "title": "L'Art de l'Immobilier d'Exception",
+      "title": "L'Art de l'Immobilier",
       "tagline": "À Essaouira, chaque lieu raconte une histoire. La vôtre commence ici.",
       "paragraph1": "Square Meter est une agence immobilière indépendante à Essaouira, née d'une vision contemporaine de l'immobilier. Derrière chaque bien, nous voyons bien plus qu'une surface : un potentiel, une atmosphère, une intention à révéler.",
       "paragraph2": "Nous accompagnons celles et ceux qui souhaitent vivre, investir ou s'ancrer à Essaouira, avec une approche mêlant expertise locale, regard stratégique et outils innovants. Acheter, vendre, louer ou investir devient une expérience fluide, réfléchie et alignée avec vos projets.",
@@ -1624,24 +1621,24 @@
       }
     },
     "philosophy": {
-      "title": "Notre Philosophie",
-      "description": "Fondée sur les principes d'excellence, de discrétion et d'expertise, M² Square Meter réinvente l'immobilier de prestige. Notre approche personnalisée et notre réseau international nous permettent de vous proposer les biens les plus exclusifs et les services les plus raffinés.",
+      "title": "Notre philosophie",
+      "description": "Chez Square Meter, nous avons choisi de réinventer l'immobilier à travers une approche innovante, humaine et résolument tournée vers l'international.\n\nNotre vision combine expertise locale, technologies modernes et accompagnement sur mesure afin d'anticiper les attentes d'un marché en constante évolution.\n\nPrésents sur le terrain et ouverts sur le monde, nous accompagnons des projets immobiliers ambitieux, durables et alignés avec les nouvelles façons d'habiter, d'investir et de voyager.",
       "principles": {
         "discretion": {
-          "title": "Discrétion Absolue",
-          "description": "Vos projets immobiliers sont traités avec la plus stricte confidentialité et protection des données."
+          "title": "Vision innovante",
+          "description": "Nous intégrons des outils digitaux, des méthodes modernes et une approche avant-gardiste pour simplifier, sécuriser et optimiser chaque projet immobilier."
         },
         "excellence": {
-          "title": "Excellence & Expertise",
-          "description": "Une connaissance approfondie des marchés immobiliers de prestige et des tendances du luxe."
+          "title": "Expertise & stratégie",
+          "description": "Une parfaite connaissance du marché immobilier, des tendances et des opportunités, pour vous aider à prendre des décisions éclairées et durables."
         },
         "service": {
-          "title": "Service Personnalisé",
-          "description": "Un accompagnement sur mesure pour chaque client, de la recherche à la transaction finale."
+          "title": "Accompagnement sur mesure",
+          "description": "Chaque client bénéficie d'un suivi personnalisé, de la première prise de contact jusqu'à la concrétisation du projet, avec clarté et transparence."
         },
         "network": {
-          "title": "Réseau International",
-          "description": "Accès à un portefeuille de biens exclusifs worldwide et à une clientèle internationale exigeante."
+          "title": "Ouverture internationale",
+          "description": "Une expertise locale combinée à un réseau national et international, pour accompagner des clients d'ici et d'ailleurs dans leurs projets immobiliers au Maroc."
         }
       }
     }

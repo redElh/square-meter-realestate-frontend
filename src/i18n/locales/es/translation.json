@@ -1629,24 +1629,24 @@
       }
     },
     "philosophy": {
-      "title": "Nuestra Filosofía",
-      "description": "Fundada en los principios de excelencia, discreción y experiencia, M² Square Meter reinventa el inmobiliario de prestigio. Nuestro enfoque personalizado y nuestra red internacional nos permiten ofrecerle las propiedades más exclusivas y los servicios más refinados.",
+      "title": "Nuestra filosofía",
+      "description": "En Square Meter, hemos elegido reinventar el sector inmobiliario a través de un enfoque innovador, humano y decididamente orientado a lo internacional.\n\nNuestra visión combina experiencia local, tecnologías modernas y acompañamiento personalizado para anticipar las expectativas de un mercado en constante evolución.\n\nPresentes sobre el terreno y abiertos al mundo, acompañamos proyectos inmobiliarios ambiciosos, sostenibles y alineados con las nuevas formas de habitar, invertir y viajar.",
       "principles": {
         "discretion": {
-          "title": "Discreción Absoluta",
-          "description": "Sus proyectos inmobiliarios se tratan con la más estricta confidencialidad y protección de datos."
+          "title": "Visión innovadora",
+          "description": "Integramos herramientas digitales, métodos modernos y un enfoque vanguardista para simplificar, asegurar y optimizar cada proyecto inmobiliario."
         },
         "excellence": {
-          "title": "Excelencia y Experiencia",
-          "description": "Conocimiento profundo de los mercados inmobiliarios de prestigio y tendencias de lujo."
+          "title": "Experiencia y estrategia",
+          "description": "Un perfecto conocimiento del mercado inmobiliario, las tendencias y las oportunidades, para ayudarle a tomar decisiones informadas y sostenibles."
         },
         "service": {
-          "title": "Servicio Personalizado",
-          "description": "Acompañamiento a medida para cada cliente, desde la búsqueda hasta la transacción final."
+          "title": "Acompañamiento personalizado",
+          "description": "Cada cliente se beneficia de un seguimiento personalizado, desde el primer contacto hasta la concretización del proyecto, con claridad y transparencia."
         },
         "network": {
-          "title": "Red Internacional",
-          "description": "Acceso a una cartera de propiedades exclusivas en todo el mundo y a una clientela internacional exigente."
+          "title": "Apertura internacional",
+          "description": "Una experiencia local combinada con una red nacional e internacional, para acompañar a clientes de aquí y de allá en sus proyectos inmobiliarios en Marruecos."
         }
       }
     }

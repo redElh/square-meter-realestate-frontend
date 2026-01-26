@@ -69,10 +69,7 @@
     "buyersSupport": "Manage your interactions and purchases",
     "loginDescription": "Access your personal space",
     "dashboardDescription": "Manage your interactions and purchases",
-    "agencyDescription": "Expert guidance in luxury real estate",
-    "servicesDescription": "Premium services for your projects",
     "careersDescription": "Join our team of excellence",
-    "contactDescription": "Let's discuss your real estate projects",
     "magazineDescription": "News and trends in luxury real estate"
   },
   "home": {
@@ -107,7 +104,7 @@
       }
     },
     "essence": {
-      "title": "The Art of Exceptional Real Estate",
+      "title": "The Art of Real Estate",
       "tagline": "In Essaouira, every place tells a story. Yours begins here.",
       "paragraph1": "Square Meter is an independent real estate agency in Essaouira, born from a contemporary vision of real estate. Behind every property, we see much more than square footage: potential, atmosphere, an intention to reveal.",
       "paragraph2": "We support those who wish to live, invest or settle in Essaouira, with an approach combining local expertise, strategic vision and innovative tools. Buying, selling, renting or investing becomes a fluid, thoughtful experience aligned with your projects.",
@@ -1593,24 +1590,24 @@
       }
     },
     "philosophy": {
-      "title": "Our Philosophy",
-      "description": "Founded on the principles of excellence, discretion and expertise, M² Square Meter reinvents prestige real estate. Our personalized approach and international network allow us to offer you the most exclusive properties and the most refined services.",
+      "title": "Our philosophy",
+      "description": "At Square Meter, we have chosen to reinvent real estate through an innovative, human approach that is resolutely internationally oriented.\n\nOur vision combines local expertise, modern technologies, and personalized support to anticipate the expectations of a constantly evolving market.\n\nPresent on the ground and open to the world, we support ambitious, sustainable real estate projects aligned with new ways of living, investing, and traveling.",
       "principles": {
         "discretion": {
-          "title": "Absolute Discretion",
-          "description": "Your real estate projects are handled with the strictest confidentiality and data protection."
+          "title": "Innovative vision",
+          "description": "We integrate digital tools, modern methods, and a forward-thinking approach to simplify, secure, and optimize every real estate project."
         },
         "excellence": {
-          "title": "Excellence & Expertise",
-          "description": "In-depth knowledge of prestige real estate markets and luxury trends."
+          "title": "Expertise & strategy",
+          "description": "A perfect knowledge of the real estate market, trends, and opportunities to help you make informed and sustainable decisions."
         },
         "service": {
-          "title": "Personalized Service",
-          "description": "Tailor-made support for each client, from research to final transaction."
+          "title": "Personalized support",
+          "description": "Each client benefits from personalized follow-up, from the first contact to the completion of the project, with clarity and transparency."
         },
         "network": {
-          "title": "International Network",
-          "description": "Access to an exclusive worldwide property portfolio and a demanding international clientele."
+          "title": "International openness",
+          "description": "Local expertise combined with a national and international network to support clients from here and abroad in their real estate projects in Morocco."
         }
       }
     }

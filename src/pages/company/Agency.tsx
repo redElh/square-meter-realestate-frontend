@@ -74,7 +74,7 @@ const Agency: React.FC = () => {
       role: t('agency.team.members.hayat.role'),
       image: '/member-4.jfif',
       specialty: t('agency.team.members.hayat.specialty'),
-      languages: [t('languageNames.fr'), t('languageNames.ar'), t('languageNames.en')],
+      languages: [t('languageNames.fr'), t('languageNames.ar')],
       quote: t('agency.team.members.hayat.quote')
     },
     {

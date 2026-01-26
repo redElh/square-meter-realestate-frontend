@@ -122,30 +122,26 @@ const Header: React.FC = () => {
         path: '/agency',
         label: t('navigation.agency'),
         Icon: BuildingOfficeIcon,
-        category: 'company',
-        description: t('header.agencyDescription')
+        category: 'company'
       },
       {
         path: '/services',
         label: t('navigation.services'),
         Icon: StarIcon,
-        category: 'company',
-        description: t('header.servicesDescription')
+        category: 'company'
       },
       {
         path: '/contact',
         label: t('navigation.contact'),
         Icon: PhoneIcon,
-        category: 'company',
-        description: t('header.contactDescription')
+        category: 'company'
       }
       // Magazine temporarily hidden
       // {
       //   path: '/mag',
       //   label: t('navigation.magazine'),
       //   Icon: NewspaperIcon,
-      //   category: 'company',
-      //   description: t('header.magazineDescription')
+      //   category: 'company'
       // }
     ],
   };
@@ -375,7 +371,7 @@ const Header: React.FC = () => {
                         style={{ transitionDelay: `${index * 100}ms` }}
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <div className="flex items-start space-x-3 sm:space-x-4">
+                        <div className="flex items-center space-x-3 sm:space-x-4">
                           <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 ${
                             isActivePath(item.path)
                               ? 'bg-gray-100 text-gray-900 shadow-sm'
@@ -383,7 +379,7 @@ const Header: React.FC = () => {
                           }`}>
                             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                           </div>
-                          <div className="flex-1 min-w-0"> {/* Added min-w-0 for text truncation */}
+                          <div className="flex-1 min-w-0">
                             <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
                               isActivePath(item.path)
                                 ? 'text-gray-900'
@@ -391,9 +387,6 @@ const Header: React.FC = () => {
                             }`}>
                               {item.label}
                             </span>
-                            <p className="text-xs sm:text-sm text-gray-600 mt-1 transition-colors duration-300 line-clamp-2">
-                              {item.description}
-                            </p>
                           </div>
                         </div>
                         <div className="absolute top-4 sm:top-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">

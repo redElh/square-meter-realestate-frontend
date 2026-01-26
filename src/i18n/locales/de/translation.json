@@ -1613,23 +1613,23 @@
     },
     "philosophy": {
       "title": "Unsere Philosophie",
-      "description": "Gegründet auf den Prinzipien von Exzellenz, Diskretion und Expertise, erfindet M² Square Meter Prestige-Immobilien neu. Unser personalisierter Ansatz und unser internationales Netzwerk ermöglichen es uns, Ihnen die exklusivsten Immobilien und raffiniertesten Dienstleistungen anzubieten.",
+      "description": "Bei Square Meter haben wir uns dafür entschieden, die Immobilienbranche durch einen innovativen, menschlichen und entschieden internationalen Ansatz neu zu erfinden.\n\nUnsere Vision kombiniert lokale Expertise, moderne Technologien und maßgeschneiderte Begleitung, um den Erwartungen eines sich ständig weiterentwickelnden Marktes gerecht zu werden.\n\nVor Ort präsent und weltoffen begleiten wir ambitionierte, nachhaltige Immobilienprojekte, die mit den neuen Arten des Wohnens, Investierens und Reisens in Einklang stehen.",
       "principles": {
         "discretion": {
-          "title": "Absolute Diskretion",
-          "description": "Ihre Immobilienprojekte werden mit strengster Vertraulichkeit und Datenschutz behandelt."
+          "title": "Innovative Vision",
+          "description": "Wir integrieren digitale Tools, moderne Methoden und einen zukunftsweisenden Ansatz, um jedes Immobilienprojekt zu vereinfachen, abzusichern und zu optimieren."
         },
         "excellence": {
-          "title": "Exzellenz & Expertise",
-          "description": "Tiefgreifende Kenntnisse der Prestige-Immobilienmärkte und Luxustrends."
+          "title": "Expertise & Strategie",
+          "description": "Eine perfekte Kenntnis des Immobilienmarktes, der Trends und Chancen, um Ihnen zu helfen, fundierte und nachhaltige Entscheidungen zu treffen."
         },
         "service": {
-          "title": "Personalisierter Service",
-          "description": "Maßgeschneiderte Betreuung für jeden Kunden, von der Recherche bis zur finalen Transaktion."
+          "title": "Maßgeschneiderte Begleitung",
+          "description": "Jeder Kunde profitiert von einer persönlichen Betreuung, vom ersten Kontakt bis zur Realisierung des Projekts, mit Klarheit und Transparenz."
         },
         "network": {
-          "title": "Internationales Netzwerk",
-          "description": "Zugang zu einem exklusiven weltweiten Immobilienportfolio und anspruchsvoller internationaler Kundschaft."
+          "title": "Internationale Offenheit",
+          "description": "Lokale Expertise kombiniert mit einem nationalen und internationalen Netzwerk, um Kunden von hier und anderswo bei ihren Immobilienprojekten in Marokko zu begleiten."
         }
       }
     }
