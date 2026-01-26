@@ -599,6 +599,21 @@
     "budgetHelp": "Ayuda con el presupuesto",
     "neighborhoodInfo": "Información del barrio"
   },
+  "chat": {
+    "title": "Asistente IA",
+    "subtitle": "Siempre aquí para ayudar",
+    "betaWarning": "En desarrollo - Puede cometer errores",
+    "placeholder": "Escribe tu mensaje...",
+    "send": "Enviar",
+    "listening": "Escuchando...",
+    "error": "Lo siento, encontré un error. Por favor, inténtalo de nuevo.",
+    "welcome": "¡Bienvenido! ¿Cómo puedo ayudarte hoy?",
+    "typing": "IA está escribiendo...",
+    "viewProperty": "Ver Propiedad",
+    "bookViewing": "Reservar Visita",
+    "contactAgent": "Contactar Agente",
+    "searchProperties": "Buscar Propiedades"
+  },
   "errors": {
     "pageNotFound": "Página no encontrada",
     "somethingWrong": "Algo salió mal",

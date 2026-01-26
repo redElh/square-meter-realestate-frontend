@@ -4,6 +4,14 @@
 
 Before deploying to Vercel, make sure to add these environment variables in your Vercel project settings:
 
+### AI Assistant Configuration
+
+1. **REACT_APP_GEMINI_API_KEY**
+   - Google Gemini AI API key for the chatbot
+   - Value: `AIzaSyC42wqPiC9ZmLXpGCgyVLYywyNLr2MWhnc`
+   - Get from: https://aistudio.google.com/app/apikey
+   - Note: This is a FREE API key
+
 ### Email Configuration
 
 1. **GMAIL_USER**

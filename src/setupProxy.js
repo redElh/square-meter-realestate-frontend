@@ -11,8 +11,33 @@ module.exports = function(app) {
   console.log('🚀 Setting up proxy middleware...');
   console.log('🔑 Authorization header will be:', `Basic ${base64Credentials}`);
   
-  // CRITICAL: Add body parser middleware FIRST before any routes
-  // This ensures req.body is populated for all POST requests
+  // ChromaDB Proxy - Must come BEFORE body parser to avoid conflicts
+  app.use(
+    '/chroma',
+    createProxyMiddleware({
+      target: 'http://localhost:8000',
+      changeOrigin: true,
+      timeout: 60000,
+      proxyTimeout: 60000,
+      pathRewrite: {
+        '^/chroma': '',
+      },
+      onProxyReq: (proxyReq, req, res) => {
+        console.log('🔵 ChromaDB Proxy:', req.method, req.url);
+      },
+      onProxyRes: (proxyRes, req, res) => {
+        console.log('✅ ChromaDB Response:', proxyRes.statusCode);
+      },
+      onError: (err, req, res) => {
+        console.error('❌ Proxy Error:', err.message);
+        res.status(500).json({ error: 'Proxy error', message: err.message });
+      },
+      logLevel: 'debug',
+    })
+  );
+  
+  // CRITICAL: Add body parser middleware AFTER ChromaDB proxy
+  // This ensures req.body is populated for other routes
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
   

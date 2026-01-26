@@ -255,6 +255,9 @@ export interface Property {
   // Additional fields from Apimo
   rooms?: number;
   city?: string;
+  // Property type fields for filtering
+  category?: number; // APIMO category (1=Appartement, 2=Maison, 9=Villa, etc.)
+  subtype?: number; // APIMO subtype
   zipcode?: string;
   country?: string;
   latitude?: number;
@@ -424,6 +427,8 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     title,
     description,
     type: getCategoryType(apimoProperty.category, apimoProperty.subcategory),
+    category: apimoProperty.type, // APIMO type number for filtering
+    subtype: apimoProperty.subtype, // APIMO subtype number
     price: apimoProperty.price?.value || 0,
     currency: apimoProperty.price?.currency || 'EUR',
     location,

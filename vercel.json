@@ -13,6 +13,13 @@
     "api/debug-careers.js": {
       "maxDuration": 30,
       "memory": 1024
+    },
+    "api/chatbot.js": {
+      "maxDuration": 60,
+      "memory": 3008
     }
+  },
+  "env": {
+    "NODE_ENV": "production"
   }
 }

@@ -589,6 +589,21 @@
     "budgetHelp": "Budget-Hilfe",
     "neighborhoodInfo": "Nachbarschaftsinformationen"
   },
+  "chat": {
+    "title": "KI-Assistent",
+    "subtitle": "Immer hier um zu helfen",
+    "betaWarning": "In Entwicklung - Kann Fehler machen",
+    "placeholder": "Geben Sie Ihre Nachricht ein...",
+    "send": "Senden",
+    "listening": "Hört zu...",
+    "error": "Entschuldigung, es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "welcome": "Willkommen! Wie kann ich Ihnen heute helfen?",
+    "typing": "KI schreibt...",
+    "viewProperty": "Immobilie Ansehen",
+    "bookViewing": "Besichtigung Buchen",
+    "contactAgent": "Agent Kontaktieren",
+    "searchProperties": "Immobilien Suchen"
+  },
   "errors": {
     "pageNotFound": "Seite nicht gefunden",
     "somethingWrong": "Etwas ist schief gelaufen",

@@ -28,6 +28,7 @@ import Success from './pages/special-pages/Success';
 import Careers from './pages/special-pages/Careers';
 import LanguageCurrency from './pages/Settings/LanguageCurrency';
 import ScrollToTop from './components/ScrollToTop';
+import RAGAssistant from './components/AIAssistant/RAGAssistant';
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
           </Routes>
             </main>
             <Footer />
+            <RAGAssistant />
           </div>
           </ReviewsProvider>
         </Router>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ChromaDB Connection Test</title>
+</head>
+<body>
+    <h1>ChromaDB Proxy Test</h1>
+    <button onclick="testDirect()">Test Direct (localhost:8000)</button>
+    <button onclick="testProxy()">Test Proxy (/chroma)</button>
+    <pre id="output"></pre>
+
+    <script>
+        const log = (msg) => {
+            document.getElementById('output').textContent += msg + '\n';
+            console.log(msg);
+        };
+
+        async function testDirect() {
+            document.getElementById('output').textContent = '';
+            log('🔵 Testing DIRECT connection to http://localhost:8000...');
+            try {
+                const response = await fetch('http://localhost:8000/api/v2/heartbeat');
+                const data = await response.json();
+                log('✅ Direct connection SUCCESS!');
+                log('Response: ' + JSON.stringify(data));
+            } catch (error) {
+                log('❌ Direct connection FAILED: ' + error.message);
+            }
+        }
+
+        async function testProxy() {
+            document.getElementById('output').textContent = '';
+            log('🟢 Testing PROXY connection to /chroma...');
+            try {
+                const response = await fetch('/chroma/api/v2/heartbeat');
+                const data = await response.json();
+                log('✅ Proxy connection SUCCESS!');
+                log('Response: ' + JSON.stringify(data));
+            } catch (error) {
+                log('❌ Proxy connection FAILED: ' + error.message);
+            }
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            setTimeout(testProxy, 1000);
+        };
+    </script>
+</body>
+</html>

@@ -108,13 +108,16 @@ const Properties: React.FC = () => {
           console.log(`  ${index + 1}. [ID: ${prop.id}] "${prop.title}"`);
         });
         
-        // Filter out incomplete properties (missing essential data)
+        // Filter out incomplete properties (missing essential data) and unwanted properties
         const validProperties = apimoProperties.filter(prop => 
           prop.title && 
           prop.location && 
           prop.price > 0 && 
           prop.surface > 0 &&
-          prop.images.length > 0
+          prop.images.length > 0 &&
+          !prop.title.includes('VILLA POOL') &&
+          !prop.title.includes('8 TRAVELERS') &&
+          !prop.title.includes('PANORAMIC')
         );
         
         console.log(`\n🔍 Filtered ${apimoProperties.length - validProperties.length} incomplete properties`);

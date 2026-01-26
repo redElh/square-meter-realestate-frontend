@@ -597,6 +597,21 @@
     "budgetHelp": "المساعدة في الميزانية",
     "neighborhoodInfo": "معلومات عن الحي"
   },
+  "chat": {
+    "title": "المساعد الذكي",
+    "subtitle": "دائماً هنا لمساعدتك",
+    "betaWarning": "قيد التطوير - قد يخطئ",
+    "placeholder": "اكتب رسالتك...",
+    "send": "إرسال",
+    "listening": "الاستماع...",
+    "error": "عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "welcome": "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+    "typing": "الذكاء الاصطناعي يكتب...",
+    "viewProperty": "عرض العقار",
+    "bookViewing": "حجز معاينة",
+    "contactAgent": "الاتصال بالوكيل",
+    "searchProperties": "البحث عن العقارات"
+  },
   "errors": {
     "pageNotFound": "الصفحة غير موجودة",
     "somethingWrong": "حدث خطأ ما",

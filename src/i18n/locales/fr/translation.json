@@ -601,6 +601,21 @@
     "budgetHelp": "Aide au budget",
     "neighborhoodInfo": "Informations sur le quartier"
   },
+  "chat": {
+    "title": "Assistant IA",
+    "subtitle": "Toujours là pour vous aider",
+    "betaWarning": "En développement - Peut faire des erreurs",
+    "placeholder": "Écrivez votre message...",
+    "send": "Envoyer",
+    "listening": "Écoute en cours...",
+    "error": "Désolé, une erreur s'est produite. Veuillez réessayer.",
+    "welcome": "Bienvenue ! Comment puis-je vous aider aujourd'hui ?",
+    "typing": "L'IA écrit...",
+    "viewProperty": "Voir la propriété",
+    "bookViewing": "Réserver une visite",
+    "contactAgent": "Contacter l'agent",
+    "searchProperties": "Rechercher des propriétés"
+  },
   "errors": {
     "pageNotFound": "Page non trouvée",
     "somethingWrong": "Quelque chose s'est mal passé",

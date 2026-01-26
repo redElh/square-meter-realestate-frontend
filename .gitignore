@@ -22,3 +22,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 public/Homepage-video.mp4
+
+# ChromaDB local database (development only)
+/chroma/
+*.sqlite3
+chroma.log
+chromadb.log
+
+# Test files (keep in repo but could be excluded if needed)
+# test-*.js
+# test-*.html

@@ -579,6 +579,21 @@
     "budgetHelp": "Budget assistance",
     "neighborhoodInfo": "Neighborhood information"
   },
+  "chat": {
+    "title": "AI Assistant",
+    "subtitle": "Always here to help",
+    "betaWarning": "Under development - May make mistakes",
+    "placeholder": "Type your message...",
+    "send": "Send",
+    "listening": "Listening...",
+    "error": "Sorry, I encountered an error. Please try again.",
+    "welcome": "Welcome! How can I help you today?",
+    "typing": "AI is typing...",
+    "viewProperty": "View Property",
+    "bookViewing": "Book Viewing",
+    "contactAgent": "Contact Agent",
+    "searchProperties": "Search Properties"
+  },
   "errors": {
     "pageNotFound": "Page Not Found",
     "somethingWrong": "Something went wrong",
