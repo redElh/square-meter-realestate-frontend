@@ -3,18 +3,11 @@
 
 import { Property } from './apimoService';
 
-export interface ActionSuggestion {
-  type: 'book_viewing' | 'contact_agent' | 'view_property' | 'apply_filters';
-  label: string;
-  data?: any;
-}
-
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: Date;
   propertyResults?: Property[];
-  actionSuggestions?: ActionSuggestion[];
 }
 
 class RAGChatbotService {
