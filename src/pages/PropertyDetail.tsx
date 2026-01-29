@@ -207,7 +207,7 @@ const PropertyDetail: React.FC = () => {
                 </div>
                 <div className="hidden sm:block w-px h-6 bg-white/30"></div>
                 <div className="text-lg sm:text-2xl lg:text-3xl font-serif font-light text-white">
-                  {formatPrice(property.price || 0)}
+                  {formatPrice(property.price || 0, property.currency as any || 'EUR')}
                 </div>
               </div>
             </div>

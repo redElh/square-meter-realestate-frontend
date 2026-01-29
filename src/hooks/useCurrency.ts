@@ -16,6 +16,21 @@ export const useCurrency = () => {
      * @param showSymbol - Whether to show currency symbol (default: true)
      */
     format: (amount: number, sourceCurrency: SupportedCurrency = 'MAD', showSymbol = true) => {
+      // Validate source currency
+      const validCurrencies: SupportedCurrency[] = ['MAD', 'AED', 'EUR', 'USD', 'GBP'];
+      const isValidCurrency = validCurrencies.includes(sourceCurrency);
+      
+      if (!isValidCurrency) {
+        console.warn(`⚠️ Invalid source currency "${sourceCurrency}" in useCurrency.format(). Defaulting to MAD.`);
+        console.warn(`   Valid currencies: ${validCurrencies.join(', ')}`);
+        sourceCurrency = 'MAD';
+      }
+      
+      // Log conversion for debugging (only in development)
+      if (process.env.NODE_ENV === 'development' && sourceCurrency !== currency) {
+        console.log(`💱 Converting: ${amount} ${sourceCurrency} → ${currency}`);
+      }
+      
       // Convert from source currency to selected currency
       const converted = convertPrice(amount, sourceCurrency);
       const currencyInfo = currencies.find(c => c.code === currency);

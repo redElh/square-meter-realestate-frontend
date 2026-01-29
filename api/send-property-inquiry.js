@@ -353,8 +353,8 @@ function formatEmailAsHtml(content, formData) {
   </div>
   <div class="footer">
     <p>Square Meter - Excellence Immobilière</p>
-    <p>123 Avenue de Luxe, 75008 Paris, France</p>
-    <p>+33 1 23 45 67 89 | contact@squaremeter.com</p>
+    <p>461 lotissement Argana, Technopark bureau 017, 44000 Essaouira</p>
+    <p>+212 7 00 00 06 44 | Essaouira@m2squaremeter.com</p>
   </div>
 </body>
 </html>

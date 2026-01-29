@@ -22,7 +22,7 @@ import { useCurrency } from '../hooks/useCurrency';
 
 const Properties: React.FC = () => {
   const { t } = useTranslation();
-  const { format: formatCurrencyPrice } = useCurrency();
+  const { format: formatCurrencyPrice, getCode: getCurrentCurrency } = useCurrency();
   const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
@@ -125,6 +125,17 @@ const Properties: React.FC = () => {
         validProperties.forEach((prop, index) => {
           console.log(`  ${index + 1}. [ID: ${prop.id}] "${prop.title}"`);
         });
+        
+        // Log currency distribution for debugging
+        const currencyDistribution = validProperties.reduce((acc, prop) => {
+          const curr = prop.currency || 'UNKNOWN';
+          acc[curr] = (acc[curr] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        console.log('\n💱 Currency distribution in properties:', currencyDistribution);
+        console.log('💡 Properties will be converted to your selected currency automatically');
+        console.log('⚠️  Make sure each property\'s original currency is correctly identified for accurate conversion');
+        
         console.log('\n');
         setProperties(validProperties);
       } catch (error) {
@@ -230,12 +241,29 @@ const Properties: React.FC = () => {
   
 
   const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal', sourceCurrency: string = 'MAD') => {
-    // Convert the source currency string to SupportedCurrency type
-    const currency = (sourceCurrency === 'EUR' || sourceCurrency === 'USD' || sourceCurrency === 'GBP' || sourceCurrency === 'AED' || sourceCurrency === 'MAD') 
-      ? sourceCurrency 
-      : 'MAD';
+    // List of supported currencies
+    const supportedCurrencies = ['EUR', 'USD', 'GBP', 'AED', 'MAD'];
     
-    const formattedPrice = formatCurrencyPrice(price, currency as any);
+    // Validate and normalize the source currency
+    const normalizedCurrency = sourceCurrency?.toUpperCase() || 'MAD';
+    
+    // Check if currency is supported
+    const isCurrencySupported = supportedCurrencies.includes(normalizedCurrency);
+    
+    // Use the source currency if supported, otherwise log warning and default to EUR (common for properties)
+    let finalCurrency = normalizedCurrency;
+    if (!isCurrencySupported) {
+      console.warn(`⚠️ Unsupported currency "${sourceCurrency}" for property price ${price}. Defaulting to EUR.`);
+      console.warn('   Supported currencies:', supportedCurrencies.join(', '));
+      finalCurrency = 'EUR'; // Most properties use EUR if not MAD
+    }
+    
+    // Log currency conversion for debugging
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`💱 Price conversion: ${price} ${finalCurrency} → formatted in selected currency`);
+    }
+    
+    const formattedPrice = formatCurrencyPrice(price, finalCurrency as any);
     if (type === 'rent') {
       return `${formattedPrice}/${t('common.month') || 'month'}`;
     }
@@ -594,7 +622,19 @@ const Properties: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPropertyPrice(property.price, property.type, property.currency)}</div>
+                        <div className="flex items-center gap-1">
+                          <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">
+                            {formatPropertyPrice(property.price, property.type, property.currency)}
+                          </div>
+                          {property.currency && property.currency.toUpperCase() !== getCurrentCurrency() && (
+                            <span 
+                              className="text-[10px] text-gray-500 px-1.5 py-0.5 bg-gray-100 rounded" 
+                              title={`Original: ${property.currency}`}
+                            >
+                              {property.currency}
+                            </span>
+                          )}
+                        </div>
                         <Link
                           to={`/properties/${property.id}`}
                           className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"

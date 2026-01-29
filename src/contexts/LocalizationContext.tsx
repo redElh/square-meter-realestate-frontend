@@ -98,13 +98,37 @@ export const LocalizationProvider: React.FC<{ children: ReactNode }> = ({ childr
     return CURRENCIES.find(c => c.code === code) || CURRENCIES[0];
   };
 
+  /**
+   * Convert price from one currency to another
+   * @param amount - The amount to convert
+   * @param fromCurrency - The source currency (default: MAD)
+   * @returns The converted amount in the user's selected currency
+   * 
+   * Conversion process:
+   * 1. Convert from source currency to MAD (base currency) using: amount / fromRate
+   * 2. Convert from MAD to target currency using: amountInMAD * toRate
+   * 
+   * Example: Convert 100 EUR to USD
+   * - EUR rate: 0.091 (1 MAD = 0.091 EUR)
+   * - USD rate: 0.100 (1 MAD = 0.100 USD)
+   * - Step 1: 100 EUR to MAD = 100 / 0.091 = 1098.90 MAD
+   * - Step 2: 1098.90 MAD to USD = 1098.90 * 0.100 = 109.89 USD
+   */
   const convertPrice = (amount: number, fromCurrency: SupportedCurrency = 'MAD'): number => {
     const fromRate = getCurrencyInfo(fromCurrency).rate;
     const toRate = getCurrencyInfo(currency).rate;
     
     // Convert to MAD first, then to target currency
     const amountInMAD = amount / fromRate;
-    return amountInMAD * toRate;
+    const convertedAmount = amountInMAD * toRate;
+    
+    // Log conversion for debugging
+    if (process.env.NODE_ENV === 'development' && fromCurrency !== currency) {
+      console.log(`💱 Currency conversion: ${amount} ${fromCurrency} → ${Math.round(convertedAmount)} ${currency}`);
+      console.log(`   Via MAD: ${amount} ${fromCurrency} → ${Math.round(amountInMAD)} MAD → ${Math.round(convertedAmount)} ${currency}`);
+    }
+    
+    return convertedAmount;
   };
 
   const formatPrice = (amount: number, showSymbol: boolean = true): string => {
