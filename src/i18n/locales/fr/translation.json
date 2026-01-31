@@ -130,13 +130,12 @@
       }
     },
     "featured": {
-      "title": "Propriétés en vedette",
-      "subtitle": "Une sélection minutieuse de demeures extraordinaires",
+      "title": "Sélection / Coup de Cœur",
+      "subtitle": "Nos propriétés favorites, choisies avec passion",
       "viewAll": "Voir toutes les propriétés",
       "exclusive": "Exclusif",
-      "confidential": "Confidentiel",
       "photos": "photos",
-      "forSale": "À Vendre",
+      "forSale": "À Acheter",
       "forRent": "À Louer",
       "vacation": "Vacances",
       "viewButton": "Voir les Détails",
@@ -450,7 +449,7 @@
       "paris": "Paris",
       "bedrooms3Plus": "3+ chambres",
       "toBuy": "À acheter",
-      "vacation": "Vancances",
+      "vacation": "Vacances",
       "tailoredExploration": "Exploration Sur Mesure"
     },
     "filters": {
@@ -458,7 +457,7 @@
       "all": "Tout",
       "buy": "À acheter",
       "rent": "À louer",
-      "vacation": "Vancances",
+      "vacation": "Vacances",
       "type": "Type de bien",
       "location": "Localisation",
       "allLocations": "Toutes les localisations",
@@ -469,7 +468,9 @@
       "surface": "Surface",
       "activeFilters": "filtre(s) actif(s)",
       "resetAll": "Tout réinitialiser",
-      "apply": "Appliquer les filtres"
+      "apply": "Appliquer les filtres",
+      "moreFilters": "Plus de filtres",
+      "lessFilters": "Moins de filtres"
     },
     "listing": {
       "available": "Biens disponibles",
@@ -481,11 +482,10 @@
       "newest": "Plus récents",
       "loading": "Chargement...",
       "exclusive": "EXCLUSIF",
-      "confidential": "CONFIDENTIEL",
       "photos": "photos",
-      "forSale": "À VENDRE",
+      "forSale": "À ACHETER",
       "forRent": "À LOUER",
-      "forVacation": "VANCANCES",
+      "forVacation": "VACANCES",
       "view": "Voir",
       "loadMore": "Voir plus de biens"
     },
@@ -1742,7 +1742,7 @@
     "hero": {
       "title": "NOUS REJOINDRE",
       "subtitle": "Rejoignez SQUARE METER",
-      "description": "Grandir, apprendre, accomplir. Chez M² Square Meter, nous croyons que le succès est collectif. Rejoignez une équipe où votre talent trouve sa pleine expression et votre ambition devient réalité."
+      "description": "Grandir, apprendre, accomplir. Chez Square Meter, nous croyons que le succès est collectif. Rejoignez une équipe où votre talent trouve sa pleine expression et votre ambition devient réalité."
     },
     "points": {
       "teamSpirit": {

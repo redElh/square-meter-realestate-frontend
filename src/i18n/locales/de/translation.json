@@ -133,13 +133,12 @@
       }
     },
     "featured": {
-      "title": "Ausgewählte Immobilien",
-      "subtitle": "Handverlesene Auswahl außergewöhnlicher Häuser",
+      "title": "Auswahl / Unsere Favoriten",
+      "subtitle": "Unsere Lieblingsimmobilien, mit Leidenschaft ausgewählt",
       "viewAll": "Alle Immobilien ansehen",
       "exclusive": "Exklusiv",
-      "confidential": "Vertraulich",
       "photos": "Fotos",
-      "forSale": "Zu verkaufen",
+      "forSale": "Zu kaufen",
       "forRent": "Zu vermieten",
       "vacation": "Urlaub",
       "viewButton": "Immobilie ansehen",
@@ -482,7 +481,9 @@
       "surface": "Fläche",
       "activeFilters": "aktive Filter",
       "resetAll": "Alles zurücksetzen",
-      "apply": "Filter anwenden"
+      "apply": "Filter anwenden",
+      "moreFilters": "Mehr Filter",
+      "lessFilters": "Weniger Filter"
     },
     "listing": {
       "available": "Immobilien verfügbar",
@@ -494,9 +495,8 @@
       "newest": "Neueste",
       "loading": "Wird geladen...",
       "exclusive": "EXKLUSIV",
-      "confidential": "VERTRAULICH",
       "photos": "Fotos",
-      "forSale": "ZU VERKAUFEN",
+      "forSale": "ZU KAUFEN",
       "forRent": "ZU VERMIETEN",
       "forVacation": "URLAUB",
       "view": "Ansehen",
@@ -1733,7 +1733,7 @@
     "hero": {
       "title": "WERDEN SIE TEIL UNSERES TEAMS",
       "subtitle": "Treten Sie SQUARE METER bei",
-      "description": "Wachsen, lernen, erreichen. Bei M² Square Meter glauben wir, dass Erfolg kollektiv ist. Werden Sie Teil eines Teams, in dem Ihr Talent voll zur Geltung kommt und Ihr Ehrgeiz Wirklichkeit wird."
+      "description": "Wachsen, lernen, erreichen. Bei Square Meter glauben wir, dass Erfolg kollektiv ist. Werden Sie Teil eines Teams, in dem Ihr Talent voll zur Geltung kommt und Ihr Ehrgeiz Wirklichkeit wird."
     },
     "points": {
       "teamSpirit": {

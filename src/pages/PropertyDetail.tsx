@@ -151,8 +151,8 @@ const PropertyDetail: React.FC = () => {
           ))}
         </div>
 
-        {/* Carousel Controls - Positioned like Properties page */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-1.5 sm:space-x-4">
+        {/* Carousel Controls - Consistent positioning across all sizes */}
+        <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[200px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 flex items-center space-x-1 sm:space-x-2 md:space-x-4">
           <button
             onClick={prevImage}
             className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
@@ -185,18 +185,24 @@ const PropertyDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Property Title Overlay - Simplified */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 p-3 sm:p-8 lg:p-12">
+        {/* Property Title Overlay - Consistent positioning across all sizes */}
+        <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[140px] left-0 right-0 z-20 p-3 sm:p-8 lg:p-12 pr-20 md:pr-32 lg:pr-8">
           <div className="container mx-auto px-2 sm:px-4">
             <div className="max-w-6xl">
-              {/* Status Badge - Green theme */}
+              {/* Property Type Badge */}
               <div className="inline-block mb-1 sm:mb-4">
-                <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider">
-                  {t('propertyDetail.exclusive')}
+                <span className={`px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider ${
+                  property.type === 'buy' 
+                    ? 'bg-blue-50 text-blue-800 border border-blue-200' 
+                    : property.type === 'rent'
+                    ? 'bg-green-50 text-green-800 border border-green-200'
+                    : 'bg-purple-50 text-purple-800 border border-purple-200'
+                }`}>
+                  {property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}
                 </span>
               </div>
 
-              <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-1 sm:mb-4 leading-tight">
+              <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-inter font-light text-white mb-1 sm:mb-4 leading-tight">
                 {property.title}
               </h1>
               
@@ -214,29 +220,27 @@ const PropertyDetail: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Gradient removed per design request */}
-      </section>
-
-      {/* Quick Stats Bar - Green theme - Part of hero section */}
-      <section className="bg-[#023927] text-white py-3 sm:py-6 flex-shrink-0">
-        <div className="container mx-auto px-3 sm:px-6">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-6 text-center items-center">
-            {[
-              { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
-              { value: property.landSurface ? `${property.landSurface} m²` : '-', label: t('propertyDetail.stats.land') },
-              { value: property.rooms || 0, label: t('propertyDetail.stats.rooms') },
-              { value: property.floors || 0, label: t('propertyDetail.stats.floors') },
-              { value: property.yearBuilt || '-', label: t('propertyDetail.stats.year') }
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-sm sm:text-lg lg:text-xl font-inter font-medium mb-0.5 sm:mb-1">
-                  {stat.value}
+        {/* Quick Stats Bar - Consistent transparent overlay */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 py-2 sm:py-4 md:py-6">
+          <div className="container mx-auto px-2 sm:px-4 md:px-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 sm:gap-2 md:gap-3 lg:gap-4 text-center items-center">
+              {[
+                { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
+                { value: property.landSurface ? `${property.landSurface} m²` : '-', label: t('propertyDetail.stats.land') },
+                { value: property.rooms || 0, label: t('propertyDetail.stats.rooms') },
+                { value: property.floors || 0, label: t('propertyDetail.stats.floors') },
+                { value: property.yearBuilt || '-', label: t('propertyDetail.stats.year') }
+              ].map((stat, index) => (
+                <div key={index} className="text-center border border-white/30 py-1.5 sm:py-2.5 md:py-3 lg:py-4 px-1 sm:px-2 hover:border-white transition-all duration-300">
+                  <div className="text-xs sm:text-base md:text-lg lg:text-2xl font-inter font-medium text-white mb-0.5 sm:mb-1 md:mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-[8px] sm:text-[10px] md:text-xs text-white/80 uppercase tracking-wide md:tracking-wider">
+                    {stat.label}
+                  </div>
                 </div>
-                <div className="text-[10px] sm:text-sm text-white/80 tracking-wide">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

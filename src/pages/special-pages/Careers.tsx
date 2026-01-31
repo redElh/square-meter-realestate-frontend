@@ -418,13 +418,9 @@ Square Meter - Service de candidature
       )}
 
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-[#023927] via-[#0a4d3a] to-[#023927] py-12 sm:py-16 lg:py-20">
+      <div className="bg-gradient-to-r from-[#023927] via-[#0a4d3a] to-[#023927] py-8 sm:py-10 lg:py-12 lg:mt-14 md:mt-14">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-inter font-light text-white mb-4 sm:mb-6 tracking-tight">
-              {t('careers.hero.title')}
-            </h1>
-            <div className="h-1 bg-white/30 w-32 sm:w-48 mx-auto mb-6 sm:mb-8"></div>
             <p className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-white mb-3 sm:mb-4 px-4">
               {t('careers.hero.subtitle')}
             </p>

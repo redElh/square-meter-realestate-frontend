@@ -65,10 +65,22 @@ module.exports = function(app) {
     })
   );
 
-  // FREE Google Reviews - Puppeteer scraping (NO API KEY, NO BILLING)
-  app.use('/api/scrape-reviews', async (req, res, next) => {
-    const handler = require('../api/scrape-reviews.js');
-    await handler(req, res);
+  // Google Reviews - Playwright scraping (NO API KEY, NO BILLING)
+  app.get('/api/google-reviews', async (req, res) => {
+    try {
+      console.log('📊 Google Reviews endpoint called');
+      const handler = require('../api/google-reviews.js');
+      await handler(req, res);
+    } catch (error) {
+      console.error('❌ Error in Google Reviews handler:', error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message,
+        reviews: [],
+        count: 0,
+        source: 'error'
+      });
+    }
   });
 
   // Property inquiry email sending

@@ -28,12 +28,13 @@ const Properties: React.FC = () => {
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
   const [locationFilter, setLocationFilter] = useState('');
   const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<string>('relevance');
+  const [sortBy, setSortBy] = useState<string>('newest');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
   const propertiesListRef = useRef<HTMLDivElement>(null);
   
   
@@ -194,12 +195,9 @@ const Properties: React.FC = () => {
         sorted.sort((a, b) => b.surface - a.surface);
         break;
       case 'newest':
+      default:
         // Sort by ID (assuming higher IDs are newer)
         sorted.sort((a, b) => b.id - a.id);
-        break;
-      case 'relevance':
-      default:
-        // Keep original order for relevance
         break;
     }
 
@@ -296,39 +294,127 @@ const Properties: React.FC = () => {
           ))}
         </div>
 
-        {/* Centered Search Bar - Moved down 40px */}
-        <div className="absolute inset-0 flex items-center justify-center z-20 px-4 sm:px-6 mt-48">
-          <div className="w-full max-w-4xl">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    // Smooth scroll to properties list
-                    propertiesListRef.current?.scrollIntoView({ 
-                      behavior: 'smooth', 
-                      block: 'start' 
-                    });
-                  }
-                }}
-                placeholder={t('properties.search.placeholder')}
-                className="w-full px-4 sm:px-8 py-4 sm:py-6 pl-12 sm:pl-16 pr-20 sm:pr-12 bg-white/95 backdrop-blur-sm border-2 border-white/50 text-gray-900 placeholder-gray-600 focus:outline-none focus:border-white focus:ring-4 focus:ring-white/30 shadow-2xl text-sm sm:text-lg font-light transition-all duration-300 truncate"
-                style={{ borderRadius: '0' }}
-              />
-              <div className="absolute left-4 sm:left-8 top-1/2 transform -translate-y-1/2">
-                <MagnifyingGlassIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[#023927]" />
-              </div>
-              <div className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2">
-                <span className="text-xs sm:text-sm text-gray-500 font-medium px-2 sm:px-3 py-1 bg-white/80">
-                  {filteredAndSortedProperties.length} {t('properties.search.results')}
+        {/* Centered Filter Controls */}
+        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
+          <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
+            {/* Primary Filter Buttons: Buy, Rent, Vacation */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4">
+              {propertyTypes.map(({ key, label, count }) => (
+                <button
+                  key={key}
+                  onClick={() => setFilter(key)}
+                  className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 ${
+                    filter === key
+                      ? 'border-white bg-white/95 text-[#023927]'
+                      : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+                  }`}
+                  style={{ borderRadius: '0' }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span>{label}</span>
+                    <span className={`text-xs sm:text-sm px-1.5 sm:px-2.5 py-0.5 sm:py-1 ${
+                      filter === key 
+                        ? 'bg-[#023927]/10 text-[#023927]' 
+                        : 'bg-white/30 text-white'
+                    }`}>
+                      {count}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* More Filters Toggle & Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4">
+              <button
+                onClick={() => setShowMoreFilters(!showMoreFilters)}
+                className="group relative flex-1 border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
+              >
+                <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                  {showMoreFilters ? `− ${t('properties.filters.lessFilters')}` : `+ ${t('properties.filters.moreFilters')}`}
                 </span>
+              </button>
+              
+              {activeFiltersCount > 0 && (
+                <button
+                  onClick={resetFilters}
+                  className="group relative border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base whitespace-nowrap"
+                >
+                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                    {t('properties.filters.resetAll')} ({activeFiltersCount})
+                  </span>
+                </button>
+              )}
+              
+              <button
+                onClick={() => {
+                  propertiesListRef.current?.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                  });
+                }}
+                className="group relative bg-white text-gray-900 px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base whitespace-nowrap"
+              >
+                <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                  {t('properties.filters.apply')}
+                </span>
+              </button>
+            </div>
+
+            {/* Collapsible Location & Room Filters */}
+            <div 
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                showMoreFilters ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-2">
+                {/* Location Filter */}
+                <div>
+                  <label className="block text-white text-sm sm:text-base font-medium mb-2">
+                    {t('properties.filters.location')}
+                  </label>
+                  <select 
+                    value={locationFilter}
+                    onChange={(e) => setLocationFilter(e.target.value)}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-white/50 focus:outline-none focus:border-white bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base"
+                    style={{ borderRadius: '0' }}
+                  >
+                    <option value="">{t('properties.filters.allLocations')}</option>
+                    {locations.map(location => (
+                      <option key={location} value={location}>{location}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Bedrooms Filter */}
+                <div>
+                  <label className="block text-white text-sm sm:text-base font-medium mb-2">
+                    {t('properties.filters.bedrooms')}
+                  </label>
+                  <select 
+                    value={bedroomsFilter || ''}
+                    onChange={(e) => setBedroomsFilter(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-white/50 focus:outline-none focus:border-white bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base"
+                    style={{ borderRadius: '0' }}
+                  >
+                    <option value="">{t('properties.filters.allBedrooms')}</option>
+                    {bedroomOptions.map(beds => (
+                      <option key={beds} value={beds}>{beds}+ {t('properties.filters.bedroomsLabel')}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
             
-            {/* Suggestions removed per request */}
+            {/* Results count indicator */}
+            <div className="text-center mt-4">
+              <span className="text-xs sm:text-sm text-white/90 font-medium px-3 py-1.5 bg-black/30 backdrop-blur-sm inline-block">
+                {filteredAndSortedProperties.length} {t('properties.search.results')}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -370,110 +456,7 @@ const Properties: React.FC = () => {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
       </section>
 
-      {/* Enhanced Filters Section - Cleaner */}
-      <section className="py-4 sm:py-8 bg-white border-b border-gray-100">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="bg-white p-4 sm:p-6 shadow-sm">
-            {/* Filters Header */}
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 sm:mb-8">
-              <div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-inter font-light text-gray-900 mb-1 sm:mb-2">
-                  {t('properties.search.tailoredExploration')}
-                </h2>
-                <p className="text-gray-500 text-sm sm:text-base">
-                  {t('properties.filters.title')}
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-3 sm:mt-4 lg:mt-0">
-                {activeFiltersCount > 0 && (
-                  <span className="bg-[#023927] text-white px-3 sm:px-5 py-1.5 sm:py-2.5 text-sm sm:text-base font-medium">
-                    {activeFiltersCount} {t('properties.filters.activeFilters')}
-                  </span>
-                )}
-                <button
-                  onClick={resetFilters}
-                  className="text-gray-600 hover:text-[#023927] hover:bg-white transition-all duration-500 text-sm sm:text-base border-2 border-gray-300 px-3 sm:px-5 py-1.5 sm:py-2.5 hover:border-[#023927]"
-                >
-                  {t('properties.filters.resetAll')}
-                </button>
-              </div>
-            </div>
 
-            {/* Property Type Tabs - Larger, no icons */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 mb-6 sm:mb-8">
-              {propertyTypes.map(({ key, label, count }) => (
-                <button
-                  key={key}
-                  onClick={() => setFilter(key)}
-                  className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium ${
-                    filter === key
-                      ? 'border-[#023927] bg-white text-[#023927]'
-                      : 'border-gray-300 bg-white text-gray-700 hover:border-gray-900 hover:text-[#023927] hover:bg-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span>{label}</span>
-                    <span className={`text-xs sm:text-sm px-1.5 sm:px-2.5 py-0.5 sm:py-1 ${
-                      filter === key 
-                        ? 'bg-[#023927]/10 text-[#023927]' 
-                        : 'bg-gray-100 text-gray-600'
-                    }`}>
-                      {count}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Advanced Filters Grid - Larger */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
-              <div>
-                <label className="block font-medium text-gray-900 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">
-                  {t('properties.filters.location')}
-                </label>
-                <select 
-                  value={locationFilter}
-                  onChange={(e) => setLocationFilter(e.target.value)}
-                  className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base"
-                  style={{ borderRadius: '0' }}
-                >
-                  <option value="">{t('properties.filters.allLocations')}</option>
-                  {locations.map(location => (
-                    <option key={location} value={location}>{location}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Bedrooms */}
-              <div>
-                <label className="block font-medium text-gray-900 text-sm sm:text-base lg:text-lg mb-2 sm:mb-3">
-                  {t('properties.filters.bedrooms')}
-                </label>
-                <select 
-                  value={bedroomsFilter || ''}
-                  onChange={(e) => setBedroomsFilter(e.target.value ? parseInt(e.target.value) : null)}
-                  className="w-full px-3 sm:px-5 py-2.5 sm:py-3.5 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#023927] focus:border-transparent bg-white text-sm sm:text-base"
-                  style={{ borderRadius: '0' }}
-                >
-                  <option value="">{t('properties.filters.allBedrooms')}</option>
-                  {bedroomOptions.map(beds => (
-                    <option key={beds} value={beds}>{beds}+ {t('properties.filters.bedroomsLabel')}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* (Budget min/max removed per request) */}
-
-              {/* Apply Button - Updated hover */}
-              <div className="flex items-end">
-                <button className="w-full border-2 border-gray-900 text-gray-900 py-2.5 sm:py-3.5 text-sm sm:text-base font-medium hover:text-[#023927] hover:bg-white transition-all duration-500 hover:border-[#023927]">
-                  {t('properties.filters.apply')}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Property Cards Section - REVOLUTIONARY NEW LAYOUT */}
       <section ref={propertiesListRef} className="py-6 sm:py-12 bg-white">
@@ -491,11 +474,10 @@ const Properties: React.FC = () => {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]"
                 >
-                  <option value="relevance">{t('properties.listing.relevance')}</option>
+                  <option value="newest">{t('properties.listing.newest')}</option>
                   <option value="priceAsc">{t('properties.listing.priceAsc')}</option>
                   <option value="priceDesc">{t('properties.listing.priceDesc')}</option>
                   <option value="surface">{t('properties.listing.surface')}</option>
-                  <option value="newest">{t('properties.listing.newest')}</option>
                 </select>
               </div>
             </div>
@@ -536,11 +518,6 @@ const Properties: React.FC = () => {
                           {property.featured && (
                             <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
                               {t('properties.listing.exclusive')}
-                            </span>
-                          )}
-                          {property.confidential && (
-                            <span className="bg-black/90 text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
-                              {t('properties.listing.confidential')}
                             </span>
                           )}
                         </div>

@@ -136,6 +136,13 @@ const Header: React.FC = () => {
         Icon: PhoneIcon,
         category: 'company'
       }
+      ,
+      {
+        path: '/mag',
+        label: t('navigation.magazine'),
+        Icon: NewspaperIcon,
+        category: 'company'
+      }
       // Magazine temporarily hidden
       // {
       //   path: '/mag',
@@ -217,7 +224,7 @@ const Header: React.FC = () => {
             {/* Centered Logo - Mobile Optimized */}
             <Link
               to="/"
-              className="group flex-shrink-0 mx-0 sm:mx-2"
+              className="group flex-shrink-0 mx-0 sm:mx-2 lg:mr-14"
               onMouseEnter={() => setActiveHover('logo')}
               onMouseLeave={() => setActiveHover(null)}
             >

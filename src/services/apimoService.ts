@@ -278,6 +278,7 @@ export interface Property {
   }>;
   landSurface?: number;
   condition?: number;
+  tags?: number[]; // APIMO tags array
   standing?: number;
   orientation?: string[];
   services?: string[];
@@ -286,15 +287,18 @@ export interface Property {
 
 // Mapping functions
 const getCategoryType = (category: number, subcategory: number): 'buy' | 'rent' | 'seasonal' => {
-  // Category: 1 = Vente, 2 = Location, 3 = Viager, 4 = Saisonnière
+  // Category mapping based on APIMO API:
+  // 1 = Vente (Sale/Buy) - Tag: "À vendre"
+  // 2 = Location (Rental) - Tag: "À louer"
+  // 3 = Location saisonnière (Seasonal/Vacation) - Tag: "Vacances"
   if (category === 1) return 'buy';
   if (category === 2) {
-    // Subcategory 21 could be long-term rental
+    // Subcategory check for seasonal rentals
     if (subcategory === 22 || subcategory === 23) return 'seasonal';
     return 'rent';
   }
-  if (category === 4) return 'seasonal';
-  return 'buy';
+  if (category === 3 || category === 4) return 'seasonal'; // Category 3 or 4 = Seasonal
+  return 'buy'; // Default fallback
 };
 
 const getPropertyTypeLabel = (type: number, subtype: number): string => {
@@ -452,6 +456,7 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     standing: apimoProperty.standing,
     featured: apimoProperty.ranking ? apimoProperty.ranking >= 4 : false,
     confidential: !apimoProperty.publish_address,
+    tags: apimoProperty.tags || [],
   };
 };
 

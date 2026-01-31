@@ -133,13 +133,12 @@
       }
     },
     "featured": {
-      "title": "Propiedades destacadas",
-      "subtitle": "Una selección cuidadosa de hogares extraordinarios",
+      "title": "Selección / Favoritos",
+      "subtitle": "Nuestras propiedades favoritas, elegidas con pasión",
       "viewAll": "Ver todas las propiedades",
       "exclusive": "Exclusivo",
-      "confidential": "Confidencial",
       "photos": "fotos",
-      "forSale": "En Venta",
+      "forSale": "Para Comprar",
       "forRent": "En Alquiler",
       "vacation": "Vacaciones",
       "viewButton": "Ver Detalles",
@@ -470,7 +469,9 @@
       "surface": "Superficie",
       "activeFilters": "filtro(s) activo(s)",
       "resetAll": "Restablecer todo",
-      "apply": "Aplicar filtros"
+      "apply": "Aplicar filtros",
+      "moreFilters": "Más filtros",
+      "lessFilters": "Menos filtros"
     },
     "listing": {
       "available": "Propiedades disponibles",
@@ -482,9 +483,8 @@
       "newest": "Más recientes",
       "loading": "Cargando...",
       "exclusive": "EXCLUSIVO",
-      "confidential": "CONFIDENCIAL",
       "photos": "fotos",
-      "forSale": "EN VENTA",
+      "forSale": "PARA COMPRAR",
       "forRent": "EN ALQUILER",
       "forVacation": "VACACIONES",
       "view": "Ver",
@@ -1750,7 +1750,7 @@
     "hero": {
       "title": "ÚNETE A NOSOTROS",
       "subtitle": "Únete a SQUARE METER",
-      "description": "Crecer, aprender, lograr. En M² Square Meter, creemos que el éxito es colectivo. Únete a un equipo donde tu talento encuentra su plena expresión y tu ambición se convierte en realidad."
+      "description": "Crecer, aprender, lograr. En Square Meter, creemos que el éxito es colectivo. Únete a un equipo donde tu talento encuentra su plena expresión y tu ambición se convierte en realidad."
     },
     "points": {
       "teamSpirit": {

@@ -119,8 +119,11 @@ const Home: React.FC = () => {
           limit: 1000,
         }, t, currentLanguage);
         
-        // Use all available properties for featured section
-        setFeaturedProperties(apiProperties);
+        // Filter properties that have tag = 1 (Coup de Coeur)
+        const coupDeCoeurProperties = apiProperties.filter(prop => 
+          prop.tags && prop.tags.includes(1)
+        );
+        setFeaturedProperties(coupDeCoeurProperties);
       } catch (error) {
         console.error('Error loading featured properties:', error);
         setFeaturedProperties([]);
@@ -426,11 +429,7 @@ const Home: React.FC = () => {
                                   {t('home.featured.exclusive')}
                                 </span>
                               )}
-                              {property.confidential && (
-                                <span className="bg-black/90 text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
-                                  {t('home.featured.confidential')}
-                                </span>
-                              )}
+                              {/* Confidential badge removed by request */}
                             </div>
                             
                             {/* Favorite Button */}

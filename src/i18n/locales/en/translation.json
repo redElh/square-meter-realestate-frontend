@@ -130,13 +130,12 @@
       }
     },
     "featured": {
-      "title": "Featured Properties",
-      "subtitle": "Handpicked selection of extraordinary homes",
+      "title": "Selection / Our Favorites",
+      "subtitle": "Our favorite properties, chosen with passion",
       "viewAll": "View All Properties",
       "exclusive": "Exclusive",
-      "confidential": "Confidential",
       "photos": "photos",
-      "forSale": "For Sale",
+      "forSale": "To Buy",
       "forRent": "For Rent",
       "vacation": "Vacation",
       "viewButton": "View Details",
@@ -469,7 +468,9 @@
       "surface": "Surface Area",
       "activeFilters": "active filter(s)",
       "resetAll": "Reset all",
-      "apply": "Apply filters"
+      "apply": "Apply filters",
+      "moreFilters": "More filters",
+      "lessFilters": "Less filters"
     },
     "listing": {
       "available": "Properties available",
@@ -481,9 +482,8 @@
       "newest": "Most recent",
       "loading": "Loading...",
       "exclusive": "EXCLUSIVE",
-      "confidential": "CONFIDENTIAL",
       "photos": "photos",
-      "forSale": "FOR SALE",
+      "forSale": "TO BUY",
       "forRent": "FOR RENT",
       "forVacation": "VACATION",
       "view": "View",
@@ -1711,7 +1711,7 @@
     "hero": {
       "title": "JOIN US",
       "subtitle": "Join SQUARE METER",
-      "description": "Grow, learn, accomplish. At M² Square Meter, we believe that success is collective. Join a team where your talent finds its full expression and your ambition becomes reality."
+      "description": "Grow, learn, accomplish. At Square Meter, we believe that success is collective. Join a team where your talent finds its full expression and your ambition becomes reality."
     },
     "points": {
       "teamSpirit": {
