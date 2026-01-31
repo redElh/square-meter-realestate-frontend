@@ -30,7 +30,6 @@ const Home: React.FC = () => {
   const [featuredAutoPlay, setFeaturedAutoPlay] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
-  const [loadingProperties, setLoadingProperties] = useState(true);
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
   const [countersStarted, setCountersStarted] = useState(false);
   const [yearsCount, setYearsCount] = useState(0);
@@ -113,7 +112,6 @@ const Home: React.FC = () => {
   // Fetch featured properties from API
   useEffect(() => {
     const fetchFeaturedProperties = async () => {
-      setLoadingProperties(true);
       try {
         const { properties: apiProperties } = await apimoService.getProperties({
           limit: 1000,
@@ -127,28 +125,11 @@ const Home: React.FC = () => {
       } catch (error) {
         console.error('Error loading featured properties:', error);
         setFeaturedProperties([]);
-      } finally {
-        setLoadingProperties(false);
       }
     };
 
     fetchFeaturedProperties();
   }, [t, currentLanguage]);
-
-  const clientTestimonials = [
-    {
-      name: t('home.testimonials.clients.aicha.name'),
-      text: t('home.testimonials.clients.aicha.text'),
-    },
-    {
-      name: t('home.testimonials.clients.marc.name'),
-      text: t('home.testimonials.clients.marc.text'),
-    },
-    {
-      name: t('home.testimonials.clients.thomas.name'),
-      text: t('home.testimonials.clients.thomas.text'),
-    }
-  ];
 
   useEffect(() => {
     let featuredInterval: NodeJS.Timeout;

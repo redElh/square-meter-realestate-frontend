@@ -11,7 +11,6 @@ import {
   NewspaperIcon,
   PaperAirplaneIcon,
   PhoneIcon,
-  ShieldCheckIcon,
   UserIcon,
   CogIcon,
   StarIcon,

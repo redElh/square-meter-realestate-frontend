@@ -4,24 +4,13 @@ import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
   MapPinIcon, 
-  ArrowsPointingOutIcon, 
-  HomeIcon, 
-  HeartIcon,
   CalendarIcon,
   DocumentTextIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CameraIcon,
   PhoneIcon,
-  EnvelopeIcon,
-  CheckIcon,
-  Square2StackIcon,
-  ArrowTopRightOnSquareIcon
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
-import {
-  HeartIcon as HeartIconSolid,
-  MapPinIcon as MapPinIconSolid
-} from '@heroicons/react/24/solid';
 import { apimoService, Property } from '../services/apimoService';
 import PropertyCard from '../components/PropertyCard';
 import { useCurrency } from '../hooks/useCurrency';
@@ -35,9 +24,7 @@ const PropertyDetail: React.FC = () => {
   const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [showAllFeatures, setShowAllFeatures] = useState(false);
+  const isPlaying = true;
 
   useEffect(() => {
     const fetchPropertyData = async () => {
@@ -67,7 +54,7 @@ const PropertyDetail: React.FC = () => {
     };
 
     fetchPropertyData();
-  }, [id]);
+  }, [id, t, currentLanguage]);
 
   // Carousel autoplay effect
   useEffect(() => {
@@ -113,8 +100,6 @@ const PropertyDetail: React.FC = () => {
       </div>
     );
   }
-
-  const visibleFeatures = showAllFeatures ? (property.features || []) : (property.features || []).slice(0, 8);
 
   return (
     <div className="min-h-screen bg-white">

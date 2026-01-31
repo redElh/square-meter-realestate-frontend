@@ -1,6 +1,5 @@
 // src/components/ProtectedRoute/MagProtectedRoute.tsx
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 
 const MAG_PASSWORD = 'SquareMeter#2025!Mag';
@@ -11,7 +10,6 @@ interface MagProtectedRouteProps {
 }
 
 const MagProtectedRoute: React.FC<MagProtectedRouteProps> = ({ children }) => {
-  const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
