@@ -1,9 +1,18 @@
 /**
  * FREE Google Maps Reviews Scraper using Playwright
  * NO API KEYS, NO BILLING, 100% FREE
+ * Falls back to curated reviews if Playwright is not available
  */
 
-const { chromium } = require('playwright');
+// Try to import Playwright, but don't fail if it's not installed
+let chromium;
+try {
+  const playwright = require('playwright');
+  chromium = playwright.chromium;
+} catch (e) {
+  console.log('⚠️ Playwright not available, will use fallback reviews');
+  chromium = null;
+}
 
 // Your actual Google Maps URL
 const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/M%C2%B2+Square+Meter/@31.4938096,-9.7575766,17z/data=!4m8!3m7!1s0x6b0f78fc73018673:0x9f971ab9cce20129!8m2!3d31.4938051!4d-9.7550017!9m1!1b1!16s%2Fg%2F11wth7gqpg';
@@ -12,6 +21,12 @@ const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/M%C2%B2+Square+Meter/
  * Scrape Google Maps reviews using Playwright
  */
 async function scrapeGoogleReviews() {
+  // If Playwright is not available, return empty array to trigger fallback
+  if (!chromium) {
+    console.log('⚠️ Playwright not available, skipping scrape');
+    return [];
+  }
+  
   let browser = null;
   
   try {
