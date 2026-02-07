@@ -25,17 +25,47 @@ const Services: React.FC = () => {
   // Hero slides for services
   const heroSlides = [
     {
-      image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-1.jfif",
       title: t('services.hero.slide1'),
       subtitle: t('services.hero.subtitle1')
     },
     {
-      image: "https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-2.jfif",
       title: t('services.hero.slide2'),
       subtitle: t('services.hero.subtitle2')
     },
     {
-      image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920&h=800",
+      image: "/photo-3.jfif",
+      title: t('services.hero.slide3'),
+      subtitle: t('services.hero.subtitle3')
+    },
+    {
+      image: "/photo-4.jfif",
+      title: t('services.hero.slide1'),
+      subtitle: t('services.hero.subtitle1')
+    },
+    {
+      image: "/photo-5.jfif",
+      title: t('services.hero.slide2'),
+      subtitle: t('services.hero.subtitle2')
+    },
+    {
+      image: "/photo-6.jfif",
+      title: t('services.hero.slide3'),
+      subtitle: t('services.hero.subtitle3')
+    },
+    {
+      image: "/photo-7.jfif",
+      title: t('services.hero.slide1'),
+      subtitle: t('services.hero.subtitle1')
+    },
+    {
+      image: "/photo-8.jfif",
+      title: t('services.hero.slide2'),
+      subtitle: t('services.hero.subtitle2')
+    },
+    {
+      image: "/photo-9.jfif",
       title: t('services.hero.slide3'),
       subtitle: t('services.hero.subtitle3')
     }

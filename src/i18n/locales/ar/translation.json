@@ -26,7 +26,8 @@
     "or": "أو",
     "and": "و",
     "month": "شهر",
-    "week": "أسبوع"
+    "week": "أسبوع",
+    "year": "سنة"
   },
   "brand": {
     "subtitle": "العقارات"
@@ -487,6 +488,7 @@
       "forSale": "للشراء",
       "forRent": "للإيجار",
       "forVacation": "عطلة",
+      "fromPerDay": "من {{price}}/يوم",
       "view": "عرض",
       "loadMore": "عرض المزيد من العقارات"
     },

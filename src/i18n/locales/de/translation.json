@@ -26,7 +26,8 @@
     "or": "oder",
     "and": "und",
     "month": "Monat",
-    "week": "Woche"
+    "week": "Woche",
+    "year": "Jahr"
   },
   "brand": {
     "subtitle": "IMMOBILIEN"
@@ -499,6 +500,7 @@
       "forSale": "ZU KAUFEN",
       "forRent": "ZU VERMIETEN",
       "forVacation": "URLAUB",
+      "fromPerDay": "ab {{price}}/Tag",
       "view": "Ansehen",
       "loadMore": "Mehr Immobilien anzeigen"
     },

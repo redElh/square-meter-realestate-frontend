@@ -26,7 +26,8 @@
     "or": "or",
     "and": "and",
     "month": "month",
-    "week": "week"
+    "week": "week",
+    "year": "year"
   },
   "brand": {
     "subtitle": "REAL ESTATE"
@@ -486,6 +487,7 @@
       "forSale": "TO BUY",
       "forRent": "FOR RENT",
       "forVacation": "VACATION",
+      "fromPerDay": "from {{price}}/day",
       "view": "View",
       "loadMore": "View more properties"
     },

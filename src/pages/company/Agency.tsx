@@ -19,26 +19,8 @@ import {
 
 const Agency: React.FC = () => {
   const { t } = useTranslation();
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [activeTeamMember, setActiveTeamMember] = useState(0);
-
-  // Cinematic hero slides - updated with premium real estate images
-  const heroSlides = [
-    {
-      image: "https://images.pexels.com/photos/7031407/pexels-photo-7031407.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      title: t('agency.hero.slide1')
-    },
-    {
-      image: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      title: t('agency.hero.slide2')
-    },
-    {
-      image: "https://images.pexels.com/photos/1396132/pexels-photo-1396132.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      title: t('agency.hero.slide3')
-    }
-  ];
 
   const teamMembers = [
     {
@@ -122,24 +104,7 @@ const Agency: React.FC = () => {
 
   useEffect(() => {
     setIsVisible(true);
-    
-    let slideInterval: NodeJS.Timeout;
-    if (isPlaying) {
-      slideInterval = setInterval(() => {
-        setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-      }, 6000);
-    }
-
-    return () => clearInterval(slideInterval);
-  }, [isPlaying, heroSlides.length]);
-
-  const nextSlide = () => {
-    setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-  };
-
-  const prevSlide = () => {
-    setActiveSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  };
+  }, []);
 
   const nextTeamMember = () => {
     setActiveTeamMember((prev) => (prev + 1) % teamMembers.length);
@@ -160,57 +125,25 @@ const Agency: React.FC = () => {
   return (
     <div className="min-h-screen bg-white font-inter text-base">
       {/* Hero Section - match Properties page height and spacing */}
-      <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white -mt-24 sm:-mt-32">
-        {/* Background Carousel */}
-        <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === activeSlide ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-            </div>
-          ))}
-        </div>
+      <section className="relative h-[60vh] sm:h-screen overflow-hidden bg-white -mt-24 sm:-mt-32">
+        {/* Background Image */}
+        <div className="absolute inset-0 mt-24 md:mt-28 lg:mt-32">
+          {/* Blurred background to fill empty space when main image is object-contain */}
+          <div
+            className="absolute inset-0 bg-center bg-cover filter blur-xl scale-105 brightness-75 z-0"
+            style={{ backgroundImage: `url(/team-image.jfif)` }}
+          />
 
-        {/* Navigation Controls */}
-        <div className="absolute top-1/2 left-3 right-3 sm:left-6 sm:right-6 transform -translate-y-1/2 flex justify-between z-20">
-          <button
-            onClick={prevSlide}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
-          >
-            <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
-          >
-            <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-        </div>
-
-        {/* Slide Indicators */}
-        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 sm:space-x-4 z-20">
-          <div className="flex space-x-2">
-            {heroSlides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveSlide(index)}
-                className={`w-2 h-2 transition-all duration-300 ${
-                  activeSlide === index 
-                    ? 'bg-white scale-125' 
-                    : 'bg-white/60 hover:bg-white/80'
-                }`}
-              />
-            ))}
+          {/* Main image centered on top */}
+          <div className="relative z-10 w-full h-full flex items-center justify-center">
+            <img
+              src="/team-image.jfif"
+              alt={t('agency.hero.title')}
+              className="w-full h-full object-contain object-center"
+            />
           </div>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-20"></div>
         </div>
 
         {/* Buttons Container */}

@@ -236,7 +236,7 @@ const Properties: React.FC = () => {
 
   
 
-  const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal', sourceCurrency: string = 'MAD') => {
+  const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal', sourceCurrency: string = 'MAD', pricePeriod?: number) => {
     // List of supported currencies
     const supportedCurrencies = ['EUR', 'USD', 'GBP', 'AED', 'MAD'];
     
@@ -260,11 +260,30 @@ const Properties: React.FC = () => {
     }
     
     const formattedPrice = formatCurrencyPrice(price, finalCurrency as any);
+    
+    // Use period from API if available: 1=Jour, 2=Semaine, 3=Quinzaine, 4=Mois, 5=Trimestre, 6=Bimensuel, 7=Semestre, 8=An
+    if (pricePeriod) {
+      switch (pricePeriod) {
+        case 1: // Jour
+          return `${t('properties.listing.fromPerDay', { price: formattedPrice })}`;
+        case 2: // Semaine
+          return `${formattedPrice}/${t('common.week') || 'week'}`;
+        case 4: // Mois
+          return `${formattedPrice}/${t('common.month') || 'month'}`;
+        case 8: // An
+          return `${formattedPrice}/${t('common.year') || 'year'}`;
+        default:
+          // For other periods (Quinzaine, Trimestre, Bimensuel, Semestre), show price as is
+          return formattedPrice;
+      }
+    }
+    
+    // Fallback to type-based formatting if no period specified
     if (type === 'rent') {
       return `${formattedPrice}/${t('common.month') || 'month'}`;
     }
     if (type === 'seasonal') {
-      return `${formattedPrice}/${t('common.week') || 'week'}`;
+      return `${t('properties.listing.fromPerDay', { price: formattedPrice })}`;
     }
     return formattedPrice;
   };
@@ -597,18 +616,8 @@ const Properties: React.FC = () => {
                       </div>
 
                       <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="flex items-center gap-1">
-                          <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">
-                            {formatPropertyPrice(property.price, property.type, property.currency)}
-                          </div>
-                          {property.currency && property.currency.toUpperCase() !== getCurrentCurrency() && (
-                            <span 
-                              className="text-[10px] text-gray-500 px-1.5 py-0.5 bg-gray-100 rounded" 
-                              title={`Original: ${property.currency}`}
-                            >
-                              {property.currency}
-                            </span>
-                          )}
+                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">
+                          {formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}
                         </div>
                         <Link
                           to={`/properties/${property.id}`}

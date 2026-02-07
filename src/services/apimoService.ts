@@ -241,6 +241,7 @@ export interface Property {
   description: string;
   type: 'buy' | 'rent' | 'seasonal';
   price: number;
+  pricePeriod?: number; // 1=Jour, 2=Semaine, 3=Quinzaine, 4=Mois, 5=Trimestre, 6=Bimensuel, 7=Semestre, 8=An
   location: string;
   surface: number;
   bedrooms: number;
@@ -434,6 +435,7 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     category: apimoProperty.type, // APIMO type number for filtering
     subtype: apimoProperty.subtype, // APIMO subtype number
     price: apimoProperty.price?.value || 0,
+    pricePeriod: apimoProperty.price?.period, // 1=Jour, 2=Semaine, 3=Quinzaine, 4=Mois, 5=Trimestre, 6=Bimensuel, 7=Semestre, 8=An
     currency: apimoProperty.price?.currency || 'EUR',
     location,
     city: cityName,

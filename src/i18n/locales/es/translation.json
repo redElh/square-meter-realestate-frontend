@@ -26,7 +26,8 @@
     "or": "o",
     "and": "y",
     "month": "mes",
-    "week": "semana"
+    "week": "semana",
+    "year": "año"
   },
   "brand": {
     "subtitle": "INMOBILIARIA"
@@ -487,6 +488,7 @@
       "forSale": "PARA COMPRAR",
       "forRent": "EN ALQUILER",
       "forVacation": "VACACIONES",
+      "fromPerDay": "desde {{price}}/día",
       "view": "Ver",
       "loadMore": "Ver más propiedades"
     },
