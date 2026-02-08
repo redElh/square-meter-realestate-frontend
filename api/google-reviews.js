@@ -1,163 +1,58 @@
 /**
- * FREE Google Maps Reviews Scraper using Playwright
- * NO API KEYS, NO BILLING, 100% FREE
- * Falls back to curated reviews if Playwright is not available
- * 
- * NOTE: On Vercel production, we use fallback reviews due to serverless limitations.
- * Playwright scraping works in local development only.
+ * Google Maps Reviews using Google Places API
+ * Official, reliable, and free (with generous quota)
+ * Get your API key from: https://console.cloud.google.com/apis/credentials
  */
 
-// Detect if we're in production/serverless environment
-const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+// Your Google Places API Key (add to .env.local and Vercel env vars)
+const GOOGLE_PLACES_API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
-// Try to import Playwright (local development only)
-let chromium = null;
-if (!isProduction) {
-  try {
-    const playwright = require('playwright');
-    chromium = playwright.chromium;
-    console.log('✓ Using regular playwright for local development');
-  } catch (e) {
-    console.log('⚠️ Playwright not available, will use fallback reviews');
-  }
-} else {
-  console.log('🌐 Production environment detected - using curated fallback reviews for reliability');
-}
-
-// Your actual Google Maps URL
-const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/M%C2%B2+Square+Meter/@31.4938096,-9.7575766,17z/data=!4m8!3m7!1s0x6b0f78fc73018673:0x9f971ab9cce20129!8m2!3d31.4938051!4d-9.7550017!9m1!1b1!16s%2Fg%2F11wth7gqpg';
+// Your Google Maps Place ID - extract from your Google Maps URL
+const PLACE_ID = 'ChIJc4YBc_x4D2cRKQHizoFyeZ8'; // M² Square Meter place ID
 
 /**
- * Scrape Google Maps reviews using Playwright
+ * Fetch real Google reviews using official Google Places API
  */
-async function scrapeGoogleReviews() {
-  // If Playwright is not available, return empty array to trigger fallback
-  if (!chromium) {
-    console.log('⚠️ Playwright not available, skipping scrape');
+async function fetchGooglePlacesReviews() {
+  if (!GOOGLE_PLACES_API_KEY) {
+    console.error('❌ GOOGLE_PLACES_API_KEY not configured');
     return [];
   }
-  
-  let browser = null;
-  
+
   try {
-    console.log('🚀 Launching Playwright browser...');
+    console.log('🔍 Fetching reviews from Google Places API...');
     
-    browser = await chromium.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${PLACE_ID}&fields=name,rating,reviews,user_ratings_total&key=${GOOGLE_PLACES_API_KEY}`;
     
-    const context = await browser.newContext({
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      viewport: { width: 1920, height: 1080 }
-    });
+    const response = await fetch(url);
+    const data = await response.json();
     
-    const page = await context.newPage();
-    
-    console.log('📍 Navigating to Google Maps...');
-    await page.goto(GOOGLE_MAPS_URL, { 
-      waitUntil: 'domcontentloaded',
-      timeout: 30000 
-    });
-    
-    // Wait for page to load
-    await page.waitForTimeout(5000);
-    
-    // Try to click on reviews tab
-    try {
-      // Look for reviews button/tab
-      const reviewsButton = await page.locator('button:has-text("Avis"), button:has-text("Reviews"), [role="tab"]:has-text("Avis"), [role="tab"]:has-text("Reviews")').first();
-      if (await reviewsButton.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await reviewsButton.click();
-        await page.waitForTimeout(3000);
-      }
-    } catch (e) {
-      console.log('Reviews tab not found or already visible');
+    if (data.status !== 'OK') {
+      console.error('❌ Google Places API error:', data.status, data.error_message);
+      return [];
     }
     
-    // Scroll to load more reviews
-    try {
-      const scrollableDiv = await page.locator('[role="main"]').first();
-      if (await scrollableDiv.isVisible().catch(() => false)) {
-        for (let i = 0; i < 3; i++) {
-          await scrollableDiv.evaluate(el => el.scrollTop = el.scrollHeight);
-          await page.waitForTimeout(2000);
-        }
-      }
-    } catch (e) {
-      console.log('Could not scroll for more reviews');
-    }
+    const reviews = data.result?.reviews || [];
     
-    console.log('📖 Extracting reviews...');
+    console.log(`✅ Successfully fetched ${reviews.length} real reviews from Google!`);
+    console.log(`⭐ Business rating: ${data.result?.rating} (${data.result?.user_ratings_total} total reviews)`);
     
-    // Wait a bit more for content to load
-    await page.waitForTimeout(3000);
+    // Transform to our format
+    return reviews.map(review => ({
+      author_name: review.author_name,
+      rating: review.rating,
+      text: review.text,
+      relative_time_description: review.relative_time_description,
+      time: review.time,
+      profile_photo_url: review.profile_photo_url,
+      language: review.language
+    }));
     
-    // Extract business rating info first
-    const businessInfo = await page.evaluate(() => {
-      const ratingText = document.querySelector('[role="img"][aria-label*="stars"]')?.getAttribute('aria-label');
-      const reviewCount = document.querySelector('button[aria-label*="reviews"]')?.textContent;
-      return { ratingText, reviewCount };
-    });
-    
-    console.log('📊 Business info:', businessInfo);
-    
-    // Extract reviews - try multiple selector strategies
-    const reviews = await page.evaluate(() => {
-      const extractedReviews = [];
-      
-      // Try to find all review containers
-      // Google Maps uses different selectors, let's try them all
-      const possibleSelectors = [
-        '.jftiEf',                    // Common review container
-        '[data-review-id]',           // Reviews with IDs
-        'div[jslog*="review"]',       // JSLog reviews
-        '.fontBodyMedium',            // Body text containers
-        'div[aria-label*="star"]',    // Containers with star ratings
-      ];
-      
-      let reviewElements = [];
-      
-      for (const selector of possibleSelectors) {
-        const elements = Array.from(document.querySelectorAll(selector));
-        if (elements.length > 0) {
-          reviewElements = elements;
-          break;
-        }
-      }
-      
-      // If no specific review containers, try to extract from the overall content
-      if (reviewElements.length === 0) {
-        reviewElements = Array.from(document.querySelectorAll('div')).filter(el => {
-          const text = el.textContent || '';
-          const hasStars = el.querySelector('[role="img"][aria-label*="star"]') !== null;
-          const hasText = text.length > 50 && text.length < 1000;
-          return hasStars && hasText;
-        });
-      }
-      
-      reviewElements.forEach((container, index) => {
-        if (index >= 15) return; // Limit to 15 reviews
-        
-        try {
-          // Extract author name
-          let authorName = 'Anonymous';
-          const authorElement = container.querySelector('.d4r55, button[aria-label]');
-          if (authorElement) {
-            authorName = (authorElement.textContent?.trim() || 
-                        authorElement.getAttribute('aria-label')?.split(',')[0] || 
-                        'Anonymous')
-                        .replace(/^Photo de\s*/i, '')  // Remove "Photo de" prefix
-                        .replace(/^Photo of\s*/i, '')  // Remove "Photo of" prefix
-                        .trim();
-          }
-          
-          // If still anonymous, try finding any button or strong text near the top
-          if (authorName === 'Anonymous') {
-            const buttons = container.querySelectorAll('button');
-            for (const btn of Array.from(buttons)) {
-              const text = btn.textContent?.trim() || '';
-              if (text && text.length > 2 && text.length < 50 && !text.includes('star')) {
+  } catch (error) {
+    console.error('❌ Error fetching from Google Places API:', error.message);
+    return [];
+  }
+}
                 authorName = text;
                 break;
               }
@@ -323,40 +218,38 @@ module.exports = async (req, res) => {
   }
   
   try {
-    console.log('🔍 Attempting to scrape Google Maps reviews...');
+    console.log('🔍 Fetching real Google reviews...');
     
-    const scrapedReviews = await scrapeGoogleReviews();
+    const reviews = await fetchGooglePlacesReviews();
     
-    if (scrapedReviews && scrapedReviews.length > 0) {
-      console.log(`✅ Successfully scraped ${scrapedReviews.length} real reviews!`);
+    if (reviews && reviews.length > 0) {
+      console.log(`✅ Successfully fetched ${reviews.length} real Google reviews!`);
       return res.json({
         success: true,
-        count: scrapedReviews.length,
-        reviews: scrapedReviews,
-        source: 'google_maps_scraped',
-        message: 'Real Google Maps reviews (free Playwright scraping)'
+        count: reviews.length,
+        reviews: reviews,
+        source: 'google_places_api',
+        message: 'Real Google reviews via official Places API'
       });
     } else {
-      console.log('⚠️ No reviews scraped, using fallback');
-      const fallback = getFallbackReviews();
+      console.log('⚠️ No reviews available - API key might be missing or invalid');
       return res.json({
-        success: true,
-        count: fallback.length,
-        reviews: fallback,
-        source: 'fallback',
-        message: 'High-quality curated reviews (scraping returned no results)'
+        success: false,
+        count: 0,
+        reviews: [],
+        source: 'error',
+        message: 'Unable to fetch reviews - please configure GOOGLE_PLACES_API_KEY'
       });
     }
     
   } catch (error) {
     console.error('❌ Error:', error.message);
-    const fallback = getFallbackReviews();
     return res.json({
-      success: true,
-      count: fallback.length,
-      reviews: fallback,
-      source: 'fallback',
-      message: `Curated reviews (Error: ${error.message})`
+      success: false,
+      count: 0,
+      reviews: [],
+      source: 'error',
+      message: `Error fetching reviews: ${error.message}`
     });
   }
 };
