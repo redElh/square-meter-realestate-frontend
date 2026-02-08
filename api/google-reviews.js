@@ -2,25 +2,26 @@
  * FREE Google Maps Reviews Scraper using Playwright
  * NO API KEYS, NO BILLING, 100% FREE
  * Falls back to curated reviews if Playwright is not available
+ * 
+ * NOTE: On Vercel production, we use fallback reviews due to serverless limitations.
+ * Playwright scraping works in local development only.
  */
 
-// Try to import Playwright (works for both local and Vercel)
-let chromium;
-try {
-  // First try playwright-aws-lambda for Vercel serverless
-  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-    const playwrightAws = require('playwright-aws-lambda');
-    chromium = playwrightAws.chromium;
-    console.log('✓ Using playwright-aws-lambda for serverless');
-  } else {
-    // Use regular playwright for local development
+// Detect if we're in production/serverless environment
+const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL;
+
+// Try to import Playwright (local development only)
+let chromium = null;
+if (!isProduction) {
+  try {
     const playwright = require('playwright');
     chromium = playwright.chromium;
-    console.log('✓ Using regular playwright for local');
+    console.log('✓ Using regular playwright for local development');
+  } catch (e) {
+    console.log('⚠️ Playwright not available, will use fallback reviews');
   }
-} catch (e) {
-  console.log('⚠️ Playwright not available, will use fallback reviews');
-  chromium = null;
+} else {
+  console.log('🌐 Production environment detected - using curated fallback reviews for reliability');
 }
 
 // Your actual Google Maps URL
