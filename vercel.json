@@ -8,8 +8,7 @@
   "functions": {
     "api/google-reviews.js": {
       "maxDuration": 60,
-      "memory": 3008,
-      "runtime": "nodejs20.x"
+      "memory": 3008
     },
     "api/send-property-inquiry.js": {
       "maxDuration": 30,

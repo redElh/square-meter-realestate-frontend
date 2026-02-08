@@ -4,11 +4,20 @@
  * Falls back to curated reviews if Playwright is not available
  */
 
-// Try to import Playwright, but don't fail if it's not installed
+// Try to import Playwright (works for both local and Vercel)
 let chromium;
 try {
-  const playwright = require('playwright');
-  chromium = playwright.chromium;
+  // First try playwright-aws-lambda for Vercel serverless
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    const playwrightAws = require('playwright-aws-lambda');
+    chromium = playwrightAws.chromium;
+    console.log('✓ Using playwright-aws-lambda for serverless');
+  } else {
+    // Use regular playwright for local development
+    const playwright = require('playwright');
+    chromium = playwright.chromium;
+    console.log('✓ Using regular playwright for local');
+  }
 } catch (e) {
   console.log('⚠️ Playwright not available, will use fallback reviews');
   chromium = null;
