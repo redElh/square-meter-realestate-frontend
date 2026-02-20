@@ -489,7 +489,11 @@
       "forVacation": "VACATION",
       "fromPerDay": "from {{price}}/day",
       "view": "View",
-      "loadMore": "View more properties"
+      "loadMore": "View more properties",
+      "showing": "Showing",
+      "of": "of",
+      "properties": "properties",
+      "goToPage": "Go to page"
     },
     "empty": {
       "title": "No properties match your search",
@@ -657,6 +661,10 @@
       "companyPlaceholder": "Your company name",
       "subject": "Subject *",
       "subjectPlaceholder": "Select a subject",
+      "propertyReference": "Property Reference",
+      "propertyReferencePlaceholder": "86749556",
+      "propertyReferenceHelp": "You can find the reference number displayed on each property card.",
+      "optional": "Optional",
       "preferredContact": "Preferred contact method",
       "preferredEmail": "Email",
       "preferredPhone": "Phone",
@@ -1024,6 +1032,7 @@
     "positive": "Must be a positive number",
     "integer": "Must be a whole number",
     "lettersOnly": "Only letters and spaces allowed",
+    "numbersOnly": "Only numbers allowed",
     "nameLengthError": "Name must be between 2 and 50 characters",
     "cvTooLarge": "CV file is too large (max 15MB)",
     "cvInvalidFormat": "Invalid format. Please upload a PDF, DOC or DOCX file",

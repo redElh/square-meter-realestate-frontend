@@ -19,6 +19,7 @@ import {
 import { apimoService, Property } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
 import { useReviews } from '../contexts/ReviewsContext';
+import SEO from '../components/SEO/SEO';
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -158,19 +159,66 @@ const Home: React.FC = () => {
     );
   };
 
-  const formatPrice = (price: number, type?: string) => {
-    const formattedPrice = formatCurrencyPrice(price);
+  const formatPrice = (price: number, type: 'buy' | 'rent' | 'seasonal', sourceCurrency: string = 'MAD', pricePeriod?: number) => {
+    // List of supported currencies
+    const supportedCurrencies = ['EUR', 'USD', 'GBP', 'AED', 'MAD'];
+    
+    // Validate and normalize the source currency
+    const normalizedCurrency = sourceCurrency?.toUpperCase() || 'MAD';
+    
+    // Check if currency is supported
+    const isCurrencySupported = supportedCurrencies.includes(normalizedCurrency);
+    
+    // Use the source currency if supported, otherwise log warning and default to EUR (common for properties)
+    let finalCurrency = normalizedCurrency;
+    if (!isCurrencySupported) {
+      console.warn(`⚠️ Unsupported currency "${sourceCurrency}" for property price ${price}. Defaulting to EUR.`);
+      console.warn('   Supported currencies:', supportedCurrencies.join(', '));
+      finalCurrency = 'EUR'; // Most properties use EUR if not MAD
+    }
+    
+    // Log currency conversion for debugging
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`💱 Price conversion: ${price} ${finalCurrency} → formatted in selected currency`);
+    }
+    
+    const formattedPrice = formatCurrencyPrice(price, finalCurrency as any);
+    
+    // Use period from API if available: 1=Jour, 2=Semaine, 3=Quinzaine, 4=Mois, 5=Trimestre, 6=Bimensuel, 7=Semestre, 8=An
+    if (pricePeriod) {
+      switch (pricePeriod) {
+        case 1: // Jour
+          return `${t('properties.listing.fromPerDay', { price: formattedPrice })}`;
+        case 2: // Semaine
+          return `${formattedPrice}/${t('common.week') || 'week'}`;
+        case 4: // Mois
+          return `${formattedPrice}/${t('common.month') || 'month'}`;
+        case 8: // An
+          return `${formattedPrice}/${t('common.year') || 'year'}`;
+        default:
+          // For other periods (Quinzaine, Trimestre, Bimensuel, Semestre), show price as is
+          return formattedPrice;
+      }
+    }
+    
+    // Fallback to type-based formatting if no period specified
     if (type === 'rent') {
       return `${formattedPrice}/${t('common.month') || 'month'}`;
     }
     if (type === 'seasonal') {
-      return `${formattedPrice}/${t('common.week') || 'week'}`;
+      return `${t('properties.listing.fromPerDay', { price: formattedPrice })}`;
     }
     return formattedPrice;
   };
 
   return (
     <div className="min-h-screen">
+      <SEO 
+        title={t('home.hero.title') || 'Agence Immobilière de Prestige à Essaouira'}
+        description="Découvrez notre sélection exclusive de villas, appartements et biens d'exception à Essaouira. Vente, location longue durée, location saisonnière, gestion locative et conciergerie haut de gamme."
+        keywords="immobilier Essaouira, agence immobilière Essaouira, vente villa Essaouira, location appartement Essaouira, immobilier de prestige Maroc, gestion locative Essaouira, conciergerie Essaouira, location saisonnière Essaouira, real estate Essaouira, property Morocco"
+        url="/"
+      />
       {/* Hero Section - Épurée */}
       <section className="relative h-[70vh] sm:h-screen overflow-hidden">
         {/* Image Carousel Background (replaces video) */}
@@ -490,7 +538,7 @@ const Home: React.FC = () => {
                           </div>
 
                           <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                            <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPrice(property.price, property.type)}</div>
+                            <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPrice(property.price, property.type, property.currency, property.pricePeriod)}</div>
                             <Link
                               to={`/properties/${property.id}`}
                               className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"

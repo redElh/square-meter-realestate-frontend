@@ -43,7 +43,8 @@ const Contact: React.FC = () => {
     budget: '',
     timeline: '',
     company: '',
-    preferredContact: 'email'
+    preferredContact: 'email',
+    propertyReference: ''
   });
 
   // Map query params to subject values
@@ -174,6 +175,14 @@ const Contact: React.FC = () => {
     // Subject validation
     if (name === 'subject') {
       if (!value || value === '') return t('validation.required');
+    }
+
+    // Property Reference validation (required)
+    if (name === 'propertyReference') {
+      if (!value || value.trim() === '') return t('validation.required');
+      if (!/^\d+$/.test(value.trim())) return t('validation.numbersOnly');
+      if (value.trim().length < 3) return t('validation.minLength', { min: 3 });
+      if (value.trim().length > 20) return t('validation.maxLength', { max: 20 });
     }
 
     // Message validation
@@ -337,7 +346,7 @@ INFORMATIONS DU CONTACT
 Nom complet : ${formData.firstName} ${formData.lastName}
 Email : ${formData.email}
 Téléphone : ${formData.phone || 'Non fourni'}
-${formData.company ? `Société : ${formData.company}\n` : ''}
+${formData.company ? `Société : ${formData.company}\n` : ''}${formData.propertyReference ? `Référence du bien : ${formData.propertyReference}\n` : ''}
 
 OBJET DE LA DEMANDE
 
@@ -706,6 +715,34 @@ Square Meter - Système de notification automatique
                       </div>
                     )}
                   </div>
+                </div>
+
+                {/* Property Reference */}
+                <div>
+                  <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 font-medium">
+                    {t('contact.form.propertyReference')} *
+                  </label>
+                  <input
+                    type="text"
+                    name="propertyReference"
+                    value={formData.propertyReference}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base font-mono ${
+                      touched.propertyReference && errors.propertyReference
+                        ? 'border-red-500 focus:border-red-600'
+                        : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                    }`}
+                    placeholder={t('contact.form.propertyReferencePlaceholder')}
+                  />
+                  {touched.propertyReference && errors.propertyReference ? (
+                    <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
+                      <XMarkIcon className="w-4 h-4 flex-shrink-0" />
+                      <span>{errors.propertyReference}</span>
+                    </div>
+                  ) : (
+                    <p className="mt-1.5 text-xs text-gray-500">{t('contact.form.propertyReferenceHelp')}</p>
+                  )}
                 </div>
 
                 {/* Conditional Fields */}

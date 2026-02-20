@@ -17,6 +17,8 @@ import {
 } from '@heroicons/react/24/solid';
 import { apimoService, Property } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
+import SEO from '../components/SEO/SEO';
+import ImageGalleryModal from '../components/ImageGalleryModal';
 
 const Properties: React.FC = () => {
   const { t } = useTranslation();
@@ -33,6 +35,19 @@ const Properties: React.FC = () => {
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [galleryModal, setGalleryModal] = useState<{
+    isOpen: boolean;
+    images: string[];
+    propertyTitle: string;
+    initialIndex: number;
+  }>({
+    isOpen: false,
+    images: [],
+    propertyTitle: '',
+    initialIndex: 0
+  });
   const propertiesListRef = useRef<HTMLDivElement>(null);
   
   
@@ -225,6 +240,7 @@ const Properties: React.FC = () => {
     setBedroomsFilter(null);
     setSearchQuery('');
     setSortBy('relevance');
+    setCurrentPage(1);
   };
 
   const activeFiltersCount = [
@@ -234,7 +250,44 @@ const Properties: React.FC = () => {
     searchQuery !== '',
   ].filter(Boolean).length;
 
-  
+  // Pagination calculations
+  const totalProperties = filteredAndSortedProperties.length;
+  const totalPages = Math.ceil(totalProperties / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProperties = filteredAndSortedProperties.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters or sort changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, locationFilter, bedroomsFilter, searchQuery, sortBy]);
+
+  // Scroll to top of properties list when page changes
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    propertiesListRef.current?.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+  };
+
+  const openGallery = (property: Property, initialIndex: number = 0) => {
+    setGalleryModal({
+      isOpen: true,
+      images: property.images,
+      propertyTitle: property.title,
+      initialIndex
+    });
+  };
+
+  const closeGallery = () => {
+    setGalleryModal({
+      isOpen: false,
+      images: [],
+      propertyTitle: '',
+      initialIndex: 0
+    });
+  };
 
   const formatPropertyPrice = (price: number, type: 'buy' | 'rent' | 'seasonal', sourceCurrency: string = 'MAD', pricePeriod?: number) => {
     // List of supported currencies
@@ -288,8 +341,26 @@ const Properties: React.FC = () => {
     return formattedPrice;
   };
 
+  const getSEOData = () => {
+    const filterType = filter === 'buy' ? 'Vente' : filter === 'rent' ? 'Location' : filter === 'seasonal' ? 'Location Saisonnière' : '';
+    const title = filterType ? `${filterType} - Biens Immobiliers Essaouira` : 'Tous nos Biens Immobiliers à Essaouira';
+    const description = filterType 
+      ? `Découvrez nos biens en ${filterType.toLowerCase()} à Essaouira. ${filteredAndSortedProperties.length} propriétés disponibles. Villas, appartements et biens d'exception.`
+      : `Explorez notre catalogue complet de ${properties.length} biens immobiliers à Essaouira. Vente, location et location saisonnière de propriétés d'exception.`;
+    
+    return { title, description };
+  };
+
+  const seoData = getSEOData();
+
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords="immobilier Essaouira, vente villa Essaouira, location appartement Essaouira, biens immobiliers Maroc, propriétés Essaouira, real estate Morocco, maisons Essaouira, appartements de luxe"
+        url="/properties"
+      />
       {/* Hero Section with Search Only - Updated with margin */}
       <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white">
         {/* Background Carousel */}
@@ -513,7 +584,7 @@ const Properties: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
-              {filteredAndSortedProperties.map((property, index) => (
+              {paginatedProperties.map((property, index) => (
                 <div
                   key={property.id}
                   className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
@@ -523,7 +594,10 @@ const Properties: React.FC = () => {
                     {/* IMAGE SECTION - Left side with primary + secondary images */}
                     <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
                       {/* Primary Image - Larger on left */}
-                      <div className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden">
+                      <div 
+                        className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer group"
+                        onClick={() => openGallery(property, 0)}
+                      >
                         <img
                           src={property.images[0]}
                           alt={property.title}
@@ -552,10 +626,16 @@ const Properties: React.FC = () => {
                         </button>
                         
                         {/* Image Counter */}
-                        <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm">
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openGallery(property, 0);
+                          }}
+                          className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm hover:bg-black/90 transition-all"
+                        >
                           <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                           <span className="text-xs sm:text-sm">{property.images.length} {t('properties.listing.photos')}</span>
-                        </div>
+                        </button>
                       </div>
                       
                       {/* Secondary Images - Stacked vertically on right */}
@@ -563,7 +643,8 @@ const Properties: React.FC = () => {
                         {property.images.slice(1, 3).map((img, imgIndex) => (
                           <div 
                             key={imgIndex} 
-                            className="flex-1 relative overflow-hidden group/secondary"
+                            className="flex-1 relative overflow-hidden group/secondary cursor-pointer"
+                            onClick={() => openGallery(property, imgIndex + 1)}
                           >
                             <img
                               src={img}
@@ -573,12 +654,18 @@ const Properties: React.FC = () => {
                             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"></div>
                             {/* View More Overlay for last image */}
                             {imgIndex === 1 && property.images.length > 3 && (
-                              <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300">
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  openGallery(property, 0);
+                                }}
+                                className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"
+                              >
                                 <div className="text-white text-center p-2 sm:p-4">
                                   <ArrowTopRightOnSquareIcon className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2" />
                                   <span className="text-[10px] sm:text-xs font-medium">+{property.images.length - 3} photos</span>
                                 </div>
-                              </div>
+                              </button>
                             )}
                           </div>
                         ))}
@@ -600,6 +687,12 @@ const Properties: React.FC = () => {
                           <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
 
                           <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
+
+                          {property.reference && (
+                            <span className="text-gray-400 text-[10px] sm:text-xs font-mono px-2 py-0.5 bg-gray-50 border border-gray-200">
+                              Réf: {property.reference}
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -661,16 +754,107 @@ const Properties: React.FC = () => {
             </div>
           )}
 
-          {/* Load More */}
-          {filteredAndSortedProperties.length > 0 && (
-            <div className="text-center mt-8 sm:mt-16">
-              <button className="border-2 border-gray-900 text-gray-900 px-8 sm:px-14 py-3 sm:py-5 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500 focus:outline-none">
-                <span>{t('properties.listing.loadMore')}</span>
-              </button>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 sm:mt-20">
+              <div className="flex flex-col items-center gap-6">
+                {/* Page Info */}
+                <div className="text-gray-600 text-sm sm:text-base">
+                  {t('properties.listing.showing')} {startIndex + 1}-{Math.min(endIndex, totalProperties)} {t('properties.listing.of')} {totalProperties} {t('properties.listing.properties')}
+                </div>
+
+                {/* Pagination Controls */}
+                <div className="flex items-center gap-2">
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-gray-300 flex items-center justify-center text-gray-700 hover:border-emerald-600 hover:text-emerald-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:text-gray-700"
+                  >
+                    <ChevronLeftIcon className="w-5 h-5" />
+                  </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center gap-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                      // Show first page, last page, current page, and pages around current
+                      const showPage = 
+                        page === 1 || 
+                        page === totalPages || 
+                        (page >= currentPage - 1 && page <= currentPage + 1);
+                      
+                      const showEllipsis = 
+                        (page === 2 && currentPage > 3) || 
+                        (page === totalPages - 1 && currentPage < totalPages - 2);
+
+                      if (showEllipsis) {
+                        return (
+                          <span key={page} className="px-2 text-gray-400">
+                            ...
+                          </span>
+                        );
+                      }
+
+                      if (!showPage) return null;
+
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`w-10 h-10 sm:w-12 sm:h-12 border-2 flex items-center justify-center font-medium transition-all ${
+                            currentPage === page
+                              ? 'bg-emerald-600 border-emerald-600 text-white'
+                              : 'border-gray-300 text-gray-700 hover:border-emerald-600 hover:text-emerald-600'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-gray-300 flex items-center justify-center text-gray-700 hover:border-emerald-600 hover:text-emerald-600 transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:border-gray-300 disabled:hover:text-gray-700"
+                  >
+                    <ChevronRightIcon className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Jump to Page */}
+                <div className="flex items-center gap-3 text-sm">
+                  <span className="text-gray-600">{t('properties.listing.goToPage')}</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max={totalPages}
+                    value={currentPage}
+                    onChange={(e) => {
+                      const page = parseInt(e.target.value);
+                      if (page >= 1 && page <= totalPages) {
+                        handlePageChange(page);
+                      }
+                    }}
+                    className="w-16 px-3 py-2 border-2 border-gray-300 text-center focus:outline-none focus:border-emerald-600"
+                  />
+                  <span className="text-gray-600">/ {totalPages}</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </section>
+
+      {/* Image Gallery Modal */}
+      <ImageGalleryModal
+        isOpen={galleryModal.isOpen}
+        onClose={closeGallery}
+        images={galleryModal.images}
+        propertyTitle={galleryModal.propertyTitle}
+        initialIndex={galleryModal.initialIndex}
+      />
     </div>
   );
 };

@@ -488,7 +488,11 @@
       "forVacation": "ОТПУСК",
       "fromPerDay": "от {{price}}/день",
       "view": "Смотреть",
-      "loadMore": "Посмотреть больше объектов"
+      "loadMore": "Посмотреть больше объектов",
+      "showing": "Показано",
+      "of": "из",
+      "properties": "объектов",
+      "goToPage": "Перейти на страницу"
     },
     "empty": {
       "title": "Ни один объект не соответствует вашему запросу",
@@ -656,6 +660,10 @@
       "companyPlaceholder": "Название вашей компании",
       "subject": "Тема *",
       "subjectPlaceholder": "Выберите тему",
+      "propertyReference": "Референс объекта",
+      "propertyReferencePlaceholder": "86749556",
+      "propertyReferenceHelp": "Вы можете найти референсный номер на каждой карточке объекта.",
+      "optional": "Необязательно",
       "preferredContact": "Предпочтительный способ связи",
       "preferredEmail": "Email",
       "preferredPhone": "Телефон",
@@ -1032,6 +1040,7 @@
     "positive": "Должно быть положительным числом",
     "integer": "Должно быть целым числом",
     "lettersOnly": "Разрешены только буквы и пробелы",
+    "numbersOnly": "Разрешены только цифры",
     "nameLengthError": "Имя должно быть от 2 до 50 символов",
     "cvTooLarge": "Файл резюме слишком большой (макс 15MB)",
     "cvInvalidFormat": "Неверный формат. Пожалуйста, загрузите файл PDF, DOC или DOCX",

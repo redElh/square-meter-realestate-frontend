@@ -1,6 +1,7 @@
 // src/App.tsx
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { LocalizationProvider } from './contexts/LocalizationContext';
 import { ReviewsProvider } from './contexts/ReviewsContext';
 import Header from './components/Layout/Header';
@@ -33,21 +34,22 @@ import MagProtectedRoute from './components/ProtectedRoute/MagProtectedRoute';
 
 function App() {
   return (
-    <LocalizationProvider>
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading...</p>
+    <HelmetProvider>
+      <LocalizationProvider>
+        <Suspense fallback={
+          <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading...</p>
+            </div>
           </div>
-        </div>
-      }>        <Router>
-          <ReviewsProvider>
-            <ScrollToTop />
-            <div className="min-h-screen bg-ivory">
-            <Header />
-            <main>
-              <Routes>
+        }>        <Router>
+            <ReviewsProvider>
+              <ScrollToTop />
+              <div className="min-h-screen bg-ivory">
+              <Header />
+              <main>
+                <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/properties" element={<Properties />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
@@ -79,6 +81,7 @@ function App() {
         </Router>
       </Suspense>
     </LocalizationProvider>
+    </HelmetProvider>
   );
 }
 

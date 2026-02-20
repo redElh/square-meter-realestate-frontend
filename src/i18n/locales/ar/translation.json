@@ -490,7 +490,11 @@
       "forVacation": "عطلة",
       "fromPerDay": "من {{price}}/يوم",
       "view": "عرض",
-      "loadMore": "عرض المزيد من العقارات"
+      "loadMore": "عرض المزيد من العقارات",
+      "showing": "عرض",
+      "of": "من",
+      "properties": "عقارات",
+      "goToPage": "الانتقال إلى الصفحة"
     },
     "empty": {
       "title": "لا توجد عقارات تطابق بحثك",
@@ -656,6 +660,10 @@
       "companyPlaceholder": "اسم شركتك",
       "subject": "الموضوع *",
       "subjectPlaceholder": "اختر موضوعًا",
+      "propertyReference": "رقم مرجع العقار",
+      "propertyReferencePlaceholder": "86749556",
+      "propertyReferenceHelp": "يمكنك العثور على رقم المرجع المعروض في كل بطاقة عقار.",
+      "optional": "اختياري",
       "preferredContact": "طريقة الاتصال المفضلة",
       "preferredEmail": "البريد الإلكتروني",
       "preferredPhone": "الهاتف",
@@ -1032,6 +1040,7 @@
     "positive": "يجب أن يكون رقماً موجباً",
     "integer": "يجب أن يكون رقماً صحيحاً",
     "lettersOnly": "يُسمح بالحروف والمسافات فقط",
+    "numbersOnly": "يُسمح بالأرقام فقط",
     "nameLengthError": "يجب أن يكون الاسم بين 2 و50 حرفًا",
     "cvTooLarge": "ملف السيرة الذاتية كبير جدًا (الحد الأقصى 15MB)",
     "cvInvalidFormat": "تنسيق غير صالح. يرجى تحميل ملف PDF أو DOC أو DOCX",

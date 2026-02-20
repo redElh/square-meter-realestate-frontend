@@ -502,7 +502,11 @@
       "forVacation": "URLAUB",
       "fromPerDay": "ab {{price}}/Tag",
       "view": "Ansehen",
-      "loadMore": "Mehr Immobilien anzeigen"
+      "loadMore": "Mehr Immobilien anzeigen",
+      "showing": "Anzeige",
+      "of": "von",
+      "properties": "Immobilien",
+      "goToPage": "Gehe zu Seite"
     },
     "empty": {
       "title": "Keine Immobilien entsprechen Ihrer Suche",
@@ -670,6 +674,10 @@
       "companyPlaceholder": "Ihr Unternehmensname",
       "subject": "Betreff *",
       "subjectPlaceholder": "Wählen Sie ein Thema",
+      "propertyReference": "Immobilienreferenz",
+      "propertyReferencePlaceholder": "86749556",
+      "propertyReferenceHelp": "Die Referenznummer finden Sie auf jeder Immobilienkarte.",
+      "optional": "Optional",
       "preferredContact": "Bevorzugte Kontaktmethode",
       "preferredEmail": "E-Mail",
       "preferredPhone": "Telefon",
@@ -1046,6 +1054,7 @@
     "positive": "Muss eine positive Zahl sein",
     "integer": "Muss eine ganze Zahl sein",
     "lettersOnly": "Nur Buchstaben und Leerzeichen erlaubt",
+    "numbersOnly": "Nur Zahlen erlaubt",
     "nameLengthError": "Name muss zwischen 2 und 50 Zeichen lang sein",
     "cvTooLarge": "Lebenslauf-Datei ist zu groß (max 15MB)",
     "cvInvalidFormat": "Ungültiges Format. Bitte laden Sie eine PDF-, DOC- oder DOCX-Datei hoch",

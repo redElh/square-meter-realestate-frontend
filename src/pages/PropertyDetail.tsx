@@ -14,6 +14,7 @@ import {
 import { apimoService, Property } from '../services/apimoService';
 import PropertyCard from '../components/PropertyCard';
 import { useCurrency } from '../hooks/useCurrency';
+import SEO from '../components/SEO/SEO';
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams();
@@ -103,6 +104,23 @@ const PropertyDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title={property.title}
+        description={`${property.description?.substring(0, 155)}... | ${property.location} - ${property.surface}m² - ${property.bedrooms} chambres`}
+        keywords={`${property.location}, immobilier ${property.location}, ${property.type === 'buy' ? 'vente' : 'location'} ${property.location}, ${property.bedrooms} chambres ${property.location}`}
+        image={property.images[0]}
+        url={`/properties/${property.id}`}
+        type="product"
+        property={{
+          price: property.price,
+          currency: property.currency,
+          bedrooms: property.bedrooms,
+          bathrooms: property.bathrooms,
+          area: property.surface,
+          location: property.location,
+          type: property.type
+        }}
+      />
       {/* HERO SECTION - Includes carousel and stats bar */}
       <div className="h-[70vh] sm:h-screen flex flex-col">
         {/* HERO CAROUSEL */}

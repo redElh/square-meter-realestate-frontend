@@ -490,7 +490,11 @@
       "forVacation": "VACACIONES",
       "fromPerDay": "desde {{price}}/día",
       "view": "Ver",
-      "loadMore": "Ver más propiedades"
+      "loadMore": "Ver más propiedades",
+      "showing": "Mostrando",
+      "of": "de",
+      "properties": "propiedades",
+      "goToPage": "Ir a la página"
     },
     "empty": {
       "title": "Ninguna propiedad coincide con tu búsqueda",
@@ -680,6 +684,10 @@
       "companyPlaceholder": "Nombre de su empresa",
       "subject": "Asunto *",
       "subjectPlaceholder": "Seleccione un asunto",
+      "propertyReference": "Referencia de la propiedad",
+      "propertyReferencePlaceholder": "86749556",
+      "propertyReferenceHelp": "Puede encontrar el número de referencia mostrado en cada tarjeta de propiedad.",
+      "optional": "Opcional",
       "preferredContact": "Método de contacto preferido",
       "preferredEmail": "Email",
       "preferredPhone": "Teléfono",
@@ -1063,6 +1071,7 @@
     "positive": "Debe ser un número positivo",
     "integer": "Debe ser un número entero",
     "lettersOnly": "Solo se permiten letras y espacios",
+    "numbersOnly": "Solo se permiten números",
     "nameLengthError": "El nombre debe tener entre 2 y 50 caracteres",
     "cvTooLarge": "El archivo CV es demasiado grande (máx 15MB)",
     "cvInvalidFormat": "Formato inválido. Por favor suba un archivo PDF, DOC o DOCX",
