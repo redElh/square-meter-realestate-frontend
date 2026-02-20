@@ -28,6 +28,6 @@
   },
   "buildCommand": "npm run build",
   "outputDirectory": "build",
-  "installCommand": "npm install --production=false",
+  "installCommand": "npm install --legacy-peer-deps",
   "framework": null
 }
