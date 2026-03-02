@@ -25,8 +25,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'en',
-    lng: localStorage.getItem('appLanguage') || 'en',
+    fallbackLng: 'fr',
+    lng: localStorage.getItem('appLanguage') || 'fr',
     debug: process.env.NODE_ENV === 'development',
     
     interpolation: {

@@ -47,8 +47,11 @@ const Contact: React.FC = () => {
     propertyReference: ''
   });
 
-  // Map query params to subject values
+  // Map query params to subject values and property reference
   useEffect(() => {
+    const propertyParam = searchParams.get('property');
+    const updates: Partial<typeof formData> = {};
+    
     if (contactType) {
       const subjectMap: Record<string, string> = {
         'visit': 'visit',
@@ -59,9 +62,18 @@ const Contact: React.FC = () => {
       };
       
       const mappedSubject = subjectMap[contactType] || contactType;
-      setFormData(prev => ({ ...prev, subject: mappedSubject }));
+      updates.subject = mappedSubject;
     }
-  }, [contactType]);
+    
+    // Pre-fill property reference if provided in URL
+    if (propertyParam) {
+      updates.propertyReference = propertyParam;
+    }
+    
+    if (Object.keys(updates).length > 0) {
+      setFormData(prev => ({ ...prev, ...updates }));
+    }
+  }, [contactType, searchParams]);
 
   const contactMethods = [
     {
@@ -346,7 +358,7 @@ INFORMATIONS DU CONTACT
 Nom complet : ${formData.firstName} ${formData.lastName}
 Email : ${formData.email}
 Téléphone : ${formData.phone || 'Non fourni'}
-${formData.company ? `Société : ${formData.company}\n` : ''}${formData.propertyReference ? `Référence du bien : ${formData.propertyReference}\n` : ''}
+${formData.company ? `Société : ${formData.company}\n` : ''}
 
 OBJET DE LA DEMANDE
 
@@ -368,6 +380,7 @@ ${
 }\n`
     : ''
 }
+${formData.propertyReference ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\nRéférence : ${formData.propertyReference}\n` : ''}
 
 MESSAGE DU CLIENT
 

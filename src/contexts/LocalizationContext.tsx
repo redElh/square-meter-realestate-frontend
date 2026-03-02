@@ -61,11 +61,11 @@ export const LocalizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const { i18n } = useTranslation();
   const [language, setLanguageState] = useState<SupportedLanguage>(() => {
     const stored = localStorage.getItem(LANG_KEY);
-    return (stored as SupportedLanguage) || 'en';
+    return (stored as SupportedLanguage) || 'fr';
   });
   const [currency, setCurrencyState] = useState<SupportedCurrency>(() => {
     const stored = localStorage.getItem(CURRENCY_KEY);
-    return (stored as SupportedCurrency) || 'MAD';
+    return (stored as SupportedCurrency) || 'EUR';
   });
 
   const currentLangInfo = LANGUAGES.find(l => l.code === language);

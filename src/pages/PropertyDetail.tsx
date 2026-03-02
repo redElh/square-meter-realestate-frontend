@@ -268,7 +268,7 @@ const PropertyDetail: React.FC = () => {
               {/* Contact Actions */}
               <div className="space-y-3 sm:space-y-4">
                 <Link
-                  to="/contact?type=visit&property=1"
+                  to={`/contact?type=visit&property=${property.reference || property.id}`}
                   className="block w-full bg-[#023927] text-white text-center py-4 font-inter hover:bg-[#023927]/90 transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="flex items-center justify-center space-x-2">
@@ -277,7 +277,7 @@ const PropertyDetail: React.FC = () => {
                   </span>
                 </Link>
                 <Link
-                  to="/contact?type=info&property=1"
+                  to={`/contact?type=info&property=${property.reference || property.id}`}
                   className="block w-full border-2 border-[#023927] text-[#023927] text-center py-4 font-inter hover:bg-[#023927] hover:text-white transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="flex items-center justify-center space-x-2">

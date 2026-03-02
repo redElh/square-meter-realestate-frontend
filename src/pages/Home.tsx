@@ -20,6 +20,7 @@ import { apimoService, Property } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
 import { useReviews } from '../contexts/ReviewsContext';
 import SEO from '../components/SEO/SEO';
+import ImageGalleryModal from '../components/ImageGalleryModal';
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -37,6 +38,12 @@ const Home: React.FC = () => {
   const [countriesCount, setCountriesCount] = useState(0);
   const statsRef = useRef<HTMLDivElement>(null);
 
+  // Gallery modal state
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryTitle, setGalleryTitle] = useState('');
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
+
   // Homepage hero images
   const heroImages = [
     '/photo-9.jfif',
@@ -51,6 +58,14 @@ const Home: React.FC = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [heroImages.length]);
+
+  // Open gallery modal
+  const openGallery = (images: string[], title: string, initialIndex: number = 0) => {
+    setGalleryImages(images);
+    setGalleryTitle(title);
+    setGalleryInitialIndex(initialIndex);
+    setGalleryOpen(true);
+  };
 
   // Animated counters with Intersection Observer
   useEffect(() => {
@@ -444,7 +459,7 @@ const Home: React.FC = () => {
                         {/* IMAGE SECTION - Left side with primary + secondary images */}
                         <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
                           {/* Primary Image - Larger on left */}
-                          <div className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden">
+                          <div className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer" onClick={() => openGallery(property.images, property.title, 0)}>
                             <img
                               src={property.images[0]}
                               alt={property.title}
@@ -485,7 +500,8 @@ const Home: React.FC = () => {
                             {property.images.slice(1, 3).map((img, imgIndex) => (
                               <div 
                                 key={imgIndex} 
-                                className="flex-1 relative overflow-hidden group/secondary"
+                                className="flex-1 relative overflow-hidden group/secondary cursor-pointer"
+                                onClick={() => openGallery(property.images, property.title, imgIndex + 1)}
                               >
                                 <img
                                   src={img}
@@ -817,6 +833,15 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Image Gallery Modal */}
+      <ImageGalleryModal
+        isOpen={galleryOpen}
+        onClose={() => setGalleryOpen(false)}
+        images={galleryImages}
+        propertyTitle={galleryTitle}
+        initialIndex={galleryInitialIndex}
+      />
     </div>
   );
 };
