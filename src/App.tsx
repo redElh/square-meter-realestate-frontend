@@ -13,6 +13,7 @@ import TravelerSpace from './pages/clients/TravelerSpace';
 import PropertyDetail from './pages/PropertyDetail';
 import Agency from './pages/company/Agency';
 import Mag from './pages/company/Mag';
+import MagArticle from './pages/company/MagArticle';
 import Contact from './pages/company/Contact';
 import SellingMultiStep from './pages/clients/SellingMultiStep';
 import ConfidentialSelection from './pages/ConfidentialSelection';
@@ -57,6 +58,7 @@ function App() {
             <Route path="/traveler" element={<TravelerSpace />} />
             <Route path="/agency" element={<Agency />} />
             <Route path="/mag" element={<MagProtectedRoute><Mag /></MagProtectedRoute>} />
+            <Route path="/mag/:id" element={<MagProtectedRoute><MagArticle /></MagProtectedRoute>} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/selling-multistep" element={<SellingMultiStep />} />
             <Route path="/confidential" element={<ConfidentialSelection />} />
