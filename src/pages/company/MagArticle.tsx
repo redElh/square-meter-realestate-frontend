@@ -19,7 +19,19 @@ import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 import { incrementViewCount, getViewCount, formatViewCount } from '../../utils/articleViews';
 
 // ─── WordPress proxy ──────────────────────────────────────────────────────────
-const WP_BASE = '/wp-api';
+// Development: use local proxy (/setupProxy.js)
+// Production: use Vercel serverless function to solve anti-bot challenge
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Helper to build WordPress API URLs
+const wpUrl = (path: string) => {
+  if (isProduction) {
+    // Vercel serverless function: /api/wordpress?path=/posts/123
+    return `/api/wordpress?path=${encodeURIComponent(path)}`;
+  }
+  // Development proxy: /wp-api/posts/123
+  return `/wp-api${path}`;
+};
 
 interface WPPost {
   id: number;
@@ -167,7 +179,7 @@ const MagArticle: React.FC = () => {
 
     (async () => {
       try {
-        const res = await fetch(`${WP_BASE}/posts/${id}?_embed`);
+        const res = await fetch(wpUrl(`/posts/${id}?_embed`));
         const ct  = res.headers.get('content-type') ?? '';
         if (!ct.includes('application/json')) throw new Error('API unavailable');
         if (!res.ok) throw new Error(`Post non trouvé (${res.status})`);
@@ -187,7 +199,7 @@ const MagArticle: React.FC = () => {
         // Related posts
         const catId = data.categories[0];
         if (catId) {
-          const rr  = await fetch(`${WP_BASE}/posts?_embed&per_page=3&categories=${catId}&exclude=${id}`);
+          const rr  = await fetch(wpUrl(`/posts?_embed&per_page=3&categories=${catId}&exclude=${id}`));
           const rct = rr.headers.get('content-type') ?? '';
           if (rct.includes('application/json') && rr.ok) {
             const rp: WPPost[] = await rr.json();

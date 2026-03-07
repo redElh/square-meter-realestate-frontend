@@ -24,7 +24,19 @@ import {
 import { getViewCount, formatViewCount } from '../../utils/articleViews';
 
 // ─── WordPress API ────────────────────────────────────────────────────────────
-const WP_BASE = '/wp-api';
+// Development: use local proxy (/setupProxy.js)
+// Production: use Vercel serverless function to solve anti-bot challenge
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Helper to build WordPress API URLs
+const wpUrl = (path: string) => {
+  if (isProduction) {
+    // Vercel serverless function: /api/wordpress?path=/posts
+    return `/api/wordpress?path=${encodeURIComponent(path)}`;
+  }
+  // Development proxy: /wp-api/posts
+  return `/wp-api${path}`;
+};
 
 interface WPPost {
   id: number;
@@ -184,8 +196,8 @@ const Mag: React.FC = () => {
         setLoading(true);
         setError(null);
         const [postsRes, catsRes] = await Promise.all([
-          fetch(`${WP_BASE}/posts?_embed&per_page=20`),
-          fetch(`${WP_BASE}/categories?per_page=50`),
+          fetch(wpUrl('/posts?_embed&per_page=20')),
+          fetch(wpUrl('/categories?per_page=50')),
         ]);
 
         // If either response is not JSON (e.g. WordPress is unavailable and returns HTML),
