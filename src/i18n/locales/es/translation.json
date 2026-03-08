@@ -1946,7 +1946,58 @@
         "number": "98%",
         "label": "Satisfacción"
       }
-    }
+    },
+    "allArticles": "Todos los artículos",
+    "resultsFor": "Resultados para \"{{query}}\"",
+    "article_one": "artículo",
+    "article_other": "artículos",
+    "noResults": "No se encontraron artículos.",
+    "resetFilter": "Restablecer filtro",
+    "views": "vistas",
+    "readingTime": "de lectura",
+    "reads": "lecturas",
+    "readTime": {
+      "min": "min",
+      "read": "de lectura",
+      "quick": "Lectura rápida",
+      "words": "palabras"
+    },
+    "share": {
+      "title": "Compartir artículo",
+      "close": "Cerrar",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter",
+      "email": "Correo electrónico",
+      "copyLink": "Copiar enlace",
+      "copied": "✓ ¡Copiado!",
+      "moreOptions": "Más opciones"
+    },
+    "cta": {
+      "title": "Descubre nuestras propiedades excepcionales",
+      "description": "Villas, apartamentos y terrenos cuidadosamente seleccionados en Marruecos e internacionalmente. Nuestro equipo le acompaña en cada paso de su proyecto inmobiliario.",
+      "viewProperties": "Ver propiedades",
+      "contactUs": "Contáctenos",
+      "brandLabel": "Square Meter Inmobiliaria"
+    },
+    "sticky": {
+      "description": "Descubra nuestras propiedades excepcionales en Marruecos e internacionalmente.",
+      "viewButton": "Ver propiedades"
+    },
+    "sticky": {
+      "description": "Descubra nuestras propiedades excepcionales en Marruecos e internacionalmente.",
+      "viewButton": "Ver propiedades"
+    },
+    "article": {
+      "notFound": "Artículo no encontrado",
+      "backToMagazine": "Volver a la revista",
+      "magazine": "Revista",
+      "readAlso": "Leer también",
+      "read": "Leer",
+      "onThisPage": "En esta página",
+      "authorBio": "Redactor de Square Meter Inmobiliaria — análisis de mercado, consejos y tendencias inmobiliarias."
+    },
+    "errorLoading": "Error de carga"
   },
   "notFound": {
     "hero": {

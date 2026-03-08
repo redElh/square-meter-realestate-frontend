@@ -31,7 +31,6 @@ import Careers from './pages/special-pages/Careers';
 import LanguageCurrency from './pages/Settings/LanguageCurrency';
 import ScrollToTop from './components/ScrollToTop';
 import RAGAssistant from './components/AIAssistant/RAGAssistant';
-import MagProtectedRoute from './components/ProtectedRoute/MagProtectedRoute';
 
 function App() {
   return (
@@ -57,8 +56,8 @@ function App() {
             <Route path="/owners" element={<Owners />} />
             <Route path="/traveler" element={<TravelerSpace />} />
             <Route path="/agency" element={<Agency />} />
-            <Route path="/mag" element={<MagProtectedRoute><Mag /></MagProtectedRoute>} />
-            <Route path="/mag/:id" element={<MagProtectedRoute><MagArticle /></MagProtectedRoute>} />
+            <Route path="/mag" element={<Mag />} />
+            <Route path="/mag/:id" element={<MagArticle />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/selling-multistep" element={<SellingMultiStep />} />
             <Route path="/confidential" element={<ConfidentialSelection />} />

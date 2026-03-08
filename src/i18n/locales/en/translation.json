@@ -1907,7 +1907,54 @@
         "number": "98%",
         "label": "Satisfaction"
       }
-    }
+    },
+    "allArticles": "All articles",
+    "resultsFor": "Results for \"{{query}}\"",
+    "article_one": "article",
+    "article_other": "articles",
+    "noResults": "No articles found.",
+    "resetFilter": "Reset filter",
+    "views": "views",
+    "readingTime": "read",
+    "reads": "reads",
+    "readTime": {
+      "min": "min",
+      "read": "read",
+      "quick": "Quick read",
+      "words": "words"
+    },
+    "share": {
+      "title": "Share article",
+      "close": "Close",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter",
+      "email": "Email",
+      "copyLink": "Copy link",
+      "copied": "✓ Copied!",
+      "moreOptions": "More options"
+    },
+    "cta": {
+      "title": "Discover our exceptional properties",
+      "description": "Villas, apartments and land carefully selected in Morocco and internationally. Our team supports you at every step of your real estate project.",
+      "viewProperties": "View Properties",
+      "contactUs": "Contact Us",
+      "brandLabel": "Square Meter Real Estate"
+    },
+    "sticky": {
+      "description": "Discover our exceptional properties in Morocco and internationally.",
+      "viewButton": "View properties"
+    },
+    "article": {
+      "notFound": "Article not found",
+      "backToMagazine": "Back to magazine",
+      "magazine": "Magazine",
+      "readAlso": "Also read",
+      "read": "Read",
+      "onThisPage": "On this page",
+      "authorBio": "Writer for Square Meter Real Estate — market analysis, advice and real estate trends."
+    },
+    "errorLoading": "Loading error"
   },
   "notFound": {
     "hero": {

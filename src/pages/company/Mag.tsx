@@ -6,7 +6,6 @@ import {
   ClockIcon,
   CalendarIcon,
   BookmarkIcon,
-  ShareIcon,
   MagnifyingGlassIcon,
   ArrowRightIcon,
   StarIcon,
@@ -22,6 +21,8 @@ import {
   FireIcon as FireIconSolid,
 } from '@heroicons/react/24/solid';
 import { getViewCount, formatViewCount } from '../../utils/articleViews';
+import { getReadingTime } from '../../utils/readingTime';
+import ShareButton from '../../components/ShareButton';
 
 // ─── WordPress API ────────────────────────────────────────────────────────────
 // Development: use local proxy (/setupProxy.js)
@@ -74,6 +75,7 @@ interface Article {
   image: string;
   readTime: string;
   date: string;
+  dateRaw: string; // ISO date string for localization
   featured?: boolean;
   trending?: boolean;
   author: string;
@@ -87,13 +89,19 @@ const stripHtml = (html: string): string => {
   return (tmp.textContent || tmp.innerText || '').trim();
 };
 
-const calcReadTime = (htmlContent: string): string => {
-  const words = stripHtml(htmlContent).split(/\s+/).filter(Boolean).length;
-  return `${Math.max(1, Math.round(words / 200))} min`;
+const formatDate = (iso: string, locale: string = 'fr-FR'): string => {
+  // Map i18n language codes to date locale codes
+  const localeMap: { [key: string]: string } = {
+    'fr': 'fr-FR',
+    'en': 'en-US',
+    'es': 'es-ES',
+    'de': 'de-DE',
+    'ar': 'ar-MA',
+    'ru': 'ru-RU'
+  };
+  const dateLocale = localeMap[locale] || 'fr-FR';
+  return new Date(iso).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
 };
-
-const formatDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
 const categoryIcon = (slug: string) => {
   switch (slug) {
@@ -121,7 +129,7 @@ const SkeletonCard: React.FC = () => (
 );
 
 const Mag: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n: i18nInstance } = useTranslation();
 
   // Hero
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
@@ -135,9 +143,12 @@ const Mag: React.FC = () => {
 
   // WordPress data
   const [articles, setArticles] = useState<Article[]>([]);
+  const [originalArticles, setOriginalArticles] = useState<Article[]>([]);
   const [wpCategories, setWpCategories] = useState<WPCategory[]>([]);
+  const [translatedCategoryNames, setTranslatedCategoryNames] = useState<Record<string, string>>({}); // Map of slug -> translated name
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentLang, setCurrentLang] = useState(i18nInstance.language);
 
   // Hero slides for magazine
   const heroSlides = [
@@ -226,6 +237,7 @@ const Mag: React.FC = () => {
           const authorAvatar = post._embedded?.author?.[0]?.avatar_urls?.['96'] ?? '';
           const primaryCatId = post.categories[0] ?? 0;
           const cat = catMap[primaryCatId] ?? { name: 'Article', slug: 'article' };
+          
           return {
             id:           post.id,
             wpSlug:       post.slug,
@@ -235,8 +247,9 @@ const Mag: React.FC = () => {
             categorySlug: cat.slug,
             categoryName: cat.name,
             image:        imageUrl,
-            readTime:     calcReadTime(post.content.rendered),
-            date:         formatDate(post.date),
+            readTime:     getReadingTime(post.content.rendered, 'fr'),
+            date:         formatDate(post.date, 'fr'),
+            dateRaw:      post.date, // Store raw ISO date
             featured:     idx === 0,
             trending:     idx >= 1 && idx <= 3,
             author:       authorName,
@@ -244,26 +257,96 @@ const Mag: React.FC = () => {
           };
         });
         setArticles(mapped);
+        setOriginalArticles(mapped); // Store originals for translation
       } catch (err: any) {
-        if (!cancelled) setError(err.message ?? 'Erreur de chargement');
+        if (!cancelled) setError(err.message ?? t('mag.errorLoading'));
       } finally {
         if (!cancelled) setLoading(false);
       }
     };
     fetchData();
     return () => { cancelled = true; };
-  }, []);
+  }, [t]);
+
+  // Track language changes
+  useEffect(() => {
+    setCurrentLang(i18nInstance.language);
+  }, [i18nInstance.language]);
+
+  // Translate articles when language changes
+  useEffect(() => {
+    if (originalArticles.length === 0) return;
+    
+    const translateArticles = async () => {
+      // Don't translate if English (original) or French (WordPress is in French)
+      if (currentLang === 'en' || currentLang === 'fr') {
+        // But still update date formatting for the current locale
+        const updatedArticles = originalArticles.map(article => ({
+          ...article,
+          date: formatDate(article.dateRaw, currentLang)
+        }));
+        setArticles(updatedArticles);
+        setTranslatedCategoryNames({}); // Clear translations
+        return;
+      }
+      
+      try {
+        const { translateBatch } = await import('../../services/browserTranslationService');
+        
+        // Get all titles and excerpts to translate
+        const titles = originalArticles.map(a => a.title);
+        const excerpts = originalArticles.map(a => a.excerpt);
+        const categoryNames = originalArticles.map(a => a.categoryName);
+        
+        // Also get unique category names from wpCategories for tab translation
+        const categoryTabNames = wpCategories.map(cat => cat.name);
+        
+        // Translate in parallel
+        const [translatedTitles, translatedExcerpts, translatedCategories, translatedTabNames] = await Promise.all([
+          translateBatch(titles, currentLang, 'fr'),
+          translateBatch(excerpts, currentLang, 'fr'),
+          translateBatch(categoryNames, currentLang, 'fr'),
+          translateBatch(categoryTabNames, currentLang, 'fr')
+        ]);
+        
+        // Create translated articles
+        const translatedArticles = originalArticles.map((article, index) => ({
+          ...article,
+          title: translatedTitles[index] || article.title,
+          excerpt: translatedExcerpts[index] || article.excerpt,
+          categoryName: translatedCategories[index] || article.categoryName,
+          date: formatDate(article.dateRaw, currentLang), // Re-format date for current locale
+        }));
+        
+        // Create map of slug -> translated name for category tabs
+        const categoryNameMap: Record<string, string> = {};
+        wpCategories.forEach((cat, index) => {
+          categoryNameMap[cat.slug] = translatedTabNames[index] || cat.name;
+        });
+        setTranslatedCategoryNames(categoryNameMap);
+        
+        setArticles(translatedArticles);
+        console.log(`✅ Translated ${originalArticles.length} articles to ${currentLang}`);
+      } catch (error) {
+        console.error('Translation error:', error);
+        // Fallback to original articles
+        setArticles(originalArticles);
+      }
+    };
+    
+    translateArticles();
+  }, [currentLang, originalArticles, wpCategories]);
 
   // Derived data
   const categories = useMemo(() => [
-    { key: 'all', label: 'Tous', icon: StarIcon, count: articles.length },
+    { key: 'all', label: t('mag.categories.all'), icon: StarIcon, count: articles.length },
     ...wpCategories.map((c) => ({
       key:   c.slug,
-      label: c.name,
+      label: translatedCategoryNames[c.slug] || c.name, // Use translated name if available
       icon:  categoryIcon(c.slug),
       count: articles.filter((a) => a.categorySlug === c.slug).length,
     })),
-  ], [wpCategories, articles]);
+  ], [wpCategories, articles, t, translatedCategoryNames]);
 
   const filteredArticles = useMemo(() => {
     let list = activeCategory === 'all'
@@ -482,9 +565,12 @@ const Mag: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          <button className="p-2 text-gray-400 hover:text-[#023927] transition-colors duration-300">
-                            <ShareIcon className="w-5 h-5" />
-                          </button>
+                          <ShareButton
+                            url={`${window.location.origin}/mag/${featuredArticle.id}`}
+                            title={featuredArticle.title}
+                            description={featuredArticle.excerpt}
+                            className="p-2 text-gray-400 hover:text-[#023927] transition-colors duration-300"
+                          />
                         </div>
                       </div>
                     </div>
@@ -499,15 +585,15 @@ const Mag: React.FC = () => {
             <div className="flex items-center gap-4 mb-6 sm:mb-8">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-inter font-light text-gray-900 whitespace-nowrap">
                 {searchQuery
-                  ? `Résultats pour « ${searchQuery} »`
+                  ? t('mag.resultsFor', { query: searchQuery })
                   : activeCategory !== 'all'
                     ? categories.find((c) => c.key === activeCategory)?.label
-                    : 'Tous les articles'}
+                    : t('mag.allArticles')}
               </h2>
               <div className="h-px flex-1 bg-gray-200" />
               {(searchQuery || activeCategory !== 'all') && (
                 <span className="text-sm text-gray-400 font-inter whitespace-nowrap">
-                  {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''}
+                  {filteredArticles.length} {t('mag.article', { count: filteredArticles.length })}
                 </span>
               )}
             </div>
@@ -516,10 +602,10 @@ const Mag: React.FC = () => {
             {filteredArticles.length === 0 ? (
               <div className="text-center py-20">
                 <MagnifyingGlassIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="font-inter text-gray-500 text-lg">Aucun article trouvé.</p>
+                <p className="font-inter text-gray-500 text-lg">{t('mag.noResults')}</p>
                 <button onClick={() => { setSearchQuery(''); setActiveCategory('all'); }}
                   className="mt-4 text-[#023927] font-inter text-sm hover:underline">
-                  Réinitialiser le filtre
+                  {t('mag.resetFilter')}
                 </button>
               </div>
             ) : (
@@ -602,25 +688,25 @@ const Mag: React.FC = () => {
             </div>
             <div className="p-8 sm:p-12 flex flex-col justify-center bg-white">
               <span className="inline-block mb-4 px-3 py-1.5 border-2 border-[#023927] text-[#023927] font-inter uppercase text-xs tracking-widest max-w-max">
-                Square Meter Immobilier
+                {t('mag.cta.brandLabel')}
               </span>
               <h3 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-4 leading-snug">
-                Découvrez nos propriétés d'exception
+                {t('mag.cta.title')}
               </h3>
               <p className="font-inter text-gray-600 text-sm sm:text-base mb-8 leading-relaxed">
-                Villas, appartements et terrains soigneusement sélectionnés au Maroc et à l'international. Notre équipe vous accompagne à chaque étape de votre projet immobilier.
+                {t('mag.cta.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
                   to="/properties"
                   className="inline-flex items-center gap-2 bg-[#023927] text-white px-6 py-3 font-inter text-sm uppercase tracking-wide hover:bg-[#023927]/90 transition-colors duration-300 max-w-max">
-                  Voir les propriétés
+                  {t('mag.cta.viewProperties')}
                   <ArrowRightIcon className="w-4 h-4" />
                 </Link>
                 <Link
                   to="/contact"
                   className="inline-flex items-center gap-2 border-2 border-gray-300 text-gray-700 px-6 py-3 font-inter text-sm uppercase tracking-wide hover:border-[#023927] hover:text-[#023927] transition-colors duration-300 max-w-max">
-                  Nous contacter
+                  {t('mag.cta.contactUs')}
                 </Link>
               </div>
             </div>

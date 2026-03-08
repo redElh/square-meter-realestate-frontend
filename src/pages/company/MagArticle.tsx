@@ -1,12 +1,12 @@
 // src/pages/company/MagArticle.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowLeftIcon,
   CalendarIcon,
   ClockIcon,
   BookmarkIcon,
-  ShareIcon,
   ChevronUpIcon,
   ArrowRightIcon,
   HomeModernIcon,
@@ -17,6 +17,8 @@ import {
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 import { incrementViewCount, getViewCount, formatViewCount } from '../../utils/articleViews';
+import { getReadingTime } from '../../utils/readingTime';
+import ShareButton from '../../components/ShareButton';
 
 // ─── WordPress proxy ──────────────────────────────────────────────────────────
 // Development: use local proxy (/setupProxy.js)
@@ -56,6 +58,7 @@ interface RelatedArticle {
   excerpt: string;
   image: string;
   date: string;
+  dateRaw: string; // ISO date string for localization
   categoryName: string;
   readTime: string;
 }
@@ -71,13 +74,19 @@ const stripHtml = (html: string): string => {
   return (d.textContent || d.innerText || '').trim();
 };
 
-const calcReadTime = (html: string): string => {
-  const words = stripHtml(html).split(/\s+/).filter(Boolean).length;
-  return `${Math.max(1, Math.round(words / 200))} min`;
+const formatDate = (iso: string, locale: string = 'fr-FR'): string => {
+  // Map i18n language codes to date locale codes
+  const localeMap: { [key: string]: string } = {
+    'fr': 'fr-FR',
+    'en': 'en-US',
+    'es': 'es-ES',
+    'de': 'de-DE',
+    'ar': 'ar-MA',
+    'ru': 'ru-RU'
+  };
+  const dateLocale = localeMap[locale] || 'fr-FR';
+  return new Date(iso).toLocaleDateString(dateLocale, { day: 'numeric', month: 'long', year: 'numeric' });
 };
-
-const formatDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
 const categoryIcon = (slug: string) => {
   switch (slug) {
@@ -129,12 +138,17 @@ function processContent(html: string): { content: string; toc: TocEntry[] } {
 const MagArticle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { i18n: i18nInstance, t } = useTranslation();
 
   // Data
   const [post, setPost]       = useState<WPPost | null>(null);
+  const [originalPost, setOriginalPost] = useState<WPPost | null>(null);
+  const [categoryName, setCategoryName] = useState<string>(''); // Translated category name
   const [related, setRelated] = useState<RelatedArticle[]>([]);
+  const [originalRelated, setOriginalRelated] = useState<RelatedArticle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError]     = useState<string | null>(null);
+  const [currentLang, setCurrentLang] = useState(i18nInstance.language);
 
   // Content
   const [processedContent, setProcessedContent] = useState('');
@@ -146,6 +160,7 @@ const MagArticle: React.FC = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeToc, setActiveToc]         = useState<string>('');
   const [viewCount, setViewCount]         = useState(0);
+  const viewIncrementedRef                = useRef(false); // Track if view already incremented
 
   const contentRef  = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -176,6 +191,7 @@ const MagArticle: React.FC = () => {
     window.scrollTo(0, 0);
     setLoading(true);
     setError(null);
+    viewIncrementedRef.current = false; // Reset flag on new article
 
     (async () => {
       try {
@@ -185,6 +201,11 @@ const MagArticle: React.FC = () => {
         if (!res.ok) throw new Error(`Post non trouvé (${res.status})`);
         const data: WPPost = await res.json();
         setPost(data);
+        setOriginalPost(data); // Store original for translation
+        
+        // Set initial category name
+        const initialCategoryName = data._embedded?.['wp:term']?.[0]?.[0]?.name || '';
+        setCategoryName(initialCategoryName);
 
         // Process content: emoji → h2, inject IDs, build TOC
         const preprocessed = convertEmojiParasToH2(data.content.rendered);
@@ -192,9 +213,14 @@ const MagArticle: React.FC = () => {
         setProcessedContent(c);
         setToc(t);
 
-        // View counter
-        const count = incrementViewCount(data.id);
-        setViewCount(count);
+        // View counter - Only increment once per article load
+        if (!viewIncrementedRef.current) {
+          const count = incrementViewCount(data.id);
+          setViewCount(count);
+          viewIncrementedRef.current = true;
+        } else {
+          setViewCount(getViewCount(data.id));
+        }
 
         // Related posts
         const catId = data.categories[0];
@@ -208,27 +234,133 @@ const MagArticle: React.FC = () => {
               title:        stripHtml(p.title.rendered),
               excerpt:      stripHtml(p.excerpt.rendered).replace(/\[…\]/g, '…'),
               image:        p._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? FALLBACK_IMG,
-              date:         formatDate(p.date),
+              date:         formatDate(p.date, 'fr'),
+              dateRaw:      p.date, // Store raw ISO date
               categoryName: p._embedded?.['wp:term']?.[0]?.[0]?.name ?? '',
-              readTime:     calcReadTime(p.content.rendered),
+              readTime:     getReadingTime(p.content.rendered, 'fr'),
+            })));
+            setOriginalRelated(rp.map((p) => ({
+              id:           p.id,
+              title:        stripHtml(p.title.rendered),
+              excerpt:      stripHtml(p.excerpt.rendered).replace(/\[…\]/g, '…'),
+              image:        p._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? FALLBACK_IMG,
+              date:         formatDate(p.date, 'fr'),
+              dateRaw:      p.date, // Store raw ISO date
+              categoryName: p._embedded?.['wp:term']?.[0]?.[0]?.name ?? '',
+              readTime:     getReadingTime(p.content.rendered, 'fr'),
             })));
           }
         }
       } catch (err: any) {
-        setError(err.message ?? 'Erreur de chargement');
+        setError(err.message ?? t('mag.errorLoading'));
       } finally {
         setLoading(false);
       }
     })();
-  }, [id]);
+  }, [id, t]);
 
-  const handleShare = async () => {
-    if (navigator.share && post) {
-      await navigator.share({ title: stripHtml(post.title.rendered), url: window.location.href });
-    } else {
-      await navigator.clipboard.writeText(window.location.href);
-    }
-  };
+  // Track language changes
+  useEffect(() => {
+    setCurrentLang(i18nInstance.language);
+  }, [i18nInstance.language]);
+
+  // Translate post and related articles when language changes
+  useEffect(() => {
+    if (!originalPost) return;
+    
+    const translateContent = async () => {
+      const originalCategoryName = originalPost._embedded?.['wp:term']?.[0]?.[0]?.name || '';
+      
+      // Don't translate if English (original) or French (WordPress is in French)
+      if (currentLang === 'en' || currentLang === 'fr') {
+        setPost(originalPost);
+        setCategoryName(originalCategoryName); // Use original category name
+        
+        // But still update date formatting for related articles
+        const updatedRelated = originalRelated.map(article => ({
+          ...article,
+          date: formatDate(article.dateRaw, currentLang)
+        }));
+        setRelated(updatedRelated);
+        
+        // Re-process content without translation
+        const preprocessed = convertEmojiParasToH2(originalPost.content.rendered);
+        const { content: c, toc: t } = processContent(preprocessed);
+        setProcessedContent(c);
+        setToc(t);
+        return;
+      }
+      
+      try {
+        const { translateBatch, translateText } = await import('../../services/browserTranslationService');
+        
+        // Translate post title, excerpt, content, and category name
+        const [translatedTitle, translatedExcerpt, translatedContent, translatedCategory] = await Promise.all([
+          translateText(stripHtml(originalPost.title.rendered), currentLang, 'fr'),
+          translateText(stripHtml(originalPost.excerpt.rendered), currentLang, 'fr'),
+          translateText(stripHtml(originalPost.content.rendered), currentLang, 'fr'),
+          translateText(originalCategoryName, currentLang, 'fr')
+        ]);
+        
+        // Create translated post
+        const translatedPost = {
+          ...originalPost,
+          title: { rendered: translatedTitle },
+          excerpt: { rendered: translatedExcerpt },
+          content: { rendered: translatedContent }
+        };
+        
+        setPost(translatedPost);
+        setCategoryName(translatedCategory); // Set translated category name
+        
+        // Process translated content
+        const preprocessed = convertEmojiParasToH2(translatedPost.content.rendered);
+        const { content: c, toc: t } = processContent(preprocessed);
+        setProcessedContent(c);
+        setToc(t);
+        
+        // Translate related articles if any
+        if (originalRelated.length > 0) {
+          const relatedTitles = originalRelated.map(r => r.title);
+          const relatedExcerpts = originalRelated.map(r => r.excerpt);
+          const relatedCategories = originalRelated.map(r => r.categoryName);
+          
+          const [translatedTitles, translatedExcerpts, translatedCategories] = await Promise.all([
+            translateBatch(relatedTitles, currentLang, 'fr'),
+            translateBatch(relatedExcerpts, currentLang, 'fr'),
+            translateBatch(relatedCategories, currentLang, 'fr')
+          ]);
+          
+          const translatedRelated = originalRelated.map((article, index) => ({
+            ...article,
+            title: translatedTitles[index] || article.title,
+            excerpt: translatedExcerpts[index] || article.excerpt,
+            categoryName: translatedCategories[index] || article.categoryName,
+            date: formatDate(article.dateRaw, currentLang), // Re-format date for current locale
+          }));
+          
+          setRelated(translatedRelated);
+        }
+        
+        console.log(`✅ Translated article to ${currentLang}`);
+      } catch (error) {
+        console.error('Translation error:', error);
+        // Fallback to original post
+        const originalCategoryName = originalPost._embedded?.['wp:term']?.[0]?.[0]?.name || '';
+        setPost(originalPost);
+        setCategoryName(originalCategoryName); // Fallback to original category
+        setRelated(originalRelated);
+        
+        // Re-process original content
+        const preprocessed = convertEmojiParasToH2(originalPost.content.rendered);
+        const { content: c, toc: t } = processContent(preprocessed);
+        setProcessedContent(c);
+        setToc(t);
+      }
+    };
+    
+    translateContent();
+  }, [currentLang, originalPost, originalRelated]);
 
   // Derived values
   const heroImage     = post?._embedded?.['wp:featuredmedia']?.[0]?.source_url ?? FALLBACK_IMG;
@@ -237,8 +369,8 @@ const MagArticle: React.FC = () => {
   const authorBio     = post?._embedded?.author?.[0]?.description ?? '';
   const category      = post?._embedded?.['wp:term']?.[0]?.[0];
   const CategoryIcon  = category ? categoryIcon(category.slug) : HomeModernIcon;
-  const readTime      = post ? calcReadTime(post.content.rendered) : '';
-  const dateFormatted = post ? formatDate(post.date) : '';
+  const readTime      = post ? getReadingTime(post.content.rendered, currentLang) : '';
+  const dateFormatted = post ? formatDate(post.date, currentLang) : ''; // Use current language
   const title         = post ? stripHtml(post.title.rendered) : '';
 
 
@@ -273,11 +405,11 @@ const MagArticle: React.FC = () => {
       <div className="min-h-screen bg-white flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="text-6xl font-inter font-light text-gray-200 mb-4">!</div>
-          <h2 className="text-2xl font-inter font-light text-gray-900 mb-3">Article introuvable</h2>
+          <h2 className="text-2xl font-inter font-light text-gray-900 mb-3">{t('mag.article.notFound')}</h2>
           <p className="font-inter text-gray-500 text-sm mb-8">{error}</p>
           <Link to="/mag"
             className="inline-flex items-center gap-2 bg-[#023927] text-white px-6 py-3 font-inter text-sm uppercase tracking-wide hover:bg-[#023927]/90 transition-colors">
-            <ArrowLeftIcon className="w-4 h-4" /> Retour au magazine
+            <ArrowLeftIcon className="w-4 h-4" /> {t('mag.article.backToMagazine')}
           </Link>
         </div>
       </div>
@@ -299,7 +431,7 @@ const MagArticle: React.FC = () => {
           className="absolute top-44 sm:top-52 left-4 sm:left-10 flex items-center gap-2 text-white/80 hover:text-white font-inter text-sm uppercase tracking-wide transition-all duration-300 group"
         >
           <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
-          Magazine
+          {t('mag.article.magazine')}
         </button>
 
         {/* Top-right: views + bookmark + share */}
@@ -311,10 +443,13 @@ const MagArticle: React.FC = () => {
             className="w-9 h-9 bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300">
             {saved ? <BookmarkIconSolid className="w-4 h-4" /> : <BookmarkIcon className="w-4 h-4" />}
           </button>
-          <button onClick={handleShare}
-            className="w-9 h-9 bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300">
-            <ShareIcon className="w-4 h-4" />
-          </button>
+          <ShareButton
+            url={window.location.href}
+            title={title}
+            description={post?.excerpt?.rendered ? stripHtml(post.excerpt.rendered) : ''}
+            className="w-9 h-9 bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300"
+            iconClassName="w-4 h-4"
+          />
         </div>
 
         {/* Bottom meta */}
@@ -323,7 +458,7 @@ const MagArticle: React.FC = () => {
             {category && (
               <div className="flex items-center gap-2 mb-4">
                 <CategoryIcon className="w-4 h-4 text-white/70" />
-                <span className="font-inter uppercase text-xs tracking-widest text-white/70">{category.name}</span>
+                <span className="font-inter uppercase text-xs tracking-widest text-white/70">{categoryName || category.name}</span>
               </div>
             )}
             <h1 className="text-2xl sm:text-3xl lg:text-5xl font-inter font-light text-white leading-tight mb-5 max-w-3xl">
@@ -336,8 +471,8 @@ const MagArticle: React.FC = () => {
               )}
               <span className="text-white/90 font-medium">{authorName}</span>
               <span className="flex items-center gap-1.5"><CalendarIcon className="w-3.5 h-3.5" />{dateFormatted}</span>
-              <span className="flex items-center gap-1.5"><ClockIcon className="w-3.5 h-3.5" />{readTime} de lecture</span>
-              <span className="flex items-center gap-1.5"><EyeIcon className="w-3.5 h-3.5" />{formatViewCount(viewCount)} vues</span>
+              <span className="flex items-center gap-1.5"><ClockIcon className="w-3.5 h-3.5" />{readTime} {t('mag.readingTime')}</span>
+              <span className="flex items-center gap-1.5"><EyeIcon className="w-3.5 h-3.5" />{formatViewCount(viewCount)} {t('mag.views')}</span>
             </div>
           </div>
         </div>
@@ -377,7 +512,7 @@ const MagArticle: React.FC = () => {
                     <CategoryIcon className="w-4 h-4 text-[#023927]" />
                     <button onClick={() => navigate('/mag')}
                       className="px-3 py-1.5 border-2 border-[#023927] text-[#023927] font-inter text-xs uppercase tracking-wide hover:bg-[#023927] hover:text-white transition-colors duration-300">
-                      {category.name}
+                      {categoryName || category.name}
                     </button>
                   </div>
                 )}
@@ -389,14 +524,14 @@ const MagArticle: React.FC = () => {
                   <div>
                     <div className="font-inter text-gray-900 font-medium mb-1">{authorName}</div>
                     <p className="font-inter text-gray-500 text-sm leading-relaxed">
-                      {authorBio || 'Rédacteur pour Square Meter Immobilier — analyses de marché, conseils et tendances immobilières.'}
+                      {authorBio || t('mag.article.authorBio')}
                     </p>
                   </div>
                 </div>
                 {related.length > 0 && (
                   <div className="mt-14">
                     <div className="flex items-center gap-4 mb-8">
-                      <h2 className="text-xl font-inter font-light text-gray-900 whitespace-nowrap">À lire aussi</h2>
+                      <h2 className="text-xl font-inter font-light text-gray-900 whitespace-nowrap">{t('mag.article.readAlso')}</h2>
                       <div className="h-px flex-1 bg-gray-200" />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
@@ -417,7 +552,7 @@ const MagArticle: React.FC = () => {
                             <h3 className="font-inter text-gray-900 text-sm font-medium line-clamp-2 mb-2 group-hover:text-[#023927] transition-colors duration-300 leading-snug">{r.title}</h3>
                             <div className="flex items-center justify-between text-gray-400 font-inter text-xs">
                               <span className="flex items-center gap-1"><CalendarIcon className="w-3 h-3" />{r.date}</span>
-                              <span className="flex items-center gap-1 text-[#023927]">Lire <ArrowRightIcon className="w-3 h-3" /></span>
+                              <span className="flex items-center gap-1 text-[#023927]">{t('mag.article.read')} <ArrowRightIcon className="w-3 h-3" /></span>
                             </div>
                           </div>
                         </Link>
@@ -429,7 +564,7 @@ const MagArticle: React.FC = () => {
                   <Link to="/mag"
                     className="inline-flex items-center gap-2 text-[#023927] font-inter text-sm uppercase tracking-wide group hover:gap-3 transition-all duration-300">
                     <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
-                    Retour au magazine
+                    {t('mag.article.backToMagazine')}
                   </Link>
                 </div>
           </div>
@@ -439,7 +574,7 @@ const MagArticle: React.FC = () => {
             <div className="space-y-6">
               {toc.length > 0 && (
                 <div className="border-2 border-gray-100 p-5">
-                  <div className="font-inter uppercase text-xs tracking-widest text-gray-400 mb-3">Sur cette page</div>
+                  <div className="font-inter uppercase text-xs tracking-widest text-gray-400 mb-3">{t('mag.article.onThisPage')}</div>
                   <nav className="space-y-0.5 max-h-56 overflow-y-auto">
                     {toc.map((entry) => (
                       <button key={entry.id}
@@ -457,17 +592,17 @@ const MagArticle: React.FC = () => {
                 <EyeIcon className="w-5 h-5 text-[#023927] shrink-0" />
                 <div>
                   <div className="font-inter text-xl text-[#023927] font-light">{formatViewCount(viewCount)}</div>
-                  <div className="font-inter text-gray-400 text-xs uppercase tracking-wide">lectures</div>
+                  <div className="font-inter text-gray-400 text-xs uppercase tracking-wide">{t('mag.reads')}</div>
                 </div>
               </div>
               <div className="bg-[#023927] p-5 text-white">
                 <div className="font-inter uppercase text-xs tracking-widest text-white/50 mb-2">Square Meter</div>
                 <p className="font-inter font-light text-sm leading-relaxed mb-4 text-white/90">
-                  Découvrez nos propriétés d'exception au Maroc et à l'international.
+                  {t('mag.sticky.description')}
                 </p>
                 <Link to="/properties"
                   className="inline-flex items-center gap-2 bg-white text-[#023927] px-4 py-2 font-inter text-xs uppercase tracking-wide hover:bg-gray-100 transition-colors duration-300">
-                  Voir les biens <ArrowRightIcon className="w-3.5 h-3.5" />
+                  {t('mag.sticky.viewButton')} <ArrowRightIcon className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>

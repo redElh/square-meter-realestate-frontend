@@ -1938,7 +1938,54 @@
         "number": "98%",
         "label": "Satisfaction"
       }
-    }
+    },
+    "allArticles": "Tous les articles",
+    "resultsFor": "Résultats pour « {{query}} »",
+    "article_one": "article",
+    "article_other": "articles",
+    "noResults": "Aucun article trouvé.",
+    "resetFilter": "Réinitialiser le filtre",
+    "views": "vues",
+    "readingTime": "de lecture",
+    "reads": "lectures",
+    "readTime": {
+      "min": "min",
+      "read": "de lecture",
+      "quick": "Lecture rapide",
+      "words": "mots"
+    },
+    "share": {
+      "title": "Partager l'article",
+      "close": "Fermer",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "twitter": "Twitter",
+      "email": "Email",
+      "copyLink": "Copier le lien",
+      "copied": "✓ Copié!",
+      "moreOptions": "Plus d'options"
+    },
+    "cta": {
+      "title": "Découvrez nos propriétés d'exception",
+      "description": "Villas, appartements et terrains soigneusement sélectionnés au Maroc et à l'international. Notre équipe vous accompagne à chaque étape de votre projet immobilier.",
+      "viewProperties": "Voir les propriétés",
+      "contactUs": "Nous contacter",
+      "brandLabel": "Square Meter Immobilier"
+    },
+    "sticky": {
+      "description": "Découvrez nos propriétés d'exception au Maroc et à l'international.",
+      "viewButton": "Voir les biens"
+    },
+    "article": {
+      "notFound": "Article introuvable",
+      "backToMagazine": "Retour au magazine",
+      "magazine": "Magazine",
+      "readAlso": "À lire aussi",
+      "read": "Lire",
+      "onThisPage": "Sur cette page",
+      "authorBio": "Rédacteur pour Square Meter Immobilier — analyses de marché, conseils et tendances immobilières."
+    },
+    "errorLoading": "Erreur de chargement"
   },
   "notFound": {
     "hero": {
