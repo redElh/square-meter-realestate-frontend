@@ -25,6 +25,10 @@
     "api/wordpress.js": {
       "maxDuration": 30,
       "memory": 1024
+    },
+    "api/article-views.js": {
+      "maxDuration": 10,
+      "memory": 512
     }
   },
   "env": {

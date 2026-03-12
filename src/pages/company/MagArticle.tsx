@@ -16,7 +16,7 @@ import {
   EyeIcon,
 } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
-import { incrementViewCount, getViewCount, formatViewCount } from '../../utils/articleViews';
+import { fetchViewCounts, incrementViewCount, getViewCount, formatViewCount } from '../../utils/articleViews';
 import { getReadingTime } from '../../utils/readingTime';
 import ShareButton from '../../components/ShareButton';
 
@@ -160,6 +160,7 @@ const MagArticle: React.FC = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeToc, setActiveToc]         = useState<string>('');
   const [viewCount, setViewCount]         = useState(0);
+  const [relatedViewCounts, setRelatedViewCounts] = useState<Record<string, number>>({});
   const viewIncrementedRef                = useRef(false); // Track if view already incremented
 
   const contentRef  = useRef<HTMLDivElement>(null);
@@ -188,10 +189,16 @@ const MagArticle: React.FC = () => {
   // Fetch post + related
   useEffect(() => {
     if (!id) return;
+    setViewCount(getViewCount(id));
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
     window.scrollTo(0, 0);
     setLoading(true);
     setError(null);
     viewIncrementedRef.current = false; // Reset flag on new article
+    setRelatedViewCounts({});
 
     (async () => {
       try {
@@ -215,7 +222,7 @@ const MagArticle: React.FC = () => {
 
         // View counter - Only increment once per article load
         if (!viewIncrementedRef.current) {
-          const count = incrementViewCount(data.id);
+          const count = await incrementViewCount(data.id);
           setViewCount(count);
           viewIncrementedRef.current = true;
         } else {
@@ -249,15 +256,40 @@ const MagArticle: React.FC = () => {
               categoryName: p._embedded?.['wp:term']?.[0]?.[0]?.name ?? '',
               readTime:     getReadingTime(p.content.rendered, 'fr'),
             })));
+
+            const relatedCounts = await fetchViewCounts(rp.map((p) => p.id));
+            setRelatedViewCounts(relatedCounts);
           }
         }
       } catch (err: any) {
-        setError(err.message ?? t('mag.errorLoading'));
+        setError(err.message ?? 'Unable to load article');
       } finally {
         setLoading(false);
       }
     })();
-  }, [id, t]);
+  }, [id]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadRelatedViewCounts = async () => {
+      if (related.length === 0) {
+        setRelatedViewCounts({});
+        return;
+      }
+
+      const counts = await fetchViewCounts(related.map((article) => article.id));
+      if (!cancelled) {
+        setRelatedViewCounts(counts);
+      }
+    };
+
+    loadRelatedViewCounts();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [related]);
 
   // Track language changes
   useEffect(() => {
@@ -545,7 +577,7 @@ const MagArticle: React.FC = () => {
                               <span className="absolute bottom-2 left-3 px-2 py-0.5 bg-black/70 text-white font-inter text-xs uppercase tracking-wide">{r.categoryName}</span>
                             )}
                             <span className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 bg-black/60 text-white font-inter text-xs">
-                              <EyeIcon className="w-3 h-3" />{formatViewCount(getViewCount(r.id))}
+                              <EyeIcon className="w-3 h-3" />{formatViewCount(relatedViewCounts[String(r.id)] ?? getViewCount(r.id))}
                             </span>
                           </div>
                           <div className="p-4">

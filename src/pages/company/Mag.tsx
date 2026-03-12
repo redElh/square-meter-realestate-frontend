@@ -20,7 +20,7 @@ import {
   BookmarkIcon as BookmarkIconSolid,
   FireIcon as FireIconSolid,
 } from '@heroicons/react/24/solid';
-import { getViewCount, formatViewCount } from '../../utils/articleViews';
+import { fetchViewCounts, getViewCount, formatViewCount } from '../../utils/articleViews';
 import { getReadingTime } from '../../utils/readingTime';
 import ShareButton from '../../components/ShareButton';
 
@@ -146,6 +146,7 @@ const Mag: React.FC = () => {
   const [originalArticles, setOriginalArticles] = useState<Article[]>([]);
   const [wpCategories, setWpCategories] = useState<WPCategory[]>([]);
   const [translatedCategoryNames, setTranslatedCategoryNames] = useState<Record<string, string>>({}); // Map of slug -> translated name
+  const [viewCounts, setViewCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentLang, setCurrentLang] = useState(i18nInstance.language);
@@ -337,6 +338,30 @@ const Mag: React.FC = () => {
     translateArticles();
   }, [currentLang, originalArticles, wpCategories]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadViewCounts = async () => {
+      const articleIds = articles.map((article) => article.id);
+
+      if (articleIds.length === 0) {
+        setViewCounts({});
+        return;
+      }
+
+      const counts = await fetchViewCounts(articleIds);
+      if (!cancelled) {
+        setViewCounts(counts);
+      }
+    };
+
+    loadViewCounts();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [articles]);
+
   // Derived data
   const categories = useMemo(() => [
     { key: 'all', label: t('mag.categories.all'), icon: StarIcon, count: articles.length },
@@ -362,6 +387,8 @@ const Mag: React.FC = () => {
   }, [articles, activeCategory, searchQuery]);
 
   const featuredArticle  = useMemo(() => articles.find((a) => a.featured), [articles]);
+
+  const resolveViewCount = (articleId: number) => viewCounts[String(articleId)] ?? getViewCount(articleId);
 
   const toggleSave = (id: number) => {
     setSavedArticles((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]);
@@ -561,7 +588,7 @@ const Mag: React.FC = () => {
                               <div className="font-inter text-gray-500 text-xs flex items-center gap-1.5">
                                 <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4" />{featuredArticle.date}
                                 <span className="text-gray-300">·</span>
-                                <EyeIcon className="w-3 h-3 sm:w-4 sm:h-4" />{formatViewCount(getViewCount(featuredArticle.id))}
+                                <EyeIcon className="w-3 h-3 sm:w-4 sm:h-4" />{formatViewCount(resolveViewCount(featuredArticle.id))}
                               </div>
                             </div>
                           </div>
@@ -655,7 +682,7 @@ const Mag: React.FC = () => {
                               <div className="font-inter text-gray-400 text-xs flex items-center gap-1.5">
                                 <CalendarIcon className="w-3 h-3" />{article.date}
                                 <span className="text-gray-300">·</span>
-                                <EyeIcon className="w-3 h-3" />{formatViewCount(getViewCount(article.id))}
+                                <EyeIcon className="w-3 h-3" />{formatViewCount(resolveViewCount(article.id))}
                               </div>
                             </div>
                           </div>

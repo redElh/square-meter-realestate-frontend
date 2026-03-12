@@ -83,6 +83,20 @@ module.exports = function(app) {
     }
   });
 
+  app.all('/api/article-views', async (req, res) => {
+    try {
+      console.log(`📈 Article views endpoint called: ${req.method}`);
+      const handler = require('../api/article-views.js');
+      await handler(req, res);
+    } catch (error) {
+      console.error('❌ Error in article views handler:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
+
   // WordPress REST API – custom handler that solves InfinityFree's JS/AES anti-bot challenge.
   // InfinityFree (rf.gd) returns an HTML page with dynamically-generated AES-CBC values.
   // The browser is supposed to decrypt them, set a cookie, then redirect.
