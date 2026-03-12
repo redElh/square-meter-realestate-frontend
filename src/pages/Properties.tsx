@@ -22,7 +22,8 @@ import ImageGalleryModal from '../components/ImageGalleryModal';
 
 const Properties: React.FC = () => {
   const { t } = useTranslation();
-  const { format: formatCurrencyPrice } = useCurrency();
+  const { format: formatCurrencyPrice, convertPrice } = useCurrency();
+  const PROPERTIES_PER_PAGE = 10;
   const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
@@ -32,6 +33,7 @@ const Properties: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
@@ -167,6 +169,16 @@ const Properties: React.FC = () => {
   }, [t, currentLanguage]);
 
   const filteredAndSortedProperties = (() => {
+    const supportedCurrencies = ['EUR', 'USD', 'GBP', 'AED', 'MAD'] as const;
+    const getSortablePrice = (property: Property): number => {
+      const sourceCurrency = (property.currency || 'EUR').toUpperCase();
+      const normalizedCurrency = supportedCurrencies.includes(sourceCurrency as any)
+        ? sourceCurrency
+        : 'EUR';
+
+      return convertPrice(property.price, normalizedCurrency as any);
+    };
+
     // First, filter the properties
     const filtered = properties.filter(property => {
       const typeMatch = filter === 'all' || property.type === filter;
@@ -200,10 +212,10 @@ const Properties: React.FC = () => {
     const sorted = [...filtered];
     switch (sortBy) {
       case 'priceAsc':
-        sorted.sort((a, b) => a.price - b.price);
+        sorted.sort((a, b) => getSortablePrice(a) - getSortablePrice(b));
         break;
       case 'priceDesc':
-        sorted.sort((a, b) => b.price - a.price);
+        sorted.sort((a, b) => getSortablePrice(b) - getSortablePrice(a));
         break;
       case 'surface':
         sorted.sort((a, b) => b.surface - a.surface);
@@ -217,6 +229,22 @@ const Properties: React.FC = () => {
 
     return sorted;
   })();
+
+  const totalPages = Math.max(1, Math.ceil(filteredAndSortedProperties.length / PROPERTIES_PER_PAGE));
+  const paginatedProperties = filteredAndSortedProperties.slice(
+    (currentPage - 1) * PROPERTIES_PER_PAGE,
+    currentPage * PROPERTIES_PER_PAGE
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, locationFilter, bedroomsFilter, searchQuery, sortBy]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const toggleFavorite = (propertyId: number) => {
     setFavorites(prev => 
@@ -240,7 +268,8 @@ const Properties: React.FC = () => {
     setLocationFilter('');
     setBedroomsFilter(null);
     setSearchQuery('');
-    setSortBy('relevance');
+    setSortBy('newest');
+    setCurrentPage(1);
   };
 
   const activeFiltersCount = [
@@ -547,7 +576,7 @@ const Properties: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
-              {filteredAndSortedProperties.map((property, index) => (
+              {paginatedProperties.map((property, index) => (
                 <div
                   key={property.id}
                   className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
@@ -696,12 +725,42 @@ const Properties: React.FC = () => {
             </div>
           )}
 
-          {/* Load More */}
-          {filteredAndSortedProperties.length > 0 && (
-            <div className="text-center mt-8 sm:mt-16">
-              <button className="border-2 border-gray-900 text-gray-900 px-8 sm:px-14 py-3 sm:py-5 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500 focus:outline-none">
-                <span>{t('properties.listing.loadMore')}</span>
+          {/* Pagination */}
+          {!loading && filteredAndSortedProperties.length > 0 && totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mt-8 sm:mt-16 flex-wrap">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="inline-flex items-center justify-center w-10 h-10 border-2 border-gray-300 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[#023927] hover:text-[#023927] transition-colors duration-300"
+              >
+                <ChevronLeftIcon className="w-4 h-4" />
               </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-10 h-10 border-2 text-sm font-medium transition-colors duration-300 ${
+                    currentPage === page
+                      ? 'border-[#023927] bg-[#023927] text-white'
+                      : 'border-gray-300 text-gray-700 hover:border-[#023927] hover:text-[#023927]'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="inline-flex items-center justify-center w-10 h-10 border-2 border-gray-300 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[#023927] hover:text-[#023927] transition-colors duration-300"
+              >
+                <ChevronRightIcon className="w-4 h-4" />
+              </button>
+
+              <div className="w-full text-center text-sm text-gray-500 mt-2">
+                {t('common.page') || 'Page'} {currentPage} / {totalPages}
+              </div>
             </div>
           )}
         </div>
