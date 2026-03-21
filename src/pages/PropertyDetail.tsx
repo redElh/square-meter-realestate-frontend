@@ -8,6 +8,8 @@ import {
   DocumentTextIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CameraIcon,
+  ArrowTopRightOnSquareIcon,
   PhoneIcon,
   EnvelopeIcon
 } from '@heroicons/react/24/outline';
@@ -15,6 +17,7 @@ import { apimoService, Property } from '../services/apimoService';
 import PropertyCard from '../components/PropertyCard';
 import { useCurrency } from '../hooks/useCurrency';
 import SEO from '../components/SEO/SEO';
+import ImageGalleryModal from '../components/ImageGalleryModal';
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams();
@@ -25,6 +28,8 @@ const PropertyDetail: React.FC = () => {
   const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
   const isPlaying = true;
 
   useEffect(() => {
@@ -76,6 +81,11 @@ const PropertyDetail: React.FC = () => {
   const prevImage = () => {
     if (!property) return;
     setActiveImage(prev => (prev - 1 + property.images.length) % property.images.length);
+  };
+
+  const openGallery = (initialIndex: number = 0) => {
+    setGalleryInitialIndex(initialIndex);
+    setGalleryOpen(true);
   };
 
   if (loading) {
@@ -141,7 +151,10 @@ const PropertyDetail: React.FC = () => {
               />
 
               {/* Main image centered on top */}
-              <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <div
+                className="relative z-10 w-full h-full flex items-center justify-center cursor-pointer"
+                onClick={() => openGallery(index)}
+              >
                 <img
                   src={image}
                   alt={`${property.title} - Vue ${index + 1}`}
@@ -153,6 +166,18 @@ const PropertyDetail: React.FC = () => {
             </div>
           ))}
         </div>
+
+        <button
+          onClick={() => openGallery(activeImage)}
+          className="absolute top-[110px] sm:top-[130px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 bg-black/65 hover:bg-black/80 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 backdrop-blur-sm transition-colors duration-300 flex items-center gap-1.5 sm:gap-2"
+          style={{ borderRadius: '0' }}
+        >
+          <CameraIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="text-[10px] sm:text-xs uppercase tracking-wide font-medium">
+            {t('properties.listing.view')} {t('properties.listing.photos')} ({property.images.length})
+          </span>
+          <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        </button>
 
         {/* Carousel Controls - Consistent positioning across all sizes */}
         <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[200px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 flex items-center space-x-1 sm:space-x-2 md:space-x-4">
@@ -373,6 +398,14 @@ const PropertyDetail: React.FC = () => {
           </div>
         </section>
       )}
+
+      <ImageGalleryModal
+        isOpen={galleryOpen}
+        onClose={() => setGalleryOpen(false)}
+        images={property.images}
+        propertyTitle={property.title}
+        initialIndex={galleryInitialIndex}
+      />
     </div>
   );
 };
