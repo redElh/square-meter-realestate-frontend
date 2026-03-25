@@ -1,159 +1,159 @@
-# Guide de Lecture de la Documentation
+# Documentation Reading Guide
 
-Bienvenue dans l'analyse technique du projet Square Meter Real Estate. Ce guide vous aide à naviguer efficacement dans la documentation pour votre audit.
+Welcome to the technical analysis of the Square Meter Real Estate project. This guide helps you navigate the documentation efficiently for your audit.
 
-## 📋 Structure Recommandée de Lecture
+## 📋 Recommended Reading Structure
 
-### 1. **Commencez par ici** → [README.md](README.md)
-   - **Durée:** 5 minutes
-   - **Contenu:** Vue d'ensemble du projet, structure des dossiers, capacités principales
-   - **Objectif:** Comprendre ce que fait l'application et sa stack de base
+### 1. **Start Here** → [README.md](README.md)
+   - **Duration:** 5 minutes
+   - **Content:** Project overview, folder structure, main capabilities
+   - **Goal:** Understand what the application does and its basic stack
 
-### 2. **Architecture Technique** → [ARCHITECTURE.md](ARCHITECTURE.md)
-   - **Durée:** 10 minutes
-   - **Contenu:** Composantes système (frontend, API, services externes), flux de requêtes
-   - **Objectif:** Comprendre comment les différents éléments interagissent
+### 2. **Technical Architecture** → [ARCHITECTURE.md](ARCHITECTURE.md)
+   - **Duration:** 10 minutes
+   - **Content:** System components (frontend, API, external services), request flows
+   - **Goal:** Understand how different elements interact
 
-### 3. **Stack Technologique Détaillé** → [TECH_STACK.md](TECH_STACK.md)
-   - **Durée:** 15 minutes
-   - **Contenu:** Liste complète des dépendances, versions, justifications d'usage
-   - **Sections clés:**
+### 3. **Detailed Technology Stack** → [TECH_STACK.md](TECH_STACK.md)
+   - **Duration:** 15 minutes
+   - **Content:** Complete list of dependencies, versions, usage justifications
+   - **Key Sections:**
      - Frontend: React, TypeScript, Tailwind, i18n
-     - Backend: Nodemailer, API serverless
-     - Services externes: APIMO, Gemini AI, WordPress
+     - Backend: Nodemailer, serverless API
+     - External Services: APIMO, Gemini AI, WordPress
      - Infrastructure: Vercel, build configuration
-   - **Objectif:** Valider la qualité et la pertinence des choix technologiques
+   - **Goal:** Validate the quality and relevance of technology choices
 
-### 4. **Gestion des Données & Formulaires** → [DATA_HANDLING.md](DATA_HANDLING.md)
-   - **Durée:** 20 minutes
-   - **Contenu:** Modes d'envoi des formulaires, stockage, rétention, sécurité
-   - **Sections clés:**
-     - Points de collecte (formulaires inquiry, careers, contact)
-     - **Architecture d'envoi SMTP:** Gmail, Custom SMTP, SendGrid
-     - **Stockage:** Email inbox (INDEFINI), logs (30 jours), pas de DB persistante
-     - **Sécurité:** TLS in-transit, env vars, limitations connues
-     - **GDPR:** Droits utilisateur, conformité, incidents
-   - **Objectif:** Évaluer la conformité RGPD et les risques de sécurité
+### 4. **Data Management & Forms** → [DATA_HANDLING.md](DATA_HANDLING.md)
+   - **Duration:** 20 minutes
+   - **Content:** Form transmission modes, storage, retention, security
+   - **Key Sections:**
+     - Collection points (inquiry, careers, contact forms)
+     - **SMTP Transmission Architecture:** Gmail, Custom SMTP, SendGrid
+     - **Storage:** Email inbox (INDEFINITE), logs (30 days), no persistent DB
+     - **Security:** TLS in-transit, env vars, known limitations
+     - **GDPR:** User rights, compliance, incidents
+   - **Goal:** Evaluate GDPR compliance and security risks
 
-### 5. **Déploiement & Infrastructure** → [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
-   - **Durée:** 10 minutes
-   - **Contenu:** Variables d'environnement, processus de déploiement Vercel
-   - **Objectif:** Comprendre comment l'app se déploie en production
+### 5. **Deployment & Infrastructure** → [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+   - **Duration:** 10 minutes
+   - **Content:** Environment variables, Vercel deployment process
+   - **Goal:** Understand how the app deploys to production
 
-### 6. **Sécurité & Secrets** → [SECURITY_NOTICE.md](SECURITY_NOTICE.md)
-   - **Durée:** 5 minutes
-   - **Contenu:** Historique de fuite de clé Gemini, corrections appliquées
-   - **Objectif:** Évaluer la gestion des incidents de sécurité
+### 6. **Security & Secrets** → [SECURITY_NOTICE.md](SECURITY_NOTICE.md)
+   - **Duration:** 5 minutes
+   - **Content:** Gemini API key leak history, applied fixes
+   - **Goal:** Evaluate security incident management
 
-## 🎯 Lectures par Persona
+## 🎯 Reading by Persona
 
-### **Recruteur / Manager Technique**
-1. README.md (vue d'ensemble)
-2. TECH_STACK.md (qualité des choix)
-3. ARCHITECTURE.md (complexité et design)
-4. DATA_HANDLING.md (conscience de la sécurité/GDPR)
+### **Recruiter / Technical Manager**
+1. README.md (overview)
+2. TECH_STACK.md (quality of choices)
+3. ARCHITECTURE.md (complexity and design)
+4. DATA_HANDLING.md (security/GDPR awareness)
 
-**Temps total:** ~40 minutes
+**Total Time:** ~40 minutes
 
-### **Audit de Conformité (RGPD/Sécurité)**
-1. DATA_HANDLING.md (points de collecte, stockage, rétention)
+### **Compliance Audit (GDPR/Security)**
+1. DATA_HANDLING.md (collection points, storage, retention)
 2. SECURITY_NOTICE.md (incident response)
-3. DEPLOYMENT_GUIDE.md (gestion des secrets)
-4. .env.example (variables d'environnement requises)
+3. DEPLOYMENT_GUIDE.md (secret management)
+4. .env.example (required environment variables)
 
-**Temps total:** ~30 minutes
+**Total Time:** ~30 minutes
 
-### **Développeur (Onboarding)**
-1. README.md (structure du projet)
-2. ARCHITECTURE.md (flux système)
-3. TECH_STACK.md (dépendances à connaître)
-4. api/ folder (endpoints expérimentaux)
-5. src/ folder (structure React)
+### **Developer (Onboarding)**
+1. README.md (project structure)
+2. ARCHITECTURE.md (system flows)
+3. TECH_STACK.md (dependencies to know)
+4. api/ folder (endpoints)
+5. src/ folder (React structure)
 
-**Temps total:** ~1 heure
+**Total Time:** ~1 hour
 
-## 📂 Fichiers Importants à Consulter
+## 📂 Important Files to Review
 
-### Fichiers de Contenu
-| Fichier | Objectif | Audience |
-|---------|----------|----------|
-| [README.md](README.md) | Vue d'ensemble du projet | Tous |
-| [ARCHITECTURE.md](ARCHITECTURE.md) | Conception système | Techs, Managers |
-| [TECH_STACK.md](TECH_STACK.md) | Dépendances & versions | Techs, Recruteurs |
-| [DATA_HANDLING.md](DATA_HANDLING.md) | Données, formulaires, RGPD | Compliance, Techs |
-| [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Déploiement Vercel | DevOps, Techs |
-| [SECURITY_NOTICE.md](SECURITY_NOTICE.md) | Incidents et corrections | Security, Managers |
+### Content Files
+| File | Purpose | Audience |
+|------|---------|----------|
+| [README.md](README.md) | Project overview | Everyone |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | System design | Techs, Managers |
+| [TECH_STACK.md](TECH_STACK.md) | Dependencies & versions | Techs, Recruiters |
+| [DATA_HANDLING.md](DATA_HANDLING.md) | Data, forms, GDPR | Compliance, Techs |
+| [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Vercel deployment | DevOps, Techs |
+| [SECURITY_NOTICE.md](SECURITY_NOTICE.md) | Incidents and fixes | Security, Managers |
 
-### Fichiers de Configuration
-| Fichier | Objectif |
-|---------|----------|
-| [.env.example](.env.example) | Variables d'environnement requises |
-| [package.json](package.json) | Dépendances npm, scripts |
-| [vercel.json](vercel.json) | Configuration Vercel (timeouts, memory) |
-| [tsconfig.json](tsconfig.json) | Configuration TypeScript |
-| [tailwind.config.js](tailwind.config.js) | Configuration Tailwind CSS |
+### Configuration Files
+| File | Purpose |
+|------|----------|
+| [.env.example](.env.example) | Required environment variables |
+| [package.json](package.json) | npm dependencies, scripts |
+| [vercel.json](vercel.json) | Vercel config (timeouts, memory) |
+| [tsconfig.json](tsconfig.json) | TypeScript configuration |
+| [tailwind.config.js](tailwind.config.js) | Tailwind CSS configuration |
 
-### Code Source
-| Dossier | Objectif |
+### Source Code
+| Folder | Purpose |
 |--------|----------|
-| [src/](src/) | Code React (composants, pages, services) |
-| [api/](api/) | Fonctions Vercel serverless (email, IA, etc.) |
-| [public/](public/) | Assets statiques |
+| [src/](src/) | React code (components, pages, services) |
+| [api/](api/) | Vercel serverless functions (email, AI, etc.) |
+| [public/](public/) | Static assets |
 
-## 🔍 Points Clés à Valider
+## 🔍 Key Points to Validate
 
-### Pour un Audit de Qualité Code
-- ✅ TypeScript utilisé pour type safety
-- ✅ React 19 moderne avec hooks
+### For Code Quality Audit
+- ✅ TypeScript used for type safety
+- ✅ Modern React 19 with hooks
 - ✅ Tailwind CSS (no inline styles)
-- ✅ i18n support (6 langues: FR, EN, ES, DE, AR, RU)
-- ⚠️ ESLint warnings dans certains fichiers (voir warnings de build)
+- ✅ i18n support (6 languages: FR, EN, ES, DE, AR, RU)
+- ⚠️ ESLint warnings in some files (see build warnings)
 
-### Pour un Audit de Sécurité
-- ✅ HTTPS/TLS sur tous les transports
-- ✅ Secrets en env vars (jamais dans le code)
-- ✅ .env fichiers ignorés par Git
-- ⚠️ Pas de rate limiting sur formulaires (spam vulnerability)
-- ⚠️ Pas de CAPTCHA implémenté
-- ⚠️ Données personnelles peuvent apparaître dans logs (30 jours)
+### For Security Audit
+- ✅ HTTPS/TLS on all transports
+- ✅ Secrets in env vars (never in code)
+- ✅ .env files ignored by Git
+- ⚠️ No rate limiting on forms (spam vulnerability)
+- ⚠️ No CAPTCHA implemented
+- ⚠️ Personal data may appear in logs (30 days)
 
-### Pour un Audit RGPD
-- ✅ Formulaires collectent minimum de données
-- ✅ Pas de tracking cookies
-- ✅ Pas de géolocalisation
-- ✅ TLS encryption en transit
-- ⚠️ Pas de consentement explicite (à ajouter)
-- ⚠️ Rétention de données indéfinies (email provider)
-- ⚠️ Pas de consentement pour services tiers (Gemini, translation)
+### For GDPR Audit
+- ✅ Forms collect minimal data
+- ✅ No tracking cookies
+- ✅ No geolocation
+- ✅ TLS encryption in transit
+- ⚠️ No explicit consent (should add)
+- ⚠️ Indefinite data retention (email provider)
+- ⚠️ No consent for third-party services (Gemini, translation)
 
-## 💡 Questions Fréquentes
+## 💡 Frequently Asked Questions
 
-**Q: Où sont stockées les données des formulaires?**
-R: Dans l'inbox email du destinataire (Gmail/SendGrid/SMTP), pas dans une DB d'app. Rétention indéfinie.
+**Q: Where are form data stored?**
+A: In recipient's email inbox (Gmail/SendGrid/SMTP), not in app DB. Retention indefinite.
 
-**Q: Comment fonctionne l'envoi de CV?**
-R: Base64 encodé dans le payload JSON, décódé côté serveur, envoyé comme attachment MIME via Nodemailer.
+**Q: How does CV sending work?**
+A: Base64 encoded in JSON payload, decoded on server, sent as MIME attachment via Nodemailer.
 
-**Q: Quels fournisseurs d'email sont supportés?**
-R: Gmail (SMTP + App Password), Custom SMTP (Outlook, Yahoo, etc.), SendGrid API.
+**Q: Which email providers are supported?**
+A: Gmail (SMTP + App Password), Custom SMTP (Outlook, Yahoo, etc.), SendGrid API.
 
-**Q: L'IA (Gemini) a-t-elle accès aux données utilisateur?**
-R: Non, seulement le message de chat. Pas d'identifiants. Check Google policy pour log retention.
+**Q: Does AI (Gemini) have access to user data?**
+A: No, only the chat message. No identifiers. Check Google policy for log retention.
 
-**Q: Comment les traductions vers le français se font-elles?**
-R: LibreTranslate (gratuit, défaut) ou DeepL (payant). Les textes des formulaires sont traduits avant d'être envoyés.
+**Q: How is French translation handled?**
+A: LibreTranslate (free, default) or DeepL (paid). Form texts are translated before sending.
 
-**Q: Comment gérer la sécurité des clés API?**
-R: Chaque clé est un env var Vercel (chiffré). Si fuite: rotation immédiate.
+**Q: How to manage API key security?**
+A: Each key is a Vercel env var (encrypted). If leaked: rotate immediately.
 
 ---
 
 ## 📞 Support
 
-Pour des questions spécifiques:
-- **Code & Architecture:** Consulter les fichiers src/ et api/
-- **Données & Sécurité:** Voir DATA_HANDLING.md + SECURITY_NOTICE.md
-- **Déploiement:** Voir DEPLOYMENT_GUIDE.md
-- **Technologies:** Voir TECH_STACK.md
+For specific questions:
+- **Code & Architecture:** Review src/ and api/ files
+- **Data & Security:** See DATA_HANDLING.md + SECURITY_NOTICE.md
+- **Deployment:** See DEPLOYMENT_GUIDE.md
+- **Technologies:** See TECH_STACK.md
 
-**Dernier audit:** Mars 2026
+**Last Updated:** March 2026
