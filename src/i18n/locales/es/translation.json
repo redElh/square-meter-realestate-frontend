@@ -466,6 +466,8 @@
       "bedrooms": "Habitaciones",
       "bedroomsLabel": "habitaciones",
       "allBedrooms": "Todas",
+      "propertyType": "Tipo de propiedad",
+      "allPropertyTypes": "Todos los tipos",
       "priceRange": "Rango de precio",
       "surface": "Superficie",
       "activeFilters": "filtro(s) activo(s)",
@@ -528,6 +530,12 @@
       "penthouse": "Ático",
       "chateau": "Castillo",
       "land": "Terreno"
+    },
+    "propertyTypes": {
+      "apartment": "Apartamento",
+      "villa": "Villa",
+      "land": "Terreno",
+      "other": "Otro"
     }
     ,
     "mock": {

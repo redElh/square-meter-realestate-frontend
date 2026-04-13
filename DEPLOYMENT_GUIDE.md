@@ -1,158 +1,71 @@
-# 🚀 Deployment Guide - Square Meter Real Estate
+# Deployment Guide
 
-## Quick Deployment to Vercel
+This project is designed for Vercel deployment with React frontend + serverless API routes.
 
-### Prerequisites
-- ✅ Vercel account connected to your GitHub repository
-- ✅ All environment variables configured (see VERCEL_ENV_SETUP.md)
+## 1. Prerequisites
 
-### Step 1: Commit and Push Changes
+- Vercel project connected to this repository
+- Required environment variables configured in Vercel dashboard
+
+## 2. Required Environment Variables
+
+Set values in Vercel Project Settings > Environment Variables.
+
+Core app and data:
+- APIMO_PROVIDER_ID
+- APIMO_TOKEN
+- APIMO_AGENCY_ID
+
+AI assistant:
+- REACT_APP_GEMINI_API_KEY
+
+Email delivery (choose one provider path):
+- CONTACT_EMAIL
+- CONTACT_EMAIL2
+- CONTACT_EMAIL3
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- SMTP_HOST
+- SMTP_PORT
+- SMTP_SECURE
+- SMTP_USER
+- SMTP_PASSWORD
+- SMTP_FROM
+- SENDGRID_API_KEY
+
+Optional translation and article views:
+- TRANSLATE_API_URL
+- KV_REDIS_URL
+- KV_REST_API_URL
+- KV_REST_API_TOKEN
+
+Never commit real credentials to Git.
+
+## 3. Deploy
+
+Automatic path:
+- Push to the connected production branch.
+
+CLI path:
 
 ```bash
-# Add all new and modified files
-git add .
-
-# Commit changes
-git commit -m "feat: Add AI Assistant with multi-language support and responsive design"
-
-# Push to main branch
-git push origin main
-```
-
-### Step 2: Configure Vercel Environment Variables
-
-Go to your Vercel project dashboard and add these environment variables:
-
-#### Required for AI Assistant
-```
-REACT_APP_GEMINI_API_KEY=your_new_gemini_api_key_here
-```
-
-**⚠️ SECURITY NOTE:** 
-- Get a NEW API key from: https://aistudio.google.com/app/apikey
-- The previous key was leaked and must be replaced
-- Add ONLY to Vercel environment variables, NEVER commit to git
-
-#### Required for Email (already configured)
-```
-GMAIL_USER=redaelhiri9@gmail.com
-GMAIL_APP_PASSWORD=uonnrlzgmazoxysq
-CONTACT_EMAIL=Essaouira@m2squaremeter.com
-CONTACT_EMAIL2=direction@m2squaremeter.com
-CONTACT_EMAIL3=Squaremeter@apilead3.net
-```
-
-### Step 3: Deploy
-
-Vercel will automatically deploy when you push to main. You can also:
-
-```bash
-# Deploy using Vercel CLI
 npm install -g vercel
 vercel --prod
 ```
 
-## Important Notes
+## 4. Post-Deploy Verification
 
-### ChromaDB in Production
+- Verify property pages and filters load correctly
+- Verify API-backed features respond without errors:
+  - property inquiries
+  - chatbot endpoint
+  - google reviews endpoint
+  - article view tracking
+- Verify multilingual navigation and page rendering
+- Verify contact/inquiry emails are delivered
 
-⚠️ **ChromaDB is NOT available in production on Vercel** due to serverless limitations.
+## 5. Operational Notes
 
-The AI Assistant will automatically use **fallback mode** in production, which:
-- ✅ Still searches properties using direct APIMO API
-- ✅ Uses Google Gemini AI for natural language understanding
-- ✅ Provides intelligent responses in all 6 languages
-- ✅ Works without vector database
-
-**ChromaDB is only for local development** to enhance search with semantic similarity.
-
-### Production AI Assistant Features
-
-Even without ChromaDB, the AI Assistant in production:
-- ✅ Understands natural language queries
-- ✅ Filters properties by price, location, rooms, amenities
-- ✅ Responds in user's selected language (EN, FR, ES, DE, AR, RU)
-- ✅ Shows disclaimer about being in development
-- ✅ Provides property recommendations
-- ✅ Works on all devices (responsive design)
-
-### Environment Variables
-
-The app checks for `NODE_ENV === 'production'` to automatically disable ChromaDB in production.
-
-No additional configuration needed - it just works! 🎉
-
-## Post-Deployment Checklist
-
-After deployment, verify:
-
-- [ ] AI Assistant button appears on all pages
-- [ ] Chat opens and displays welcome message in correct language
-- [ ] Disclaimer banner shows in header
-- [ ] Property search works (queries APIMO directly)
-- [ ] AI responds in the correct language based on app settings
-- [ ] Mobile responsive design works (test on phone)
-- [ ] Email forms still work correctly
-- [ ] All 6 languages work (EN, FR, ES, DE, AR, RU)
-
-## Testing the AI Assistant in Production
-
-Test these scenarios:
-
-1. **Language Switching**
-   - Go to Settings → Change language
-   - Open AI Assistant
-   - Verify title, subtitle, and disclaimer are translated
-
-2. **Property Search**
-   - Ask: "Find me a 3-bedroom villa in Essaouira"
-   - Ask: "Show me the cheapest apartment"
-   - Ask: "Properties under €500k with a pool"
-
-3. **Mobile Responsiveness**
-   - Open on mobile device
-   - Check chat fits on screen
-   - Test input and buttons work
-
-4. **Multi-device Support**
-   - Test on desktop (large screen)
-   - Test on tablet (medium screen)
-   - Test on mobile (small screen)
-
-## Troubleshooting
-
-### AI Assistant doesn't respond
-- Check REACT_APP_GEMINI_API_KEY is set in Vercel
-- Check browser console for errors
-- Verify Gemini API quota hasn't been exceeded
-
-### Wrong language in responses
-- Verify language is correctly set in app
-- Check translation files are deployed
-- Clear browser cache
-
-### Mobile layout issues
-- Check viewport meta tag in index.html
-- Verify Tailwind CSS is building correctly
-- Test in Chrome DevTools mobile view
-
-## Build Information
-
-Last successful build size:
-```
-Main bundle: ~838 KB (gzipped)
-CSS: ~12 KB (gzipped)
-```
-
-Build time: ~2 minutes
-
-## Support
-
-For issues or questions:
-- Email: Essaouira@m2squaremeter.com
-- Check logs in Vercel dashboard
-- Review browser console errors
-
----
-
-**Ready to deploy? Run the git commands above and push to production! 🚀**
+- ChromaDB is intended for local or custom-hosted usage. Serverless production environments generally use fallback flows when vector services are unavailable.
+- Keep all secrets in platform-managed env vars.
+- Rotate any key immediately if there is a leak suspicion.

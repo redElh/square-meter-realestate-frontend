@@ -20,9 +20,6 @@ src/**/*.spec.tsx
 src/**/*.spec.ts
 *.md
 README.md
-QUICK_START.md
 AI_FEATURES_README.md
 AI_INTEGRATION_GUIDE.md
-SEO_IMPLEMENTATION_COMPLETE.md
-SEO_QUICK_START.md
 public/README_ADD_LOGO.md

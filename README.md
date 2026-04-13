@@ -1,47 +1,96 @@
-# Getting Started with Create React App
+# Square Meter Real Estate Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Production React application for a multilingual luxury real-estate experience, including property discovery, inquiry workflows, and AI-assisted search.
 
-## Available Scripts
+## Main Capabilities
 
-In the project directory, you can run:
+- Multilingual UI with i18n support (FR, EN, ES, DE, AR, RU)
+- Property listing and detail flows
+- Inquiry and contact workflows with serverless email delivery
+- AI assistant endpoint integration for property-related questions
+- Google reviews endpoint integration
+- SEO-ready pages and metadata support
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- React 19 + TypeScript
+- React Router
+- Tailwind CSS
+- i18next / react-i18next
+- Vercel Serverless Functions (under api)
+- Nodemailer (email delivery)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+frontend/
+- src/: React application code
+- api/: Vercel serverless functions
+- public/: static assets
+- services/: local scripts/services used by AI and translation workflows
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Local Setup
 
-### `npm run build`
+1. Install dependencies
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+	npm install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Create your local environment file
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+	- Copy .env.example to .env.local or .env
+	- Fill only your own keys and credentials
 
-### `npm run eject`
+3. Start development server
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+	npm start
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Build for production
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+	npm run build
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Environment Variables
 
-## Learn More
+The following variables are commonly required depending on enabled features:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- APIMO_PROVIDER_ID
+- APIMO_TOKEN
+- APIMO_AGENCY_ID
+- REACT_APP_GEMINI_API_KEY
+- CONTACT_EMAIL
+- CONTACT_EMAIL2
+- CONTACT_EMAIL3
+- GMAIL_USER
+- GMAIL_APP_PASSWORD
+- SMTP_HOST
+- SMTP_PORT
+- SMTP_SECURE
+- SMTP_USER
+- SMTP_PASSWORD
+- SMTP_FROM
+- SENDGRID_API_KEY
+- TRANSLATE_API_URL
+- KV_REDIS_URL or KV_REST_API_URL + KV_REST_API_TOKEN
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+See .env.example for placeholders and DEPLOYMENT_GUIDE.md for deployment notes.
+
+## Serverless API Endpoints
+
+- api/apimo.js
+- api/chatbot.js
+- api/google-reviews.js
+- api/send-property-inquiry.js
+- api/article-views.js
+- api/wordpress.js
+
+## Documentation
+
+- ARCHITECTURE.md
+- DEPLOYMENT_GUIDE.md
+- SECURITY_NOTICE.md
+- AI_INTEGRATION_GUIDE.md
+- RAG_CHATBOT_GUIDE.md
+- TRANSLATION_SETUP.md
+
+## Repository Hygiene
+
+This repository was cleaned to remove implementation-status noise, debug outputs, generated artifacts, and tracked local secret files so it is easier to review in hiring and technical audit contexts.
 

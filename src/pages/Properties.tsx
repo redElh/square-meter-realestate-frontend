@@ -36,6 +36,7 @@ const Properties: React.FC = () => {
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
   const [locationFilter, setLocationFilter] = useState('');
   const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(null);
+  const [propertyTypeFilter, setPropertyTypeFilter] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('newest');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -193,6 +194,14 @@ const Properties: React.FC = () => {
       const locationMatch = !locationFilter || 
         property.location.toLowerCase().includes(locationFilter.toLowerCase());
       const roomsMatch = !bedroomsFilter || (property.rooms && property.rooms >= bedroomsFilter);
+      const propertyTypeMatch = !propertyTypeFilter || (() => {
+        const title = property.title?.toLowerCase() || '';
+        if (propertyTypeFilter === 'apartment') return title.includes('appartement') || title.includes('apartment') || title.includes('riad');
+        if (propertyTypeFilter === 'villa') return title.includes('villa');
+        if (propertyTypeFilter === 'land') return title.includes('terrain') || title.includes('land');
+        if (propertyTypeFilter === 'other') return !title.includes('appartement') && !title.includes('apartment') && !title.includes('villa') && !title.includes('terrain') && !title.includes('land') && !title.includes('riad');
+        return true;
+      })();
       
       // Enhanced intelligent search - searches across multiple fields
       const searchMatch = !searchQuery || (() => {
@@ -213,7 +222,7 @@ const Properties: React.FC = () => {
         return queryWords.every(word => searchFields.includes(word));
       })();
       
-      return typeMatch && locationMatch && roomsMatch && searchMatch;
+      return typeMatch && locationMatch && roomsMatch && propertyTypeMatch && searchMatch;
     });
 
     // Then, sort the filtered properties
@@ -265,7 +274,7 @@ const Properties: React.FC = () => {
     }
 
     setCurrentPage(1);
-  }, [filter, locationFilter, bedroomsFilter, searchQuery, sortBy, loading, properties.length]);
+  }, [filter, locationFilter, bedroomsFilter, propertyTypeFilter, searchQuery, sortBy, loading, properties.length]);
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams);
@@ -331,11 +340,18 @@ const Properties: React.FC = () => {
 
   const locations = Array.from(new Set(properties.map(p => p.location)));
   const bedroomOptions = [1, 2, 3, 4, 5, 6];
+  const propertyTypeOptions = [
+    { value: 'apartment', label: t('properties.propertyTypes.apartment') },
+    { value: 'villa', label: t('properties.propertyTypes.villa') },
+    { value: 'land', label: t('properties.propertyTypes.land') },
+    { value: 'other', label: t('properties.propertyTypes.other') }
+  ];
 
   const resetFilters = () => {
     setFilter('all');
     setLocationFilter('');
     setBedroomsFilter(null);
+    setPropertyTypeFilter('');
     setSearchQuery('');
     setSortBy('newest');
     setCurrentPage(1);
@@ -345,6 +361,7 @@ const Properties: React.FC = () => {
     filter !== 'all',
     locationFilter !== '',
     bedroomsFilter !== null,
+    propertyTypeFilter !== '',
     searchQuery !== '',
   ].filter(Boolean).length;
 
@@ -549,6 +566,24 @@ const Properties: React.FC = () => {
                     <option value="">{t('properties.filters.allBedrooms')}</option>
                     {bedroomOptions.map(beds => (
                       <option key={beds} value={beds}>{beds}+ {t('properties.filters.bedroomsLabel')}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Property Type Filter */}
+                <div>
+                  <label className="block text-white text-sm sm:text-base font-medium mb-2">
+                    {t('properties.filters.propertyType')}
+                  </label>
+                  <select 
+                    value={propertyTypeFilter}
+                    onChange={(e) => setPropertyTypeFilter(e.target.value)}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-white/50 focus:outline-none focus:border-white bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base"
+                    style={{ borderRadius: '0' }}
+                  >
+                    <option value="">{t('properties.filters.allPropertyTypes')}</option>
+                    {propertyTypeOptions.map(type => (
+                      <option key={type.value} value={type.value}>{type.label}</option>
                     ))}
                   </select>
                 </div>

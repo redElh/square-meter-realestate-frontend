@@ -465,6 +465,8 @@
       "bedrooms": "Bedrooms",
       "bedroomsLabel": "bedrooms",
       "allBedrooms": "All",
+      "propertyType": "Property Type",
+      "allPropertyTypes": "All types",
       "priceRange": "Price Range",
       "surface": "Surface Area",
       "activeFilters": "active filter(s)",
@@ -527,6 +529,12 @@
       "penthouse": "Penthouse",
       "chateau": "Château",
       "land": "Land"
+    },
+    "propertyTypes": {
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "land": "Land",
+      "other": "Other"
     }
     ,
     "mock": {

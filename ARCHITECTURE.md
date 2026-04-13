@@ -1,391 +1,73 @@
-# Email Feature Architecture
+# Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         USER INTERFACE                              │
-│                                                                     │
-│  ┌───────────────────────────────────────────────────────────┐   │
-│  │          SELLING MULTISTEP FORM                           │   │
-│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐    │   │
-│  │  │ Step 1  │→ │ Step 2  │→ │ Step 3  │→ │ Step 4  │    │   │
-│  │  │Property │  │Features │  │ Project │  │ Contact │    │   │
-│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘    │   │
-│  │                                                │          │   │
-│  │                                                ↓          │   │
-│  │                                          [SUBMIT]         │   │
-│  └───────────────────────────────────────────┬───────────────┘   │
-│                                              │                   │
-│                                              ↓                   │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │         EMAIL PREVIEW MODAL                              │   │
-│  │  ┌──────────────────────────────────────────────────┐   │   │
-│  │  │ Subject: Property Inquiry - [Address]            │   │   │
-│  │  ├──────────────────────────────────────────────────┤   │   │
-│  │  │                                                   │   │   │
-│  │  │ Hello [Name],                                     │   │   │
-│  │  │                                                   │   │   │
-│  │  │ PROPERTY DETAILS                                  │   │   │
-│  │  │ 📍 Address: ...                                   │   │   │
-│  │  │ 🏠 Type: ...                                      │   │   │
-│  │  │ 📐 Surface: ... m²                                │   │   │
-│  │  │                                                   │   │   │
-│  │  │ FEATURES                                          │   │   │
-│  │  │ ✨ Terrace, Pool, Parking...                      │   │   │
-│  │  │                                                   │   │   │
-│  │  │ CONTACT INFO                                      │   │   │
-│  │  │ 👤 Name: ...                                      │   │   │
-│  │  │ 📧 Email: ...                                     │   │   │
-│  │  │ 📞 Phone: ...                                     │   │   │
-│  │  │                                                   │   │   │
-│  │  └──────────────────────────────────────────────────┘   │   │
-│  │                                                          │   │
-│  │  ℹ️ This message will be translated to French           │   │
-│  │                                                          │   │
-│  │       [Cancel]              [✈️ Send Message]            │   │
-│  └───────────────────────────────────────┬──────────────────┘   │
-└────────────────────────────────────────┬─┘                       │
-                                        │                          │
-                                        ↓                          │
-┌─────────────────────────────────────────────────────────────────┐
-│                      TRANSLATION LAYER                           │
-│                                                                  │
-│  If currentLanguage !== 'fr':                                   │
-│                                                                  │
-│  ┌────────────────────────┐    ┌──────────────────────────┐   │
-│  │   JavaScript Option    │ OR │     Python Option        │   │
-│  │  (LibreTranslate API)  │    │  (Multi-Backend Service) │   │
-│  │  • Free                │    │  • DeepL (Best)          │   │
-│  │  • No setup            │    │  • Azure Translator      │   │
-│  │  • Good quality        │    │  • LibreTranslate        │   │
-│  │  • Serverless          │    │  • Google Translate      │   │
-│  └────────────────────────┘    └──────────────────────────┘   │
-│              │                              │                   │
-│              └──────────┬───────────────────┘                   │
-│                         ↓                                       │
-│              Email translated to French                         │
-└──────────────────────────┬──────────────────────────────────────┘
-                          │
-                          ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                      EMAIL SENDING LAYER                         │
-│                                                                  │
-│  /api/send-property-inquiry                                     │
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  1. Receive: { subject, content, formData, language }  │   │
-│  │  2. Translate to French (if needed)                     │   │
-│  │  3. Format as HTML email                                │   │
-│  │  4. Send via email service:                             │   │
-│  │     • SendGrid                                          │   │
-│  │     • Mailgun                                           │   │
-│  │     • AWS SES                                           │   │
-│  │  5. Return success/error                                │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└──────────────────────────┬───────────────────────────────────────┘
-                          │
-                          ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                      FEEDBACK LAYER                              │
-│                                                                  │
-│  Success:                        Error:                          │
-│  ┌─────────────────────────┐   ┌─────────────────────────┐     │
-│  │  ✅ Message Sent!       │   │  ❌ Error Sending       │     │
-│  │  [Close ✕]              │   │  [Close ✕]              │     │
-│  └─────────────────────────┘   └─────────────────────────┘     │
-│           │                                                      │
-│           ↓                                                      │
-│  Auto-redirect after 3s                                          │
-│  → /contact?type=estimation&submitted=true                       │
-│                                                                  │
-└──────────────────────────────────────────────────────────────────┘
-```
+## System Summary
 
-## Data Flow
+The project is a React frontend deployed with Vercel serverless functions.
 
-```
-┌──────────────┐
-│   FormData   │
-├──────────────┤
-│ • address    │
-│ • type       │
-│ • surface    │
-│ • rooms      │
-│ • bedrooms   │
-│ • condition  │
-│ • features[] │
-│ • timeline   │
-│ • motivation │
-│ • price      │
-│ • firstName  │
-│ • lastName   │
-│ • email      │
-│ • phone      │
-└──────┬───────┘
-       │
-       ↓
-┌──────────────────────────┐
-│  generateEmailContent()  │
-│  • Uses i18n for text    │
-│  • Formats with emoji    │
-│  • Adds separators       │
-│  • Interpolates data     │
-└──────┬───────────────────┘
-       │
-       ↓
-┌────────────────────┐
-│  Display in Modal  │
-│  • Subject         │
-│  • Content         │
-│  • Editable        │
-└──────┬─────────────┘
-       │
-       ↓
-┌────────────────────┐
-│  User Clicks Send  │
-└──────┬─────────────┘
-       │
-       ↓
-┌───────────────────────────┐
-│  POST to API              │
-│  {                        │
-│    subject,               │
-│    content,               │
-│    formData,              │
-│    currentLanguage: 'en'  │
-│  }                        │
-└──────┬────────────────────┘
-       │
-       ↓
-┌─────────────────────────────┐
-│  Translation (if needed)    │
-│  English → French           │
-│  Spanish → French           │
-│  German → French            │
-│  etc.                       │
-└──────┬──────────────────────┘
-       │
-       ↓
-┌───────────────────────┐
-│  Send Email           │
-│  To: agency@company   │
-│  From: user@email     │
-│  Subject: [French]    │
-│  Body: [French]       │
-└──────┬────────────────┘
-       │
-       ↓
-┌────────────────────┐
-│  Response          │
-│  {                 │
-│    success: true   │
-│  }                 │
-└──────┬─────────────┘
-       │
-       ↓
-┌──────────────────────┐
-│  Show Success Alert  │
-│  Wait 3 seconds      │
-│  Redirect to thanks  │
-└──────────────────────┘
-```
+- Frontend: routing, UI, localization, page composition
+- Serverless API: email, property data integrations, chatbot, content metrics
+- External services: APIMO, Gemini, SMTP providers, Redis/KV, optional translation provider
 
-## Language Support Matrix
+## Runtime Components
 
-```
-┌──────────────┬────────────────┬─────────────┬───────────────┐
-│  Language    │  Display Email │  Send As    │  Translation  │
-├──────────────┼────────────────┼─────────────┼───────────────┤
-│  French      │      ✅        │   French    │      ❌       │
-│  English     │      ✅        │   French    │      ✅       │
-│  Spanish     │      ✅        │   French    │      ✅       │
-│  German      │      ✅        │   French    │      ✅       │
-│  Arabic      │      ✅        │   French    │      ✅       │
-│  Russian     │      ✅        │   French    │      ✅       │
-└──────────────┴────────────────┴─────────────┴───────────────┘
-```
+### Frontend (src)
 
-## File Structure
+- App entry and routing are defined in src/App.tsx
+- App initialization is in src/index.tsx
+- Main concerns:
+  - property browsing and detail pages
+  - multilingual UI and locale-aware content
+  - contact and inquiry forms
+  - AI assistant integration
 
-```
-frontend/
-├── src/
-│   ├── pages/
-│   │   └── clients/
-│   │       └── SellingMultiStep.tsx  ← Main component
-│   └── i18n/
-│       └── locales/
-│           ├── fr/translation.json    ← French translations
-│           ├── en/translation.json    ← English translations
-│           ├── es/translation.json    ← Spanish translations
-│           ├── de/translation.json    ← German translations
-│           ├── ar/translation.json    ← Arabic translations
-│           └── ru/translation.json    ← Russian translations
-│
-├── api/
-│   └── send-property-inquiry.js       ← Email API endpoint
-│
-├── services/
-│   └── translation_service.py         ← Python translation
-│
-├── api_translation.py                 ← Flask translation API
-├── requirements-translation.txt       ← Python dependencies
-│
-└── Documentation/
-    ├── EMAIL_FEATURE_COMPLETE.md      ← Full documentation
-    ├── TRANSLATION_SETUP.md           ← Setup guide
-    ├── QUICK_START_EMAIL.md           ← Quick reference
-    ├── EMAIL_IMPLEMENTATION_SUMMARY.md ← Summary
-    └── ARCHITECTURE.md                ← This file
-```
+### API Layer (api)
 
-## Technology Stack
+Vercel functions expose backend behavior without a standalone server:
 
-```
-┌─────────────────────────────────────────┐
-│           Frontend Stack                │
-├─────────────────────────────────────────┤
-│  • React 19.2.0                         │
-│  • TypeScript                           │
-│  • react-i18next 14.1.0                 │
-│  • Tailwind CSS                         │
-│  • Heroicons                            │
-└─────────────────────────────────────────┘
+- api/apimo.js: property data proxy and integration logic
+- api/send-property-inquiry.js: email sending and request formatting
+- api/chatbot.js: AI assistant backend route
+- api/google-reviews.js: review aggregation/scraping endpoint
+- api/article-views.js: article metrics endpoint
+- api/wordpress.js: WordPress content endpoint
 
-┌─────────────────────────────────────────┐
-│           Backend Stack                 │
-├─────────────────────────────────────────┤
-│  JavaScript:                            │
-│  • Node.js                              │
-│  • Vercel Serverless Functions          │
-│  • LibreTranslate API                   │
-│                                         │
-│  Python (Optional):                     │
-│  • Flask 3.0.0                          │
-│  • DeepL API                            │
-│  • Azure Translator                     │
-│  • LibreTranslate                       │
-└─────────────────────────────────────────┘
+## Request Flows
 
-┌─────────────────────────────────────────┐
-│         Deployment Options              │
-├─────────────────────────────────────────┤
-│  • Vercel (Recommended)                 │
-│  • Heroku (Python service)              │
-│  • Docker (Python service)              │
-│  • AWS Lambda (Alternative)             │
-└─────────────────────────────────────────┘
-```
+### Property Discovery Flow
 
-## Translation Backends Hierarchy
+1. User opens listings page
+2. Frontend requests property data through API integration routes
+3. Result set is filtered/sorted client-side and rendered
+4. Property detail pages load targeted data for selected entries
 
-```
-┌─────────────────────────────────────────────────┐
-│         Translation Attempt Order               │
-├─────────────────────────────────────────────────┤
-│  1. DeepL (Best Quality)                        │
-│     • Requires: API key                         │
-│     • Cost: Free tier then $5.49/month          │
-│     • Quality: ⭐⭐⭐⭐⭐                      │
-├─────────────────────────────────────────────────┤
-│  2. Azure Translator (Enterprise)               │
-│     • Requires: Azure subscription              │
-│     • Cost: Pay-as-you-go                       │
-│     • Quality: ⭐⭐⭐⭐⭐                      │
-├─────────────────────────────────────────────────┤
-│  3. LibreTranslate (Free & Open)                │
-│     • Requires: Nothing (default)               │
-│     • Cost: Free                                │
-│     • Quality: ⭐⭐⭐                          │
-├─────────────────────────────────────────────────┤
-│  4. Google Translate (Backup)                   │
-│     • Requires: googletrans package             │
-│     • Cost: Free (unofficial)                   │
-│     • Quality: ⭐⭐⭐⭐                        │
-│     • Note: Unstable, backup only               │
-└─────────────────────────────────────────────────┘
+### Inquiry Email Flow
 
-If all fail → Use original text (no translation)
-```
+1. User submits inquiry/career/contact form
+2. Frontend posts payload to api/send-property-inquiry.js
+3. API validates payload, optionally translates content, and sends via configured provider
+4. API returns success/error response for UI feedback
 
-## State Management
+### AI Assistant Flow
 
-```
-Component State (SellingMultiStep.tsx):
-┌────────────────────────────────────────┐
-│  Form State:                           │
-│  • currentStep: number                 │
-│  • formData: {                         │
-│      address, type, surface,           │
-│      rooms, bedrooms, condition,       │
-│      features[], timeline,             │
-│      motivation, price, availability   │
-│      firstName, lastName, email, phone │
-│    }                                   │
-├────────────────────────────────────────┤
-│  Email State:                          │
-│  • showEmailPreview: boolean           │
-│  • emailSubject: string                │
-│  • emailContent: string                │
-│  • isSendingEmail: boolean             │
-├────────────────────────────────────────┤
-│  Alert State:                          │
-│  • showAlert: boolean                  │
-│  • alertMessage: string                │
-│  • alertType: 'success' | 'error'      │
-├────────────────────────────────────────┤
-│  UI State:                             │
-│  • isSubmitting: boolean               │
-│  • activeSlide: number                 │
-│  • isPlaying: boolean                  │
-└────────────────────────────────────────┘
-```
+1. User sends prompt in assistant UI
+2. Frontend sends message to api/chatbot.js
+3. API invokes Gemini model with language-specific prompt strategy
+4. Response is returned to UI and rendered in the active language context
 
-## API Contract
+## Configuration Model
 
-```typescript
-// POST /api/send-property-inquiry
+- Client and server behavior depend on environment variables
+- Sensitive secrets must be provided only through environment managers (local untracked env files and deployment platform env config)
+- Example placeholders are maintained in .env.example
 
-Request:
-{
-  subject: string;              // Email subject
-  content: string;              // Email body
-  formData: {                   // Original form data
-    address: string;
-    propertyType: string;
-    surface: string;
-    rooms: string;
-    bedrooms: string;
-    condition: string;
-    features: string[];
-    timeline: string;
-    motivation: string;
-    priceExpectation: string;
-    visitAvailability: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-  };
-  currentLanguage: string;      // e.g., 'en', 'es', 'de'
-}
+## Deployment Model
 
-Response (Success):
-{
-  success: true;
-  message: string;
-  translatedToFrench: boolean;
-}
+- Build: npm run build
+- Frontend static assets + serverless functions are deployed by Vercel
+- Function runtime constraints are configured in vercel.json
 
-Response (Error):
-{
-  success: false;
-  error: string;
-}
-```
+## Security Notes
 
----
-
-**Architecture Version**: 1.0.0  
-**Last Updated**: January 15, 2026  
-**Status**: Production Ready ✅
+- Never commit real API keys, SMTP passwords, or private tokens
+- Restrict CORS and input validation where possible for public routes
+- Rotate credentials immediately when exposed
