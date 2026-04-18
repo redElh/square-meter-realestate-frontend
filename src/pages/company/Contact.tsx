@@ -18,6 +18,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/solid';
 import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
+import propertyStatsService from '../../services/propertyStatsService';
 
 const Contact: React.FC = () => {
   const { t } = useTranslation();
@@ -44,7 +45,7 @@ const Contact: React.FC = () => {
     timeline: '',
     company: '',
     preferredContact: 'email',
-    propertyReference: ''
+    propertyId: ''
   });
 
   // Map query params to subject values and property reference
@@ -65,9 +66,9 @@ const Contact: React.FC = () => {
       updates.subject = mappedSubject;
     }
     
-    // Pre-fill property reference if provided in URL
+    // Pre-fill property ID if provided in URL
     if (propertyParam) {
-      updates.propertyReference = propertyParam;
+      updates.propertyId = propertyParam;
     }
     
     if (Object.keys(updates).length > 0) {
@@ -257,6 +258,7 @@ const Contact: React.FC = () => {
           content: emailContent.content,
           formData: formData,
           currentLanguage: 'fr',
+          emailType: 'contact',
           type: 'contact'
         }),
       });
@@ -276,6 +278,17 @@ const Contact: React.FC = () => {
         setAlertMessage(t('contact.email.successMessage'));
         setShowAlert(true);
         setIsSubmitting(false);
+        
+        // Track inquiry stat if propertyId is provided (even in dev mode)
+        if (formData.propertyId) {
+          try {
+            console.log(`📊 Tracking inquiry for property ${formData.propertyId}`);
+            await propertyStatsService.trackStat(formData.propertyId, 'inquiries', 1);
+            console.log(`✅ Inquiry tracked successfully for property ${formData.propertyId}`);
+          } catch (statsError) {
+            console.error('⚠️ Failed to track inquiry stat:', statsError);
+          }
+        }
         
         // Redirect after 3 seconds
         setTimeout(() => {
@@ -380,7 +393,7 @@ ${
 }\n`
     : ''
 }
-${formData.propertyReference ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\nRéférence : ${formData.propertyReference}\n` : ''}
+${formData.propertyId ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\nRéférence : ${formData.propertyId}\n` : ''}
 
 MESSAGE DU CLIENT
 
@@ -737,12 +750,12 @@ Square Meter - Système de notification automatique
                   </label>
                   <input
                     type="text"
-                    name="propertyReference"
-                    value={formData.propertyReference}
+                    name="propertyId"
+                    value={formData.propertyId}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base font-mono ${
-                      touched.propertyReference && errors.propertyReference
+                      touched.propertyId && errors.propertyId
                         ? 'border-red-500 focus:border-red-600'
                         : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
                     }`}

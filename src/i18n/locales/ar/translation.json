@@ -38,6 +38,7 @@
     "owners": "الملاك",
     "travelers": "المسافرون",
     "agency": "الوكالة",
+    "statistics": "التحليلات",
     "magazine": "المجلة",
     "contact": "اتصل بنا",
     "login": "تسجيل الدخول",
@@ -74,7 +75,34 @@
     "servicesDescription": "خدمات متميزة لمشاريعك",
     "careersDescription": "انضم إلى فريق التميز لدينا",
     "contactDescription": "لنناقش مشاريعك العقارية",
-    "magazineDescription": "أخبار واتجاهات العقارات الفاخرة"
+    "magazineDescription": "أخبار واتجاهات العقارات الفاخرة",
+    "analyticsProtectedDescription": "مخصص لأعضاء فريق الوكالة فقط. كلمة المرور مطلوبة.",
+    "teamOnlyBadge": "للفريق فقط"
+  },
+  "statsProtection": {
+    "eyebrow": "منطقة آمنة",
+    "title": "مطلوب وصول الفريق",
+    "subtitle": "صفحة التحليلات مخصصة لأعضاء فريق الوكالة الذين لديهم كلمة مرور الوصول الداخلية.",
+    "disclaimerTitle": "تنبيه للزوار",
+    "disclaimerBody": "إذا لم تكن من فريق Square Meter، فلا يمكن الوصول إلى هذه الصفحة. يرجى متابعة التصفح في الأقسام العامة من الموقع.",
+    "passwordLabel": "كلمة مرور الفريق",
+    "passwordPlaceholder": "أدخل كلمة مرور الوصول",
+    "button": "الدخول إلى صفحة التحليلات",
+    "footerNote": "الوصول محصور بأعضاء فريق الوكالة المصرح لهم فقط.",
+    "invalidPassword": "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+    "invalidPasswordWithAttempts": "كلمة المرور غير صحيحة. تبقى {{remainingAttempts}} محاولة.",
+    "emptyPasswordError": "يرجى إدخال كلمة المرور.",
+    "tooShortError": "يجب أن تحتوي كلمة المرور على {{min}} أحرف على الأقل.",
+    "tooLongError": "لا يمكن أن تتجاوز كلمة المرور {{max}} حرفا.",
+    "invalidCharactersError": "تم اكتشاف أحرف غير صالحة. استخدم الرموز المسموح بها فقط.",
+    "lockedError": "عدد كبير من المحاولات الفاشلة. حاول مرة أخرى بعد {{seconds}} ثانية.",
+    "backLabel": "العودة إلى الصفحة الرئيسية",
+    "helperTitle": "هل تحتاج إلى وصول؟",
+    "helperBody": "يرجى التواصل مع مسؤول داخلي للحصول على بيانات الاعتماد.",
+    "authenticationTitle": "المصادقة",
+    "analyticsCardTitle": "تحليلات العقارات",
+    "teamCardTitle": "وصول داخلي للفريق",
+    "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور"
   },
   "home": {
     "hero": {
@@ -2255,5 +2283,88 @@
       "phone": "الهاتف",
       "address": "العنوان"
     }
+  },
+  "stats": {
+    "title": "إحصائيات العقارات",
+    "description": "تحليل الأداء العقاري في الوقت الفعلي",
+    "pageTitle": "التحليلات / لوحة المعلومات",
+    "header": {
+      "performance": "ذكاء الأداء في الوقت الفعلي",
+      "activeProperty": "العقار النشط",
+      "selectProperty": "اختر عقاراً للتحليل",
+      "propertyId": "المعرف:",
+      "liveUpdates": "التحديثات المباشرة",
+      "updatesPaused": "التحديثات معلقة",
+      "loading": "جاري تحميل لوحة التحليل",
+      "timeframe": {
+        "24h": "24 ساعة",
+        "7d": "7 أيام",
+        "30d": "30 يوماً"
+      }
+    },
+    "overview": {
+      "title": "نظرة عامة على العقار",
+      "price": "السعر",
+      "surface": "المساحة",
+      "bedrooms": "غرف النوم",
+      "engagementScore": "درجة الانخراط",
+      "topPerforming": "الأداء الأفضل"
+    },
+    "metrics": {
+      "totalViews": "إجمالي المشاهدات",
+      "inquiries": "الاستفسارات",
+      "favorites": "المفضلة",
+      "interactions": "التفاعلات",
+      "views": "المشاهدات",
+      "inquiries": "الاستفسارات",
+      "interactions": "التفاعلات"
+    },
+    "trends": {
+      "title": "اتجاهات الأداء",
+      "subtitle": "مقاييس التفاعل عبر الزمن",
+      "views": "المشاهدات",
+      "inquiries": "الاستفسارات",
+      "interactions": "التفاعلات"
+    },
+    "engagement": {
+      "title": "تحليل التفاعل",
+      "engagementRate": "معدل التفاعل",
+      "actions": "الإجراءات",
+      "conversionRate": "التحويل",
+      "inquiries": "الاستفسارات",
+      "interactionBreakdown": "تفصيل التفاعلات",
+      "clicks": "النقرات"
+    },
+    "activityFeed": {
+      "title": "تغذية النشاط المباشر",
+      "subtitle": "تفاعلات المستخدم في الوقت الفعلي",
+      "live": "مباشر",
+      "noActivity": "في انتظار النشاط",
+      "noActivityDesc": "ستظهر التفاعلات هنا في الوقت الفعلي",
+      "secondsAgo": "قبل ثوان"
+    },
+    "performanceIndex": {
+      "title": "مؤشر الأداء",
+      "outOf100": "من 100",
+      "marketPosition": "موقع السوق",
+      "top10": "أفضل 10%",
+      "top40": "أفضل 40%",
+      "average": "متوسط",
+      "viewToInquiry": "المشاهدة للاستفسار",
+      "lastUpdate": "آخر تحديث",
+      "live": "مباشر"
+    },
+    "emptyState": {
+      "title": "اختر عقاراً لبدء التحليل",
+      "description": "اختر من قائمة الإسقاط أعلاه لعرض التحليلات التفصيلية"
+    },
+    "updated": "محدث",
+    "subtitle": "مقاييس الأداء في الوقت الفعلي لجميع العقارات",
+    "topProperties": "أفضل العقارات أداءً",
+    "ranked": "مصنف حسب",
+    "noData": "لا توجد بيانات عقارية حتى الآن",
+    "liveUpdates": "حالة التحديثات المباشرة",
+    "autoRefresh": "تتحدث الإحصائيات كل 5 ثوان عند تفعيل الوضع المباشر",
+    "lastUpdate": "آخر تحديث: للتو"
   }
 }

@@ -2,6 +2,7 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LocalizationProvider } from './contexts/LocalizationContext';
 import { ReviewsProvider } from './contexts/ReviewsContext';
 import Header from './components/Layout/Header';
@@ -29,21 +30,27 @@ import Concierge from './pages/special-pages/Concierge';
 import Success from './pages/special-pages/Success';
 import Careers from './pages/special-pages/Careers';
 import LanguageCurrency from './pages/Settings/LanguageCurrency';
+import PropertyStatistics from './pages/PropertyStatistics';
+import PropertyStatsProtectedRoute from './components/ProtectedRoute/PropertyStatsProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import RAGAssistant from './components/AIAssistant/RAGAssistant';
+
+// Create QueryClient outside the component
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <HelmetProvider>
-      <LocalizationProvider>
-        <Suspense fallback={
-          <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading...</p>
+      <QueryClientProvider client={queryClient}>
+        <LocalizationProvider>
+          <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-900 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading...</p>
+              </div>
             </div>
-          </div>
-        }>        <Router>
+          }>        <Router>
             <ReviewsProvider>
               <ScrollToTop />
               <div className="min-h-screen bg-ivory">
@@ -53,6 +60,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/properties" element={<Properties />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
+            <Route
+              path="/property-statistics"
+              element={(
+                <PropertyStatsProtectedRoute>
+                  <PropertyStatistics />
+                </PropertyStatsProtectedRoute>
+              )}
+            />
             <Route path="/owners" element={<Owners />} />
             <Route path="/traveler" element={<TravelerSpace />} />
             <Route path="/agency" element={<Agency />} />
@@ -81,7 +96,8 @@ function App() {
           </ReviewsProvider>
         </Router>
       </Suspense>
-    </LocalizationProvider>
+        </LocalizationProvider>
+      </QueryClientProvider>
     </HelmetProvider>
   );
 }

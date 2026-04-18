@@ -38,6 +38,7 @@
     "owners": "Eigentümer",
     "travelers": "Reisende",
     "agency": "Agentur",
+    "statistics": "Analytik",
     "magazine": "Magazin",
     "contact": "Kontakt",
     "login": "Anmelden",
@@ -74,7 +75,34 @@
     "servicesDescription": "Premium-Dienstleistungen für Ihre Projekte",
     "careersDescription": "Werden Sie Teil unseres Exzellenz-Teams",
     "contactDescription": "Sprechen wir über Ihre Immobilienprojekte",
-    "magazineDescription": "Nachrichten und Trends bei Luxusimmobilien"
+    "magazineDescription": "Nachrichten und Trends bei Luxusimmobilien",
+    "analyticsProtectedDescription": "Nur für Teammitglieder der Agentur. Passwort erforderlich.",
+    "teamOnlyBadge": "Nur Team"
+  },
+  "statsProtection": {
+    "eyebrow": "Geschützter Bereich",
+    "title": "Teamzugang erforderlich",
+    "subtitle": "Die Analytik-Seite ist Agentur-Teammitgliedern mit internem Zugangspasswort vorbehalten.",
+    "disclaimerTitle": "Hinweis für Besucher",
+    "disclaimerBody": "Wenn Sie nicht zum Square Meter Team gehören, ist diese Seite nicht zugänglich. Bitte nutzen Sie die öffentlichen Bereiche der Website.",
+    "passwordLabel": "Team-Passwort",
+    "passwordPlaceholder": "Zugangspasswort eingeben",
+    "button": "Zur Analytik-Seite",
+    "footerNote": "Der Zugriff ist nur für autorisierte Teammitglieder der Agentur erlaubt.",
+    "invalidPassword": "Ungültiges Passwort. Bitte versuchen Sie es erneut.",
+    "invalidPasswordWithAttempts": "Ungültiges Passwort. {{remainingAttempts}} Versuch(e) verbleibend.",
+    "emptyPasswordError": "Bitte geben Sie Ihr Passwort ein.",
+    "tooShortError": "Die Passworteingabe muss mindestens {{min}} Zeichen enthalten.",
+    "tooLongError": "Die Passworteingabe darf {{max}} Zeichen nicht überschreiten.",
+    "invalidCharactersError": "Ungültige Zeichen erkannt. Verwenden Sie nur unterstützte Symbole.",
+    "lockedError": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {{seconds}} Sekunden erneut.",
+    "backLabel": "Zur Startseite",
+    "helperTitle": "Benötigen Sie Zugriff?",
+    "helperBody": "Bitte kontaktieren Sie einen internen Administrator für Zugangsdaten.",
+    "authenticationTitle": "Authentifizierung",
+    "analyticsCardTitle": "Immobilien-Analytik",
+    "teamCardTitle": "Interner Teamzugang",
+    "togglePasswordVisibility": "Passwort ein- oder ausblenden"
   },
   "home": {
     "hero": {
@@ -2277,5 +2305,88 @@
       "phone": "Telefon",
       "address": "Adresse"
     }
+  },
+  "stats": {
+    "title": "Immobilienstatistiken",
+    "description": "Echtzeit-Leistungsanalyse von Immobilien",
+    "pageTitle": "Analyse / Übersichtsseite",
+    "header": {
+      "performance": "Echtzeit-Leistungsintelligenz",
+      "activeProperty": "Aktive Immobilie",
+      "selectProperty": "Wählen Sie eine Immobilie zur Analyse",
+      "propertyId": "ID:",
+      "liveUpdates": "Live-Updates",
+      "updatesPaused": "Updates Pausiert",
+      "loading": "Analyse-Dashboard wird geladen",
+      "timeframe": {
+        "24h": "24 Std.",
+        "7d": "7 Tage",
+        "30d": "30 Tage"
+      }
+    },
+    "overview": {
+      "title": "Immobilienübersicht",
+      "price": "Preis",
+      "surface": "Fläche",
+      "bedrooms": "Schlafzimmer",
+      "engagementScore": "Engagement-Score",
+      "topPerforming": "Top-Performer"
+    },
+    "metrics": {
+      "totalViews": "Gesamtaufrufe",
+      "inquiries": "Anfragen",
+      "favorites": "Favoriten",
+      "interactions": "Interaktionen",
+      "views": "Aufrufe",
+      "inquiries": "Anfragen",
+      "interactions": "Interaktionen"
+    },
+    "trends": {
+      "title": "Leistungstrends",
+      "subtitle": "Interaktionsmetriken im Zeitverlauf",
+      "views": "Aufrufe",
+      "inquiries": "Anfragen",
+      "interactions": "Interaktionen"
+    },
+    "engagement": {
+      "title": "Interaktionsanalyse",
+      "engagementRate": "Interaktion",
+      "actions": "Aktionen",
+      "conversionRate": "Konversion",
+      "inquiries": "Anfragen",
+      "interactionBreakdown": "Interaktionsaufschlüsselung",
+      "clicks": "Klicks"
+    },
+    "activityFeed": {
+      "title": "Live-Aktivitäts-Feed",
+      "subtitle": "Echtzeit-Benutzerinteraktionen",
+      "live": "LIVE",
+      "noActivity": "Warten auf Aktivität",
+      "noActivityDesc": "Interaktionen werden hier in Echtzeit angezeigt",
+      "secondsAgo": "vor wenigen Sekunden"
+    },
+    "performanceIndex": {
+      "title": "Leistungsindex",
+      "outOf100": "von 100",
+      "marketPosition": "Marktposition",
+      "top10": "Top 10%",
+      "top40": "Top 40%",
+      "average": "Durchschnitt",
+      "viewToInquiry": "Aufruf zur Anfrage",
+      "lastUpdate": "Letzte Aktualisierung",
+      "live": "Live"
+    },
+    "emptyState": {
+      "title": "Wählen Sie eine Immobilie, um die Analyse zu starten",
+      "description": "Wählen Sie aus der obigen Dropdown-Liste, um detaillierte Analysen anzuzeigen"
+    },
+    "updated": "Aktualisiert",
+    "subtitle": "Echtzeit-Leistungsmetriken für alle Immobilien",
+    "topProperties": "Top-Performing Immobilien",
+    "ranked": "Rangiert nach",
+    "noData": "Noch keine Immobiliendaten vorhanden",
+    "liveUpdates": "Live-Update-Status",
+    "autoRefresh": "Statistiken werden alle 5 Sekunden aktualisiert, wenn Live aktiviert ist",
+    "lastUpdate": "Zuletzt aktualisiert: gerade eben"
   }
 }

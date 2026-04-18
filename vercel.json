@@ -29,6 +29,10 @@
     "api/article-views.js": {
       "maxDuration": 10,
       "memory": 512
+    },
+    "api/property-stats.js": {
+      "maxDuration": 10,
+      "memory": 512
     }
   },
   "env": {

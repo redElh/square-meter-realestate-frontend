@@ -213,4 +213,32 @@ module.exports = function(app) {
       res.status(500).json({ success: false, error: error.message });
     }
   });
+
+  // Property Statistics endpoint - with explicit body parser
+  const statsParser = express.json({ limit: '50mb' });
+  app.all('/api/property-stats', statsParser, async (req, res) => {
+    try {
+      console.log(`📊 Property stats endpoint called: ${req.method}`, req.url);
+      console.log(`📊 Request body:`, req.body);
+      console.log(`📊 Request headers:`, req.headers);
+      
+      // Check if body was parsed for POST/PUT requests
+      if ((req.method === 'POST' || req.method === 'PUT') && (!req.body || Object.keys(req.body).length === 0)) {
+        console.error('❌ Property-stats: req.body is empty or undefined!');
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Request body is empty. Make sure Content-Type is application/json' 
+        });
+      }
+      
+      const handler = require('../api/property-stats.js');
+      await handler(req, res);
+    } catch (error) {
+      console.error('❌ Error in property-stats handler:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  });
 };

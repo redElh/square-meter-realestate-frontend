@@ -38,6 +38,7 @@
     "owners": "Propriétaires",
     "travelers": "Voyageurs",
     "agency": "Agence",
+    "statistics": "Analytique",
     "magazine": "Magazine",
     "contact": "Contact",
     "login": "Connexion",
@@ -71,7 +72,34 @@
     "loginDescription": "Accédez à votre espace personnel",
     "dashboardDescription": "Gérez vos interactions et achats",
     "careersDescription": "Rejoignez notre équipe d'excellence",
-    "magazineDescription": "Actualités et tendances du luxe immobilier"
+    "magazineDescription": "Actualités et tendances du luxe immobilier",
+    "analyticsProtectedDescription": "Réservé aux membres de l'équipe de l'agence. Mot de passe requis.",
+    "teamOnlyBadge": "Équipe uniquement"
+  },
+  "statsProtection": {
+    "eyebrow": "Zone sécurisée",
+    "title": "Accès équipe requis",
+    "subtitle": "La page Analytique est réservée aux membres de l'équipe de l'agence disposant du mot de passe interne.",
+    "disclaimerTitle": "Information pour les visiteurs",
+    "disclaimerBody": "Si vous n'êtes pas membre de l'équipe Square Meter, cet espace n'est pas accessible. Merci de revenir aux pages publiques du site.",
+    "passwordLabel": "Mot de passe équipe",
+    "passwordPlaceholder": "Entrez le mot de passe d'accès",
+    "button": "Accéder à la page Analytique",
+    "footerNote": "Accès réservé uniquement aux membres autorisés de l'agence.",
+    "invalidPassword": "Mot de passe incorrect. Veuillez réessayer.",
+    "invalidPasswordWithAttempts": "Mot de passe incorrect. Il vous reste {{remainingAttempts}} tentative(s).",
+    "emptyPasswordError": "Veuillez saisir votre mot de passe.",
+    "tooShortError": "La saisie du mot de passe doit contenir au moins {{min}} caractères.",
+    "tooLongError": "La saisie du mot de passe ne peut pas dépasser {{max}} caractères.",
+    "invalidCharactersError": "Des caractères non autorisés ont été détectés. Utilisez uniquement des symboles pris en charge.",
+    "lockedError": "Trop de tentatives échouées. Réessayez dans {{seconds}} secondes.",
+    "backLabel": "Retourner à l'accueil",
+    "helperTitle": "Besoin d'accès ?",
+    "helperBody": "Contactez un administrateur interne pour obtenir les droits.",
+    "authenticationTitle": "Authentification",
+    "analyticsCardTitle": "Analytique immobilière",
+    "teamCardTitle": "Accès interne équipe",
+    "togglePasswordVisibility": "Afficher ou masquer le mot de passe"
   },
   "home": {
     "hero": {
@@ -2286,5 +2314,88 @@
       "phone": "Téléphone",
       "address": "Adresse"
     }
+  },
+  "stats": {
+    "title": "Statistiques Immobilières",
+    "description": "Analytique de performance des propriétés en temps réel",
+    "pageTitle": "Analyse / Tableau de bord",
+    "header": {
+      "performance": "Intelligence de performance en temps réel",
+      "activeProperty": "Propriété Active",
+      "selectProperty": "Sélectionnez une propriété à analyser",
+      "propertyId": "ID :",
+      "liveUpdates": "Mises à Jour en Direct",
+      "updatesPaused": "Mises à Jour en Pause",
+      "loading": "Chargement du Tableau de Bord Analytique",
+      "timeframe": {
+        "24h": "24 h",
+        "7d": "7 jours",
+        "30d": "30 jours"
+      }
+    },
+    "overview": {
+      "title": "Aperçu de la Propriété",
+      "price": "Prix",
+      "surface": "Surface",
+      "bedrooms": "Chambres",
+      "engagementScore": "Score d'Engagement",
+      "topPerforming": "Meilleure Performance"
+    },
+    "metrics": {
+      "totalViews": "Vues Totales",
+      "inquiries": "Demandes",
+      "favorites": "Favoris",
+      "interactions": "Interactions",
+      "views": "Vues",
+      "inquiries": "Demandes",
+      "interactions": "Interactions"
+    },
+    "trends": {
+      "title": "Tendances de Performance",
+      "subtitle": "Métriques d'interactions au fil du temps",
+      "views": "Vues",
+      "inquiries": "Demandes",
+      "interactions": "Interactions"
+    },
+    "engagement": {
+      "title": "Analyse de l'engagement",
+      "engagementRate": "Taux d'engagement",
+      "actions": "actions",
+      "conversionRate": "Conversion",
+      "inquiries": "demandes",
+      "interactionBreakdown": "Répartition des Interactions",
+      "clicks": "Clics"
+    },
+    "activityFeed": {
+      "title": "Flux d'Activité en Direct",
+      "subtitle": "Interactions utilisateur en temps réel",
+      "live": "EN DIRECT",
+      "noActivity": "En attente d'activité",
+      "noActivityDesc": "Les interactions apparaîtront ici en temps réel",
+      "secondsAgo": "il y a plusieurs secondes"
+    },
+    "performanceIndex": {
+      "title": "Indice de Performance",
+      "outOf100": "sur 100",
+      "marketPosition": "Position sur le Marché",
+      "top10": "Top 10%",
+      "top40": "Top 40%",
+      "average": "Moyen",
+      "viewToInquiry": "Vue vers Demande",
+      "lastUpdate": "Dernière Mise à Jour",
+      "live": "En Direct"
+    },
+    "emptyState": {
+      "title": "Sélectionnez une propriété pour commencer l'analyse",
+      "description": "Choisissez dans la liste déroulante ci-dessus pour voir les analytiques détaillées"
+    },
+    "updated": "Mise à jour",
+    "subtitle": "Métriques de performance en temps réel pour toutes les propriétés",
+    "topProperties": "Propriétés les Plus Performantes",
+    "ranked": "Classé par",
+    "noData": "Pas encore de données de propriétés",
+    "liveUpdates": "Statut de Mise à Jour en Temps Réel",
+    "autoRefresh": "Les statistiques se rafraîchissent toutes les 5 secondes en mode live",
+    "lastUpdate": "Dernière mise à jour : à l'instant"
   }
 }

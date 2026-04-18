@@ -15,6 +15,7 @@ interface ImageGalleryModalProps {
   images: string[];
   propertyTitle: string;
   initialIndex?: number;
+  onInteraction?: () => void;
 }
 
 const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
@@ -22,7 +23,8 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
   onClose,
   images,
   propertyTitle,
-  initialIndex = 0
+  initialIndex = 0,
+  onInteraction
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [zoom, setZoom] = useState(1);
@@ -70,20 +72,24 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
   }, [isOpen, currentIndex, zoom]);
 
   const handleNext = () => {
+    onInteraction?.();
     setCurrentIndex((prev) => (prev + 1) % images.length);
     resetZoom();
   };
 
   const handlePrevious = () => {
+    onInteraction?.();
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
     resetZoom();
   };
 
   const handleZoomIn = () => {
+    onInteraction?.();
     setZoom((prev) => Math.min(prev + 0.25, 3));
   };
 
   const handleZoomOut = () => {
+    onInteraction?.();
     setZoom((prev) => Math.max(prev - 0.25, 1));
     if (zoom <= 1.25) {
       setPosition({ x: 0, y: 0 });
@@ -91,6 +97,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
   };
 
   const resetZoom = () => {
+    onInteraction?.();
     setZoom(1);
     setPosition({ x: 0, y: 0 });
   };
@@ -273,6 +280,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                 <button
                   key={index}
                   onClick={() => {
+                    onInteraction?.();
                     setCurrentIndex(index);
                     resetZoom();
                   }}

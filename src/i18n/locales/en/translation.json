@@ -38,6 +38,7 @@
     "owners": "Owners",
     "travelers": "Travelers",
     "agency": "Agency",
+    "statistics": "Analytics",
     "magazine": "Magazine",
     "contact": "Contact",
     "login": "Login",
@@ -71,7 +72,34 @@
     "loginDescription": "Access your personal space",
     "dashboardDescription": "Manage your interactions and purchases",
     "careersDescription": "Join our team of excellence",
-    "magazineDescription": "News and trends in luxury real estate"
+    "magazineDescription": "News and trends in luxury real estate",
+    "analyticsProtectedDescription": "Reserved for agency team members. Password required.",
+    "teamOnlyBadge": "Team only"
+  },
+  "statsProtection": {
+    "eyebrow": "Secure Area",
+    "title": "Team Access Required",
+    "subtitle": "The Analytics page is reserved for agency team members who have the internal access password.",
+    "disclaimerTitle": "Notice for visitors",
+    "disclaimerBody": "If you are not part of the Square Meter team, this page is not accessible. Please continue browsing the public sections of the website.",
+    "passwordLabel": "Team password",
+    "passwordPlaceholder": "Enter access password",
+    "button": "Access Analytics Page",
+    "footerNote": "Access is restricted to authorized agency team members only.",
+    "invalidPassword": "Invalid password. Please try again.",
+    "invalidPasswordWithAttempts": "Invalid password. {{remainingAttempts}} attempt(s) remaining.",
+    "emptyPasswordError": "Please enter your password.",
+    "tooShortError": "Password input must contain at least {{min}} characters.",
+    "tooLongError": "Password input cannot exceed {{max}} characters.",
+    "invalidCharactersError": "Invalid characters detected. Use only supported symbols.",
+    "lockedError": "Too many failed attempts. Try again in {{seconds}} seconds.",
+    "backLabel": "Back to homepage",
+    "helperTitle": "Need access?",
+    "helperBody": "Please contact an internal administrator for credentials.",
+    "authenticationTitle": "Authentication",
+    "analyticsCardTitle": "Property Analytics",
+    "teamCardTitle": "Internal Team Access",
+    "togglePasswordVisibility": "Toggle password visibility"
   },
   "home": {
     "hero": {
@@ -2255,5 +2283,88 @@
       "phone": "Phone",
       "address": "Address"
     }
+  },
+  "stats": {
+    "title": "Property Statistics",
+    "description": "Real-time property performance analytics",
+    "pageTitle": "Analytics / Dashboard",
+    "header": {
+      "performance": "Real-time performance intelligence",
+      "activeProperty": "Active Property",
+      "selectProperty": "Select a property to analyze",
+      "propertyId": "ID:",
+      "liveUpdates": "Live Updates",
+      "updatesPaused": "Updates Paused",
+      "loading": "Loading Analytics Dashboard",
+      "timeframe": {
+        "24h": "24h",
+        "7d": "7d",
+        "30d": "30d"
+      }
+    },
+    "overview": {
+      "title": "Property Overview",
+      "price": "Price",
+      "surface": "Surface",
+      "bedrooms": "Bedrooms",
+      "engagementScore": "Engagement Score",
+      "topPerforming": "Top Performing"
+    },
+    "metrics": {
+      "totalViews": "Total Views",
+      "inquiries": "Inquiries",
+      "favorites": "Favorites",
+      "interactions": "Interactions",
+      "views": "Views",
+      "inquiries": "Inquiries",
+      "interactions": "Interactions"
+    },
+    "trends": {
+      "title": "Performance Trends",
+      "subtitle": "Interaction metrics over time",
+      "views": "Views",
+      "inquiries": "Inquiries",
+      "interactions": "Interactions"
+    },
+    "engagement": {
+      "title": "Engagement Analysis",
+      "engagementRate": "Engagement",
+      "actions": "actions",
+      "conversionRate": "Conversion",
+      "inquiries": "inquiries",
+      "interactionBreakdown": "Interaction Breakdown",
+      "clicks": "Clicks"
+    },
+    "activityFeed": {
+      "title": "Live Activity Stream",
+      "subtitle": "Real-time user interactions",
+      "live": "LIVE",
+      "noActivity": "Awaiting activity",
+      "noActivityDesc": "Interactions will appear here in real-time",
+      "secondsAgo": "seconds ago"
+    },
+    "performanceIndex": {
+      "title": "Performance Index",
+      "outOf100": "out of 100",
+      "marketPosition": "Market Position",
+      "top10": "Top 10%",
+      "top40": "Top 40%",
+      "average": "Average",
+      "viewToInquiry": "View-to-Inquiry",
+      "lastUpdate": "Last Update",
+      "live": "Live"
+    },
+    "emptyState": {
+      "title": "Select a property to begin analysis",
+      "description": "Choose from the dropdown above to view detailed analytics"
+    },
+    "updated": "Updated",
+    "subtitle": "Real-time performance metrics across all properties",
+    "topProperties": "Top Performing Properties",
+    "ranked": "Ranked by",
+    "noData": "No properties data yet",
+    "liveUpdates": "Live Update Status",
+    "autoRefresh": "Statistics refresh every 5 seconds when live is enabled",
+    "lastUpdate": "Last updated: Just now"
   }
 }

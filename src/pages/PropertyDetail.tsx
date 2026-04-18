@@ -1,5 +1,5 @@
 // src/pages/PropertyDetail.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -14,6 +14,7 @@ import {
   EnvelopeIcon
 } from '@heroicons/react/24/outline';
 import { apimoService, Property } from '../services/apimoService';
+import propertyStatsService from '../services/propertyStatsService';
 import PropertyCard from '../components/PropertyCard';
 import { useCurrency } from '../hooks/useCurrency';
 import SEO from '../components/SEO/SEO';
@@ -31,6 +32,16 @@ const PropertyDetail: React.FC = () => {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
   const isPlaying = true;
+  const viewTrackedRef = useRef(false);
+
+  // Track click interactions
+  const trackClick = () => {
+    if (property && property.id) {
+      propertyStatsService.trackStat(property.id, 'clicks', 1).catch(error => {
+        console.error('Failed to track click:', error);
+      });
+    }
+  };
 
   useEffect(() => {
     const fetchPropertyData = async () => {
@@ -41,6 +52,19 @@ const PropertyDetail: React.FC = () => {
         // Fetch the specific property
         const propertyData = await apimoService.getPropertyById(Number(id), t, currentLanguage);
         setProperty(propertyData);
+
+        // Track the view only once per property visit
+        if (propertyData && propertyData.id && !viewTrackedRef.current) {
+          viewTrackedRef.current = true;
+          try {
+            console.log(`👁️ Tracking view for property ${propertyData.id}`);
+            const trackResult = await propertyStatsService.trackStat(propertyData.id, 'views', 1);
+            console.log(`✅ View tracked successfully:`, trackResult);
+          } catch (trackError) {
+            console.error('⚠️ Failed to track view:', trackError);
+            // Don't fail the page load if stats tracking fails
+          }
+        }
 
         // Fetch all properties to get similar ones
         const { properties: allProperties } = await apimoService.getProperties({ limit: 1000 }, t, currentLanguage);
@@ -59,6 +83,8 @@ const PropertyDetail: React.FC = () => {
       }
     };
 
+    // Reset the tracking flag when the property ID changes
+    viewTrackedRef.current = false;
     fetchPropertyData();
   }, [id, t, currentLanguage]);
 
@@ -75,15 +101,18 @@ const PropertyDetail: React.FC = () => {
 
   const nextImage = () => {
     if (!property) return;
+    trackClick();
     setActiveImage(prev => (prev + 1) % property.images.length);
   };
 
   const prevImage = () => {
     if (!property) return;
+    trackClick();
     setActiveImage(prev => (prev - 1 + property.images.length) % property.images.length);
   };
 
   const openGallery = (initialIndex: number = 0) => {
+    trackClick();
     setGalleryInitialIndex(initialIndex);
     setGalleryOpen(true);
   };
@@ -201,7 +230,10 @@ const PropertyDetail: React.FC = () => {
             {property.images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setActiveImage(index)}
+                onClick={() => {
+                  trackClick();
+                  setActiveImage(index);
+                }}
                 className={`w-1 h-1 sm:w-2 sm:h-2 transition-all duration-300 ${
                   activeImage === index 
                     ? 'bg-white scale-125' 
@@ -294,6 +326,7 @@ const PropertyDetail: React.FC = () => {
               <div className="space-y-3 sm:space-y-4">
                 <Link
                   to={`/contact?type=visit&property=${property.reference || property.id}`}
+                  onClick={trackClick}
                   className="block w-full bg-[#023927] text-white text-center py-4 font-inter hover:bg-[#023927]/90 transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="flex items-center justify-center space-x-2">
@@ -303,6 +336,7 @@ const PropertyDetail: React.FC = () => {
                 </Link>
                 <Link
                   to={`/contact?type=info&property=${property.reference || property.id}`}
+                  onClick={trackClick}
                   className="block w-full border-2 border-[#023927] text-[#023927] text-center py-4 font-inter hover:bg-[#023927] hover:text-white transition-all duration-300 text-sm sm:text-base"
                 >
                   <span className="flex items-center justify-center space-x-2">
@@ -405,6 +439,7 @@ const PropertyDetail: React.FC = () => {
         images={property.images}
         propertyTitle={property.title}
         initialIndex={galleryInitialIndex}
+        onInteraction={trackClick}
       />
     </div>
   );

@@ -3,6 +3,7 @@
 
 // Import nodemailer for email sending
 const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 async function handler(req, res) {
   // Enable CORS
@@ -146,6 +147,32 @@ async function handler(req, res) {
       console.log('📎 Attachment details:', emailData.attachments[0].filename, 'Size:', emailData.attachments[0].content.length, 'bytes');
     }
     await sendEmail(emailData);
+
+    // Track inquiry for property statistics (if propertyId is provided)
+    if (formData && formData.propertyId) {
+      try {
+        console.log('📊 Tracking inquiry for property:', formData.propertyId);
+        // Make an API call to track the inquiry
+        const forwardedProto = req.headers['x-forwarded-proto'];
+        const forwardedHost = req.headers['x-forwarded-host'];
+        const host = forwardedHost || req.headers.host || 'localhost:3000';
+        const protocol = forwardedProto || (host.includes('localhost') ? 'http' : 'https');
+        const requestOrigin = `${protocol}://${host}`;
+
+        const trackingUrl = process.env.STATS_TRACKING_URL || `${requestOrigin}/api/property-stats`;
+        await axios.post(trackingUrl, {
+          propertyId: formData.propertyId,
+          statType: 'inquiries',
+          value: 1
+        }).catch(err => {
+          console.warn('⚠️ Failed to track inquiry stat:', err.message);
+          // Don't throw, as the email was sent successfully
+        });
+      } catch (trackingError) {
+        console.warn('⚠️ Error tracking inquiry:', trackingError.message);
+        // Continue anyway, as the email was sent successfully
+      }
+    }
 
     // Store inquiry in database (optional)
     await storeInquiry(formData, translatedSubject, translatedContent);

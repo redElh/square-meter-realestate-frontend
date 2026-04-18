@@ -14,7 +14,9 @@ import {
   UserIcon,
   CogIcon,
   StarIcon,
-  GlobeAltIcon
+  GlobeAltIcon,
+  ChartBarIcon,
+  LockClosedIcon
 } from '@heroicons/react/24/outline';
 
 const Header: React.FC = () => {
@@ -122,6 +124,15 @@ const Header: React.FC = () => {
         label: t('navigation.agency'),
         Icon: BuildingOfficeIcon,
         category: 'company'
+      },
+      {
+        path: '/property-statistics',
+        label: t('navigation.statistics'),
+        Icon: ChartBarIcon,
+        category: 'company',
+        description: t('header.analyticsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.'
+        })
       },
       {
         path: '/services',
@@ -365,6 +376,7 @@ const Header: React.FC = () => {
                 <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {navigation.company.map((item, index) => {
                     const Icon = item.Icon;
+                    const isProtectedAnalytics = item.path === '/property-statistics';
                     return (
                       <Link
                         key={item.path}
@@ -377,22 +389,39 @@ const Header: React.FC = () => {
                         style={{ transitionDelay: `${index * 100}ms` }}
                         onClick={() => setIsMenuOpen(false)}
                       >
-                        <div className="flex items-center space-x-3 sm:space-x-4">
-                          <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 ${
+                        <div className="flex items-start space-x-3 sm:space-x-4">
+                          <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 relative ${
                             isActivePath(item.path)
                               ? 'bg-gray-100 text-gray-900 shadow-sm'
                               : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
                           }`}>
                             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                            {isProtectedAnalytics && (
+                              <LockClosedIcon className="w-3.5 h-3.5 absolute -top-1 -right-1 text-amber-600 bg-white rounded-full p-0.5 border border-amber-200" />
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
-                              isActivePath(item.path)
-                                ? 'text-gray-900'
-                                : 'text-gray-800'
-                            }`}>
-                              {item.label}
-                            </span>
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
+                                isActivePath(item.path)
+                                  ? 'text-gray-900'
+                                  : 'text-gray-800'
+                              }`}>
+                                {item.label}
+                              </span>
+                              {isProtectedAnalytics && (
+                                <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-amber-200 bg-amber-50 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-amber-700 whitespace-nowrap">
+                                  {t('header.teamOnlyBadge', { defaultValue: 'Team only' })}
+                                </span>
+                              )}
+                            </div>
+                            {item.description && (
+                              <p className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
+                                isProtectedAnalytics ? 'text-amber-700/90' : 'text-gray-600'
+                              }`}>
+                                {item.description}
+                              </p>
+                            )}
                           </div>
                         </div>
                         <div className="absolute top-4 sm:top-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">
