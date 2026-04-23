@@ -44,6 +44,24 @@ const PropertyDetail: React.FC = () => {
   };
 
   useEffect(() => {
+    const trackPropertyViewWithRetry = async (propertyId: number, maxAttempts: number = 3): Promise<boolean> => {
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        console.log(`[Stats] Tracking view for property ${propertyId} (attempt ${attempt}/${maxAttempts})`);
+        const trackResult = await propertyStatsService.trackStat(propertyId, 'views', 1);
+
+        if (trackResult) {
+          console.log('✅ View tracked successfully:', trackResult);
+          return true;
+        }
+
+        if (attempt < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, 350 * attempt));
+        }
+      }
+
+      return false;
+    };
+
     const fetchPropertyData = async () => {
       if (!id) return;
       
@@ -55,12 +73,15 @@ const PropertyDetail: React.FC = () => {
 
         // Track the view only once per property visit
         if (propertyData && propertyData.id && !viewTrackedRef.current) {
-          viewTrackedRef.current = true;
           try {
-            console.log(`👁️ Tracking view for property ${propertyData.id}`);
-            const trackResult = await propertyStatsService.trackStat(propertyData.id, 'views', 1);
-            console.log(`✅ View tracked successfully:`, trackResult);
+            const trackedSuccessfully = await trackPropertyViewWithRetry(propertyData.id);
+            viewTrackedRef.current = trackedSuccessfully;
+
+            if (!trackedSuccessfully) {
+              console.warn(`⚠️ Failed to track view for property ${propertyData.id} after retries`);
+            }
           } catch (trackError) {
+            viewTrackedRef.current = false;
             console.error('⚠️ Failed to track view:', trackError);
             // Don't fail the page load if stats tracking fails
           }

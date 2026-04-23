@@ -4,12 +4,19 @@
  */
 
 const fs = require('fs/promises');
+const os = require('os');
 const path = require('path');
 const { Redis } = require('@upstash/redis');
 const { createClient } = require('redis');
 
-const LOCAL_STORE_PATH = path.join(process.cwd(), 'data', 'property-stats.json');
-const LOCAL_EVENT_STORE_PATH = path.join(process.cwd(), 'data', 'stat-events.json');
+const LOCAL_DATA_DIR =
+  process.env.STATS_DATA_DIR ||
+  (process.env.NODE_ENV === 'production'
+    ? path.join(os.tmpdir(), 'square-meter-realestate-stats')
+    : path.join(process.cwd(), 'data'));
+
+const LOCAL_STORE_PATH = path.join(LOCAL_DATA_DIR, 'property-stats.json');
+const LOCAL_EVENT_STORE_PATH = path.join(LOCAL_DATA_DIR, 'stat-events.json');
 
 const STATS_KEY_PREFIX = 'prop:stats:';
 const LEGACY_AGGREGATED_STATS_KEY = 'prop:stats:aggregated';
@@ -19,6 +26,8 @@ const SUPPORTED_STAT_TYPES = new Set(['views', 'inquiries', 'favorites', 'clicks
 
 let redisClient;
 let directRedisClientPromise;
+let inMemoryStatsFallback = {};
+let inMemoryEventsFallback = [];
 
 function getStorageMode() {
   if (process.env.KV_REDIS_URL) {
@@ -29,11 +38,8 @@ function getStorageMode() {
     return 'redis-rest';
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    return 'local-file';
-  }
-
-  return 'unconfigured';
+  // Keep stats tracking functional even when shared KV isn't configured.
+  return 'local-file';
 }
 
 function isSharedStorageMode(mode) {
@@ -163,19 +169,29 @@ async function readLocalStats() {
   try {
     await ensureDataDir();
     const data = await fs.readFile(LOCAL_STORE_PATH, 'utf-8');
-    return normalizeStatsMap(JSON.parse(data));
+    const normalized = normalizeStatsMap(JSON.parse(data));
+    inMemoryStatsFallback = normalized;
+    return normalized;
   } catch (error) {
     if (error.code === 'ENOENT') {
-      return {};
+      return normalizeStatsMap(inMemoryStatsFallback);
     }
     console.error('Failed reading local property stats:', error);
-    return {};
+    return normalizeStatsMap(inMemoryStatsFallback);
   }
 }
 
 async function writeLocalStats(statsMap) {
+  const normalized = normalizeStatsMap(statsMap);
+  inMemoryStatsFallback = normalized;
+
   await ensureDataDir();
-  await fs.writeFile(LOCAL_STORE_PATH, JSON.stringify(statsMap, null, 2), 'utf-8');
+
+  try {
+    await fs.writeFile(LOCAL_STORE_PATH, JSON.stringify(normalized, null, 2), 'utf-8');
+  } catch (error) {
+    console.warn('Failed writing local property stats. Using in-memory fallback:', error.message);
+  }
 }
 
 async function readLocalEvents() {
@@ -183,19 +199,29 @@ async function readLocalEvents() {
     await ensureDataDir();
     const data = await fs.readFile(LOCAL_EVENT_STORE_PATH, 'utf-8');
     const parsed = JSON.parse(data);
-    return Array.isArray(parsed) ? parsed : [];
+    const normalized = Array.isArray(parsed) ? parsed : [];
+    inMemoryEventsFallback = normalized;
+    return normalized;
   } catch (error) {
     if (error.code === 'ENOENT') {
-      return [];
+      return Array.isArray(inMemoryEventsFallback) ? [...inMemoryEventsFallback] : [];
     }
     console.error('Failed reading local stat events:', error);
-    return [];
+    return Array.isArray(inMemoryEventsFallback) ? [...inMemoryEventsFallback] : [];
   }
 }
 
 async function writeLocalEvents(events) {
+  const normalized = Array.isArray(events) ? events : [];
+  inMemoryEventsFallback = normalized;
+
   await ensureDataDir();
-  await fs.writeFile(LOCAL_EVENT_STORE_PATH, JSON.stringify(events), 'utf-8');
+
+  try {
+    await fs.writeFile(LOCAL_EVENT_STORE_PATH, JSON.stringify(normalized), 'utf-8');
+  } catch (error) {
+    console.warn('Failed writing local stat events. Using in-memory fallback:', error.message);
+  }
 }
 
 async function recordStatEvent(propertyId, statType, value = 1, storageMode = getStorageMode()) {
@@ -573,15 +599,6 @@ async function handler(req, res) {
   }
 
   const storageMode = getStorageMode();
-
-  if (storageMode === 'unconfigured') {
-    return res.status(503).json({
-      success: false,
-      error: 'Shared property statistics storage is not configured.',
-      message:
-        'Set KV_REDIS_URL or KV_REST_API_URL with KV_REST_API_TOKEN to keep statistics shared across browsers and devices.',
-    });
-  }
 
   try {
     if (req.method === 'GET') {
