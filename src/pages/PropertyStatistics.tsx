@@ -3,7 +3,7 @@
  * Sophisticated real-time performance metrics with enterprise-grade visualizations
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -569,14 +569,17 @@ const PropertyStatistics: React.FC = () => {
     max = 100, 
     label,
     subtitle,
-    gradient 
+    startColor,
+    endColor,
   }: { 
     value: number; 
     max?: number;
     label: string;
     subtitle?: string;
-    gradient: string;
+    startColor: string;
+    endColor: string;
   }) => {
+    const gradientId = `progress-ring-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
     const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0;
     const percentage = max > 0 ? Math.min((safeValue / max) * 100, 100) : 0;
     const radius = 52;
@@ -596,16 +599,16 @@ const PropertyStatistics: React.FC = () => {
             />
             {/* Gradient definition */}
             <defs>
-              <linearGradient id={`gradient-${label}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={gradient.split(' ')[1] || '#D4AF37'} />
-                <stop offset="100%" stopColor={gradient.split(' ')[3] || '#B8860B'} />
+              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={startColor} />
+                <stop offset="100%" stopColor={endColor} />
               </linearGradient>
             </defs>
             {/* Progress ring */}
             <circle
               cx="60" cy="60" r={radius}
               fill="none"
-              stroke={`url(#gradient-${label})`}
+              stroke={`url(#${gradientId})`}
               strokeWidth="8"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
@@ -951,14 +954,16 @@ const PropertyStatistics: React.FC = () => {
                     value={performanceMetrics?.engagementRate || 0}
                     label={t('stats.engagement.engagementRate', { defaultValue: currentStatsUiFallback.engagementRate })}
                     subtitle={`${performanceMetrics?.totalInteractions || 0} ${t('stats.engagement.actions')}`}
-                    gradient="from-gold to-amber-600"
+                    startColor="#D4AF37"
+                    endColor="#B8860B"
                   />
                   <ProgressRing
                     value={performanceMetrics?.inquiryRate || 0}
                     max={100}
                     label={t('stats.engagement.conversionRate')}
                     subtitle={`${performanceMetrics?.inquiries || 0} ${t('stats.engagement.inquiries')}`}
-                    gradient="from-purple-500 to-pink-500"
+                    startColor="#8B5CF6"
+                    endColor="#EC4899"
                   />
                 </div>
 
