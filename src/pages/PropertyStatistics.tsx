@@ -490,8 +490,15 @@ const PropertyStatistics: React.FC = () => {
     const clicks = selectedProperty.stats?.clicks || 0;
     
     const totalInteractions = inquiries + favorites + clicks;
-    const engagementRate = views > 0 ? (totalInteractions / views) * 100 : 0;
-    const inquiryRate = views > 0 ? (inquiries / views) * 100 : 0;
+    const normalizedStats: PropertyStats = {
+      propertyId: selectedProperty.stats?.propertyId ?? selectedProperty.id,
+      views,
+      inquiries,
+      favorites,
+      clicks,
+    };
+    const engagementRate = propertyStatsService.getEngagementRate(normalizedStats);
+    const inquiryRate = propertyStatsService.getConversionRate(normalizedStats);
     
     return {
       totalInteractions,
@@ -570,13 +577,14 @@ const PropertyStatistics: React.FC = () => {
     subtitle?: string;
     gradient: string;
   }) => {
-    const percentage = max > 0 ? (value / max) * 100 : 0;
+    const safeValue = Number.isFinite(value) ? Math.max(0, value) : 0;
+    const percentage = max > 0 ? Math.min((safeValue / max) * 100, 100) : 0;
     const radius = 52;
     const circumference = 2 * Math.PI * radius;
     const offset = circumference - (percentage / 100) * circumference;
 
     return (
-      <div className="flex flex-col items-center">
+      <div className="flex h-full flex-col items-center text-center">
         <div className="relative w-36 h-36">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
             {/* Background ring */}
@@ -611,8 +619,14 @@ const PropertyStatistics: React.FC = () => {
             </div>
           </div>
         </div>
-        <p className="mt-4 text-sm font-semibold text-gray-900 uppercase tracking-wider">{label}</p>
-        {subtitle && <p className="text-xs text-gray-500 mt-1">{subtitle}</p>}
+        <p className="mt-4 min-h-[2.75rem] text-sm font-semibold text-gray-900 uppercase tracking-wider leading-tight flex items-center justify-center">
+          {label}
+        </p>
+        {subtitle && (
+          <p className="text-xs text-gray-500 mt-1 min-h-[1.25rem] flex items-center justify-center">
+            {subtitle}
+          </p>
+        )}
       </div>
     );
   };
@@ -932,7 +946,7 @@ const PropertyStatistics: React.FC = () => {
               <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">{t('stats.engagement.title', { defaultValue: currentStatsUiFallback.engagementTitle })}</h3>
                 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                   <ProgressRing
                     value={performanceMetrics?.engagementRate || 0}
                     label={t('stats.engagement.engagementRate', { defaultValue: currentStatsUiFallback.engagementRate })}

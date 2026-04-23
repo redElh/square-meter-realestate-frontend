@@ -69,6 +69,20 @@ const parseStatsMapPayload = (payload: any): Record<string | number, PropertySta
   return {};
 };
 
+const sanitizeNonNegativeNumber = (value: unknown): number => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 0;
+  return value > 0 ? value : 0;
+};
+
+const toCappedPercent = (numerator: number, denominator: number): number => {
+  if (denominator <= 0) return 0;
+
+  const rawPercent = (numerator / denominator) * 100;
+  const boundedPercent = Math.min(100, Math.max(0, rawPercent));
+
+  return Math.round(boundedPercent * 100) / 100;
+};
+
 class PropertyStatsService {
   /**
    * Track a property stat increment
@@ -181,6 +195,11 @@ class PropertyStatsService {
    * Calculate engagement score for a property (0-100)
    */
   calculateEngagementScore(stats: PropertyStats): number {
+    const views = sanitizeNonNegativeNumber(stats.views);
+    const inquiries = sanitizeNonNegativeNumber(stats.inquiries);
+    const favorites = sanitizeNonNegativeNumber(stats.favorites);
+    const clicks = sanitizeNonNegativeNumber(stats.clicks);
+
     const weights = {
       views: 0.4,
       inquiries: 0.3,
@@ -195,28 +214,38 @@ class PropertyStatsService {
     const maxClicks = 100;
 
     const normalizedScore =
-      (Math.min(stats.views, maxViews) / maxViews) * weights.views +
-      (Math.min(stats.inquiries, maxInquiries) / maxInquiries) * weights.inquiries +
-      (Math.min(stats.favorites, maxFavorites) / maxFavorites) * weights.favorites +
-      (Math.min(stats.clicks, maxClicks) / maxClicks) * weights.clicks;
+      (Math.min(views, maxViews) / maxViews) * weights.views +
+      (Math.min(inquiries, maxInquiries) / maxInquiries) * weights.inquiries +
+      (Math.min(favorites, maxFavorites) / maxFavorites) * weights.favorites +
+      (Math.min(clicks, maxClicks) / maxClicks) * weights.clicks;
 
-    return Math.round(normalizedScore * 100);
+    const boundedScore = Math.min(1, Math.max(0, normalizedScore));
+    return Math.round(boundedScore * 100);
   }
 
   /**
    * Get conversion rate (inquiries vs views)
    */
   getConversionRate(stats: PropertyStats): number {
-    if (stats.views === 0) return 0;
-    return Math.round((stats.inquiries / stats.views) * 10000) / 100;
+    const views = sanitizeNonNegativeNumber(stats.views);
+    const inquiries = sanitizeNonNegativeNumber(stats.inquiries);
+
+    return toCappedPercent(Math.min(inquiries, views), views);
   }
 
   /**
    * Get engagement rate (favorites + clicks + inquiries vs views)
    */
   getEngagementRate(stats: PropertyStats): number {
-    if (stats.views === 0) return 0;
-    return Math.round(((stats.favorites + stats.clicks + stats.inquiries) / stats.views) * 10000) / 100;
+    const views = sanitizeNonNegativeNumber(stats.views);
+    const inquiries = sanitizeNonNegativeNumber(stats.inquiries);
+    const favorites = sanitizeNonNegativeNumber(stats.favorites);
+    const clicks = sanitizeNonNegativeNumber(stats.clicks);
+
+    const totalInteractions = inquiries + favorites + clicks;
+    const effectiveInteractions = Math.min(totalInteractions, views);
+
+    return toCappedPercent(effectiveInteractions, views);
   }
 
   /**
