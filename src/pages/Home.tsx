@@ -133,10 +133,8 @@ const Home: React.FC = () => {
           limit: 1000,
         }, t, currentLanguage);
         
-        // Filter properties that have tag = 1 (Coup de Coeur)
-        const coupDeCoeurProperties = apiProperties.filter(prop => 
-          prop.tags && prop.tags.includes(1)
-        );
+        // Coup de Coeur section: show all properties with agreement type 3
+        const coupDeCoeurProperties = apiProperties.filter(prop => Number(prop.agreementType) === 3);
         setFeaturedProperties(coupDeCoeurProperties);
       } catch (error) {
         console.error('Error loading featured properties:', error);

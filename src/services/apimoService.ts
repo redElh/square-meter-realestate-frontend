@@ -280,6 +280,7 @@ export interface Property {
   landSurface?: number;
   condition?: number;
   tags?: number[]; // APIMO tags array
+  agreementType?: number;
   standing?: number;
   orientation?: string[];
   services?: string[];
@@ -459,6 +460,7 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     featured: apimoProperty.ranking ? apimoProperty.ranking >= 4 : false,
     confidential: !apimoProperty.publish_address,
     tags: apimoProperty.tags || [],
+    agreementType: apimoProperty.agreement?.type,
   };
 };
 
