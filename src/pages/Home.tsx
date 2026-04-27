@@ -146,21 +146,37 @@ const Home: React.FC = () => {
   }, [t, currentLanguage]);
 
   useEffect(() => {
-    let featuredInterval: NodeJS.Timeout;
-    if (featuredAutoPlay) {
-      featuredInterval = setInterval(() => {
-        setFeaturedIndex((prev) => (prev + 1) % featuredProperties.length);
-      }, 6000);
+    if (!featuredAutoPlay || featuredProperties.length <= 1) {
+      return;
     }
+
+    const featuredInterval = setInterval(() => {
+      setFeaturedIndex((prev) => (prev + 1) % featuredProperties.length);
+    }, 6000);
 
     return () => clearInterval(featuredInterval);
   }, [featuredAutoPlay, featuredProperties.length]);
 
+  useEffect(() => {
+    if (featuredProperties.length === 0) {
+      if (featuredIndex !== 0) {
+        setFeaturedIndex(0);
+      }
+      return;
+    }
+
+    if (!Number.isFinite(featuredIndex) || featuredIndex < 0 || featuredIndex >= featuredProperties.length) {
+      setFeaturedIndex(0);
+    }
+  }, [featuredIndex, featuredProperties.length]);
+
   const nextFeatured = () => {
+    if (featuredProperties.length <= 1) return;
     setFeaturedIndex((prev) => (prev + 1) % featuredProperties.length);
   };
 
   const prevFeatured = () => {
+    if (featuredProperties.length <= 1) return;
     setFeaturedIndex((prev) => (prev - 1 + featuredProperties.length) % featuredProperties.length);
   };
 
@@ -571,14 +587,16 @@ const Home: React.FC = () => {
             {/* Elegant Navigation Buttons */}
             <button 
               onClick={prevFeatured} 
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-10"
+              disabled={featuredProperties.length <= 1}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-30 pointer-events-auto disabled:opacity-40 disabled:cursor-not-allowed"
               aria-label="Previous property"
             >
               <ChevronLeftIcon className="w-6 h-6" />
             </button>
             <button 
               onClick={nextFeatured} 
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-10"
+              disabled={featuredProperties.length <= 1}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-30 pointer-events-auto disabled:opacity-40 disabled:cursor-not-allowed"
               aria-label="Next property"
             >
               <ChevronRightIcon className="w-6 h-6" />

@@ -40,11 +40,11 @@ const Properties: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('newest');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
   const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [propertyZone, setPropertyZone] = useState<'normal' | 'exclusive'>('normal');
   const propertiesListRef = useRef<HTMLDivElement>(null);
   const hasInitializedFiltersRef = useRef(false);
   
@@ -177,7 +177,22 @@ const Properties: React.FC = () => {
     fetchProperties();
   }, [t, currentLanguage]);
 
-  const filteredAndSortedProperties = (() => {
+  const isExclusiveProperty = (property: Property): boolean => Number(property.agreementType) === 3;
+  const exclusiveProperties = properties.filter(isExclusiveProperty);
+  const nonExclusiveProperties = properties.filter((property) => !isExclusiveProperty(property));
+  const activeSourceProperties = propertyZone === 'exclusive' ? exclusiveProperties : nonExclusiveProperties;
+
+  const filterAndSortProperties = (
+    sourceProperties: Property[],
+    options: {
+      typeFilter: string;
+      location: string;
+      bedrooms: number | null;
+      propertyType: string;
+      query: string;
+      sort: string;
+    }
+  ): Property[] => {
     const supportedCurrencies = ['EUR', 'USD', 'GBP', 'AED', 'MAD'] as const;
     const getSortablePrice = (property: Property): number => {
       const sourceCurrency = (property.currency || 'EUR').toUpperCase();
@@ -188,24 +203,21 @@ const Properties: React.FC = () => {
       return convertPrice(property.price, normalizedCurrency as any);
     };
 
-    // First, filter the properties
-    const filtered = properties.filter(property => {
-      const typeMatch = filter === 'all' || property.type === filter;
-      const locationMatch = !locationFilter || 
-        property.location.toLowerCase().includes(locationFilter.toLowerCase());
-      const roomsMatch = !bedroomsFilter || (property.rooms && property.rooms >= bedroomsFilter);
-      const propertyTypeMatch = !propertyTypeFilter || (() => {
+    const filtered = sourceProperties.filter((property) => {
+      const typeMatch = options.typeFilter === 'all' || property.type === options.typeFilter;
+      const locationMatch = !options.location || property.location.toLowerCase().includes(options.location.toLowerCase());
+      const roomsMatch = !options.bedrooms || ((Number(property.rooms) || 0) >= options.bedrooms);
+      const propertyTypeMatch = !options.propertyType || (() => {
         const title = property.title?.toLowerCase() || '';
-        if (propertyTypeFilter === 'apartment') return title.includes('appartement') || title.includes('apartment') || title.includes('riad');
-        if (propertyTypeFilter === 'villa') return title.includes('villa');
-        if (propertyTypeFilter === 'land') return title.includes('terrain') || title.includes('land');
-        if (propertyTypeFilter === 'other') return !title.includes('appartement') && !title.includes('apartment') && !title.includes('villa') && !title.includes('terrain') && !title.includes('land') && !title.includes('riad');
+        if (options.propertyType === 'apartment') return title.includes('appartement') || title.includes('apartment') || title.includes('riad');
+        if (options.propertyType === 'villa') return title.includes('villa');
+        if (options.propertyType === 'land') return title.includes('terrain') || title.includes('land');
+        if (options.propertyType === 'other') return !title.includes('appartement') && !title.includes('apartment') && !title.includes('villa') && !title.includes('terrain') && !title.includes('land') && !title.includes('riad');
         return true;
       })();
-      
-      // Enhanced intelligent search - searches across multiple fields
-      const searchMatch = !searchQuery || (() => {
-        const query = searchQuery.toLowerCase().trim();
+
+      const searchMatch = !options.query || (() => {
+        const query = options.query.toLowerCase().trim();
         const searchFields = [
           property.title?.toLowerCase() || '',
           property.location?.toLowerCase() || '',
@@ -216,18 +228,16 @@ const Properties: React.FC = () => {
           `${property.rooms} ${t('common.rooms')}`.toLowerCase(),
           `${property.surface} m²`,
         ].join(' ');
-        
-        // Split query into words and check if all words are found
+
         const queryWords = query.split(/\s+/).filter(word => word.length > 0);
         return queryWords.every(word => searchFields.includes(word));
       })();
-      
+
       return typeMatch && locationMatch && roomsMatch && propertyTypeMatch && searchMatch;
     });
 
-    // Then, sort the filtered properties
     const sorted = [...filtered];
-    switch (sortBy) {
+    switch (options.sort) {
       case 'priceAsc':
         sorted.sort((a, b) => getSortablePrice(a) - getSortablePrice(b));
         break;
@@ -239,13 +249,21 @@ const Properties: React.FC = () => {
         break;
       case 'newest':
       default:
-        // Sort by ID (assuming higher IDs are newer)
         sorted.sort((a, b) => b.id - a.id);
         break;
     }
 
     return sorted;
-  })();
+  };
+
+  const filteredAndSortedProperties = filterAndSortProperties(activeSourceProperties, {
+    typeFilter: filter,
+    location: locationFilter,
+    bedrooms: bedroomsFilter,
+    propertyType: propertyTypeFilter,
+    query: '',
+    sort: sortBy,
+  });
 
   const totalPages = Math.max(1, Math.ceil(filteredAndSortedProperties.length / PROPERTIES_PER_PAGE));
   const paginatedProperties = filteredAndSortedProperties.slice(
@@ -274,7 +292,7 @@ const Properties: React.FC = () => {
     }
 
     setCurrentPage(1);
-  }, [filter, locationFilter, bedroomsFilter, propertyTypeFilter, searchQuery, sortBy, loading, properties.length]);
+  }, [filter, locationFilter, bedroomsFilter, propertyTypeFilter, sortBy, propertyZone, loading, properties.length]);
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams);
@@ -333,12 +351,12 @@ const Properties: React.FC = () => {
   };
 
   const propertyTypes = [
-    { key: 'buy', label: t('properties.filters.buy'), count: properties.filter(p => p.type === 'buy').length },
-    { key: 'rent', label: t('properties.filters.rent'), count: properties.filter(p => p.type === 'rent').length },
-    { key: 'seasonal', label: t('properties.filters.vacation'), count: properties.filter(p => p.type === 'seasonal').length },
+    { key: 'buy', label: t('properties.filters.buy'), count: activeSourceProperties.filter(p => p.type === 'buy').length },
+    { key: 'rent', label: t('properties.filters.rent'), count: activeSourceProperties.filter(p => p.type === 'rent').length },
+    { key: 'seasonal', label: t('properties.filters.vacation'), count: activeSourceProperties.filter(p => p.type === 'seasonal').length },
   ];
 
-  const locations = Array.from(new Set(properties.map(p => p.location)));
+  const locations = Array.from(new Set(activeSourceProperties.map(p => p.location)));
   const bedroomOptions = [1, 2, 3, 4, 5, 6];
   const propertyTypeOptions = [
     { value: 'apartment', label: t('properties.propertyTypes.apartment') },
@@ -352,7 +370,6 @@ const Properties: React.FC = () => {
     setLocationFilter('');
     setBedroomsFilter(null);
     setPropertyTypeFilter('');
-    setSearchQuery('');
     setSortBy('newest');
     setCurrentPage(1);
   };
@@ -362,7 +379,6 @@ const Properties: React.FC = () => {
     locationFilter !== '',
     bedroomsFilter !== null,
     propertyTypeFilter !== '',
-    searchQuery !== '',
   ].filter(Boolean).length;
 
   
@@ -419,11 +435,157 @@ const Properties: React.FC = () => {
     return formattedPrice;
   };
 
+  const renderPropertyCard = (property: Property, pageContext?: number) => (
+    <div
+      key={property.id}
+      id={`property-card-${property.id}`}
+      className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
+    >
+      {/* MAIN CARD CONTAINER - Horizontal Layout */}
+      <div className="flex flex-col">
+        {/* IMAGE SECTION - Left side with primary + secondary images */}
+        <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
+          {/* Primary Image - Larger on left */}
+          <div
+            className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer"
+            onClick={() => openGallery(property.images, property.title, 0)}
+          >
+            <img
+              src={property.images[0]}
+              alt={property.title}
+              className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
+            />
+
+            {/* Overlay Badges */}
+            <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-1.5 sm:gap-2">
+              {isExclusiveProperty(property) && (
+                <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
+                  {t('properties.listing.exclusive')}
+                </span>
+              )}
+            </div>
+
+            {/* Favorite Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite(property.id);
+              }}
+              className="absolute top-3 sm:top-6 right-3 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
+            >
+              {favorites.includes(property.id) ? (
+                <HeartIconSolid className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
+              ) : (
+                <HeartIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover/fav:text-red-500 transition-colors" />
+              )}
+            </button>
+
+            {/* Image Counter */}
+            <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm">
+              <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">{property.images.length} {t('properties.listing.photos')}</span>
+            </div>
+          </div>
+
+          {/* Secondary Images - Stacked vertically on right */}
+          <div className="md:w-1/3 h-1/3 md:h-full flex flex-row md:flex-col gap-1 sm:gap-2 p-1 sm:p-2">
+            {property.images.slice(1, 3).map((img, imgIndex) => (
+              <div
+                key={imgIndex}
+                className="flex-1 relative overflow-hidden group/secondary cursor-pointer"
+                onClick={() => openGallery(property.images, property.title, imgIndex + 1)}
+              >
+                <img
+                  src={img}
+                  alt={`${property.title} ${imgIndex + 2}`}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/secondary:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"></div>
+                {/* View More Overlay for last image */}
+                {imgIndex === 1 && property.images.length > 3 && (
+                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300">
+                    <div className="text-white text-center p-2 sm:p-4">
+                      <ArrowTopRightOnSquareIcon className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2" />
+                      <span className="text-[10px] sm:text-xs font-medium">+{property.images.length - 3} photos</span>
+                    </div>
+                  </div>
+                )}
+
+                {imgIndex === 1 && (
+                  <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-black/75 text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-medium tracking-wide uppercase backdrop-blur-sm flex items-center gap-1.5 pointer-events-none">
+                    <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    <span>{t('properties.listing.view')} {t('properties.listing.photos')}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* DETAILS SECTION - compact single-line summary */}
+        <div className="w-full p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+          <div className="flex-1 min-w-0 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+              <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
+                property.type === 'buy'
+                  ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                  : property.type === 'rent'
+                  ? 'bg-green-50 text-green-800 border border-green-200'
+                  : 'bg-purple-50 text-purple-800 border border-purple-200'
+              }`}>{property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
+
+              <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
+
+              <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
+            </div>
+          </div>
+
+          <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
+            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.rooms || 0}</span></div>
+            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.floors || 0}</span></div>
+            <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
+          </div>
+
+          <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
+            <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.rooms || 0}</span></div>
+            <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.floors || 0}</span></div>
+            <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">
+              {formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}
+            </div>
+            <Link
+              to={`/properties/${property.id}`}
+              onClick={() => {
+                if (typeof pageContext === 'number') {
+                  sessionStorage.setItem('properties:lastViewedId', String(property.id));
+                  sessionStorage.setItem('properties:lastViewedPage', String(pageContext));
+                } else {
+                  sessionStorage.removeItem('properties:lastViewedId');
+                  sessionStorage.removeItem('properties:lastViewedPage');
+                }
+              }}
+              className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
+            >
+              {t('properties.listing.view')}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   const getSEOData = () => {
     const filterType = filter === 'buy' ? 'Vente' : filter === 'rent' ? 'Location' : filter === 'seasonal' ? 'Location Saisonnière' : '';
+    const visibleCount = filteredAndSortedProperties.length;
+    const zoneLabel = propertyZone === 'exclusive'
+      ? t('header.exclusiveProperties', { defaultValue: 'Propriétés exclusives' })
+      : t('header.allProperties', { defaultValue: 'Autres propriétés' });
     const title = filterType ? `${filterType} - Biens Immobiliers Essaouira` : 'Tous nos Biens Immobiliers à Essaouira';
     const description = filterType 
-      ? `Découvrez nos biens en ${filterType.toLowerCase()} à Essaouira. ${filteredAndSortedProperties.length} propriétés disponibles. Villas, appartements et biens d'exception.`
+      ? `Découvrez nos biens en ${filterType.toLowerCase()} à Essaouira. ${visibleCount} propriétés disponibles dans la section ${zoneLabel}. Villas, appartements et biens d'exception.`
       : `Explorez notre catalogue complet de ${properties.length} biens immobiliers à Essaouira. Vente, location et location saisonnière de propriétés d'exception.`;
     
     return { title, description };
@@ -488,6 +650,31 @@ const Properties: React.FC = () => {
                   </div>
                 </button>
               ))}
+            </div>
+
+            <div className="mb-4">
+              <div className="grid grid-cols-2 gap-3 mb-3 sm:mb-4">
+                <button
+                  onClick={() => setPropertyZone('normal')}
+                  className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
+                    propertyZone === 'normal'
+                      ? 'border-white bg-white/95 text-[#023927]'
+                      : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+                  }`}
+                >
+                  {t('header.allProperties', { defaultValue: 'Other Properties' })}
+                </button>
+                <button
+                  onClick={() => setPropertyZone('exclusive')}
+                  className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
+                    propertyZone === 'exclusive'
+                      ? 'border-white bg-white/95 text-[#023927]'
+                      : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+                  }`}
+                >
+                  {t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })}
+                </button>
+              </div>
             </div>
 
             {/* More Filters Toggle & Action Buttons */}
@@ -593,7 +780,7 @@ const Properties: React.FC = () => {
             {/* Results count indicator */}
             <div className="text-center mt-4">
               <span className="text-xs sm:text-sm text-white/90 font-medium px-3 py-1.5 bg-black/30 backdrop-blur-sm inline-block">
-                {filteredAndSortedProperties.length} {t('properties.search.results')}
+                {filteredAndSortedProperties.length} {t('properties.search.results')} · {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'Other Properties' })}
               </span>
             </div>
           </div>
@@ -642,30 +829,6 @@ const Properties: React.FC = () => {
       {/* Property Cards Section - REVOLUTIONARY NEW LAYOUT */}
       <section ref={propertiesListRef} className="py-6 sm:py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
-          {/* Results Header */}
-          <div className="mb-6 sm:mb-12">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
-                {filteredAndSortedProperties.length} {t('properties.listing.available')}
-              </h3>
-              <div className="flex items-center space-x-2 sm:space-x-3">
-                <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
-                <select 
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]"
-                >
-                  <option value="newest">{t('properties.listing.newest')}</option>
-                  <option value="priceAsc">{t('properties.listing.priceAsc')}</option>
-                  <option value="priceDesc">{t('properties.listing.priceDesc')}</option>
-                  <option value="surface">{t('properties.listing.surface')}</option>
-                </select>
-              </div>
-            </div>
-            <div className="h-px bg-gray-200 w-full"></div>
-          </div>
-
-          {/* Properties Grid - ELEGANT HORIZONTAL LAYOUT */}
           {loading ? (
             <div className="flex justify-center items-center py-20 sm:py-40">
               <div className="relative">
@@ -676,211 +839,99 @@ const Properties: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
-              {paginatedProperties.map((property, index) => (
-                <div
-                  key={property.id}
-                  id={`property-card-${property.id}`}
-                  className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
-                >
-                  {/* MAIN CARD CONTAINER - Horizontal Layout */}
-                  <div className="flex flex-col">
-                    {/* IMAGE SECTION - Left side with primary + secondary images */}
-                    <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
-                      {/* Primary Image - Larger on left */}
-                      <div
-                        className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer"
-                        onClick={() => openGallery(property.images, property.title, 0)}
-                      >
-                        <img
-                          src={property.images[0]}
-                          alt={property.title}
-                          className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
-                        />
-                        
-                        {/* Overlay Badges */}
-                        <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-1.5 sm:gap-2">
-                          {property.featured && (
-                            <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
-                              {t('properties.listing.exclusive')}
-                            </span>
-                          )}
-                        </div>
-                        
-                        {/* Favorite Button */}
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(property.id);
-                          }}
-                          className="absolute top-3 sm:top-6 right-3 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
-                        >
-                          {favorites.includes(property.id) ? (
-                            <HeartIconSolid className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
-                          ) : (
-                            <HeartIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover/fav:text-red-500 transition-colors" />
-                          )}
-                        </button>
-                        
-                        {/* Image Counter */}
-                        <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm">
-                          <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span className="text-xs sm:text-sm">{property.images.length} {t('properties.listing.photos')}</span>
-                        </div>
-                      </div>
-                      
-                      {/* Secondary Images - Stacked vertically on right */}
-                      <div className="md:w-1/3 h-1/3 md:h-full flex flex-row md:flex-col gap-1 sm:gap-2 p-1 sm:p-2">
-                        {property.images.slice(1, 3).map((img, imgIndex) => (
-                          <div 
-                            key={imgIndex} 
-                            className="flex-1 relative overflow-hidden group/secondary cursor-pointer"
-                            onClick={() => openGallery(property.images, property.title, imgIndex + 1)}
-                          >
-                            <img
-                              src={img}
-                              alt={`${property.title} ${imgIndex + 2}`}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover/secondary:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"></div>
-                            {/* View More Overlay for last image */}
-                            {imgIndex === 1 && property.images.length > 3 && (
-                              <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300">
-                                <div className="text-white text-center p-2 sm:p-4">
-                                  <ArrowTopRightOnSquareIcon className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2" />
-                                  <span className="text-[10px] sm:text-xs font-medium">+{property.images.length - 3} photos</span>
-                                </div>
-                              </div>
-                            )}
-
-                            {imgIndex === 1 && (
-                              <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 bg-black/75 text-white px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-medium tracking-wide uppercase backdrop-blur-sm flex items-center gap-1.5 pointer-events-none">
-                                <ArrowTopRightOnSquareIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                                <span>{t('properties.listing.view')} {t('properties.listing.photos')}</span>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* DETAILS SECTION - compact single-line summary */}
-                    <div className="w-full p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
-                      <div className="flex-1 min-w-0 w-full sm:w-auto">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                          <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
-                            property.type === 'buy' 
-                              ? 'bg-blue-50 text-blue-800 border border-blue-200' 
-                              : property.type === 'rent'
-                              ? 'bg-green-50 text-green-800 border border-green-200'
-                              : 'bg-purple-50 text-purple-800 border border-purple-200'
-                          }`}>{property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
-
-                          <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
-
-                          <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
-                        <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.rooms || 0}</span></div>
-                        <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.floors || 0}</span></div>
-                        <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
-                      </div>
-
-                      <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.rooms || 0}</span></div>
-                        <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.floors || 0}</span></div>
-                        <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
-                      </div>
-
-                      <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                        <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">
-                          {formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}
-                        </div>
-                        <Link
-                          to={`/properties/${property.id}`}
-                          onClick={() => {
-                            sessionStorage.setItem('properties:lastViewedId', String(property.id));
-                            sessionStorage.setItem('properties:lastViewedPage', String(currentPage));
-                          }}
-                          className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
-                        >
-                          {t('properties.listing.view')}
-                        </Link>
-                      </div>
-                    </div>
+            <>
+              <div className="mb-6 sm:mb-12">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
+                    {filteredAndSortedProperties.length} {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'Other Properties' })}
+                  </h3>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]"
+                    >
+                      <option value="newest">{t('properties.listing.newest')}</option>
+                      <option value="priceAsc">{t('properties.listing.priceAsc')}</option>
+                      <option value="priceDesc">{t('properties.listing.priceDesc')}</option>
+                      <option value="surface">{t('properties.listing.surface')}</option>
+                    </select>
                   </div>
-                  
                 </div>
-              ))}
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!loading && filteredAndSortedProperties.length === 0 && (
-            <div className="text-center py-16 sm:py-32 bg-gray-50 border-2 border-gray-200 max-w-4xl mx-auto">
-              <div className="text-5xl sm:text-8xl mb-6 sm:mb-10 opacity-20">🏠</div>
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter text-gray-900 mb-4 sm:mb-8 font-light px-4">
-                {t('properties.empty.title')}
-              </h3>
-              <p className="text-gray-600 mb-8 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg px-4">
-                {t('properties.empty.description')}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4">
-                <button
-                  onClick={resetFilters}
-                  className="border-2 border-gray-900 text-gray-900 px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500"
-                >
-                  {t('properties.empty.expandSearch')}
-                </button>
-                <Link
-                  to="/contact"
-                  className="bg-[#023927] text-white px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
-                >
-                  {t('properties.empty.contactUs')}
-                </Link>
+                <div className="h-px bg-gray-200 w-full"></div>
               </div>
-            </div>
-          )}
 
-          {/* Pagination */}
-          {!loading && filteredAndSortedProperties.length > 0 && totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 sm:gap-3 mt-8 sm:mt-16 flex-wrap">
-              <button
-                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="inline-flex items-center justify-center w-10 h-10 border-2 border-gray-300 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[#023927] hover:text-[#023927] transition-colors duration-300"
-              >
-                <ChevronLeftIcon className="w-4 h-4" />
-              </button>
+              {filteredAndSortedProperties.length === 0 ? (
+                <div className="text-center py-16 sm:py-32 bg-gray-50 border-2 border-gray-200 max-w-4xl mx-auto">
+                  <div className="text-5xl sm:text-8xl mb-6 sm:mb-10 opacity-20">🏠</div>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter text-gray-900 mb-4 sm:mb-8 font-light px-4">
+                    {t('properties.empty.title')}
+                  </h3>
+                  <p className="text-gray-600 mb-8 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg px-4">
+                    {t('properties.empty.description')}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4">
+                    <button
+                      onClick={resetFilters}
+                      className="border-2 border-gray-900 text-gray-900 px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:text-[#023927] hover:bg-white hover:border-[#023927] transition-all duration-500"
+                    >
+                      {t('properties.empty.expandSearch')}
+                    </button>
+                    <Link
+                      to="/contact"
+                      className="bg-[#023927] text-white px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
+                    >
+                      {t('properties.empty.contactUs')}
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
+                    {paginatedProperties.map((property) => renderPropertyCard(property, currentPage))}
+                  </div>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`w-10 h-10 border-2 text-sm font-medium transition-colors duration-300 ${
-                    currentPage === page
-                      ? 'border-[#023927] bg-[#023927] text-white'
-                      : 'border-gray-300 text-gray-700 hover:border-[#023927] hover:text-[#023927]'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 mt-8 sm:mt-16 flex-wrap">
+                      <button
+                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                        className="inline-flex items-center justify-center w-10 h-10 border-2 border-gray-300 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[#023927] hover:text-[#023927] transition-colors duration-300"
+                      >
+                        <ChevronLeftIcon className="w-4 h-4" />
+                      </button>
 
-              <button
-                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage === totalPages}
-                className="inline-flex items-center justify-center w-10 h-10 border-2 border-gray-300 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[#023927] hover:text-[#023927] transition-colors duration-300"
-              >
-                <ChevronRightIcon className="w-4 h-4" />
-              </button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`w-10 h-10 border-2 text-sm font-medium transition-colors duration-300 ${
+                            currentPage === page
+                              ? 'border-[#023927] bg-[#023927] text-white'
+                              : 'border-gray-300 text-gray-700 hover:border-[#023927] hover:text-[#023927]'
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
 
-              <div className="w-full text-center text-sm text-gray-500 mt-2">
-                {t('common.page') || 'Page'} {currentPage} / {totalPages}
-              </div>
-            </div>
+                      <button
+                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                        className="inline-flex items-center justify-center w-10 h-10 border-2 border-gray-300 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed hover:border-[#023927] hover:text-[#023927] transition-colors duration-300"
+                      >
+                        <ChevronRightIcon className="w-4 h-4" />
+                      </button>
+
+                      <div className="w-full text-center text-sm text-gray-500 mt-2">
+                        {t('common.page') || 'Page'} {currentPage} / {totalPages}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           )}
         </div>
       </section>

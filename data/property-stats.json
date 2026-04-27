@@ -1,0 +1,90 @@
+{
+  "123": {
+    "propertyId": "123",
+    "views": 5,
+    "inquiries": 2,
+    "favorites": 1,
+    "clicks": 3,
+    "updatedAt": "2024-01-15T10:30:00.000Z"
+  },
+  "86346430": {
+    "propertyId": "86346430",
+    "views": 2,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-27T12:33:24.736Z"
+  },
+  "86439876": {
+    "propertyId": "86439876",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T14:18:47.409Z"
+  },
+  "86483102": {
+    "propertyId": "86483102",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T14:17:36.235Z"
+  },
+  "86681076": {
+    "propertyId": "86681076",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T14:57:12.277Z"
+  },
+  "86681101": {
+    "propertyId": "86681101",
+    "views": 25,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 14,
+    "updatedAt": "2026-04-16T01:00:54.807Z"
+  },
+  "86686477": {
+    "propertyId": "86686477",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T14:55:52.349Z"
+  },
+  "86709605": {
+    "propertyId": "86709605",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T14:12:14.716Z"
+  },
+  "86723887": {
+    "propertyId": "86723887",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T14:07:42.213Z"
+  },
+  "86742534": {
+    "propertyId": "86742534",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-15T20:49:04.387Z"
+  },
+  "86780552": {
+    "propertyId": "86780552",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-04-26T13:42:06.027Z"
+  }
+}

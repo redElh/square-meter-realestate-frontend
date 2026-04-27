@@ -1,9 +1,10 @@
 /**
  * FREE Google Maps Reviews Scraper using Playwright
  * NO API KEYS, NO BILLING, 100% FREE
+ * Optimized for Vercel serverless with playwright-aws-lambda
  */
 
-const { chromium } = require('playwright');
+const playwright = require('playwright-aws-lambda');
 
 // Your actual Google Maps URL
 const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/M%C2%B2+Square+Meter/@31.4938096,-9.7575766,17z/data=!4m8!3m7!1s0x6b0f78fc73018673:0x9f971ab9cce20129!8m2!3d31.4938051!4d-9.7550017!9m1!1b1!16s%2Fg%2F11wth7gqpg';
@@ -15,17 +16,13 @@ async function scrapeGoogleReviews() {
   let browser = null;
   
   try {
-    console.log('🚀 Launching Playwright browser...');
+    console.log('🚀 Launching Playwright browser (AWS Lambda optimized)...');
     
-    browser = await chromium.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    browser = await playwright.launchChromium({
+      headless: true
     });
     
-    const context = await browser.newContext({
-      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      viewport: { width: 1920, height: 1080 }
-    });
+    const context = await browser.newContext();
     
     const page = await context.newPage();
     

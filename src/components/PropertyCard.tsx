@@ -25,6 +25,7 @@ interface PropertyCardProps {
   floors?: number;
   images: string[];
   type: 'buy' | 'rent';
+  isExclusive?: boolean;
   isFavorite?: boolean;
   onToggleFavorite?: (id: number) => void;
 }
@@ -42,6 +43,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   floors,
   images,
   type,
+  isExclusive = false,
   isFavorite = false,
   onToggleFavorite
 }) => {
@@ -63,10 +65,15 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         />
         
         {/* Type Badge */}
-        <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'}`}>
+        <div className={`absolute top-4 ${isRTL ? 'left-4 items-start' : 'right-4 items-end'} flex flex-col gap-2`}>
           <span className="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold text-gray-900">
             {type === 'buy' ? t('properties.filters.buy') : t('properties.filters.rent')}
           </span>
+          {isExclusive && (
+            <span className="px-3 py-1 bg-[#023927]/95 backdrop-blur-sm rounded-full text-xs font-semibold text-white uppercase tracking-wide">
+              {t('properties.listing.exclusive')}
+            </span>
+          )}
         </div>
 
         {/* Favorite Button */}

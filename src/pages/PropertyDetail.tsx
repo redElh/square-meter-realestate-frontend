@@ -162,6 +162,8 @@ const PropertyDetail: React.FC = () => {
     );
   }
 
+  const isExclusiveProperty = Number(property.agreementType) === 3;
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
@@ -271,7 +273,7 @@ const PropertyDetail: React.FC = () => {
           <div className="container mx-auto px-2 sm:px-4">
             <div className="max-w-6xl">
               {/* Property Type Badge */}
-              <div className="inline-block mb-1 sm:mb-4">
+              <div className="inline-flex items-center gap-2 mb-1 sm:mb-4">
                 <span className={`px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider ${
                   property.type === 'buy' 
                     ? 'bg-blue-50 text-blue-800 border border-blue-200' 
@@ -281,6 +283,11 @@ const PropertyDetail: React.FC = () => {
                 }`}>
                   {property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}
                 </span>
+                {isExclusiveProperty && (
+                  <span className="px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider bg-[#023927] text-white border border-[#023927]">
+                    {t('properties.listing.exclusive')}
+                  </span>
+                )}
               </div>
 
               <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-inter font-light text-white mb-1 sm:mb-4 leading-tight">
@@ -446,6 +453,7 @@ const PropertyDetail: React.FC = () => {
                     floors={similar.floors}
                     images={similar.images && similar.images.length > 0 ? similar.images : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800']}
                     type={(similar.type as 'buy' | 'rent') || 'buy'}
+                    isExclusive={Number(similar.agreementType) === 3}
                   />
                 </div>
               ))}
