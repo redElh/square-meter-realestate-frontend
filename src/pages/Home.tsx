@@ -46,9 +46,10 @@ const Home: React.FC = () => {
 
   // Homepage hero images
   const heroImages = [
-    '/photo-9.jfif',
-    '/photo-8.jfif',
-    '/photo-7.jfif'
+    '/photo-7.jpeg',
+    '/photo-8.jpeg',
+    '/photo-9.jpeg',
+    '/photo-10.jpeg'
   ];
 
   // Homepage hero carousel auto-play
