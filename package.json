@@ -40,7 +40,7 @@
     "zod": "^4.1.12",
     "zxcvbn": "^4.4.2",
     "playwright-core": "^1.58.1",
-    "playwright-aws-lambda": "^0.10.0"
+    "@sparticuz/chromium": "^131.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
