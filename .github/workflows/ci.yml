@@ -52,19 +52,6 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Install dependencies
         run: npm ci
-      - name: Create .env file for Vercel deployment
-        run: |
-          cat > .env << EOF
-          REACT_APP_GEMINI_API_KEY=${{ secrets.REACT_APP_GEMINI_API_KEY || 'demo-key' }}
-          REACT_APP_CHROMA_URL=/chroma
-          APIMO_PROVIDER_ID=${{ secrets.APIMO_PROVIDER_ID || '4567' }}
-          APIMO_TOKEN=${{ secrets.APIMO_TOKEN || 'd07da6e744bb033d1299469f1f6f7334531ec05c' }}
-          APIMO_AGENCY_ID=${{ secrets.APIMO_AGENCY_ID || '25311' }}
-          CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}
-          GMAIL_USER=${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASSWORD=${{ secrets.GMAIL_APP_PASSWORD }}
-          KV_REDIS_URL=${{ secrets.KV_REDIS_URL }}
-          EOF
       - name: Deploy to Vercel
         id: vercel
         uses: amondnet/vercel-action@v25
@@ -82,23 +69,11 @@ jobs:
             echo "❌ Missing deployment URL" >&2
             exit 1
           fi
-          
-          # Wait for deployment to be ready
-          for i in {1..30}; do
-            HTTP_STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$URL")
-            if [ "$HTTP_STATUS" = "200" ]; then
-              echo "✅ Smoke test passed — $URL returned 200"
-              exit 0
-            fi
-            if [ $i -lt 30 ]; then
-              echo "⏳ Waiting for deployment (attempt $i/30)... got HTTP $HTTP_STATUS"
-              sleep 2
-            fi
-          done
-          
-          # If we get here, deployment is not responding with 200
-          RESPONSE=$(curl -s "$URL" 2>&1 || echo "Connection failed")
-          echo "❌ Smoke test failed — $URL not returning 200"
-          echo "Last HTTP status: $HTTP_STATUS"
-          echo "Response preview: ${RESPONSE:0:200}"
-          exit 1
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            "$URL")
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Smoke test failed — got HTTP $STATUS for $URL" >&2
+            exit 1
+          fi
+          echo "✅ Smoke test passed — $URL returned 200"
