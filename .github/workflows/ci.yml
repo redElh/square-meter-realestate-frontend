@@ -60,7 +60,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: --prod
-          vercel-version: 47.2.2
+          vercel-version: 53.0.1
           working-directory: ./
       - name: Smoke test
         run: |
