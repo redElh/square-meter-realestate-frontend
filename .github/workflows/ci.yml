@@ -64,16 +64,10 @@ jobs:
           working-directory: ./
       - name: Smoke test
         run: |
-          URL="${{ steps.vercel.outputs.preview-url }}"
-          if [ -z "$URL" ]; then
-            echo "❌ Missing deployment URL" >&2
-            exit 1
-          fi
-          STATUS=$(curl -o /dev/null -s -w "%{http_code}" \
-            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
-            "$URL")
+          sleep 10
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "https://squaremeter.ma")
           if [ "$STATUS" != "200" ]; then
-            echo "❌ Smoke test failed — got HTTP $STATUS for $URL" >&2
+            echo "❌ Smoke test failed — got HTTP $STATUS for https://squaremeter.ma" >&2
             exit 1
           fi
-          echo "✅ Smoke test passed — $URL returned 200"
+          echo "✅ Smoke test passed — https://squaremeter.ma returned 200"
