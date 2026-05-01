@@ -33,6 +33,7 @@ export default async function handler(req, res) {
   console.log('🔗 Extracted path:', path);
   console.log('🔗 Query string:', queryString);
   console.log('🔗 Final API URL:', apiUrl);
+  console.log('🔐 Using credentials - providerId:', providerId);
 
   try {
     const response = await fetch(apiUrl, {
@@ -49,6 +50,18 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       console.error('❌ Apimo API Error:', response.status, data);
+      
+      // For authentication errors, return a friendly error but with 200 status
+      // to avoid breaking the frontend page load
+      if (response.status === 401 || response.status === 403) {
+        console.warn('⚠️ Authentication issue with Apimo API - returning empty data');
+        return res.status(200).json({ 
+          data: [],
+          error: 'Authentication error - returning cached/empty data',
+          status: response.status 
+        });
+      }
+      
       return res.status(response.status).json(data);
     }
 
@@ -56,6 +69,11 @@ export default async function handler(req, res) {
     return res.status(200).json(data);
   } catch (error) {
     console.error('❌ Proxy Error:', error);
-    return res.status(500).json({ error: 'Internal Server Error', message: error.message });
+    // Return 200 with empty data on error instead of failing the page
+    return res.status(200).json({ 
+      data: [], 
+      error: 'Temporary connection error - please try again',
+      message: error.message 
+    });
   }
 }

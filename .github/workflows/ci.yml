@@ -52,11 +52,18 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Install dependencies
         run: npm ci
-      - name: Create .env file for build
+      - name: Create .env file for Vercel deployment
         run: |
-          cat > .env.local << EOF
+          cat > .env << EOF
           REACT_APP_GEMINI_API_KEY=${{ secrets.REACT_APP_GEMINI_API_KEY || 'demo-key' }}
           REACT_APP_CHROMA_URL=/chroma
+          APIMO_PROVIDER_ID=${{ secrets.APIMO_PROVIDER_ID || '4567' }}
+          APIMO_TOKEN=${{ secrets.APIMO_TOKEN || 'd07da6e744bb033d1299469f1f6f7334531ec05c' }}
+          APIMO_AGENCY_ID=${{ secrets.APIMO_AGENCY_ID || '25311' }}
+          CONTACT_EMAIL=${{ secrets.CONTACT_EMAIL }}
+          GMAIL_USER=${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD=${{ secrets.GMAIL_APP_PASSWORD }}
+          KV_REDIS_URL=${{ secrets.KV_REDIS_URL }}
           EOF
       - name: Deploy to Vercel
         id: vercel
