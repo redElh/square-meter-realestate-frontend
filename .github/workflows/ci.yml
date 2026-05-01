@@ -65,7 +65,7 @@ jobs:
       - name: Smoke test
         run: |
           sleep 10
-          STATUS=$(curl -o /dev/null -s -w "%{http_code}" "https://squaremeter.ma")
+          STATUS=$(curl -L -o /dev/null -s -w "%{http_code}" "https://squaremeter.ma")
           if [ "$STATUS" != "200" ]; then
             echo "❌ Smoke test failed — got HTTP $STATUS for https://squaremeter.ma" >&2
             exit 1
