@@ -4,48 +4,14 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   
   <!-- Homepage - Highest Priority -->
-  <url>
-    <loc>https://squaremeter.ma/</loc>
-    <lastmod>2026-02-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://squaremeter.ma/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://squaremeter.ma/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://squaremeter.ma/?lang=ar" />
-  </url>
   
-  <!-- Properties Listing - High Priority -->
-  <url>
-    <loc>https://squaremeter.ma/properties</loc>
-    <lastmod>2026-02-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://squaremeter.ma/properties" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://squaremeter.ma/properties?lang=en" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://squaremeter.ma/properties?lang=ar" />
-  </url>
   
   <!-- Properties by Type -->
-  <url>
-    <loc>https://squaremeter.ma/properties?type=buy</loc>
-    <lastmod>2026-02-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
   
-  <url>
-    <loc>https://squaremeter.ma/properties?type=rent</loc>
-    <lastmod>2026-02-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
   
-  <url>
-    <loc>https://squaremeter.ma/properties?type=seasonal</loc>
-    <lastmod>2026-02-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  
+  
+  
   
   <!-- Services Pages -->
   <url>
@@ -162,4 +128,527 @@
     <priority>0.3</priority>
   </url>
   
+  <url>
+    <loc>https://squaremeter.ma/properties/86681101</loc>
+    <lastmod>2026-03-11 14:39:31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86686477</loc>
+    <lastmod>2026-03-11 14:39:53</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86709240</loc>
+    <lastmod>2026-03-11 14:40:30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86681109</loc>
+    <lastmod>2026-03-11 14:41:03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86680962</loc>
+    <lastmod>2026-03-11 14:41:12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86681115</loc>
+    <lastmod>2026-03-19 12:21:23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86680978</loc>
+    <lastmod>2026-03-19 12:21:23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86709281</loc>
+    <lastmod>2026-03-19 12:21:23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86709605</loc>
+    <lastmod>2026-03-19 12:21:23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86704248</loc>
+    <lastmod>2026-03-27 11:05:20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86874157</loc>
+    <lastmod>2026-03-30 16:30:21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86875404</loc>
+    <lastmod>2026-04-01 14:34:59</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86783724</loc>
+    <lastmod>2026-04-01 14:37:24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86616956</loc>
+    <lastmod>2026-04-02 17:31:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86731168</loc>
+    <lastmod>2026-04-02 17:31:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86780552</loc>
+    <lastmod>2026-04-02 17:31:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86504900</loc>
+    <lastmod>2026-04-02 17:31:47</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86616989</loc>
+    <lastmod>2026-04-02 17:33:29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86662703</loc>
+    <lastmod>2026-04-02 17:34:49</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86674012</loc>
+    <lastmod>2026-04-02 17:34:49</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86731271</loc>
+    <lastmod>2026-04-02 17:37:03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86825586</loc>
+    <lastmod>2026-04-02 20:02:06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86875844</loc>
+    <lastmod>2026-04-02 20:04:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86803303</loc>
+    <lastmod>2026-04-02 20:08:12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86720081</loc>
+    <lastmod>2026-04-02 22:51:56</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86665218</loc>
+    <lastmod>2026-04-02 22:54:26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86504714</loc>
+    <lastmod>2026-04-04 08:55:15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86349216</loc>
+    <lastmod>2026-04-04 08:55:15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86686541</loc>
+    <lastmod>2026-04-04 08:55:15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86747266</loc>
+    <lastmod>2026-04-04 08:55:15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86742534</loc>
+    <lastmod>2026-04-04 08:56:42</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86616973</loc>
+    <lastmod>2026-04-06 10:05:01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86778971</loc>
+    <lastmod>2026-04-06 10:05:01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86689807</loc>
+    <lastmod>2026-04-08 10:08:28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86879246</loc>
+    <lastmod>2026-04-21 18:18:11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86723887</loc>
+    <lastmod>2026-04-21 20:00:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86346430</loc>
+    <lastmod>2026-04-22 11:46:21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86379445</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86612415</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86661957</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86675024</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86661974</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86657838</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86657575</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86612442</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86368669</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86379422</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86379451</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86434163</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86483102</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86612474</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86349244</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86689882</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86514919</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86483093</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86701786</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86701412</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86514892</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86704391</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86704433</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86744036</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86763112</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86763071</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86779225</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86779160</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86783342</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86744017</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86743742</loc>
+    <lastmod>2026-04-29 10:55:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86784896</loc>
+    <lastmod>2026-04-29 10:55:47</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86919521</loc>
+    <lastmod>2026-04-29 10:55:47</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86919541</loc>
+    <lastmod>2026-04-29 10:55:47</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86919542</loc>
+    <lastmod>2026-04-29 10:55:47</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86927092</loc>
+    <lastmod>2026-04-29 10:55:47</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86656784</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86651729</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86439876</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86490071</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86760927</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86761827</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86927122</loc>
+    <lastmod>2026-04-29 10:56:35</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86919491</loc>
+    <lastmod>2026-04-29 11:05:28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86686502</loc>
+    <lastmod>2026-04-29 11:06:22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86879244</loc>
+    <lastmod>2026-04-29 11:06:24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86681076</loc>
+    <lastmod>2026-04-29 11:09:17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86680868</loc>
+    <lastmod>2026-05-02 11:48:15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86658739</loc>
+    <lastmod>2026-05-05 15:57:46</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://squaremeter.ma/properties/86680904</loc>
+    <lastmod>2026-05-05 21:52:34</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>

@@ -1,6 +1,6 @@
 // src/pages/Home.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
   ChevronLeftIcon, 
@@ -37,6 +37,7 @@ const Home: React.FC = () => {
   const [yearsCount, setYearsCount] = useState(0);
   const [countriesCount, setCountriesCount] = useState(0);
   const statsRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   // Gallery modal state
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -247,7 +248,7 @@ const Home: React.FC = () => {
         title={t('home.hero.title') || 'Agence Immobilière de Prestige à Essaouira'}
         description="Découvrez notre sélection exclusive de villas, appartements et biens d'exception à Essaouira. Vente, location longue durée, location saisonnière, gestion locative et conciergerie haut de gamme."
         keywords="immobilier Essaouira, agence immobilière Essaouira, vente villa Essaouira, location appartement Essaouira, immobilier de prestige Maroc, gestion locative Essaouira, conciergerie Essaouira, location saisonnière Essaouira, real estate Essaouira, property Morocco"
-        url="/"
+        url={`${location.pathname}${location.search}`}
       />
       {/* Hero Section - Épurée */}
       <section className="relative h-[70vh] sm:h-screen overflow-hidden">

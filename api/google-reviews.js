@@ -6,6 +6,7 @@
 
 const chromium = require('@sparticuz/chromium');
 const playwright = require('playwright-core');
+const fs = require('fs');
 
 // Your actual Google Maps URL
 const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/M%C2%B2+Square+Meter/@31.4938096,-9.7575766,17z/data=!4m8!3m7!1s0x6b0f78fc73018673:0x9f971ab9cce20129!8m2!3d31.4938051!4d-9.7550017!9m1!1b1!16s%2Fg%2F11wth7gqpg';
@@ -18,12 +19,65 @@ async function scrapeGoogleReviews() {
   
   try {
     console.log('🚀 Launching Playwright browser (Sparticuz Chromium)...');
-    
-    browser = await playwright.chromium.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless
-    });
+
+    // Resolve executable path with overrides and fallbacks for dev & prod
+    let execPath = process.env.CHROMIUM_EXECUTABLE_PATH || process.env.CHROMIUM_PATH || '';
+
+    if (!execPath) {
+      try {
+        execPath = await chromium.executablePath();
+      } catch (e) {
+        console.warn('@sparticuz/chromium.executablePath() failed:', e.message);
+      }
+    }
+
+    // Common local Chrome/Chromium locations (Windows, macOS, Linux)
+    const commonPaths = [
+      // Windows
+      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+      'C:\\Program Files\\Chromium\\Application\\chrome.exe',
+      // macOS
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      '/Applications/Chromium.app/Contents/MacOS/Chromium',
+      // Linux
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium'
+    ];
+
+    if (!execPath) {
+      for (const p of commonPaths) {
+        if (fs.existsSync(p)) { execPath = p; break; }
+      }
+    }
+
+    console.log('Chromium candidate executablePath:', execPath || '(none)');
+
+    // Prefer launching system-installed Chrome for local development
+    try {
+      browser = await playwright.chromium.launch({
+        channel: 'chrome',
+        args: chromium.args || [],
+        headless: chromium.headless === undefined ? true : chromium.headless
+      });
+      console.log('Launched system Chrome via Playwright channel.');
+    } catch (sysErr) {
+      console.warn('Launching system Chrome failed:', sysErr.message);
+      // Fall back to sparticuz executable path if available
+      if (!execPath || !fs.existsSync(execPath)) {
+        const msg = `Chromium executable not found. Set env CHROMIUM_EXECUTABLE_PATH or install @sparticuz/chromium/playwright browsers.`;
+        console.error(msg);
+        throw new Error(msg);
+      }
+      browser = await playwright.chromium.launch({
+        args: chromium.args || [],
+        executablePath: execPath,
+        headless: chromium.headless === undefined ? true : chromium.headless
+      });
+      console.log('Launched Sparticuz Chromium at', execPath);
+    }
     
     const context = await browser.newContext({
       userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
@@ -338,3 +392,6 @@ module.exports = async (req, res) => {
     });
   }
 };
+
+// Export scrape function for local testing and reuse
+module.exports.scrapeGoogleReviews = scrapeGoogleReviews;

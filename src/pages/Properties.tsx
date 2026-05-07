@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { 
   HeartIcon,
   CameraIcon,
@@ -47,6 +48,7 @@ const Properties: React.FC = () => {
   const [propertyZone, setPropertyZone] = useState<'normal' | 'exclusive'>('normal');
   const propertiesListRef = useRef<HTMLDivElement>(null);
   const hasInitializedFiltersRef = useRef(false);
+  const location = useLocation();
   
   // Gallery modal state
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -599,7 +601,7 @@ const Properties: React.FC = () => {
         title={seoData.title}
         description={seoData.description}
         keywords="immobilier Essaouira, vente villa Essaouira, location appartement Essaouira, biens immobiliers Maroc, propriétés Essaouira, real estate Morocco, maisons Essaouira, appartements de luxe"
-        url="/properties"
+        url={`${location.pathname}${location.search}`}
       />
       {/* Hero Section with Search Only - Updated with margin */}
       <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white">

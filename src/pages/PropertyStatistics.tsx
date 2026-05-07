@@ -4,10 +4,10 @@
  */
 
 import React, { useState, useEffect, useMemo, useCallback, useId } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import {
-  ChartBarIcon,
   EyeIcon,
   EnvelopeIcon,
   HeartIcon,
@@ -28,7 +28,8 @@ import {
   CheckBadgeIcon,
   SignalIcon,
   ArrowRightIcon,
-  BoltIcon
+  BoltIcon,
+  ChartBarIcon
 } from '@heroicons/react/24/outline';
 import { 
   Area, 
@@ -141,6 +142,7 @@ const PropertyStatistics: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { format: formatCurrency } = useCurrency();
   const { isRTL } = useLocalization();
+  const location = useLocation();
 
   const currentLanguage = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0].toLowerCase();
   const currentStatsUiFallback = statsUiFallbacks[currentLanguage] || statsUiFallbacks.en;
@@ -653,6 +655,7 @@ const PropertyStatistics: React.FC = () => {
       <SEO
         title={t('stats.title', { defaultValue: 'Property Statistics' })}
         description={t('stats.description', { defaultValue: 'Real-time property performance analytics' })}
+        url={`${location.pathname}${location.search}`}
       />
 
       <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 ${isRTL ? 'rtl' : 'ltr'}`}>
