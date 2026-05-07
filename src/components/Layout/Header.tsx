@@ -249,10 +249,10 @@ const Header: React.FC = () => {
                   <div className={`relative ${
                     effectiveIsScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-16 h-16 sm:w-32 sm:h-32'
                   } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden mx-auto`}>
-                    <img 
-                      src="/logo-m2.png" 
-                      alt="Square Meter logo" 
-                      className="w-full h-full object-contain p-0 bg-transparent" 
+                    <img
+                      src={process.env.PUBLIC_URL + '/logo-m2.png'}
+                      alt="Square Meter logo"
+                      className="w-full h-full object-contain p-0 bg-transparent"
                       style={{ background: 'transparent' }}
                       loading="eager"
                     />

@@ -131,12 +131,19 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchFeaturedProperties = async () => {
       try {
+        const startTime = performance.now();
+        console.log('🚀 Starting to fetch Coup de Cœur properties...');
+        
         const { properties: apiProperties } = await apimoService.getProperties({
           limit: 1000,
         }, t, currentLanguage);
         
         // Coup de Coeur section: show all properties with agreement type 3
         const coupDeCoeurProperties = apiProperties.filter(prop => Number(prop.agreementType) === 3);
+        const fetchTime = performance.now() - startTime;
+        
+        console.log(`✅ Coup de Cœur properties loaded: ${coupDeCoeurProperties.length} items in ${fetchTime.toFixed(0)}ms`);
+        
         setFeaturedProperties(coupDeCoeurProperties);
       } catch (error) {
         console.error('Error loading featured properties:', error);

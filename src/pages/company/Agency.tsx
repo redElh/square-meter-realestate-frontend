@@ -131,13 +131,13 @@ const Agency: React.FC = () => {
           {/* Blurred background to fill empty space when main image is object-contain */}
           <div
             className="absolute inset-0 bg-center bg-cover filter blur-xl scale-105 brightness-75 z-0"
-            style={{ backgroundImage: `url(/team-image.jfif)` }}
+              style={{ backgroundImage: `url(${process.env.PUBLIC_URL + '/team-image.jfif'})` }}
           />
 
           {/* Main image centered on top */}
           <div className="relative z-10 w-full h-full flex items-center justify-center">
-            <img
-              src="/team-image.jfif"
+              <img
+                src={process.env.PUBLIC_URL + '/team-image.jfif'}
               alt={t('agency.hero.title')}
               className="w-full h-full object-contain object-center"
             />

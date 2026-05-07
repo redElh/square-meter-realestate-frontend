@@ -466,9 +466,23 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
 
 // API Functions
 class ApimoService {
+  // Cache implementation for properties
+  private propertiesCache = new Map<string, { data: { properties: Property[]; total: number }; timestamp: number }>();
+  private pendingRequests = new Map<string, Promise<{ properties: Property[]; total: number }>>();
+  private readonly CACHE_TTL = 5 * 60 * 1000; // 5 minutes cache TTL
+
   private getAuthHeader(): string {
     const credentials = `${APIMO_CONFIG.providerId}:${APIMO_CONFIG.token}`;
     return `Basic ${btoa(credentials)}`;
+  }
+
+  private getCacheKey(params?: any, language?: string): string {
+    const paramStr = params ? JSON.stringify(params) : 'default';
+    return `${paramStr}:${language || 'fr'}`;
+  }
+
+  private isCacheValid(timestamp: number): boolean {
+    return Date.now() - timestamp < this.CACHE_TTL;
   }
 
   async getProperties(params?: {
@@ -479,64 +493,92 @@ class ApimoService {
     status?: number;
     group?: number;
   }, t?: any, language?: string): Promise<{ properties: Property[]; total: number }> {
-    try {
-      console.log('🔧 apimoService.getProperties called with params:', params);
-      const queryParams = new URLSearchParams();
-      if (params?.limit) queryParams.append('limit', params.limit.toString());
-      if (params?.offset) queryParams.append('offset', params.offset.toString());
-      if (params?.timestamp) queryParams.append('timestamp', params.timestamp.toString());
-      if (params?.step) queryParams.append('step', params.step.toString());
-      if (params?.status) queryParams.append('status', params.status.toString());
-      if (params?.group) queryParams.append('group', params.group.toString());
+    const cacheKey = this.getCacheKey(params, language);
 
-      const url = `${APIMO_CONFIG.baseUrl}/agencies/${APIMO_CONFIG.agencyId}/properties${
-        queryParams.toString() ? '?' + queryParams.toString() : ''
-      }`;
-      
-      console.log('📍 Fetching from URL:', url);
-      console.log('🌐 Environment:', process.env.NODE_ENV);
-      console.log('🔑 Base URL:', APIMO_CONFIG.baseUrl);
-
-      // The proxy/serverless function handles authentication
-      const headers: HeadersInit = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      };
-
-      console.log('📤 Sending request...');
-      const response = await fetch(url, {
-        method: 'GET',
-        headers,
-      });
-
-      console.log('📥 Response status:', response.status, response.statusText);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ API Error Response:', errorText);
-        throw new Error(`Apimo API error: ${response.status} ${response.statusText}`);
-      }
-
-      console.log('📦 Parsing response JSON...');
-      const data: ApimoResponse = await response.json();
-      console.log('📊 Received data:', data);
-      
-      console.log('🔄 Mapping properties...');
-      const properties = data.properties.map(prop => mapApimoToProperty(prop, language || 'fr', t));
-      
-      // Translate property names for all non-English languages
-      if (language && language !== 'en') {
-        await this.translatePropertyNames(properties, language);
-      }
-
-      return {
-        properties,
-        total: data.total_items,
-      };
-    } catch (error) {
-      console.error('💥 Error fetching properties from Apimo:', error);
-      throw error;
+    // Check if request is already in progress (request deduplication)
+    if (this.pendingRequests.has(cacheKey)) {
+      console.log('⏳ Request already in progress, waiting for result...');
+      return this.pendingRequests.get(cacheKey)!;
     }
+
+    // Check cache first
+    const cached = this.propertiesCache.get(cacheKey);
+    if (cached && this.isCacheValid(cached.timestamp)) {
+      console.log('✅ Returning cached properties (age:', Date.now() - cached.timestamp, 'ms)');
+      return cached.data;
+    }
+
+    // Create the async request
+    const requestPromise = (async () => {
+      try {
+        console.log('🔧 apimoService.getProperties called with params:', params);
+        const queryParams = new URLSearchParams();
+        if (params?.limit) queryParams.append('limit', params.limit.toString());
+        if (params?.offset) queryParams.append('offset', params.offset.toString());
+        if (params?.timestamp) queryParams.append('timestamp', params.timestamp.toString());
+        if (params?.step) queryParams.append('step', params.step.toString());
+        if (params?.status) queryParams.append('status', params.status.toString());
+        if (params?.group) queryParams.append('group', params.group.toString());
+
+        const url = `${APIMO_CONFIG.baseUrl}/agencies/${APIMO_CONFIG.agencyId}/properties${
+          queryParams.toString() ? '?' + queryParams.toString() : ''
+        }`;
+        
+        console.log('📍 Fetching from URL:', url);
+        console.log('🌐 Environment:', process.env.NODE_ENV);
+        console.log('🔑 Base URL:', APIMO_CONFIG.baseUrl);
+
+        // The proxy/serverless function handles authentication
+        const headers: HeadersInit = {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        };
+
+        console.log('📤 Sending request...');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers,
+        });
+
+        console.log('📥 Response status:', response.status, response.statusText);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('❌ API Error Response:', errorText);
+          throw new Error(`Apimo API error: ${response.status} ${response.statusText}`);
+        }
+
+        console.log('📦 Parsing response JSON...');
+        const data: ApimoResponse = await response.json();
+        console.log('📊 Received data:', data);
+        
+        console.log('🔄 Mapping properties...');
+        const properties = data.properties.map(prop => mapApimoToProperty(prop, language || 'fr', t));
+        
+        // SKIP full translation for now - translate only when needed
+        // This significantly improves initial page load time
+        // Translations will be done lazy-loaded for displayed properties
+        console.log('⚠️  Skipping full translation for now - will translate on-demand for better performance');
+
+        const result = {
+          properties,
+          total: data.total_items,
+        };
+
+        // Store in cache
+        this.propertiesCache.set(cacheKey, { data: result, timestamp: Date.now() });
+
+        return result;
+      } finally {
+        // Remove from pending requests
+        this.pendingRequests.delete(cacheKey);
+      }
+    })();
+
+    // Store the pending request
+    this.pendingRequests.set(cacheKey, requestPromise);
+
+    return requestPromise;
   }
 
   /**
@@ -588,16 +630,28 @@ class ApimoService {
 
   async getPropertyById(propertyId: number, t?: any, language?: string): Promise<Property | null> {
     try {
-      // Fetch all properties and find the one with matching ID
-      // Note: Apimo API doesn't have a direct endpoint for single property
-      // You might need to implement caching or use a different approach
+      // Use cached properties to find the property
       const { properties } = await this.getProperties({ limit: 1000 }, t, language);
       const property = properties.find(p => p.id === propertyId);
+      
+      // Translate just this property on-demand if needed
+      if (property && language && language !== 'en') {
+        await this.translatePropertyNames([property], language);
+      }
+      
       return property || null;
     } catch (error) {
       console.error(`Error fetching property ${propertyId} from Apimo:`, error);
       throw error;
     }
+  }
+
+  /**
+   * Clear the cache - useful for force-refreshing properties
+   */
+  clearCache(): void {
+    this.propertiesCache.clear();
+    console.log('✅ Properties cache cleared');
   }
 }
 

@@ -30,17 +30,17 @@ const Owners: React.FC = () => {
   
   const heroSlides = [
     {
-      image: "/photo-4.jfif",
+      image: process.env.PUBLIC_URL + '/photo-4.jfif',
       title: heroSlidesData[0].title,
       subtitle: heroSlidesData[0].subtitle
     },
     {
-      image: "/photo-5.jfif",
+      image: process.env.PUBLIC_URL + '/photo-5.jfif',
       title: heroSlidesData[1].title,
       subtitle: heroSlidesData[1].subtitle
     },
     {
-      image: "/photo-6.jfif",
+      image: process.env.PUBLIC_URL + '/photo-6.jfif',
       title: heroSlidesData[2].title,
       subtitle: heroSlidesData[2].subtitle
     }

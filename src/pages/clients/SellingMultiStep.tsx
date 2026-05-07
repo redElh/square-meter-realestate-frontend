@@ -57,9 +57,9 @@ const SellingMultiStep: React.FC = () => {
   const heroSlidesData = t('sellingMultiStep.hero.slides', { returnObjects: true }) as Array<{title: string; subtitle: string}>;
   const heroSlides = heroSlidesData.map((slide, index) => ({
     image: [
-      "/photo-4.jfif",
-      "/photo-5.jfif",
-      "/photo-6.jfif"
+      process.env.PUBLIC_URL + '/photo-4.jfif',
+      process.env.PUBLIC_URL + '/photo-5.jfif',
+      process.env.PUBLIC_URL + '/photo-6.jfif'
     ][index],
     ...slide
   }));
