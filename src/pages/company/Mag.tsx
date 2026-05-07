@@ -707,7 +707,7 @@ const Mag: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="relative h-56 lg:h-auto overflow-hidden">
               <img
-                src={process.env.PUBLIC_URL + '/mag-1.jpeg'}
+                src="/mag-1.jpeg"
                 alt="Propriétés Square Meter"
                 className="w-full h-full object-cover"
               />

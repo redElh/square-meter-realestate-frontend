@@ -64,21 +64,21 @@ const Properties: React.FC = () => {
   // Exclusive properties hero images
   const heroProperties = [
     {
-      image: process.env.PUBLIC_URL + '/photo-1.jfif',
+      image: "/photo-1.jfif",
       title: "Villa Azure",
       location: "Côte d'Azur, France",
       price: "4,200,000 €",
       type: "buy"
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-2.jfif',
+      image: "/photo-2.jfif",
       title: "Château de la Renaissance",
       location: "Loire Valley, France",
       price: "8,500,000 €",
       type: "buy"
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-3.jfif',
+      image: "/photo-3.jfif",
       title: "Penthouse Skyline",
       location: "Paris 16ème, France",
       price: "12,500 €/mois",

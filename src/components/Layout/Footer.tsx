@@ -122,8 +122,8 @@ const Footer: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1500" />
                     
                     {/* Logo Content (use same image as header) */}
-                      <div className="relative z-10 w-full h-full flex items-center justify-center">
-                      <img src={process.env.PUBLIC_URL + '/logo-m2.png'} alt="Square Meter logo" className="w-full h-full object-contain" />
+                    <div className="relative z-10 w-full h-full flex items-center justify-center">
+                      <img src="/logo-m2.png" alt="Square Meter logo" className="w-full h-full object-contain" />
                     </div>
                   </div>
                 </div>
@@ -150,12 +150,12 @@ const Footer: React.FC = () => {
               </p>
               <div className="flex space-x-2 sm:space-x-3">
                 {socialLinks.map((social) => (
-                  { 
-                    name: 'Linktree', 
-                    href: 'https://linktr.ee/qr/13bde000-f522-45a2-9377-8822c9295274?utm_source=qr_code', 
-                    image: `${process.env.PUBLIC_URL}/linktree.png`,
-                    label: t('footer.social.linktree')
-                  },
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative group"
                     title={social.label}
                   >
                     <div className="relative p-2 sm:p-3 bg-white rounded-lg sm:rounded-xl border border-gray-200 shadow-sm hover:shadow-md backdrop-blur-sm transition-all duration-300 hover:bg-gray-50 group-hover:scale-110 group-hover:-translate-y-0.5">
@@ -164,12 +164,12 @@ const Footer: React.FC = () => {
                           src={social.image} 
                           alt={social.name}
                           className="w-4 h-4 sm:w-5 sm:h-5 object-contain transform transition-all duration-300"
-                        { 
-                          name: 'Instagram', 
-                          href: 'https://www.instagram.com/squaremeteressaouira?igsh=dGJzc2E4bWhwenN5&utm_source=qr', 
-                          image: `${process.env.PUBLIC_URL}/instagram.png`,
-                          label: t('footer.social.instagram')
-                        },
+                        />
+                      </div>
+                      
+                      {/* Hover Tooltip */}
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap z-20">
+                        {social.label}
                         <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
                       </div>
                     </div>
@@ -200,12 +200,12 @@ const Footer: React.FC = () => {
                         <span className="group-hover:font-semibold transition-all duration-300">{item.label}</span>
                       </Link>
                     </li>
-                  { 
-                    name: 'Facebook', 
-                    href: 'https://www.facebook.com/share/1GB85Fgz2j/?mibextid=wwXIfr', 
-                    image: `${process.env.PUBLIC_URL}/facebook.png`,
-                    label: t('footer.social.facebook')
-                  },
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+
           <div className="space-y-6 sm:space-y-8">
             <div>
               <h4 className="text-gray-800 text-xs sm:text-sm font-bold tracking-widest uppercase mb-4 sm:mb-6 flex items-center space-x-2">
@@ -226,12 +226,12 @@ const Footer: React.FC = () => {
                         <span className="group-hover:font-semibold transition-all duration-300">{item.label}</span>
                       </Link>
                     </li>
-                  { 
-                    name: 'Google', 
-                    href: 'https://share.google/4Gx34x0fGmMnTP29b', 
-                    image: `${process.env.PUBLIC_URL}/google.png`,
-                    label: t('footer.social.google')
-                  }
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+
           {/* Enhanced Contact Info */}
           <div className="space-y-6 sm:space-y-8">
             <div>

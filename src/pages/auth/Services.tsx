@@ -25,47 +25,47 @@ const Services: React.FC = () => {
   // Hero slides for services
   const heroSlides = [
     {
-      image: process.env.PUBLIC_URL + '/photo-1.jfif',
+      image: "/photo-1.jfif",
       title: t('services.hero.slide1'),
       subtitle: t('services.hero.subtitle1')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-2.jfif',
+      image: "/photo-2.jfif",
       title: t('services.hero.slide2'),
       subtitle: t('services.hero.subtitle2')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-3.jfif',
+      image: "/photo-3.jfif",
       title: t('services.hero.slide3'),
       subtitle: t('services.hero.subtitle3')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-4.jfif',
+      image: "/photo-4.jfif",
       title: t('services.hero.slide1'),
       subtitle: t('services.hero.subtitle1')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-5.jfif',
+      image: "/photo-5.jfif",
       title: t('services.hero.slide2'),
       subtitle: t('services.hero.subtitle2')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-6.jfif',
+      image: "/photo-6.jfif",
       title: t('services.hero.slide3'),
       subtitle: t('services.hero.subtitle3')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-7.jfif',
+      image: "/photo-7.jfif",
       title: t('services.hero.slide1'),
       subtitle: t('services.hero.subtitle1')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-8.jfif',
+      image: "/photo-8.jfif",
       title: t('services.hero.slide2'),
       subtitle: t('services.hero.subtitle2')
     },
     {
-      image: process.env.PUBLIC_URL + '/photo-9.jfif',
+      image: "/photo-9.jfif",
       title: t('services.hero.slide3'),
       subtitle: t('services.hero.subtitle3')
     }

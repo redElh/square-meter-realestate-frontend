@@ -764,7 +764,7 @@ const PropertyStatistics: React.FC = () => {
                 <div className="flex gap-8 p-8">
                   <div className="relative w-44 h-44 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
                     <img
-                      src={selectedProperty.images?.[0] || process.env.PUBLIC_URL + '/photo-1.jfif'}
+                      src={selectedProperty.images?.[0] || '/photo-1.jfif'}
                       alt={selectedProperty.title}
                       className="w-full h-full object-cover"
                     />
