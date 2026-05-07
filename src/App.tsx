@@ -20,6 +20,7 @@ import SellingMultiStep from './pages/clients/SellingMultiStep';
 import ConfidentialSelection from './pages/ConfidentialSelection';
 import Auth from './pages/auth/Auth';
 import Dashboard from './pages/auth/Dashboard';
+import ClientsProtectedRoute from './components/ProtectedRoute/ClientsProtectedRoute';
 import Services from './pages/auth/Services';
 import NotFound from './pages/support/NotFound';
 import Markets from './pages/auth/Markets';
@@ -69,15 +70,27 @@ function App() {
               )}
             />
             <Route path="/owners" element={<Owners />} />
-            <Route path="/traveler" element={<TravelerSpace />} />
+            <Route path="/traveler" element={(
+              <ClientsProtectedRoute>
+                <TravelerSpace />
+              </ClientsProtectedRoute>
+            )} />
             <Route path="/agency" element={<Agency />} />
             <Route path="/mag" element={<Mag />} />
             <Route path="/mag/:id" element={<MagArticle />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/selling-multistep" element={<SellingMultiStep />} />
             <Route path="/confidential" element={<ConfidentialSelection />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/auth" element={(
+              <ClientsProtectedRoute>
+                <Auth />
+              </ClientsProtectedRoute>
+            )} />
+            <Route path="/dashboard" element={(
+              <ClientsProtectedRoute>
+                <Dashboard />
+              </ClientsProtectedRoute>
+            )} />
             <Route path="/services" element={<Services />} />
             <Route path="/markets" element={<Markets />} />
             <Route path="/privacy" element={<Privacy />} />
