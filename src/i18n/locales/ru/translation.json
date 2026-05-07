@@ -77,6 +77,7 @@
     "contactDescription": "Обсудим ваши проекты в сфере недвижимости",
     "magazineDescription": "Новости и тренды в сфере элитной недвижимости",
     "analyticsProtectedDescription": "Только для сотрудников агентства. Требуется пароль.",
+    "clientsProtectedDescription": "Только для сотрудников агентства. Требуется пароль.",
     "teamOnlyBadge": "Только команда"
   },
   "statsProtection": {
@@ -102,6 +103,21 @@
     "authenticationTitle": "Аутентификация",
     "analyticsCardTitle": "Аналитика недвижимости",
     "teamCardTitle": "Внутренний доступ команды",
+    "togglePasswordVisibility": "Показать или скрыть пароль"
+  },
+  "clientsProtection": {
+    "title": "Кабинет клиента — Ограниченный доступ",
+    "subtitle": "Только для членов команды. Введите внутренний пароль доступа.",
+    "passwordLabel": "Пароль",
+    "passwordPlaceholder": "Введите пароль",
+    "button": "Открыть кабинет клиента",
+    "helperBody": "Свяжитесь с администратором, чтобы при необходимости сменить пароль.",
+    "backLabel": "Вернуться на главную",
+    "emptyPasswordError": "Пожалуйста, введите пароль.",
+    "tooShortError": "Пароль должен содержать не менее {{min}} символов.",
+    "invalidPasswordWithAttempts": "Неверный пароль. Осталось попыток: {{remainingAttempts}}.",
+    "lockedError": "Слишком много попыток. Повторите через {{seconds}} секунд.",
+    "lockedForError": "Слишком много неудачных попыток. Блокировка на {{seconds}} секунд.",
     "togglePasswordVisibility": "Показать или скрыть пароль"
   },
   "home": {

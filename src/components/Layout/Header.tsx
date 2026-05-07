@@ -101,21 +101,27 @@ const Header: React.FC = () => {
         label: t('header.travelerSpace'),
         Icon: PaperAirplaneIcon,
         category: 'clients',
-        description: t('header.prestigeForTravel')
+        description: t('header.clientsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.'
+        })
       },
       {
         path: '/auth',
         label: t('navigation.login'),
         Icon: UserIcon,
         category: 'clients',
-        description: t('header.loginDescription')
+        description: t('header.clientsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.'
+        })
       },
       {
         path: '/dashboard',
         label: t('navigation.dashboard'),
         Icon: CogIcon,
         category: 'clients',
-        description: t('header.dashboardDescription')
+        description: t('header.clientsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.'
+        })
       }
     ],
     company: [
@@ -163,8 +169,8 @@ const Header: React.FC = () => {
     ],
   };
 
-  // Feature flag to hide the Clients (Espace Clients) secondary menu section
-  const showClientSection = false;
+  // Show the Clients (Espace Clients) secondary menu section
+  const showClientSection = true;
 
   const isActivePath = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
@@ -442,6 +448,7 @@ const Header: React.FC = () => {
                   <div className="grid grid-cols-1 gap-3 sm:gap-4">
                     {navigation.clients.map((item, index) => {
                       const Icon = item.Icon;
+                      const isProtectedClient = true;
                       return (
                         <Link
                           key={item.path}
@@ -455,22 +462,34 @@ const Header: React.FC = () => {
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <div className="flex items-start space-x-3 sm:space-x-4">
-                            <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 ${
+                            <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 relative ${
                               isActivePath(item.path)
                                 ? 'bg-gray-100 text-gray-900 shadow-sm'
                                 : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
                             }`}>
                               <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                              {isProtectedClient && (
+                                <LockClosedIcon className="w-3.5 h-3.5 absolute -top-1 -right-1 text-amber-600 bg-white rounded-full p-0.5 border border-amber-200" />
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
-                                isActivePath(item.path)
-                                  ? 'text-gray-900'
-                                  : 'text-gray-800'
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
+                                  isActivePath(item.path)
+                                    ? 'text-gray-900'
+                                    : 'text-gray-800'
+                                }`}>
+                                  {item.label}
+                                </span>
+                                {isProtectedClient && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-amber-200 bg-amber-50 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-amber-700 whitespace-nowrap">
+                                    {t('header.teamOnlyBadge', { defaultValue: 'Team only' })}
+                                  </span>
+                                )}
+                              </div>
+                              <p className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
+                                isProtectedClient ? 'text-amber-700/90' : 'text-gray-600'
                               }`}>
-                                {item.label}
-                              </span>
-                              <p className="text-xs sm:text-sm text-gray-600 mt-1 transition-colors duration-300 line-clamp-2">
                                 {item.description}
                               </p>
                             </div>

@@ -74,6 +74,7 @@
     "careersDescription": "Rejoignez notre équipe d'excellence",
     "magazineDescription": "Actualités et tendances du luxe immobilier",
     "analyticsProtectedDescription": "Réservé aux membres de l'équipe de l'agence. Mot de passe requis.",
+    "clientsProtectedDescription": "Réservé aux membres de l'équipe de l'agence. Mot de passe requis.",
     "teamOnlyBadge": "Équipe uniquement"
   },
   "statsProtection": {
@@ -99,6 +100,21 @@
     "authenticationTitle": "Authentification",
     "analyticsCardTitle": "Analytique immobilière",
     "teamCardTitle": "Accès interne équipe",
+    "togglePasswordVisibility": "Afficher ou masquer le mot de passe"
+  },
+  "clientsProtection": {
+    "title": "Espace Clients — Accès restreint",
+    "subtitle": "Réservé aux membres de l'équipe. Saisissez le mot de passe d'accès interne.",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "Entrez le mot de passe",
+    "button": "Accéder à l'Espace Clients",
+    "helperBody": "Contactez un administrateur pour faire tourner le mot de passe si nécessaire.",
+    "backLabel": "Retour à l'accueil",
+    "emptyPasswordError": "Veuillez saisir le mot de passe.",
+    "tooShortError": "Le mot de passe doit contenir au moins {{min}} caractères.",
+    "invalidPasswordWithAttempts": "Mot de passe incorrect. {{remainingAttempts}} tentative(s) restante(s).",
+    "lockedError": "Trop de tentatives. Réessayez dans {{seconds}} secondes.",
+    "lockedForError": "Trop de tentatives échouées. Accès bloqué pendant {{seconds}} secondes.",
     "togglePasswordVisibility": "Afficher ou masquer le mot de passe"
   },
   "home": {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const CLIENTS_PASSWORD = 'SM-TEAM::Clients#2026!X7p9$ZqL';
 const CLIENTS_AUTH_KEY = 'clients_space_authenticated';
@@ -12,6 +13,7 @@ interface ClientsProtectedRouteProps {
 }
 
 const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children }) => {
+  const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
@@ -31,8 +33,17 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
   }, []);
 
   const validate = (candidate: string) => {
-    if (!candidate) return 'Please enter password.';
-    if (candidate.length < 12) return 'Password must be at least 12 characters.';
+    if (!candidate) {
+      return t('clientsProtection.emptyPasswordError', {
+        defaultValue: 'Please enter password.',
+      });
+    }
+    if (candidate.length < 12) {
+      return t('clientsProtection.tooShortError', {
+        min: 12,
+        defaultValue: 'Password must be at least {{min}} characters.',
+      });
+    }
     return null;
   };
 
@@ -41,7 +52,12 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
 
     if (lockUntil && lockUntil > Date.now()) {
       const secs = Math.ceil((lockUntil - Date.now()) / 1000);
-      setError(`Too many attempts. Try again in ${secs} seconds.`);
+      setError(
+        t('clientsProtection.lockedError', {
+          seconds: secs,
+          defaultValue: 'Too many attempts. Try again in {{seconds}} seconds.',
+        })
+      );
       return;
     }
 
@@ -75,12 +91,22 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
       setLockUntil(until);
       setFailed(0);
       sessionStorage.removeItem(`${CLIENTS_AUTH_KEY}_failed`);
-      setError(`Too many failed attempts. Locked for ${Math.ceil(LOCKOUT_MS / 1000)} seconds.`);
+      setError(
+        t('clientsProtection.lockedForError', {
+          seconds: Math.ceil(LOCKOUT_MS / 1000),
+          defaultValue: 'Too many failed attempts. Locked for {{seconds}} seconds.',
+        })
+      );
       setPassword('');
       return;
     }
 
-    setError(`Invalid password. ${MAX_FAILED - next} attempt(s) remaining.`);
+    setError(
+      t('clientsProtection.invalidPasswordWithAttempts', {
+        remainingAttempts: MAX_FAILED - next,
+        defaultValue: 'Invalid password. {{remainingAttempts}} attempt(s) remaining.',
+      })
+    );
     setPassword('');
   };
 
@@ -95,22 +121,39 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
               <LockClosedIcon className="w-7 h-7 text-white" />
             </div>
           </div>
-          <h2 className="text-2xl font-semibold text-center mb-2">Espace Clients — Accès restreint</h2>
-          <p className="text-sm text-center text-gray-600 mb-6">Reserved for team members. Enter the internal access password.</p>
+          <h2 className="text-2xl font-semibold text-center mb-2">
+            {t('clientsProtection.title', { defaultValue: 'Client Space — Restricted Access' })}
+          </h2>
+          <p className="text-sm text-center text-gray-600 mb-6">
+            {t('clientsProtection.subtitle', {
+              defaultValue: 'Reserved for team members. Enter the internal access password.',
+            })}
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {t('clientsProtection.passwordLabel', { defaultValue: 'Password' })}
+              </label>
               <div className="relative">
                 <input
                   type={show ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => { setPassword(e.target.value); if (error) setError(''); }}
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-200"
-                  placeholder="Enter password"
+                  placeholder={t('clientsProtection.passwordPlaceholder', {
+                    defaultValue: 'Enter password',
+                  })}
                   autoComplete="off"
                 />
-                <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <button
+                  type="button"
+                  onClick={() => setShow((s) => !s)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  aria-label={t('clientsProtection.togglePasswordVisibility', {
+                    defaultValue: 'Toggle password visibility',
+                  })}
+                >
                   {show ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                 </button>
               </div>
@@ -118,12 +161,20 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
 
             {error && <div className="text-sm text-red-600 bg-red-50 p-3 rounded">{error}</div>}
 
-            <button type="submit" className="w-full bg-emerald-900 text-white px-4 py-3 rounded-lg">Access Espace Clients</button>
+            <button type="submit" className="w-full bg-emerald-900 text-white px-4 py-3 rounded-lg">
+              {t('clientsProtection.button', { defaultValue: 'Access Client Space' })}
+            </button>
           </form>
 
           <div className="mt-4 text-center text-xs text-gray-500">
-            <p>Contact an administrator to rotate the password if needed.</p>
-            <Link to="/" className="text-emerald-700 font-medium">Back to homepage</Link>
+            <p>
+              {t('clientsProtection.helperBody', {
+                defaultValue: 'Contact an administrator to rotate the password if needed.',
+              })}
+            </p>
+            <Link to="/" className="text-emerald-700 font-medium">
+              {t('clientsProtection.backLabel', { defaultValue: 'Back to homepage' })}
+            </Link>
           </div>
         </div>
       </div>

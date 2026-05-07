@@ -77,6 +77,7 @@
     "contactDescription": "Sprechen wir über Ihre Immobilienprojekte",
     "magazineDescription": "Nachrichten und Trends bei Luxusimmobilien",
     "analyticsProtectedDescription": "Nur für Teammitglieder der Agentur. Passwort erforderlich.",
+    "clientsProtectedDescription": "Nur für Teammitglieder der Agentur. Passwort erforderlich.",
     "teamOnlyBadge": "Nur Team"
   },
   "statsProtection": {
@@ -102,6 +103,21 @@
     "authenticationTitle": "Authentifizierung",
     "analyticsCardTitle": "Immobilien-Analytik",
     "teamCardTitle": "Interner Teamzugang",
+    "togglePasswordVisibility": "Passwort ein- oder ausblenden"
+  },
+  "clientsProtection": {
+    "title": "Kundenbereich — Eingeschränkter Zugriff",
+    "subtitle": "Nur für Teammitglieder. Geben Sie das interne Zugangspasswort ein.",
+    "passwordLabel": "Passwort",
+    "passwordPlaceholder": "Passwort eingeben",
+    "button": "Kundenbereich öffnen",
+    "helperBody": "Kontaktieren Sie einen Administrator, um das Passwort bei Bedarf zu wechseln.",
+    "backLabel": "Zur Startseite",
+    "emptyPasswordError": "Bitte Passwort eingeben.",
+    "tooShortError": "Das Passwort muss mindestens {{min}} Zeichen enthalten.",
+    "invalidPasswordWithAttempts": "Ungültiges Passwort. {{remainingAttempts}} Versuch(e) verbleibend.",
+    "lockedError": "Zu viele Versuche. Bitte in {{seconds}} Sekunden erneut versuchen.",
+    "lockedForError": "Zu viele fehlgeschlagene Versuche. Für {{seconds}} Sekunden gesperrt.",
     "togglePasswordVisibility": "Passwort ein- oder ausblenden"
   },
   "home": {

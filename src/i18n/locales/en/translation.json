@@ -74,6 +74,7 @@
     "careersDescription": "Join our team of excellence",
     "magazineDescription": "News and trends in luxury real estate",
     "analyticsProtectedDescription": "Reserved for agency team members. Password required.",
+    "clientsProtectedDescription": "Reserved for agency team members. Password required.",
     "teamOnlyBadge": "Team only"
   },
   "statsProtection": {
@@ -99,6 +100,21 @@
     "authenticationTitle": "Authentication",
     "analyticsCardTitle": "Property Analytics",
     "teamCardTitle": "Internal Team Access",
+    "togglePasswordVisibility": "Toggle password visibility"
+  },
+  "clientsProtection": {
+    "title": "Client Space — Restricted Access",
+    "subtitle": "Reserved for team members. Enter the internal access password.",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter password",
+    "button": "Access Client Space",
+    "helperBody": "Contact an administrator to rotate the password if needed.",
+    "backLabel": "Back to homepage",
+    "emptyPasswordError": "Please enter password.",
+    "tooShortError": "Password must be at least {{min}} characters.",
+    "invalidPasswordWithAttempts": "Invalid password. {{remainingAttempts}} attempt(s) remaining.",
+    "lockedError": "Too many attempts. Try again in {{seconds}} seconds.",
+    "lockedForError": "Too many failed attempts. Locked for {{seconds}} seconds.",
     "togglePasswordVisibility": "Toggle password visibility"
   },
   "home": {

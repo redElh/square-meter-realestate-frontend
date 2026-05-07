@@ -77,6 +77,7 @@
     "contactDescription": "لنناقش مشاريعك العقارية",
     "magazineDescription": "أخبار واتجاهات العقارات الفاخرة",
     "analyticsProtectedDescription": "مخصص لأعضاء فريق الوكالة فقط. كلمة المرور مطلوبة.",
+    "clientsProtectedDescription": "مخصص لأعضاء فريق الوكالة فقط. كلمة المرور مطلوبة.",
     "teamOnlyBadge": "للفريق فقط"
   },
   "statsProtection": {
@@ -102,6 +103,21 @@
     "authenticationTitle": "المصادقة",
     "analyticsCardTitle": "تحليلات العقارات",
     "teamCardTitle": "وصول داخلي للفريق",
+    "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور"
+  },
+  "clientsProtection": {
+    "title": "مساحة العميل — وصول مقيّد",
+    "subtitle": "مخصص لأعضاء الفريق فقط. أدخل كلمة مرور الوصول الداخلية.",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "button": "الدخول إلى مساحة العميل",
+    "helperBody": "تواصل مع المسؤول لتغيير كلمة المرور عند الحاجة.",
+    "backLabel": "العودة إلى الصفحة الرئيسية",
+    "emptyPasswordError": "يرجى إدخال كلمة المرور.",
+    "tooShortError": "يجب أن تتكون كلمة المرور من {{min}} أحرف على الأقل.",
+    "invalidPasswordWithAttempts": "كلمة المرور غير صحيحة. تبقى {{remainingAttempts}} محاولة.",
+    "lockedError": "محاولات كثيرة. حاول مرة أخرى بعد {{seconds}} ثانية.",
+    "lockedForError": "عدد كبير من المحاولات الفاشلة. تم القفل لمدة {{seconds}} ثانية.",
     "togglePasswordVisibility": "إظهار أو إخفاء كلمة المرور"
   },
   "home": {

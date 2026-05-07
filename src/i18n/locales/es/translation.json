@@ -77,6 +77,7 @@
     "contactDescription": "Hablemos de sus proyectos inmobiliarios",
     "magazineDescription": "Noticias y tendencias en inmobiliaria de lujo",
     "analyticsProtectedDescription": "Reservado para miembros del equipo de la agencia. Se requiere contraseña.",
+    "clientsProtectedDescription": "Reservado para miembros del equipo de la agencia. Se requiere contraseña.",
     "teamOnlyBadge": "Solo equipo"
   },
   "statsProtection": {
@@ -102,6 +103,21 @@
     "authenticationTitle": "Autenticación",
     "analyticsCardTitle": "Analítica de propiedades",
     "teamCardTitle": "Acceso interno del equipo",
+    "togglePasswordVisibility": "Mostrar u ocultar contraseña"
+  },
+  "clientsProtection": {
+    "title": "Espacio Cliente — Acceso restringido",
+    "subtitle": "Reservado para miembros del equipo. Introduce la contraseña de acceso interno.",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "Introduce la contraseña",
+    "button": "Acceder al Espacio Cliente",
+    "helperBody": "Contacta con un administrador para rotar la contraseña si es necesario.",
+    "backLabel": "Volver al inicio",
+    "emptyPasswordError": "Introduce la contraseña.",
+    "tooShortError": "La contraseña debe tener al menos {{min}} caracteres.",
+    "invalidPasswordWithAttempts": "Contraseña incorrecta. Quedan {{remainingAttempts}} intento(s).",
+    "lockedError": "Demasiados intentos. Vuelve a intentarlo en {{seconds}} segundos.",
+    "lockedForError": "Demasiados intentos fallidos. Bloqueado durante {{seconds}} segundos.",
     "togglePasswordVisibility": "Mostrar u ocultar contraseña"
   },
   "home": {
