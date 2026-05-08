@@ -118,13 +118,11 @@ const Properties: React.FC = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       console.log('\n\n🔄 ===============================================');
-      console.log('🔄 LOADING PROPERTIES');
+      console.log('🔄 LANGUAGE CHANGED - RELOADING PROPERTIES');
       console.log('🔄 ===============================================');
       console.log(`🌍 Current Language: ${currentLanguage}`);
       console.log('🔍 Starting to fetch properties...');
       setLoading(true);
-      const startTime = performance.now();
-      
       try {
         // Fetch properties from Apimo CRM API
         console.log('📡 Calling apimoService.getProperties...');
@@ -132,8 +130,7 @@ const Properties: React.FC = () => {
           limit: 1000, // Get all properties
         }, t, currentLanguage);
         
-        const apiTime = performance.now() - startTime;
-        console.log('\n✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length, `(${apiTime.toFixed(0)}ms)`);
+        console.log('\n✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length);
         console.log('\n📋 ALL PROPERTY NAMES LOADED:');
         apimoProperties.forEach((prop, index) => {
           console.log(`  ${index + 1}. [ID: ${prop.id}] "${prop.title}"`);
@@ -167,8 +164,6 @@ const Properties: React.FC = () => {
         console.log('💡 Properties will be converted to your selected currency automatically');
         console.log('⚠️  Make sure each property\'s original currency is correctly identified for accurate conversion');
         
-        const totalTime = performance.now() - startTime;
-        console.log(`\n⏱️  Total load time: ${totalTime.toFixed(0)}ms`);
         console.log('\n');
         setProperties(validProperties);
       } catch (error) {
