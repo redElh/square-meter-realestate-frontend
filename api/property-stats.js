@@ -29,7 +29,14 @@ let directRedisClientPromise;
 let inMemoryStatsFallback = {};
 let inMemoryEventsFallback = [];
 
+let isRedisAvailable = null;
+
 function getStorageMode() {
+  // If Redis has been checked and is unavailable, fall back to local
+  if (isRedisAvailable === false) {
+    return 'local-file';
+  }
+
   if (process.env.KV_REDIS_URL) {
     return 'redis-url';
   }
@@ -40,6 +47,47 @@ function getStorageMode() {
 
   // Keep stats tracking functional even when shared KV isn't configured.
   return 'local-file';
+}
+
+async function verifyRedisConnection() {
+  if (isRedisAvailable !== null) {
+    return isRedisAvailable;
+  }
+
+  const mode = getStorageMode();
+  if (mode === 'local-file') {
+    isRedisAvailable = false;
+    return false;
+  }
+
+  if (mode === 'redis-url') {
+    try {
+      const client = await getDirectRedisClient();
+      await client.ping();
+      isRedisAvailable = true;
+      return true;
+    } catch (error) {
+      console.warn('Redis ping failed:', error.message);
+      isRedisAvailable = false;
+      return false;
+    }
+  }
+
+  // redis-rest
+  if (mode === 'redis-rest') {
+    try {
+      const client = getRedisClient();
+      await client.ping();
+      isRedisAvailable = true;
+      return true;
+    } catch (error) {
+      console.warn('Redis REST ping failed:', error.message);
+      isRedisAvailable = false;
+      return false;
+    }
+  }
+
+  return false;
 }
 
 function isSharedStorageMode(mode) {
@@ -59,6 +107,8 @@ async function getDirectRedisClient() {
       url: process.env.KV_REDIS_URL,
       socket: {
         reconnectStrategy: false,
+        connectTimeout: 5000,
+        socketTimeout: 5000,
       },
     });
 
@@ -66,7 +116,13 @@ async function getDirectRedisClient() {
       console.error('Direct Redis client error:', error);
     });
 
-    directRedisClientPromise = client.connect().then(() => client);
+    directRedisClientPromise = client.connect()
+      .then(() => client)
+      .catch((error) => {
+        console.warn('Failed to connect to Redis, falling back to local storage:', error.message);
+        directRedisClientPromise = null;
+        throw error;
+      });
   }
 
   return directRedisClientPromise;
@@ -268,118 +324,151 @@ async function getStatEvents(propertyId, days = 30, storageMode = getStorageMode
 }
 
 async function getLegacyRedisPropertyStats(storageMode, propertyId) {
-  const key = getPropertyHashKey(propertyId);
-  let raw;
-
-  if (storageMode === 'redis-rest') {
-    raw = await getRedisClient().get(key);
-  } else if (storageMode === 'redis-url') {
-    const client = await getDirectRedisClient();
-    raw = await client.get(key);
-  }
-
-  if (!raw || typeof raw !== 'string') {
-    return null;
-  }
-
   try {
-    return normalizeStatsRecord(propertyId, JSON.parse(raw));
+    const key = getPropertyHashKey(propertyId);
+    let raw;
+
+    if (storageMode === 'redis-rest') {
+      raw = await getRedisClient().get(key);
+    } else if (storageMode === 'redis-url') {
+      const client = await getDirectRedisClient();
+      raw = await client.get(key);
+    }
+
+    if (!raw || typeof raw !== 'string') {
+      return null;
+    }
+
+    try {
+      return normalizeStatsRecord(propertyId, JSON.parse(raw));
+    } catch (error) {
+      console.warn('Legacy redis property stats parsing failed:', error.message);
+      return null;
+    }
   } catch (error) {
-    console.warn('Legacy redis property stats parsing failed:', error.message);
+    console.warn('Failed to get legacy Redis property stats:', error.message);
+    isRedisAvailable = false;
     return null;
   }
 }
 
 async function getLegacyRedisAggregatedStats(storageMode) {
-  let raw;
-
-  if (storageMode === 'redis-rest') {
-    raw = await getRedisClient().get(LEGACY_AGGREGATED_STATS_KEY);
-  } else if (storageMode === 'redis-url') {
-    const client = await getDirectRedisClient();
-    raw = await client.get(LEGACY_AGGREGATED_STATS_KEY);
-  }
-
-  if (!raw || typeof raw !== 'string') {
-    return {};
-  }
-
   try {
-    return normalizeStatsMap(JSON.parse(raw));
+    let raw;
+
+    if (storageMode === 'redis-rest') {
+      raw = await getRedisClient().get(LEGACY_AGGREGATED_STATS_KEY);
+    } else if (storageMode === 'redis-url') {
+      const client = await getDirectRedisClient();
+      raw = await client.get(LEGACY_AGGREGATED_STATS_KEY);
+    }
+
+    if (!raw || typeof raw !== 'string') {
+      return {};
+    }
+
+    try {
+      return normalizeStatsMap(JSON.parse(raw));
+    } catch (error) {
+      console.warn('Legacy aggregated stats parsing failed:', error.message);
+      return {};
+    }
   } catch (error) {
-    console.warn('Legacy aggregated stats parsing failed:', error.message);
+    console.warn('Failed to get legacy Redis aggregated stats:', error.message);
+    isRedisAvailable = false;
     return {};
   }
 }
 
 async function getRedisHashStats(storageMode, propertyId) {
-  const key = getPropertyHashKey(propertyId);
-  let rawHash = null;
+  try {
+    const key = getPropertyHashKey(propertyId);
+    let rawHash = null;
 
-  if (storageMode === 'redis-rest') {
-    rawHash = await getRedisClient().hgetall(key);
-  } else if (storageMode === 'redis-url') {
-    const client = await getDirectRedisClient();
-    rawHash = await client.hGetAll(key);
-  }
+    if (storageMode === 'redis-rest') {
+      rawHash = await getRedisClient().hgetall(key);
+    } else if (storageMode === 'redis-url') {
+      const client = await getDirectRedisClient();
+      rawHash = await client.hGetAll(key);
+    }
 
-  if (!rawHash || Object.keys(rawHash).length === 0) {
+    if (!rawHash || Object.keys(rawHash).length === 0) {
+      return null;
+    }
+
+    return normalizeStatsRecord(propertyId, rawHash);
+  } catch (error) {
+    console.warn('Failed to get Redis hash stats:', error.message);
+    isRedisAvailable = false;
     return null;
   }
-
-  return normalizeStatsRecord(propertyId, rawHash);
 }
 
 async function addTrackedPropertyId(storageMode, propertyId) {
-  if (storageMode === 'redis-rest') {
-    await getRedisClient().sadd(PROPERTY_IDS_SET_KEY, propertyId);
-    return;
-  }
+  try {
+    if (storageMode === 'redis-rest') {
+      await getRedisClient().sadd(PROPERTY_IDS_SET_KEY, propertyId);
+      return;
+    }
 
-  if (storageMode === 'redis-url') {
-    const client = await getDirectRedisClient();
-    await client.sAdd(PROPERTY_IDS_SET_KEY, propertyId);
+    if (storageMode === 'redis-url') {
+      const client = await getDirectRedisClient();
+      await client.sAdd(PROPERTY_IDS_SET_KEY, propertyId);
+    }
+  } catch (error) {
+    console.warn('Failed to add tracked property ID:', error.message);
+    isRedisAvailable = false;
   }
 }
 
 async function getTrackedPropertyIds(storageMode) {
-  if (storageMode === 'redis-rest') {
-    const raw = await getRedisClient().smembers(PROPERTY_IDS_SET_KEY);
-    return Array.from(new Set((Array.isArray(raw) ? raw : []).map((id) => normalizePropertyId(id)).filter(Boolean)));
-  }
+  try {
+    if (storageMode === 'redis-rest') {
+      const raw = await getRedisClient().smembers(PROPERTY_IDS_SET_KEY);
+      return Array.from(new Set((Array.isArray(raw) ? raw : []).map((id) => normalizePropertyId(id)).filter(Boolean)));
+    }
 
-  if (storageMode === 'redis-url') {
-    const client = await getDirectRedisClient();
-    const raw = await client.sMembers(PROPERTY_IDS_SET_KEY);
-    return Array.from(new Set((Array.isArray(raw) ? raw : []).map((id) => normalizePropertyId(id)).filter(Boolean)));
+    if (storageMode === 'redis-url') {
+      const client = await getDirectRedisClient();
+      const raw = await client.sMembers(PROPERTY_IDS_SET_KEY);
+      return Array.from(new Set((Array.isArray(raw) ? raw : []).map((id) => normalizePropertyId(id)).filter(Boolean)));
+    }
+  } catch (error) {
+    console.warn('Failed to get tracked property IDs:', error.message);
+    isRedisAvailable = false;
   }
 
   return [];
 }
 
 async function setRedisHashStats(storageMode, stats) {
-  const key = getPropertyHashKey(stats.propertyId);
-  const payload = {
-    propertyId: String(stats.propertyId),
-    views: String(toSafeNumber(stats.views)),
-    inquiries: String(toSafeNumber(stats.inquiries)),
-    favorites: String(toSafeNumber(stats.favorites)),
-    clicks: String(toSafeNumber(stats.clicks)),
-    updatedAt: String(stats.updatedAt || new Date().toISOString()),
-  };
+  try {
+    const key = getPropertyHashKey(stats.propertyId);
+    const payload = {
+      propertyId: String(stats.propertyId),
+      views: String(toSafeNumber(stats.views)),
+      inquiries: String(toSafeNumber(stats.inquiries)),
+      favorites: String(toSafeNumber(stats.favorites)),
+      clicks: String(toSafeNumber(stats.clicks)),
+      updatedAt: String(stats.updatedAt || new Date().toISOString()),
+    };
 
-  if (stats.resetAt) {
-    payload.resetAt = String(stats.resetAt);
+    if (stats.resetAt) {
+      payload.resetAt = String(stats.resetAt);
+    }
+
+    if (storageMode === 'redis-rest') {
+      await getRedisClient().hset(key, payload);
+    } else if (storageMode === 'redis-url') {
+      const client = await getDirectRedisClient();
+      await client.hSet(key, payload);
+    }
+
+    await addTrackedPropertyId(storageMode, String(stats.propertyId));
+  } catch (error) {
+    console.warn('Failed to set Redis hash stats:', error.message);
+    isRedisAvailable = false;
   }
-
-  if (storageMode === 'redis-rest') {
-    await getRedisClient().hset(key, payload);
-  } else if (storageMode === 'redis-url') {
-    const client = await getDirectRedisClient();
-    await client.hSet(key, payload);
-  }
-
-  await addTrackedPropertyId(storageMode, String(stats.propertyId));
 }
 
 async function hydrateRedisStatsFromLegacy(storageMode, propertyId) {
@@ -510,24 +599,37 @@ async function incrementStat(propertyIdInput, statTypeInput, value = 1) {
       await hydrateRedisStatsFromLegacy(storageMode, propertyId);
     }
 
-    if (storageMode === 'redis-rest') {
-      const redis = getRedisClient();
-      await redis.sadd(PROPERTY_IDS_SET_KEY, propertyId);
-      await redis.hincrby(key, statType, incrementBy);
-      await redis.hset(key, {
-        propertyId,
-        updatedAt,
-      });
-    } else {
-      const client = await getDirectRedisClient();
-      await client.sAdd(PROPERTY_IDS_SET_KEY, propertyId);
-      const transaction = client.multi();
-      transaction.hIncrBy(key, statType, incrementBy);
-      transaction.hSet(key, {
-        propertyId,
-        updatedAt,
-      });
-      await transaction.exec();
+    try {
+      if (storageMode === 'redis-rest') {
+        const redis = getRedisClient();
+        await redis.sadd(PROPERTY_IDS_SET_KEY, propertyId);
+        await redis.hincrby(key, statType, incrementBy);
+        await redis.hset(key, {
+          propertyId,
+          updatedAt,
+        });
+      } else {
+        const client = await getDirectRedisClient();
+        await client.sAdd(PROPERTY_IDS_SET_KEY, propertyId);
+        const transaction = client.multi();
+        transaction.hIncrBy(key, statType, incrementBy);
+        transaction.hSet(key, {
+          propertyId,
+          updatedAt,
+        });
+        await transaction.exec();
+      }
+    } catch (error) {
+      console.warn('Failed to update Redis stats, falling back to local storage:', error.message);
+      isRedisAvailable = false;
+      // Fall through to local storage update
+      const localStats = await readLocalStats();
+      const current = localStats[propertyId] || createEmptyStats(propertyId);
+      current[statType] = toSafeNumber(current[statType]) + incrementBy;
+      current.updatedAt = new Date().toISOString();
+      localStats[propertyId] = current;
+      await writeLocalStats(localStats);
+      return current;
     }
 
     return (await getStats(propertyId)) || {
@@ -601,6 +703,19 @@ async function handler(req, res) {
   const storageMode = getStorageMode();
 
   try {
+    // Check Redis availability on first request with shared storage
+    if (storageMode !== 'local-file' && isRedisAvailable === null) {
+      const available = await verifyRedisConnection();
+      if (!available) {
+        console.warn('Redis unavailable, falling back to local file storage');
+      }
+    }
+
+    // Use local storage if Redis is unavailable
+    const effectiveStorageMode = (isRedisAvailable === false && storageMode !== 'local-file')
+      ? 'local-file'
+      : storageMode;
+
     if (req.method === 'GET') {
       const propertyId = normalizePropertyId(req.query?.propertyId);
       const trendRequested = req.query?.trend === 'true';
@@ -621,7 +736,7 @@ async function handler(req, res) {
           aggregationUnit = 'day';
         }
 
-        const events = await getStatEvents(propertyId, daysToFetch, storageMode);
+        const events = await getStatEvents(propertyId, daysToFetch, effectiveStorageMode);
         const sortedEvents = [...events].sort((first, second) => Number(first.timestamp) - Number(second.timestamp));
         const buckets = new Map();
 
@@ -722,6 +837,12 @@ async function handler(req, res) {
     });
   } catch (error) {
     console.error('Property stats handler error:', error);
+    
+    // Try to fall back to local storage on error
+    if (storageMode !== 'local-file' && isRedisAvailable === null) {
+      isRedisAvailable = false;
+    }
+
     return res.status(500).json({
       success: false,
       error: error.message || 'Internal server error',

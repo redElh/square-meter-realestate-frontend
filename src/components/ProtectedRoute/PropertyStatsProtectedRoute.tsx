@@ -189,33 +189,33 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
       <div className="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-gold/20 blur-3xl" />
       <div className="absolute top-1/3 -right-24 w-80 h-80 rounded-full bg-emerald-200/25 blur-3xl" />
 
-      <div className="relative max-w-6xl mx-auto px-6 py-16 lg:py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          <section className="bg-white/75 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl p-8 lg:p-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold text-xs font-semibold tracking-[0.12em] uppercase">
-              <ShieldCheckIcon className="w-4 h-4" />
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+          <section className="bg-white/75 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/25 text-gold text-[10px] sm:text-xs font-semibold tracking-[0.12em] uppercase">
+              <ShieldCheckIcon className="w-3.5 h-3.5 sm:w-4 h-4" />
               {t('statsProtection.eyebrow', { defaultValue: 'Secure Area' })}
             </div>
 
-            <h1 className="mt-5 text-3xl sm:text-4xl font-bold tracking-tight text-gray-900">
+            <h1 className="mt-4 sm:mt-5 text-2xl sm:text-4xl font-bold tracking-tight text-gray-900">
               {t('statsProtection.title', { defaultValue: 'Team Access Required' })}
             </h1>
 
-            <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+            <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-gray-600 leading-relaxed">
               {t('statsProtection.subtitle', {
                 defaultValue:
                   'The Analytics page is reserved for agency team members who have the internal access password.',
               })}
             </p>
 
-            <div className="mt-8 p-5 rounded-2xl bg-amber-50/90 border border-amber-200">
+            <div className="mt-6 sm:mt-8 p-4 sm:p-5 rounded-2xl bg-amber-50/90 border border-amber-200">
               <div className="flex items-start gap-3">
                 <ExclamationTriangleIcon className="w-5 h-5 text-amber-700 mt-0.5 flex-shrink-0" />
                 <div>
-                  <h2 className="text-sm font-bold uppercase tracking-wide text-amber-900">
+                  <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wide text-amber-900">
                     {t('statsProtection.disclaimerTitle', { defaultValue: 'Notice for visitors' })}
                   </h2>
-                  <p className="mt-1 text-sm text-amber-800 leading-relaxed">
+                  <p className="mt-1 text-xs sm:text-sm text-amber-800 leading-relaxed">
                     {t('statsProtection.disclaimerBody', {
                       defaultValue:
                         'If you are not part of the Square Meter team, this page is not accessible. Please continue browsing the public sections of the website.',
@@ -225,16 +225,16 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
               </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="rounded-2xl border border-gray-200 bg-white/80 p-4">
-                <ChartBarIcon className="w-5 h-5 text-[#023927] mb-2" />
-                <p className="text-sm font-semibold text-gray-900">
+            <div className="mt-6 sm:mt-8 grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-gray-200 bg-white/80 p-3 sm:p-4">
+                <ChartBarIcon className="w-4 h-4 sm:w-5 h-5 text-[#023927] mb-2" />
+                <p className="text-xs sm:text-sm font-semibold text-gray-900">
                   {t('statsProtection.analyticsCardTitle', { defaultValue: 'Property Analytics' })}
                 </p>
               </div>
-              <div className="rounded-2xl border border-gray-200 bg-white/80 p-4">
-                <ShieldCheckIcon className="w-5 h-5 text-[#023927] mb-2" />
-                <p className="text-sm font-semibold text-gray-900">
+              <div className="rounded-2xl border border-gray-200 bg-white/80 p-3 sm:p-4">
+                <ShieldCheckIcon className="w-4 h-4 sm:w-5 h-5 text-[#023927] mb-2" />
+                <p className="text-xs sm:text-sm font-semibold text-gray-900">
                   {t('statsProtection.teamCardTitle', { defaultValue: 'Internal Team Access' })}
                 </p>
               </div>
@@ -242,31 +242,31 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
 
             <Link
               to="/"
-              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#023927] hover:text-[#04553d] transition-colors"
+              className="mt-6 sm:mt-8 inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#023927] hover:text-[#04553d] transition-colors"
             >
               <ArrowLeftIcon className="w-4 h-4" />
               {t('statsProtection.backLabel', { defaultValue: 'Back to homepage' })}
             </Link>
           </section>
 
-          <section className="bg-white/90 backdrop-blur-xl border border-gray-200/70 rounded-3xl shadow-xl p-8 lg:p-10 flex flex-col justify-between">
+          <section className="bg-white/90 backdrop-blur-xl border border-gray-200/70 rounded-3xl shadow-xl p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
             <div>
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#023927] to-[#0a4d3a] flex items-center justify-center shadow-lg shadow-emerald-900/20">
-                <LockClosedIcon className="w-7 h-7 text-white" />
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-[#023927] to-[#0a4d3a] flex items-center justify-center shadow-lg shadow-emerald-900/20">
+                <LockClosedIcon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
 
-              <h2 className="mt-5 text-2xl font-semibold text-gray-900">
+              <h2 className="mt-4 sm:mt-5 text-xl sm:text-2xl font-semibold text-gray-900">
                 {t('statsProtection.authenticationTitle', { defaultValue: 'Authentication' })}
               </h2>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-600">
                 {t('statsProtection.helperBody', {
                   defaultValue: 'Please contact an internal administrator for credentials.',
                 })}
               </p>
 
-              <form onSubmit={handleSubmit} noValidate className="mt-8 space-y-5">
+              <form onSubmit={handleSubmit} noValidate className="mt-6 sm:mt-8 space-y-4 sm:space-y-5">
                 <div>
-                  <label htmlFor="property-stats-password" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="property-stats-password" className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                     {t('statsProtection.passwordLabel', { defaultValue: 'Team password' })}
                   </label>
                   <div className="relative">
@@ -283,7 +283,7 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
                       placeholder={t('statsProtection.passwordPlaceholder', {
                         defaultValue: 'Enter access password',
                       })}
-                      className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 pr-12 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#023927] focus:ring-4 focus:ring-[#023927]/10 transition-all"
+                      className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 sm:py-3 pr-12 text-sm sm:text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#023927] focus:ring-4 focus:ring-[#023927]/10 transition-all"
                       autoComplete="off"
                       autoCapitalize="none"
                       autoCorrect="off"
@@ -300,33 +300,33 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
                         defaultValue: 'Toggle password visibility',
                       })}
                     >
-                      {showPassword ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+                      {showPassword ? <EyeSlashIcon className="w-4 h-4 sm:w-5 sm:h-5" /> : <EyeIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
                     </button>
                   </div>
                 </div>
 
                 {error && (
-                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-                    <p className="text-sm text-red-700">{error}</p>
+                  <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 sm:py-3">
+                    <p className="text-xs sm:text-sm text-red-700">{error}</p>
                   </div>
                 )}
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#023927] to-[#0a4d3a] px-5 py-3 text-white font-semibold shadow-lg shadow-emerald-900/20 hover:from-[#04553d] hover:to-[#0f6248] transition-all"
+                  className="w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#023927] to-[#0a4d3a] px-5 py-2.5 sm:py-3 text-sm sm:text-base text-white font-semibold shadow-lg shadow-emerald-900/20 hover:from-[#04553d] hover:to-[#0f6248] transition-all"
                 >
                   {t('statsProtection.button', { defaultValue: 'Access Analytics Page' })}
                 </button>
               </form>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100">
-              <p className="text-xs text-gray-500">
+            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-100">
+              <p className="text-[10px] sm:text-xs text-gray-500">
                 {t('statsProtection.footerNote', {
                   defaultValue: 'Access is restricted to authorized agency team members only.',
                 })}
               </p>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-[10px] sm:text-xs text-gray-400">
                 {t('statsProtection.helperTitle', { defaultValue: 'Need access?' })}
               </p>
             </div>

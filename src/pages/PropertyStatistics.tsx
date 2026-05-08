@@ -543,13 +543,13 @@ const PropertyStatistics: React.FC = () => {
     <div className="group relative">
       <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur-xl -z-10"
            style={{ background: gradient }} />
-      <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100 hover:border-gold/30 transition-all duration-300">
-        <div className="flex items-start justify-between mb-4">
-          <div className={`p-3 rounded-xl bg-gradient-to-br ${iconGradient}`}>
-            <Icon className="w-6 h-6 text-white" />
+      <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100 hover:border-gold/30 transition-all duration-300">
+        <div className="flex items-start justify-between mb-3 sm:mb-4">
+          <div className={`p-2 sm:p-3 rounded-xl bg-gradient-to-br ${iconGradient}`}>
+            <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
           {trend !== undefined && (
-            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] sm:text-xs font-semibold ${
               trend >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
             }`}>
               {trend >= 0 ? <ArrowTrendingUpIcon className="w-3 h-3" /> : <ArrowTrendingDownIcon className="w-3 h-3" />}
@@ -557,8 +557,8 @@ const PropertyStatistics: React.FC = () => {
             </div>
           )}
         </div>
-        <p className="text-sm font-medium text-gray-500 mb-1 tracking-wide uppercase">{label}</p>
-        <p className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+        <p className="text-[10px] sm:text-sm font-medium text-gray-500 mb-1 tracking-wide uppercase">{label}</p>
+        <p className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
           {value.toLocaleString()}
         </p>
       </div>
@@ -590,7 +590,7 @@ const PropertyStatistics: React.FC = () => {
 
     return (
       <div className="flex h-full flex-col items-center text-center">
-        <div className="relative w-36 h-36">
+        <div className="relative w-28 h-28 sm:w-36 sm:h-36">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
             {/* Background ring */}
             <circle
@@ -620,15 +620,15 @@ const PropertyStatistics: React.FC = () => {
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">{Math.round(percentage)}%</div>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">{Math.round(percentage)}%</div>
             </div>
           </div>
         </div>
-        <p className="mt-4 min-h-[2.75rem] text-sm font-semibold text-gray-900 uppercase tracking-wider leading-tight flex items-center justify-center">
+        <p className="mt-4 min-h-[2.5rem] sm:min-h-[2.75rem] text-[10px] sm:text-sm font-semibold text-gray-900 uppercase tracking-wider leading-tight flex items-center justify-center">
           {label}
         </p>
         {subtitle && (
-          <p className="text-xs text-gray-500 mt-1 min-h-[1.25rem] flex items-center justify-center">
+          <p className="text-[10px] sm:text-xs text-gray-500 mt-1 min-h-[1.25rem] flex items-center justify-center">
             {subtitle}
           </p>
         )}
@@ -660,34 +660,34 @@ const PropertyStatistics: React.FC = () => {
 
       <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 ${isRTL ? 'rtl' : 'ltr'}`}>
         {/* Premium Header */}
-        <div className=" top-[64px] sm:top-[96px] z-40 w-full left-0 right-0 mt-12">
+        <div className=" top-[64px] sm:top-[96px] z-40 w-full left-0 right-0 mt-8 sm:mt-12">
           <div className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-              <div className="flex justify-between items-start mb-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+              <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-gradient-to-br from-gold to-amber-600 rounded-xl shadow-lg shadow-gold/20">
-                    <PresentationChartLineIcon className="w-6 h-6 text-white" />
+                    <PresentationChartLineIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <h1 className="text-4xl font-light tracking-tight text-gray-900">
+                  <h1 className="text-2xl sm:text-4xl font-light tracking-tight text-gray-900">
                     <span className="font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent">
                       {t('stats.pageTitle', { defaultValue: currentStatsUiFallback.pageTitle })}
                     </span>
                   </h1>
                 </div>
-                <p className="text-gray-500 text-sm tracking-wide uppercase font-medium">
+                <p className="text-gray-500 text-xs sm:text-sm tracking-wide uppercase font-medium">
                   {t('stats.header.performance')}
                 </p>
               </div>
               
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
                 {/* Timeframe selector */}
                 <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
                   {(['24h', '7d', '30d'] as const).map((tf) => (
                     <button
                       key={tf}
                       onClick={() => setTimeframe(tf)}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                      className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
                         timeframe === tf 
                           ? 'bg-white text-gray-900 shadow-sm' 
                           : 'text-gray-500 hover:text-gray-700'
@@ -701,7 +701,7 @@ const PropertyStatistics: React.FC = () => {
                 {/* Auto-refresh toggle */}
                 <button
                   onClick={() => setIsAutoRefresh(!isAutoRefresh)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+                  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl border transition-all ${
                     isAutoRefresh
                       ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-transparent shadow-lg shadow-green-500/25'
                       : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
@@ -714,18 +714,18 @@ const PropertyStatistics: React.FC = () => {
             </div>
 
             {/* Property Selector - Premium Style */}
-            <div className={`flex items-center gap-4 pb-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex flex-col sm:flex-row sm:items-center gap-4 pb-6 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
               <div className="flex items-center gap-2">
                 <BuildingOfficeIcon className="w-5 h-5 text-gold" />
-                <label className="font-semibold text-gray-700 text-sm uppercase tracking-wider">
+                <label className="font-semibold text-gray-700 text-xs sm:text-sm uppercase tracking-wider">
                   {t('stats.header.activeProperty')}
                 </label>
               </div>
-              <div className="relative flex-1 max-w-md">
+              <div className="relative flex-1 max-w-full sm:max-w-md">
                 <select
                   value={selectedPropertyId || ''}
                   onChange={(e) => setSelectedPropertyId(Number(e.target.value))}
-                  className="w-full px-5 py-3 pr-12 bg-white border-2 border-gray-100 rounded-xl text-gray-900 font-medium 
+                  className="w-full px-4 sm:px-5 py-2.5 sm:py-3 pr-12 bg-white border-2 border-gray-100 rounded-xl text-sm sm:text-base text-gray-900 font-medium 
                            focus:outline-none focus:border-gold focus:ring-4 focus:ring-gold/10 
                            appearance-none cursor-pointer shadow-sm transition-all hover:border-gray-200 truncate"
                 >
@@ -740,9 +740,9 @@ const PropertyStatistics: React.FC = () => {
               </div>
               
               {selectedProperty && (
-                <div className="flex items-center gap-2 px-4 py-2 bg-gold/5 rounded-xl border border-gold/20">
+                <div className="flex items-center gap-2 px-4 py-2 bg-gold/5 rounded-xl border border-gold/20 w-fit">
                   <CheckBadgeIcon className="w-4 h-4 text-gold" />
-                  <span className="text-sm font-medium text-gray-600">
+                  <span className="text-xs sm:text-sm font-medium text-gray-600">
                     {t('stats.header.propertyId')} <span className="font-mono text-gray-900">{selectedPropertyId}</span>
                   </span>
                 </div>
@@ -754,15 +754,15 @@ const PropertyStatistics: React.FC = () => {
 
         {/* Main Content */}
         {selectedProperty ? (
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 space-y-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
             
             {/* Property Overview Card - Premium Glassmorphism */}
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-gold/5 via-amber-500/5 to-gold/5 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="relative bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-gold/10 to-transparent rounded-full blur-3xl" />
-                <div className="flex gap-8 p-8">
-                  <div className="relative w-44 h-44 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
+                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 p-6 sm:p-8">
+                  <div className="relative w-full sm:w-44 h-48 sm:h-44 rounded-2xl overflow-hidden flex-shrink-0 shadow-lg">
                     <img
                       src={selectedProperty.images?.[0] || '/photo-1.jfif'}
                       alt={selectedProperty.title}
@@ -771,32 +771,32 @@ const PropertyStatistics: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-4 sm:mb-0">
                       <div>
-                        <h2 className="text-3xl font-bold text-gray-900 mb-2 tracking-tight">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 tracking-tight">
                           {selectedProperty.title}
                         </h2>
                         <div className="flex items-center gap-2 text-gold mb-4">
                           <BuildingOfficeIcon className="w-4 h-4" />
-                          <p className="text-lg font-medium">{selectedProperty.location}</p>
+                          <p className="text-base sm:text-lg font-medium">{selectedProperty.location}</p>
                         </div>
                       </div>
                       {selectedProperty.engagementScore > 70 && (
-                        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold to-amber-600 text-white rounded-full shadow-lg shadow-gold/30">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold to-amber-600 text-white rounded-full shadow-lg shadow-gold/30 w-fit">
                           <TrophyIcon className="w-5 h-5" />
                           <span className="font-semibold text-sm">{t('stats.overview.topPerforming')}</span>
                         </div>
                       )}
                     </div>
                     
-                    <div className={`flex flex-wrap gap-8 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                    <div className={`grid grid-cols-2 lg:flex lg:flex-wrap gap-4 sm:gap-8 ${isRTL ? 'lg:flex-row-reverse' : ''}`}>
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-50 rounded-lg">
                           <BanknotesIcon className="w-5 h-5 text-blue-600" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.price')}</p>
-                          <p className="text-xl font-bold text-gray-900">
+                          <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.price')}</p>
+                          <p className="text-base sm:text-xl font-bold text-gray-900">
                             {formatCurrency(selectedProperty.price || 0, selectedProperty.currency as any || 'EUR')}
                           </p>
                         </div>
@@ -806,8 +806,8 @@ const PropertyStatistics: React.FC = () => {
                           <ArrowsPointingOutIcon className="w-5 h-5 text-emerald-600" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.surface')}</p>
-                          <p className="text-xl font-bold text-gray-900">{selectedProperty.surface} m²</p>
+                          <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.surface')}</p>
+                          <p className="text-base sm:text-xl font-bold text-gray-900">{selectedProperty.surface} m²</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -815,8 +815,8 @@ const PropertyStatistics: React.FC = () => {
                           <UsersIcon className="w-5 h-5 text-purple-600" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.bedrooms')}</p>
-                          <p className="text-xl font-bold text-gray-900">{selectedProperty.bedrooms}</p>
+                          <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.bedrooms')}</p>
+                          <p className="text-base sm:text-xl font-bold text-gray-900">{selectedProperty.bedrooms}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -824,8 +824,8 @@ const PropertyStatistics: React.FC = () => {
                           <SignalIcon className="w-5 h-5 text-amber-600" />
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.engagementScore')}</p>
-                          <p className="text-xl font-bold bg-gradient-to-r from-gold to-amber-600 bg-clip-text text-transparent">
+                          <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wider font-semibold">{t('stats.overview.engagementScore')}</p>
+                          <p className="text-base sm:text-xl font-bold bg-gradient-to-r from-gold to-amber-600 bg-clip-text text-transparent">
                             {selectedProperty.engagementScore || 0}/100
                           </p>
                         </div>
@@ -869,90 +869,94 @@ const PropertyStatistics: React.FC = () => {
             </div>
 
             {/* Main Analytics Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
               {/* Trend Chart - Large Area */}
-              <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
-                <div className="flex items-center justify-between mb-6">
+              <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900">{t('stats.trends.title')}</h3>
-                    <p className="text-sm text-gray-500 mt-1">{t('stats.trends.subtitle')}</p>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">{t('stats.trends.title')}</h3>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">{t('stats.trends.subtitle')}</p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-blue-500" />
-                      <span className="text-xs font-medium text-gray-600">{t('stats.trends.views')}</span>
+                      <div className="w-2.5 h-2.5 sm:w-3 h-3 rounded-full bg-blue-500" />
+                      <span className="text-[10px] sm:text-xs font-medium text-gray-600">{t('stats.trends.views')}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-purple-500" />
-                      <span className="text-xs font-medium text-gray-600">{t('stats.trends.inquiries')}</span>
+                      <div className="w-2.5 h-2.5 sm:w-3 h-3 rounded-full bg-purple-500" />
+                      <span className="text-[10px] sm:text-xs font-medium text-gray-600">{t('stats.trends.inquiries')}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                      <span className="text-xs font-medium text-gray-600">{t('stats.trends.interactions')}</span>
+                      <div className="w-2.5 h-2.5 sm:w-3 h-3 rounded-full bg-emerald-500" />
+                      <span className="text-[10px] sm:text-xs font-medium text-gray-600">{t('stats.trends.interactions')}</span>
                     </div>
                   </div>
                 </div>
-                <ResponsiveContainer width="100%" height={320}>
-                  <ComposedChart data={trendData}>
-                    <defs>
-                      <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#3B82F6" stopOpacity={0} />
-                      </linearGradient>
-                      <linearGradient id="inquiriesGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
-                    <XAxis 
-                      dataKey="date" 
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: '#6B7280', fontSize: 12 }}
-                    />
-                    <YAxis 
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: '#6B7280', fontSize: 12 }}
-                    />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white',
-                        border: '1px solid #E5E7EB',
-                        borderRadius: '12px',
-                        boxShadow: '0 10px 40px rgba(0,0,0,0.1)'
-                      }}
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="views" 
-                      stroke="#3B82F6" 
-                      strokeWidth={2}
-                      fill="url(#viewsGradient)"
-                    />
-                    <Bar 
-                      dataKey="inquiries" 
-                      fill="#8B5CF6" 
-                      radius={[4, 4, 0, 0]}
-                      barSize={20}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="clicks" 
-                      stroke="#10B981" 
-                      strokeWidth={2}
-                      dot={{ fill: '#10B981', strokeWidth: 2, r: 4 }}
-                    />
-                  </ComposedChart>
-                </ResponsiveContainer>
+                <div className="h-[280px] sm:h-[320px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={trendData}>
+                      <defs>
+                        <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#3B82F6" stopOpacity={0.3} />
+                          <stop offset="100%" stopColor="#3B82F6" stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="inquiriesGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#8B5CF6" stopOpacity={0.3} />
+                          <stop offset="100%" stopColor="#8B5CF6" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
+                      <XAxis 
+                        dataKey="date" 
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#6B7280', fontSize: 10 }}
+                        minTickGap={20}
+                      />
+                      <YAxis 
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: '#6B7280', fontSize: 10 }}
+                      />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'white',
+                          border: '1px solid #E5E7EB',
+                          borderRadius: '12px',
+                          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+                          fontSize: '12px'
+                        }}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="views" 
+                        stroke="#3B82F6" 
+                        strokeWidth={2}
+                        fill="url(#viewsGradient)"
+                      />
+                      <Bar 
+                        dataKey="inquiries" 
+                        fill="#8B5CF6" 
+                        radius={[4, 4, 0, 0]}
+                        barSize={16}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="clicks" 
+                        stroke="#10B981" 
+                        strokeWidth={2}
+                        dot={{ fill: '#10B981', strokeWidth: 2, r: 3 }}
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
 
               {/* Engagement Metrics Panel */}
-              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">{t('stats.engagement.title', { defaultValue: currentStatsUiFallback.engagementTitle })}</h3>
+              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-6">{t('stats.engagement.title', { defaultValue: currentStatsUiFallback.engagementTitle })}</h3>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 items-start">
                   <ProgressRing
                     value={performanceMetrics?.engagementRate || 0}
                     label={t('stats.engagement.engagementRate', { defaultValue: currentStatsUiFallback.engagementRate })}
@@ -972,39 +976,42 @@ const PropertyStatistics: React.FC = () => {
 
                 {/* Interaction Breakdown */}
                 {pieData.length > 0 && (
-                  <div className="mt-8">
-                    <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-4">
+                  <div className="mt-6 sm:mt-8">
+                    <h4 className="text-[10px] sm:text-xs font-semibold text-gray-700 uppercase tracking-wider mb-4">
                       {t('stats.engagement.interactionBreakdown')}
                     </h4>
-                    <ResponsiveContainer width="100%" height={160}>
-                      <PieChart>
-                        <Pie
-                          data={pieData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={40}
-                          outerRadius={70}
-                          paddingAngle={4}
-                          dataKey="value"
-                        >
-                          {pieData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'white',
-                            border: '1px solid #E5E7EB',
-                            borderRadius: '8px',
-                          }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                    <div className="flex justify-center gap-6 mt-4">
+                    <div className="h-[140px] sm:h-[160px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={35}
+                            outerRadius={60}
+                            paddingAngle={4}
+                            dataKey="value"
+                          >
+                            {pieData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: 'white',
+                              border: '1px solid #E5E7EB',
+                              borderRadius: '8px',
+                              fontSize: '12px'
+                            }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4">
                       {pieData.map((item, i) => (
                         <div key={i} className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                          <span className="text-xs font-medium text-gray-600">{item.name}</span>
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                          <span className="text-[10px] sm:text-xs font-medium text-gray-600">{item.name}</span>
                         </div>
                       ))}
                     </div>
@@ -1014,32 +1021,32 @@ const PropertyStatistics: React.FC = () => {
             </div>
 
             {/* Bottom Section - Live Feed & Performance Score */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
               {/* Live Activity Feed */}
-              <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
-                <div className="flex items-center justify-between mb-6">
+              <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <div className="absolute inset-0 bg-green-500 rounded-full blur-md animate-pulse" />
-                      <BoltIcon className="w-6 h-6 text-green-600 relative" />
+                      <BoltIcon className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 relative" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">{t('stats.activityFeed.title')}</h3>
-                      <p className="text-sm text-gray-500">{t('stats.activityFeed.subtitle')}</p>
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900">{t('stats.activityFeed.title')}</h3>
+                      <p className="text-xs sm:text-sm text-gray-500">{t('stats.activityFeed.subtitle')}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full w-fit">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-xs font-semibold text-green-700">{t('stats.activityFeed.live')}</span>
+                    <span className="text-[10px] sm:text-xs font-semibold text-green-700">{t('stats.activityFeed.live')}</span>
                   </div>
                 </div>
 
-                <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
+                <div className="space-y-2 max-h-64 sm:max-h-80 overflow-y-auto pr-2">
                   {recentInteractions.length > 0 ? (
                     recentInteractions.slice(0, 20).map((interaction, i) => (
                       <div
                         key={interaction.id}
-                        className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
+                        className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl transition-all ${
                           i === 0
                             ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 animate-pulse'
                             : i < 3
@@ -1048,46 +1055,46 @@ const PropertyStatistics: React.FC = () => {
                         }`}
                       >
                         <div className="flex-shrink-0">
-                          {interaction.type === 'view' && <EyeIcon className="w-5 h-5 text-blue-500" />}
-                          {interaction.type === 'inquiry' && <EnvelopeIcon className="w-5 h-5 text-purple-500" />}
-                          {interaction.type === 'favorite' && <HeartIcon className="w-5 h-5 text-red-500" />}
-                          {interaction.type === 'click' && <CursorArrowRaysIcon className="w-5 h-5 text-green-500" />}
+                          {interaction.type === 'view' && <EyeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />}
+                          {interaction.type === 'inquiry' && <EnvelopeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500" />}
+                          {interaction.type === 'favorite' && <HeartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />}
+                          {interaction.type === 'click' && <CursorArrowRaysIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />}
                         </div>
                         <div className="flex-1">
-                          <p className="text-sm font-semibold text-gray-900">{interaction.label}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs sm:text-sm font-semibold text-gray-900">{interaction.label}</p>
+                          <p className="text-[10px] sm:text-xs text-gray-500">
                             {Math.round((Date.now() - interaction.timestamp) / 1000)} {t('stats.activityFeed.secondsAgo')}
                           </p>
                         </div>
                         {i === 0 && (
-                          <ArrowRightIcon className="w-4 h-4 text-green-500 animate-bounce" />
+                          <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 animate-bounce" />
                         )}
                       </div>
                     ))
                   ) : (
-                    <div className="text-center py-16">
-                      <ClockIcon className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500 font-medium">{t('stats.activityFeed.noActivity')}</p>
-                      <p className="text-sm text-gray-400 mt-1">{t('stats.activityFeed.noActivityDesc')}</p>
+                    <div className="text-center py-12 sm:py-16">
+                      <ClockIcon className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-4" />
+                      <p className="text-sm sm:text-base text-gray-500 font-medium">{t('stats.activityFeed.noActivity')}</p>
+                      <p className="text-xs sm:text-sm text-gray-400 mt-1">{t('stats.activityFeed.noActivityDesc')}</p>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Performance Score Card */}
-              <div className="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 rounded-3xl shadow-xl p-8 text-white relative overflow-hidden">
+              <div className="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-gold/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl" />
                 
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-6">
-                    <ChartPieIcon className="w-6 h-6 text-gold" />
-                    <h3 className="text-xl font-bold">{t('stats.performanceIndex.title')}</h3>
+                    <ChartPieIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gold" />
+                    <h3 className="text-lg sm:text-xl font-bold">{t('stats.performanceIndex.title')}</h3>
                   </div>
                   
-                  <div className="flex justify-center mb-8">
+                  <div className="flex justify-center mb-6 sm:mb-8">
                     <div className="relative">
-                      <svg className="w-48 h-48" viewBox="0 0 120 120">
+                      <svg className="w-36 h-36 sm:w-48 sm:h-48" viewBox="0 0 120 120">
                         <circle cx="60" cy="60" r="54" fill="none" stroke="#1F2937" strokeWidth="8" />
                         <circle
                           cx="60" cy="60" r="54"
@@ -1107,30 +1114,30 @@ const PropertyStatistics: React.FC = () => {
                         </defs>
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-5xl font-bold bg-gradient-to-r from-gold to-amber-400 bg-clip-text text-transparent">
+                        <span className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-gold to-amber-400 bg-clip-text text-transparent">
                           {selectedProperty.engagementScore || 0}
                         </span>
-                        <span className="text-xs text-gray-400 uppercase tracking-wider mt-1">{t('stats.performanceIndex.outOf100')}</span>
+                        <span className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wider mt-1">{t('stats.performanceIndex.outOf100')}</span>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/10">
-                      <span className="text-sm text-gray-400">{t('stats.performanceIndex.marketPosition')}</span>
-                      <span className="font-semibold">
+                  <div className="space-y-3 sm:space-y-4">
+                    <div className="flex justify-between items-center p-2.5 sm:p-3 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-xs sm:text-sm text-gray-400">{t('stats.performanceIndex.marketPosition')}</span>
+                      <span className="text-xs sm:text-sm font-semibold">
                         {(selectedProperty.engagementScore || 0) > 70 ? t('stats.performanceIndex.top10') : 
                          (selectedProperty.engagementScore || 0) > 40 ? t('stats.performanceIndex.top40') : t('stats.performanceIndex.average')}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/10">
-                      <span className="text-sm text-gray-400">{t('stats.performanceIndex.viewToInquiry')}</span>
-                      <span className="font-semibold">{performanceMetrics?.inquiryRate.toFixed(1)}%</span>
+                    <div className="flex justify-between items-center p-2.5 sm:p-3 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-xs sm:text-sm text-gray-400">{t('stats.performanceIndex.viewToInquiry')}</span>
+                      <span className="text-xs sm:text-sm font-semibold">{performanceMetrics?.inquiryRate.toFixed(1)}%</span>
                     </div>
-                    <div className="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/10">
-                      <span className="text-sm text-gray-400">{t('stats.performanceIndex.lastUpdate')}</span>
-                      <span className="font-semibold flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full" />
+                    <div className="flex justify-between items-center p-2.5 sm:p-3 bg-white/5 rounded-xl border border-white/10">
+                      <span className="text-xs sm:text-sm text-gray-400">{t('stats.performanceIndex.lastUpdate')}</span>
+                      <span className="text-xs sm:text-sm font-semibold flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full" />
                         {t('stats.performanceIndex.live')}
                       </span>
                     </div>
