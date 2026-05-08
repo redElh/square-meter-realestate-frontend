@@ -181,8 +181,7 @@ const Properties: React.FC = () => {
 
   const isExclusiveProperty = (property: Property): boolean => Number(property.agreementType) === 3;
   const exclusiveProperties = properties.filter(isExclusiveProperty);
-  const nonExclusiveProperties = properties.filter((property) => !isExclusiveProperty(property));
-  const activeSourceProperties = propertyZone === 'exclusive' ? exclusiveProperties : nonExclusiveProperties;
+  const activeSourceProperties = propertyZone === 'exclusive' ? exclusiveProperties : properties;
 
   const filterAndSortProperties = (
     sourceProperties: Property[],
@@ -239,21 +238,29 @@ const Properties: React.FC = () => {
     });
 
     const sorted = [...filtered];
-    switch (options.sort) {
-      case 'priceAsc':
-        sorted.sort((a, b) => getSortablePrice(a) - getSortablePrice(b));
-        break;
-      case 'priceDesc':
-        sorted.sort((a, b) => getSortablePrice(b) - getSortablePrice(a));
-        break;
-      case 'surface':
-        sorted.sort((a, b) => b.surface - a.surface);
-        break;
-      case 'newest':
-      default:
-        sorted.sort((a, b) => b.id - a.id);
-        break;
-    }
+    sorted.sort((a, b) => {
+      // 1. Exclusive properties first if in 'normal' zone
+      if (propertyZone === 'normal') {
+        const aIsExclusive = isExclusiveProperty(a);
+        const bIsExclusive = isExclusiveProperty(b);
+        
+        if (aIsExclusive && !bIsExclusive) return -1;
+        if (!aIsExclusive && bIsExclusive) return 1;
+      }
+
+      // 2. Apply requested sort
+      switch (options.sort) {
+        case 'priceAsc':
+          return getSortablePrice(a) - getSortablePrice(b);
+        case 'priceDesc':
+          return getSortablePrice(b) - getSortablePrice(a);
+        case 'surface':
+          return b.surface - a.surface;
+        case 'newest':
+        default:
+          return b.id - a.id;
+      }
+    });
 
     return sorted;
   };
@@ -583,8 +590,8 @@ const Properties: React.FC = () => {
     const filterType = filter === 'buy' ? 'Vente' : filter === 'rent' ? 'Location' : filter === 'seasonal' ? 'Location Saisonnière' : '';
     const visibleCount = filteredAndSortedProperties.length;
     const zoneLabel = propertyZone === 'exclusive'
-      ? t('header.exclusiveProperties', { defaultValue: 'Propriétés exclusives' })
-      : t('header.allProperties', { defaultValue: 'Autres propriétés' });
+      ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })
+      : t('header.allProperties', { defaultValue: 'All Properties' });
     const title = filterType ? `${filterType} - Biens Immobiliers Essaouira` : 'Tous nos Biens Immobiliers à Essaouira';
     const description = filterType 
       ? `Découvrez nos biens en ${filterType.toLowerCase()} à Essaouira. ${visibleCount} propriétés disponibles dans la section ${zoneLabel}. Villas, appartements et biens d'exception.`
@@ -664,7 +671,7 @@ const Properties: React.FC = () => {
                       : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
                   }`}
                 >
-                  {t('header.allProperties', { defaultValue: 'Other Properties' })}
+                  {t('header.allProperties', { defaultValue: 'All Properties' })}
                 </button>
                 <button
                   onClick={() => setPropertyZone('exclusive')}
@@ -782,7 +789,7 @@ const Properties: React.FC = () => {
             {/* Results count indicator */}
             <div className="text-center mt-4">
               <span className="text-xs sm:text-sm text-white/90 font-medium px-3 py-1.5 bg-black/30 backdrop-blur-sm inline-block">
-                {filteredAndSortedProperties.length} {t('properties.search.results')} · {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'Other Properties' })}
+                {filteredAndSortedProperties.length} {t('properties.search.results')} · {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'All Properties' })}
               </span>
             </div>
           </div>
@@ -845,7 +852,7 @@ const Properties: React.FC = () => {
               <div className="mb-6 sm:mb-12">
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
-                    {filteredAndSortedProperties.length} {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'Other Properties' })}
+                    {filteredAndSortedProperties.length} {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'All Properties' })}
                   </h3>
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
