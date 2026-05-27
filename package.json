@@ -49,7 +49,7 @@
     "build": "cross-env CI=false react-scripts build",
     "postinstall": "node ./scripts/download_chromium.js",
     "postbuild": "node ./scripts/generate_sitemap.js || true",
-    "test": "react-scripts test",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\""
   },

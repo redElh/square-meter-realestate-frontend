@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { DayPicker, DateRange } from 'react-day-picker';
 import { format, addDays } from 'date-fns';
-import { fr, enUS } from 'date-fns/locale';
+import { fr } from 'date-fns/locale/fr';
+import { enUS } from 'date-fns/locale/en-US';
 import { useTranslation } from 'react-i18next';
 import { UsersIcon, CalendarIcon } from '@heroicons/react/24/outline';
-import 'react-day-picker/dist/style.css';
+import 'react-day-picker/style.css';
 
 interface ReservationCalendarProps {
   propertyId: string | number;

@@ -34,4 +34,18 @@ module.exports = {
       return webpackConfig;
     },
   },
+  jest: {
+    configure: (jestConfig) => {
+      jestConfig.transformIgnorePatterns = [
+        "[/\\\\]node_modules[/\\\\](?!date-fns|react-day-picker).+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      ];
+      jestConfig.moduleNameMapper = {
+        ...jestConfig.moduleNameMapper,
+        // Mock CSS imports from react-day-picker
+        '^react-day-picker/style.css$': '<rootDir>/node_modules/react-day-picker/src/style.css',
+        '^react-day-picker/dist/style.css$': '<rootDir>/node_modules/react-day-picker/src/style.css',
+      };
+      return jestConfig;
+    },
+  },
 };
