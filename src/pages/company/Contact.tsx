@@ -45,12 +45,18 @@ const Contact: React.FC = () => {
     timeline: '',
     company: '',
     preferredContact: 'email',
-    propertyId: ''
+    propertyId: '',
+    startDate: '',
+    endDate: '',
+    guests: ''
   });
 
   // Map query params to subject values and property reference
   useEffect(() => {
     const propertyParam = searchParams.get('property');
+    const startDateParam = searchParams.get('startDate');
+    const endDateParam = searchParams.get('endDate');
+    const guestsParam = searchParams.get('guests');
     const updates: Partial<typeof formData> = {};
     
     if (contactType) {
@@ -59,7 +65,8 @@ const Contact: React.FC = () => {
         'info': 'info',
         'estimation': 'estimation',
         'appointment': 'buy',
-        'confidential': 'confidential'
+        'confidential': 'confidential',
+        'reservation': 'reservation'
       };
       
       const mappedSubject = subjectMap[contactType] || contactType;
@@ -70,6 +77,10 @@ const Contact: React.FC = () => {
     if (propertyParam) {
       updates.propertyId = propertyParam;
     }
+
+    if (startDateParam) updates.startDate = startDateParam;
+    if (endDateParam) updates.endDate = endDateParam;
+    if (guestsParam) updates.guests = guestsParam;
     
     if (Object.keys(updates).length > 0) {
       setFormData(prev => ({ ...prev, ...updates }));
@@ -334,6 +345,7 @@ const Contact: React.FC = () => {
       'estimation': 'Demande d\'estimation',
       'confidential': 'Demande confidentielle',
       'partnership': 'Demande de partenariat',
+      'reservation': 'Demande de réservation',
       'other': 'Autre demande'
     };
 
@@ -376,6 +388,23 @@ ${formData.company ? `Société : ${formData.company}\n` : ''}
 OBJET DE LA DEMANDE
 
 Type de demande : ${subjectMap[formData.subject] || formData.subject}
+${
+  formData.subject === 'reservation' && (formData.startDate || formData.endDate || formData.guests)
+    ? `\nDÉTAILS DE LA RÉSERVATION\n${
+  formData.startDate
+    ? `\nDate d'arrivée : ${formData.startDate}`
+    : ''
+}${
+  formData.endDate
+    ? `\nDate de départ : ${formData.endDate}`
+    : ''
+}${
+  formData.guests
+    ? `\nNombre de personnes : ${formData.guests}`
+    : ''
+}\n`
+    : ''
+}
 ${
   formData.propertyType || formData.budget || formData.timeline
     ? `\nDÉTAILS DU PROJET\n${
@@ -575,6 +604,39 @@ Square Meter - Système de notification automatique
 
           {/* Right Column - Contact Form */}
           <div className="lg:col-span-2">
+            {/* Reservation Summary Banner */}
+            {formData.subject === 'reservation' && formData.startDate && formData.endDate && (
+              <div className="mb-6 bg-[#023927]/5 border border-[#023927]/20 p-6 rounded-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="bg-[#023927] p-3 text-white rounded-full">
+                    <CalendarIcon className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-inter font-medium text-[#023927] text-lg">
+                      {t('contact.reservation.summaryTitle') || 'Détails de votre réservation'}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {t('contact.reservation.summarySubtitle') || 'Ces informations seront jointes à votre message.'}
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 md:flex md:items-center gap-4 md:gap-8">
+                  <div className="text-center md:text-left">
+                    <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">{t('contact.reservation.checkIn') || 'Arrivée'}</div>
+                    <div className="font-inter font-semibold text-[#023927]">{formData.startDate}</div>
+                  </div>
+                  <div className="text-center md:text-left">
+                    <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">{t('contact.reservation.checkOut') || 'Départ'}</div>
+                    <div className="font-inter font-semibold text-[#023927]">{formData.endDate}</div>
+                  </div>
+                  <div className="text-center md:text-left col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-gray-200 pt-2 md:pt-0 md:pl-8">
+                    <div className="text-[10px] uppercase tracking-wider text-gray-500 mb-1">{t('contact.reservation.guests') || 'Personnes'}</div>
+                    <div className="font-inter font-semibold text-[#023927]">{formData.guests}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Enhanced Contact Form */}
             <div className="bg-white border-2 border-gray-200 p-5 sm:p-6 lg:p-8 mb-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-gray-200 gap-3">

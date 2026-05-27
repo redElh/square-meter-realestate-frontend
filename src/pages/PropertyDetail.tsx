@@ -1,6 +1,6 @@
 // src/pages/PropertyDetail.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
   MapPinIcon, 
@@ -19,9 +19,13 @@ import PropertyCard from '../components/PropertyCard';
 import { useCurrency } from '../hooks/useCurrency';
 import SEO from '../components/SEO/SEO';
 import ImageGalleryModal from '../components/ImageGalleryModal';
+import ReservationCalendar from '../components/ReservationCalendar';
+import { DateRange } from 'react-day-picker';
+import { format } from 'date-fns';
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const { format: formatPrice } = useCurrency();
@@ -31,6 +35,7 @@ const PropertyDetail: React.FC = () => {
   const [activeImage, setActiveImage] = useState(0);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
+  const [reservationSaved, setReservationSaved] = useState(false);
   const isPlaying = true;
   const viewTrackedRef = useRef(false);
 
@@ -138,6 +143,24 @@ const PropertyDetail: React.FC = () => {
     setGalleryOpen(true);
   };
 
+  const handleReserve = (range: DateRange | undefined, guests: number) => {
+    if (!range?.from || !range?.to || !property) return;
+    
+    const startDate = format(range.from, 'yyyy-MM-dd');
+    const endDate = format(range.to, 'yyyy-MM-dd');
+    
+    // Show success notification
+    setReservationSaved(true);
+    
+    // Track the interaction
+    trackClick();
+
+    // Redirect after a short delay to let the user see the notification
+    setTimeout(() => {
+      navigate(`/contact?type=reservation&property=${property.reference || property.id}&startDate=${startDate}&endDate=${endDate}&guests=${guests}`);
+    }, 1500);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -166,6 +189,25 @@ const PropertyDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Reservation Saved Notification */}
+      {reservationSaved && (
+        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[100] w-full max-w-md px-4 pointer-events-none">
+          <div className="bg-[#023927] text-white p-4 shadow-2xl flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="bg-white/20 p-2 rounded-full">
+              <CalendarIcon className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="font-inter font-medium">
+                {t('propertyDetail.reservation.savedTitle') || 'Sélection enregistrée !'}
+              </p>
+              <p className="text-xs text-white/80">
+                {t('propertyDetail.reservation.savedSubtitle') || 'Redirection vers le formulaire de contact...'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <SEO 
         title={property.title}
         description={`${property.description?.substring(0, 155)}... | ${property.location} - ${property.surface}m² - ${property.bedrooms} chambres`}
@@ -338,6 +380,17 @@ const PropertyDetail: React.FC = () => {
       <section className="py-8 sm:py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
+            {/* Reservation Calendar for Seasonal Properties */}
+            {property.type === 'seasonal' && (
+              <div className="mb-12">
+                <ReservationCalendar 
+                  propertyId={property.id} 
+                  propertyName={property.title}
+                  onReserve={handleReserve}
+                />
+              </div>
+            )}
+
             {/* Description - Full width */}
             <div className="mb-8 sm:mb-10">
               <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-3 border-b border-gray-200">

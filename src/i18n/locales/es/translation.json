@@ -345,6 +345,15 @@
       "title": "Propiedades Similares",
       "subtitle": "Descubra otras propiedades excepcionales que podrían interesarle"
     },
+    "reservation": {
+      "title": "Reserve su estancia",
+      "guests": "Número de personas",
+      "checkIn": "Llegada",
+      "checkOut": "Salida",
+      "button": "Solicitar reserva",
+      "savedTitle": "¡Selección guardada!",
+      "savedSubtitle": "Redirigiendo al formulario de contacto..."
+    },
     "mock": {
       "property": {
         "title": "Villa Les Oliviers",
@@ -830,6 +839,13 @@
       "successMessage": "¡Su mensaje ha sido enviado con éxito! Será redirigido a la página de inicio.",
       "errorMessage": "Se ha producido un error al enviar el mensaje. Por favor, inténtelo de nuevo.",
       "closeButton": "Cerrar"
+    },
+    "reservation": {
+      "summaryTitle": "Detalles de su reserva",
+      "summarySubtitle": "Esta información se adjuntará a su mensaje.",
+      "checkIn": "Llegada",
+      "checkOut": "Salida",
+      "guests": "Personas"
     }
   },
   "sellingMultiStep": {

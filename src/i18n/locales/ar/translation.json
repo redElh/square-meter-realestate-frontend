@@ -344,6 +344,15 @@
       "title": "عقارات مشابهة",
       "subtitle": "اكتشف عقارات استثنائية أخرى قد تهمك"
     },
+    "reservation": {
+      "title": "احجز إقامتك",
+      "guests": "عدد الأشخاص",
+      "checkIn": "الوصول",
+      "checkOut": "المغادرة",
+      "button": "طلب حجز",
+      "savedTitle": "تم حفظ الاختيار!",
+      "savedSubtitle": "جاري التوجيه إلى نموذج الاتصال..."
+    },
     "mock": {
       "property": {
         "title": "فيلا ليس أوليفييه",
@@ -798,6 +807,13 @@
       "successMessage": "تم إرسال رسالتك بنجاح! سيتم إعادة توجيهك إلى الصفحة الرئيسية.",
       "errorMessage": "حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.",
       "closeButton": "إغلاق"
+    },
+    "reservation": {
+      "summaryTitle": "تفاصيل حجزك",
+      "summarySubtitle": "سيتم إرفاق هذه المعلومات برسالتك.",
+      "checkIn": "الوصول",
+      "checkOut": "المغادرة",
+      "guests": "الأشخاص"
     }
   },
   "sellingMultiStep": {
