@@ -766,6 +766,7 @@
       "estimation": "Estimation gratuite",
       "confidential": "Sélection confidentielle",
       "partnership": "Partenariat",
+      "reservation": "Demande de réservation",
       "other": "Autre"
     },
     "projectDetails": {
@@ -1132,6 +1133,7 @@
     "integer": "Doit être un nombre entier",
     "lettersOnly": "Seules les lettres et les espaces sont autorisés",
     "numbersOnly": "Seuls les chiffres sont autorisés",
+    "alphanumeric": "Chiffres, lettres, espaces et tirets autorisés uniquement",
     "nameLengthError": "Le nom doit contenir entre 2 et 50 caractères",
     "cvTooLarge": "Le fichier CV est trop volumineux (max 15MB)",
     "cvInvalidFormat": "Format invalide. Veuillez télécharger un fichier PDF, DOC ou DOCX",

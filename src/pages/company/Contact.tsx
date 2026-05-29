@@ -201,18 +201,19 @@ const Contact: React.FC = () => {
       if (!value || value === '') return t('validation.required');
     }
 
-    // Property Reference validation (required)
-    if (name === 'propertyReference') {
+    // Property ID validation (required)
+    if (name === 'propertyId') {
       if (!value || value.trim() === '') return t('validation.required');
-      if (!/^\d+$/.test(value.trim())) return t('validation.numbersOnly');
-      if (value.trim().length < 3) return t('validation.minLength', { min: 3 });
-      if (value.trim().length > 20) return t('validation.maxLength', { max: 20 });
+      // Relaxed regex to allow alphanumeric references (e.g., 25311-1234 or REF123)
+      if (!/^[a-zA-Z0-9\s-]+$/.test(value.trim())) return t('validation.alphanumeric');
+      if (value.trim().length < 1) return t('validation.minLength', { min: 1 });
+      if (value.trim().length > 50) return t('validation.maxLength', { max: 50 });
     }
 
     // Message validation
     if (name === 'message') {
       if (!value || value.trim() === '') return t('validation.required');
-      if (value.trim().length < 10) return t('validation.minLength', { min: 10 });
+      if (value.trim().length < 5) return t('validation.minLength', { min: 5 });
       if (value.trim().length > 2000) return t('validation.maxLength', { max: 2000 });
     }
 
@@ -223,7 +224,7 @@ const Contact: React.FC = () => {
     const newErrors: Record<string, string> = {};
     
     // Required fields
-    const fields = ['firstName', 'lastName', 'email', 'subject', 'message'];
+    const fields = ['firstName', 'lastName', 'email', 'subject', 'message', 'propertyId'];
     fields.forEach(field => {
       const error = validateField(field, formData[field as keyof typeof formData]);
       if (error) newErrors[field] = error;
@@ -243,7 +244,10 @@ const Contact: React.FC = () => {
     e.preventDefault();
     
     // Validate form
-    if (!validateForm()) {
+    const isValid = validateForm();
+    console.log('📝 Form validation result:', isValid, errors);
+
+    if (!isValid) {
       // Mark all fields as touched to show errors
       const allTouched: Record<string, boolean> = {};
       Object.keys(formData).forEach(key => {
@@ -259,6 +263,12 @@ const Contact: React.FC = () => {
       // Generate email content in French
       const emailContent = generateFrenchEmailContent();
       
+      console.log('📧 Sending inquiry with payload:', {
+        subject: emailContent.subject,
+        emailType: 'contact',
+        formData: { ...formData, message: formData.message.substring(0, 20) + '...' }
+      });
+
       const response = await fetch('/api/send-property-inquiry', {
         method: 'POST',
         headers: {
@@ -274,28 +284,46 @@ const Contact: React.FC = () => {
         }),
       });
       
+      console.log('📡 API Response status:', response.status);
+
       // Check if response is JSON
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
-        // API endpoint not available (development mode or not deployed)
-        console.warn('API endpoint not available. Email data:', {
-          subject: emailContent.subject,
-          content: emailContent.content,
-          formData: formData
-        });
+        const text = await response.text();
+        console.warn('⚠️ API returned non-JSON response:', text.substring(0, 200));
         
-        // Simulate success in development
+        // If it's a 200/OK but not JSON, it might be a dev server proxy issue
+        if (response.ok) {
+          setAlertType('success');
+          setAlertMessage(t('contact.email.successMessage'));
+          setShowAlert(true);
+          setIsSubmitting(false);
+          
+          if (formData.propertyId) {
+            await propertyStatsService.trackStat(formData.propertyId, 'inquiries', 1).catch(() => {});
+          }
+          
+          setTimeout(() => navigate('/'), 3000);
+          return;
+        }
+        
+        throw new Error(`Server returned non-JSON response: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ API Result:', result);
+      
+      if (response.ok && result.success) {
+        // Show success alert
         setAlertType('success');
         setAlertMessage(t('contact.email.successMessage'));
         setShowAlert(true);
         setIsSubmitting(false);
         
-        // Track inquiry stat if propertyId is provided (even in dev mode)
+        // Track inquiry stat if propertyId is provided
         if (formData.propertyId) {
           try {
-            console.log(`📊 Tracking inquiry for property ${formData.propertyId}`);
             await propertyStatsService.trackStat(formData.propertyId, 'inquiries', 1);
-            console.log(`✅ Inquiry tracked successfully for property ${formData.propertyId}`);
           } catch (statsError) {
             console.error('⚠️ Failed to track inquiry stat:', statsError);
           }
@@ -305,29 +333,13 @@ const Contact: React.FC = () => {
         setTimeout(() => {
           navigate('/');
         }, 3000);
-        return;
-      }
-      
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-        // Show success alert
-        setAlertType('success');
-        setAlertMessage(t('contact.email.successMessage'));
-        setShowAlert(true);
-        setIsSubmitting(false);
-        
-        // Redirect after 3 seconds
-        setTimeout(() => {
-          navigate('/');
-        }, 3000);
       } else {
         throw new Error(result.error || 'Failed to send email');
       }
-    } catch (error) {
-      console.error('Error sending email:', error);
+    } catch (error: any) {
+      console.error('❌ Error sending email:', error);
       setAlertType('error');
-      setAlertMessage(t('contact.email.errorMessage'));
+      setAlertMessage(error.message || t('contact.email.errorMessage'));
       setShowAlert(true);
       setIsSubmitting(false);
     }
@@ -794,6 +806,7 @@ Square Meter - Système de notification automatique
                       <option value="estimation">{t('contact.subjects.estimation')}</option>
                       <option value="confidential">{t('contact.subjects.confidential')}</option>
                       <option value="partnership">{t('contact.subjects.partnership')}</option>
+                      <option value="reservation">{t('contact.subjects.reservation')}</option>
                       <option value="other">{t('contact.subjects.other')}</option>
                     </select>
                     {touched.subject && errors.subject && (
@@ -823,10 +836,10 @@ Square Meter - Système de notification automatique
                     }`}
                     placeholder={t('contact.form.propertyReferencePlaceholder')}
                   />
-                  {touched.propertyReference && errors.propertyReference ? (
+                  {touched.propertyId && errors.propertyId ? (
                     <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
                       <XMarkIcon className="w-4 h-4 flex-shrink-0" />
-                      <span>{errors.propertyReference}</span>
+                      <span>{errors.propertyId}</span>
                     </div>
                   ) : (
                     <p className="mt-1.5 text-xs text-gray-500">{t('contact.form.propertyReferenceHelp')}</p>

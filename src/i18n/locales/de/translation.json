@@ -757,6 +757,7 @@
       "estimation": "Kostenlose Bewertung",
       "confidential": "Vertrauliche Auswahl",
       "partnership": "Partnerschaft",
+      "reservation": "Reservierungsanfrage",
       "other": "Andere"
     },
     "projectDetails": {
@@ -1121,9 +1122,10 @@
     "number": "Bitte geben Sie eine gültige Zahl ein",
     "positive": "Muss eine positive Zahl sein",
     "integer": "Muss eine ganze Zahl sein",
-    "lettersOnly": "Nur Buchstaben und Leerzeichen erlaubt",
-    "numbersOnly": "Nur Zahlen erlaubt",
-    "nameLengthError": "Name muss zwischen 2 und 50 Zeichen lang sein",
+    "lettersOnly": "Nur Buchstaben und Leerzeichen sind erlaubt",
+    "numbersOnly": "Nur Zahlen sind erlaubt",
+    "alphanumeric": "Nur Zahlen, Buchstaben, Leerzeichen und Bindestriche sind erlaubt",
+    "nameLengthError": "Der Name muss zwischen 2 und 50 Zeichen lang sein",
     "cvTooLarge": "Lebenslauf-Datei ist zu groß (max 15MB)",
     "cvInvalidFormat": "Ungültiges Format. Bitte laden Sie eine PDF-, DOC- oder DOCX-Datei hoch",
     "pleaseFixErrors": "Bitte beheben Sie die Fehler vor dem Absenden",

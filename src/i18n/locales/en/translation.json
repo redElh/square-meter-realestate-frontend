@@ -744,6 +744,7 @@
       "estimation": "Free valuation",
       "confidential": "Confidential selection",
       "partnership": "Partnership",
+      "reservation": "Reservation request",
       "other": "Other"
     },
     "projectDetails": {
@@ -1099,8 +1100,9 @@
     "number": "Please enter a valid number",
     "positive": "Must be a positive number",
     "integer": "Must be a whole number",
-    "lettersOnly": "Only letters and spaces allowed",
-    "numbersOnly": "Only numbers allowed",
+    "lettersOnly": "Only letters and spaces are allowed",
+    "numbersOnly": "Only numbers are allowed",
+    "alphanumeric": "Only numbers, letters, spaces and dashes are allowed",
     "nameLengthError": "Name must be between 2 and 50 characters",
     "cvTooLarge": "CV file is too large (max 15MB)",
     "cvInvalidFormat": "Invalid format. Please upload a PDF, DOC or DOCX file",

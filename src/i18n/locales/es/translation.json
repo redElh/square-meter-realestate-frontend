@@ -766,7 +766,8 @@
       "management": "Gestión de propiedades",
       "estimation": "Valoración gratuita",
       "confidential": "Selección confidencial",
-      "partnership": "Colaboración",
+      "partnership": "Asociación",
+      "reservation": "Solicitud de reserva",
       "other": "Otro"
     },
     "projectDetails": {
@@ -1140,6 +1141,7 @@
     "integer": "Debe ser un número entero",
     "lettersOnly": "Solo se permiten letras y espacios",
     "numbersOnly": "Solo se permiten números",
+    "alphanumeric": "Solo se permiten números, letras, espacios y guiones",
     "nameLengthError": "El nombre debe tener entre 2 y 50 caracteres",
     "cvTooLarge": "El archivo CV es demasiado grande (máx 15MB)",
     "cvInvalidFormat": "Formato inválido. Por favor suba un archivo PDF, DOC o DOCX",

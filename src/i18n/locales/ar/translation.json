@@ -735,6 +735,7 @@
       "estimation": "تقييم مجاني",
       "confidential": "اختيار سري",
       "partnership": "شراكة",
+      "reservation": "طلب حجز",
       "other": "أخرى"
     },
     "projectDetails": {
@@ -1099,9 +1100,10 @@
     "number": "يرجى إدخال رقم صالح",
     "positive": "يجب أن يكون رقماً موجباً",
     "integer": "يجب أن يكون رقماً صحيحاً",
-    "lettersOnly": "يُسمح بالحروف والمسافات فقط",
-    "numbersOnly": "يُسمح بالأرقام فقط",
-    "nameLengthError": "يجب أن يكون الاسم بين 2 و50 حرفًا",
+    "lettersOnly": "مسموح بالحروف والمسافات فقط",
+    "numbersOnly": "مسموح بالأرقام فقط",
+    "alphanumeric": "مسموح بالأرقام والحروف والمسافات والشرطات فقط",
+    "nameLengthError": "يجب أن يكون الاسم بين 2 و 50 حرفًا",
     "cvTooLarge": "ملف السيرة الذاتية كبير جدًا (الحد الأقصى 15MB)",
     "cvInvalidFormat": "تنسيق غير صالح. يرجى تحميل ملف PDF أو DOC أو DOCX",
     "pleaseFixErrors": "يرجى إصلاح الأخطاء قبل الإرسال",
