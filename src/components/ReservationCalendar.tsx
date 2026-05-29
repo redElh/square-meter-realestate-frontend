@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
 import { DayPicker, DateRange } from 'react-day-picker';
-import { format, addDays } from 'date-fns';
+import { format, addDays, differenceInCalendarDays } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 import { enUS } from 'date-fns/locale/en-US';
 import { useTranslation } from 'react-i18next';
 import { UsersIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import 'react-day-picker/style.css';
+import { useCurrency } from '../hooks/useCurrency';
 
 interface ReservationCalendarProps {
   propertyId: string | number;
   propertyName: string;
+  pricePerDay: number;
   onReserve: (range: DateRange | undefined, guests: number) => void;
 }
 
-const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, propertyName, onReserve }) => {
+const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, propertyName, pricePerDay, onReserve }) => {
   const { t, i18n } = useTranslation();
+  const { format: formatPrice } = useCurrency();
   const [range, setRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: addDays(new Date(), 7),
@@ -23,6 +26,10 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
 
   const currentLocale = i18n.language === 'fr' ? fr : enUS;
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const selectedDays = range?.from && range?.to
+    ? Math.max(1, differenceInCalendarDays(range.to, range.from))
+    : 0;
+  const totalPrice = selectedDays > 0 ? selectedDays * (pricePerDay || 0) : 0;
 
   const handleReserve = () => {
     onReserve(range, guests);
@@ -100,6 +107,17 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">{t('propertyDetail.reservation.checkOut') || 'Départ'}</span>
               <span className="font-medium">{range?.to ? format(range.to, 'PP', { locale: currentLocale }) : '-'}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-600">{t('propertyDetail.reservation.total') || 'Total'}</span>
+              <span className="font-semibold text-[#023927]">
+                {selectedDays > 0 ? formatPrice(totalPrice) : '-'}
+              </span>
+            </div>
+            <div className="text-xs text-gray-500">
+              {selectedDays > 0
+                ? `${selectedDays} ${t('propertyDetail.reservation.days') || 'day(s)'} x ${formatPrice(pricePerDay || 0)}`
+                : t('propertyDetail.reservation.selectDates') || 'Select your dates to calculate the total'}
             </div>
           </div>
 

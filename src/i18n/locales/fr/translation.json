@@ -348,6 +348,9 @@
       "guests": "Nombre de personnes",
       "checkIn": "Arrivée",
       "checkOut": "Départ",
+      "total": "Total",
+      "days": "jours",
+      "selectDates": "Sélectionnez vos dates pour calculer le total",
       "button": "Demander une réservation",
       "savedTitle": "Sélection enregistrée !",
       "savedSubtitle": "Redirection vers le formulaire de contact..."

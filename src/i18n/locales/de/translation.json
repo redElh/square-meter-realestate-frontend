@@ -361,6 +361,9 @@
       "guests": "Anzahl der Personen",
       "checkIn": "Ankunft",
       "checkOut": "Abreise",
+      "total": "Gesamt",
+      "days": "Tage",
+      "selectDates": "Wählen Sie Ihre Daten aus, um den Gesamtpreis zu berechnen",
       "button": "Reservierung anfragen",
       "savedTitle": "Auswahl gespeichert!",
       "savedSubtitle": "Weiterleitung zum Kontaktformular..."

@@ -466,9 +466,25 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
 
 // API Functions
 class ApimoService {
+  private propertiesCache = new Map<string, Promise<{ properties: Property[]; total: number }>>();
+
   private getAuthHeader(): string {
     const credentials = `${APIMO_CONFIG.providerId}:${APIMO_CONFIG.token}`;
     return `Basic ${btoa(credentials)}`;
+  }
+
+  private buildPropertiesCacheKey(params?: {
+    limit?: number;
+    offset?: number;
+    timestamp?: number;
+    step?: number;
+    status?: number;
+    group?: number;
+  }, language?: string): string {
+    return JSON.stringify({
+      params: params || {},
+      language: language || 'fr',
+    });
   }
 
   async getProperties(params?: {
@@ -478,8 +494,16 @@ class ApimoService {
     step?: number;
     status?: number;
     group?: number;
+    translateDescriptions?: boolean;
   }, t?: any, language?: string): Promise<{ properties: Property[]; total: number }> {
     try {
+      const cacheKey = this.buildPropertiesCacheKey(params, language);
+      const cachedRequest = this.propertiesCache.get(cacheKey);
+      if (cachedRequest) {
+        return await cachedRequest;
+      }
+
+      const requestPromise = (async () => {
       console.log('🔧 apimoService.getProperties called with params:', params);
       const queryParams = new URLSearchParams();
       if (params?.limit) queryParams.append('limit', params.limit.toString());
@@ -526,13 +550,23 @@ class ApimoService {
       
       // Translate property names for all non-English languages
       if (language && language !== 'en') {
-        await this.translatePropertyNames(properties, language);
+        await this.translatePropertyNames(properties, language, params?.translateDescriptions !== false);
       }
 
       return {
         properties,
         total: data.total_items,
       };
+      })();
+
+      this.propertiesCache.set(cacheKey, requestPromise);
+
+      try {
+        return await requestPromise;
+      } catch (error) {
+        this.propertiesCache.delete(cacheKey);
+        throw error;
+      }
     } catch (error) {
       console.error('💥 Error fetching properties from Apimo:', error);
       throw error;
@@ -542,18 +576,23 @@ class ApimoService {
   /**
    * Translate property names and descriptions using browser-side Google Translate
    */
-  async translatePropertyNames(properties: Property[], targetLang: string): Promise<void> {
+  async translatePropertyNames(properties: Property[], targetLang: string, translateDescriptions: boolean = true): Promise<void> {
     try {
       const { translateBatch } = await import('./browserTranslationService');
       
       // Get all property titles and descriptions
       const titles = properties.map(prop => prop.title);
-      const descriptions = properties.map(prop => prop.description);
+      const descriptions = translateDescriptions ? properties.map(prop => prop.description) : [];
       
       // Translate all titles and descriptions in parallel
+      const translatedTitlesPromise = translateBatch(titles, targetLang, 'auto');
+      const translatedDescriptionsPromise = translateDescriptions
+        ? translateBatch(descriptions, targetLang, 'auto')
+        : Promise.resolve([] as string[]);
+
       const [translatedTitles, translatedDescriptions] = await Promise.all([
-        translateBatch(titles, targetLang, 'auto'),
-        translateBatch(descriptions, targetLang, 'auto')
+        translatedTitlesPromise,
+        translatedDescriptionsPromise
       ]);
       
       // Update property titles and descriptions
@@ -568,12 +607,14 @@ class ApimoService {
           translatedTitleCount++;
         }
         
-        const originalDesc = prop.description;
-        const translatedDesc = translatedDescriptions[index];
-        
-        if (translatedDesc && translatedDesc !== originalDesc) {
-          prop.description = translatedDesc;
-          translatedDescCount++;
+        if (translateDescriptions) {
+          const originalDesc = prop.description;
+          const translatedDesc = translatedDescriptions[index];
+          
+          if (translatedDesc && translatedDesc !== originalDesc) {
+            prop.description = translatedDesc;
+            translatedDescCount++;
+          }
         }
       });
       
@@ -588,9 +629,6 @@ class ApimoService {
 
   async getPropertyById(propertyId: number, t?: any, language?: string): Promise<Property | null> {
     try {
-      // Fetch all properties and find the one with matching ID
-      // Note: Apimo API doesn't have a direct endpoint for single property
-      // You might need to implement caching or use a different approach
       const { properties } = await this.getProperties({ limit: 1000 }, t, language);
       const property = properties.find(p => p.id === propertyId);
       return property || null;

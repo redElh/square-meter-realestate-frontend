@@ -128,6 +128,7 @@ const Properties: React.FC = () => {
         console.log('📡 Calling apimoService.getProperties...');
         const { properties: apimoProperties } = await apimoService.getProperties({
           limit: 1000, // Get all properties
+          translateDescriptions: false,
         }, t, currentLanguage);
         
         console.log('\n✅ Successfully loaded properties from Apimo CRM:', apimoProperties.length);

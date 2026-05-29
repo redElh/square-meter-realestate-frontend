@@ -17,7 +17,8 @@ import {
   CheckCircleIcon as CheckCircleIconSolid,
   XMarkIcon
 } from '@heroicons/react/24/solid';
-import { parsePhoneNumber, isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber } from 'libphonenumber-js';
+import type { CountryCode } from 'libphonenumber-js';
 import propertyStatsService from '../../services/propertyStatsService';
 
 const Contact: React.FC = () => {
@@ -38,6 +39,8 @@ const Contact: React.FC = () => {
     lastName: '',
     email: '',
     phone: '',
+    phoneCountry: 'MA',
+    propertyTitle: '',
     subject: '',
     message: '',
     propertyType: '',
@@ -48,8 +51,40 @@ const Contact: React.FC = () => {
     propertyId: '',
     startDate: '',
     endDate: '',
-    guests: ''
+    guests: '',
+    reservationNights: '',
+    reservationTotal: '',
+    pricePerNight: '',
+    priceCurrency: 'EUR'
   });
+
+  const phoneCountries: Array<{ code: CountryCode; label: string; dial: string }> = [
+    { code: 'MA', label: 'Morocco', dial: '+212' },
+    { code: 'FR', label: 'France', dial: '+33' },
+    { code: 'ES', label: 'Spain', dial: '+34' },
+    { code: 'GB', label: 'United Kingdom', dial: '+44' },
+    { code: 'DE', label: 'Germany', dial: '+49' },
+    { code: 'IT', label: 'Italy', dial: '+39' },
+    { code: 'NL', label: 'Netherlands', dial: '+31' },
+    { code: 'BE', label: 'Belgium', dial: '+32' },
+    { code: 'US', label: 'United States', dial: '+1' },
+    { code: 'CA', label: 'Canada', dial: '+1' },
+    { code: 'AE', label: 'United Arab Emirates', dial: '+971' },
+    { code: 'SA', label: 'Saudi Arabia', dial: '+966' }
+  ];
+
+  const normalizePhoneForValidation = (rawPhone: string): string => {
+    const trimmed = rawPhone.trim();
+    if (!trimmed) return '';
+
+    // Keep + when present and strip common separators.
+    const compact = trimmed.replace(/[\s()-]/g, '');
+    if (compact.startsWith('00')) {
+      return `+${compact.slice(2)}`;
+    }
+
+    return compact;
+  };
 
   // Map query params to subject values and property reference
   useEffect(() => {
@@ -57,6 +92,10 @@ const Contact: React.FC = () => {
     const startDateParam = searchParams.get('startDate');
     const endDateParam = searchParams.get('endDate');
     const guestsParam = searchParams.get('guests');
+    const reservationNightsParam = searchParams.get('reservationNights');
+    const reservationTotalParam = searchParams.get('reservationTotal');
+    const pricePerNightParam = searchParams.get('pricePerNight');
+    const priceCurrencyParam = searchParams.get('priceCurrency');
     const updates: Partial<typeof formData> = {};
     
     if (contactType) {
@@ -77,10 +116,16 @@ const Contact: React.FC = () => {
     if (propertyParam) {
       updates.propertyId = propertyParam;
     }
+    const propertyTitleParam = searchParams.get('propertyTitle');
+    if (propertyTitleParam) updates.propertyTitle = propertyTitleParam;
 
     if (startDateParam) updates.startDate = startDateParam;
     if (endDateParam) updates.endDate = endDateParam;
     if (guestsParam) updates.guests = guestsParam;
+    if (reservationNightsParam) updates.reservationNights = reservationNightsParam;
+    if (reservationTotalParam) updates.reservationTotal = reservationTotalParam;
+    if (pricePerNightParam) updates.pricePerNight = pricePerNightParam;
+    if (priceCurrencyParam) updates.priceCurrency = priceCurrencyParam;
     
     if (Object.keys(updates).length > 0) {
       setFormData(prev => ({ ...prev, ...updates }));
@@ -169,25 +214,16 @@ const Contact: React.FC = () => {
 
     // Phone validation (optional but if provided must be valid)
     if (name === 'phone' && value && value.trim() !== '') {
-      // Use Google's libphonenumber-js for real-world phone number validation
-      // This validates against actual country codes and phone number formats
-      // Examples: +212 6 23 09 42 46 (Morocco), +33 1 23 45 67 89 (France), +1 555 123 4567 (USA)
       try {
-        // Check if it's a valid phone number format
-        if (!isValidPhoneNumber(value)) {
-          return t('validation.phone');
-        }
-        
-        // Parse the phone number to get detailed info
-        const phoneNumber = parsePhoneNumber(value);
-        
-        // Ensure it has a valid country code
-        if (!phoneNumber || !phoneNumber.country) {
-          return t('validation.phone');
-        }
-        
-        // Additional check: phone number must be possible (valid length for the country)
-        if (!phoneNumber.isPossible()) {
+        const normalizedPhone = normalizePhoneForValidation(value);
+        const selectedCountry = (formData.phoneCountry || 'MA') as CountryCode;
+
+        // Validate both international (+) and national formats against selected country.
+        const isValid = normalizedPhone.startsWith('+')
+          ? isValidPhoneNumber(normalizedPhone)
+          : isValidPhoneNumber(normalizedPhone, selectedCountry);
+
+        if (!normalizedPhone || !isValid) {
           return t('validation.phone');
         }
       } catch (error) {
@@ -201,9 +237,9 @@ const Contact: React.FC = () => {
       if (!value || value === '') return t('validation.required');
     }
 
-    // Property ID validation (required)
+    // Property ID validation (optional, auto-filled from property context when available)
     if (name === 'propertyId') {
-      if (!value || value.trim() === '') return t('validation.required');
+      if (!value || value.trim() === '') return '';
       // Relaxed regex to allow alphanumeric references (e.g., 25311-1234 or REF123)
       if (!/^[a-zA-Z0-9\s-]+$/.test(value.trim())) return t('validation.alphanumeric');
       if (value.trim().length < 1) return t('validation.minLength', { min: 1 });
@@ -224,7 +260,7 @@ const Contact: React.FC = () => {
     const newErrors: Record<string, string> = {};
     
     // Required fields
-    const fields = ['firstName', 'lastName', 'email', 'subject', 'message', 'propertyId'];
+    const fields = ['firstName', 'lastName', 'email', 'subject', 'message'];
     fields.forEach(field => {
       const error = validateField(field, formData[field as keyof typeof formData]);
       if (error) newErrors[field] = error;
@@ -361,6 +397,26 @@ const Contact: React.FC = () => {
       'other': 'Autre demande'
     };
 
+    const formatMoney = (amountValue: string, currencyCode: string) => {
+      const numericAmount = Number(amountValue);
+      if (!Number.isFinite(numericAmount) || numericAmount <= 0) return amountValue;
+
+      try {
+        return new Intl.NumberFormat('fr-FR', {
+          style: 'currency',
+          currency: currencyCode || 'EUR',
+          maximumFractionDigits: 0,
+        }).format(numericAmount);
+      } catch {
+        return `${numericAmount.toLocaleString('fr-FR')} ${currencyCode || 'EUR'}`;
+      }
+    };
+
+    const reservationNights = Number(formData.reservationNights) || 0;
+    const reservationTotal = Number(formData.reservationTotal) || 0;
+    const pricePerNight = Number(formData.pricePerNight) || 0;
+    const currencyCode = formData.priceCurrency || 'EUR';
+
     const propertyTypeMap: Record<string, string> = {
       'apartment': 'Appartement',
       'villa': 'Villa',
@@ -414,6 +470,18 @@ ${
   formData.guests
     ? `\nNombre de personnes : ${formData.guests}`
     : ''
+}${
+  reservationNights > 0
+    ? `\nDurée du séjour : ${reservationNights} nuit${reservationNights > 1 ? 's' : ''}`
+    : ''
+}${
+  pricePerNight > 0
+    ? `\nPrix par nuit : ${formatMoney(String(pricePerNight), currencyCode)}`
+    : ''
+}${
+  reservationTotal > 0
+    ? `\nMontant total : ${formatMoney(String(reservationTotal), currencyCode)}`
+    : ''
 }\n`
     : ''
 }
@@ -434,7 +502,7 @@ ${
 }\n`
     : ''
 }
-${formData.propertyId ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\nRéférence : ${formData.propertyId}\n` : ''}
+${formData.propertyId || formData.propertyTitle ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\n${formData.propertyTitle ? `Titre : ${formData.propertyTitle}\n` : ''}${formData.propertyId ? `Référence : ${formData.propertyId}\n` : ''}${formData.propertyId ? `Lien : /properties/${formData.propertyId}\n` : ''}` : ''}
 
 MESSAGE DU CLIENT
 
@@ -630,6 +698,9 @@ Square Meter - Système de notification automatique
                     <p className="text-gray-600 text-sm">
                       {t('contact.reservation.summarySubtitle') || 'Ces informations seront jointes à votre message.'}
                     </p>
+                    {formData.propertyTitle && (
+                      <div className="mt-1 text-sm text-gray-800 font-medium">{formData.propertyTitle}</div>
+                    )}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:flex md:items-center gap-4 md:gap-8">
@@ -744,19 +815,34 @@ Square Meter - Système de notification automatique
                     <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 font-medium">
                       {t('contact.form.phone')}
                     </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
-                        touched.phone && errors.phone
-                          ? 'border-red-500 focus:border-red-600'
-                          : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
-                      }`}
-                      placeholder={t('contact.form.phonePlaceholder')}
-                    />
+                    <div className="grid grid-cols-12 gap-2">
+                      <select
+                        name="phoneCountry"
+                        value={formData.phoneCountry}
+                        onChange={handleChange}
+                        className="col-span-5 sm:col-span-4 px-2 sm:px-3 py-2.5 sm:py-3 border-2 border-gray-200 focus:outline-none focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 font-inter bg-white transition-all duration-300 hover:border-gray-300 text-xs sm:text-sm"
+                        aria-label="Phone country"
+                      >
+                        {phoneCountries.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.code} {country.dial}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`col-span-7 sm:col-span-8 w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base ${
+                          touched.phone && errors.phone
+                            ? 'border-red-500 focus:border-red-600'
+                            : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                        }`}
+                        placeholder={t('contact.form.phonePlaceholder')}
+                      />
+                    </div>
                     {touched.phone && errors.phone && (
                       <div className="mt-2 flex items-center space-x-2 text-red-600 text-sm animate-fade-in">
                         <XMarkIcon className="w-4 h-4 flex-shrink-0" />
@@ -821,18 +907,18 @@ Square Meter - Système de notification automatique
                 {/* Property Reference */}
                 <div>
                   <label className="block font-inter text-gray-900 text-xs sm:text-sm mb-2 font-medium">
-                    {t('contact.form.propertyReference')} *
+                    {t('contact.form.propertyReference')}
                   </label>
                   <input
                     type="text"
                     name="propertyId"
                     value={formData.propertyId}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none font-inter bg-white transition-all duration-300 text-sm sm:text-base font-mono ${
+                    readOnly
+                    aria-readonly="true"
+                    className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 focus:outline-none bg-white transition-all duration-300 text-sm sm:text-base font-mono ${
                       touched.propertyId && errors.propertyId
                         ? 'border-red-500 focus:border-red-600'
-                        : 'border-gray-200 focus:border-[#023927] focus:ring-2 focus:ring-[#023927]/20 hover:border-gray-300'
+                        : 'border-gray-200 text-gray-600 bg-gray-50 cursor-not-allowed'
                     }`}
                     placeholder={t('contact.form.propertyReferencePlaceholder')}
                   />

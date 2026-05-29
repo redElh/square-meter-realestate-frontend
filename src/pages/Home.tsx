@@ -133,6 +133,7 @@ const Home: React.FC = () => {
       try {
         const { properties: apiProperties } = await apimoService.getProperties({
           limit: 1000,
+              translateDescriptions: false,
         }, t, currentLanguage);
         
         // Coup de Coeur section: show all properties with agreement type 3

@@ -21,7 +21,7 @@ import SEO from '../components/SEO/SEO';
 import ImageGalleryModal from '../components/ImageGalleryModal';
 import ReservationCalendar from '../components/ReservationCalendar';
 import { DateRange } from 'react-day-picker';
-import { format } from 'date-fns';
+import { format, differenceInCalendarDays } from 'date-fns';
 
 const PropertyDetail: React.FC = () => {
   const { id } = useParams();
@@ -72,8 +72,9 @@ const PropertyDetail: React.FC = () => {
       
       setLoading(true);
       try {
-        // Fetch the specific property
-        const propertyData = await apimoService.getPropertyById(Number(id), t, currentLanguage);
+        // Fetch the property list once and reuse it for both the detail data and similar items.
+        const { properties: allProperties } = await apimoService.getProperties({ limit: 1000 }, t, currentLanguage);
+        const propertyData = allProperties.find(p => p.id === Number(id)) || null;
         setProperty(propertyData);
 
         // Track the view only once per property visit
@@ -92,9 +93,6 @@ const PropertyDetail: React.FC = () => {
           }
         }
 
-        // Fetch all properties to get similar ones
-        const { properties: allProperties } = await apimoService.getProperties({ limit: 1000 }, t, currentLanguage);
-        
         // Get similar properties (same type, different id, limit to 3)
         if (propertyData) {
           const similar = allProperties
@@ -148,6 +146,8 @@ const PropertyDetail: React.FC = () => {
     
     const startDate = format(range.from, 'yyyy-MM-dd');
     const endDate = format(range.to, 'yyyy-MM-dd');
+    const nights = Math.max(1, differenceInCalendarDays(range.to, range.from));
+    const totalPrice = nights * (property.price || 0);
     
     // Show success notification
     setReservationSaved(true);
@@ -157,7 +157,8 @@ const PropertyDetail: React.FC = () => {
 
     // Redirect after a short delay to let the user see the notification
     setTimeout(() => {
-      navigate(`/contact?type=reservation&property=${property.reference || property.id}&startDate=${startDate}&endDate=${endDate}&guests=${guests}`);
+      const titleParam = encodeURIComponent(property.title || '');
+      navigate(`/contact?type=reservation&property=${property.reference || property.id}&propertyTitle=${titleParam}&startDate=${startDate}&endDate=${endDate}&guests=${guests}&reservationNights=${nights}&pricePerNight=${property.price || 0}&reservationTotal=${totalPrice}&priceCurrency=${encodeURIComponent(property.currency || 'EUR')}`);
     }, 1500);
   };
 
@@ -343,7 +344,9 @@ const PropertyDetail: React.FC = () => {
                 </div>
                 <div className="hidden sm:block w-px h-6 bg-white/30"></div>
                 <div className="text-lg sm:text-2xl lg:text-3xl font-serif font-light text-white">
-                  {formatPrice(property.price || 0, property.currency as any || 'EUR')}
+                  {property.type === 'seasonal' || property.pricePeriod === 1
+                    ? t('properties.listing.fromPerDay', { price: formatPrice(property.price || 0) })
+                    : formatPrice(property.price || 0)}
                 </div>
               </div>
             </div>
@@ -386,6 +389,7 @@ const PropertyDetail: React.FC = () => {
                 <ReservationCalendar 
                   propertyId={property.id} 
                   propertyName={property.title}
+                  pricePerDay={property.price || 0}
                   onReserve={handleReserve}
                 />
               </div>
