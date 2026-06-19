@@ -20,6 +20,7 @@ import {
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import type { CountryCode } from 'libphonenumber-js';
 import propertyStatsService from '../../services/propertyStatsService';
+import apimoService, { Property } from '../../services/apimoService';
 
 const Contact: React.FC = () => {
   const { t } = useTranslation();
@@ -296,8 +297,23 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
     
     try {
+      // Fetch property details if a property reference is provided
+      let propertyImageUrl = '';
+      let propertyRef = '';
+      if (formData.propertyId) {
+        try {
+          const property = await apimoService.getPropertyById(Number(formData.propertyId));
+          if (property) {
+            propertyImageUrl = property.images?.[0] || '';
+            propertyRef = property.reference || '';
+          }
+        } catch (fetchErr) {
+          console.warn('⚠️ Could not fetch property details:', fetchErr);
+        }
+      }
+
       // Generate email content in French
-      const emailContent = generateFrenchEmailContent();
+      const emailContent = generateFrenchEmailContent(propertyImageUrl, propertyRef);
       
       console.log('📧 Sending inquiry with payload:', {
         subject: emailContent.subject,
@@ -381,7 +397,7 @@ const Contact: React.FC = () => {
     }
   };
 
-  const generateFrenchEmailContent = () => {
+  const generateFrenchEmailContent = (propertyImageUrl = '', propertyRef = '') => {
     // Generate email in French
     const subjectMap: Record<string, string> = {
       'visit': 'Demande de visite privée',
@@ -439,6 +455,13 @@ const Contact: React.FC = () => {
       'flexible': 'Flexible (6+ mois)'
     };
 
+    const getFullPhone = () => {
+      if (!formData.phone) return 'Non fourni';
+      const country = phoneCountries.find(c => c.code === formData.phoneCountry);
+      const dial = country?.dial || '';
+      return `${dial} ${formData.phone}`;
+    };
+
     const subject = `Nouveau message de contact - ${subjectMap[formData.subject] || formData.subject}`;
     
     const content = `
@@ -450,7 +473,7 @@ INFORMATIONS DU CONTACT
 
 Nom complet : ${formData.firstName} ${formData.lastName}
 Email : ${formData.email}
-Téléphone : ${formData.phone || 'Non fourni'}
+Téléphone : ${getFullPhone()}
 ${formData.company ? `Société : ${formData.company}\n` : ''}
 
 OBJET DE LA DEMANDE
@@ -502,7 +525,7 @@ ${
 }\n`
     : ''
 }
-${formData.propertyId || formData.propertyTitle ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\n${formData.propertyTitle ? `Titre : ${formData.propertyTitle}\n` : ''}${formData.propertyId ? `Référence : ${formData.propertyId}\n` : ''}${formData.propertyId ? `Lien : /properties/${formData.propertyId}\n` : ''}` : ''}
+${formData.propertyId || formData.propertyTitle ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\n${formData.propertyTitle ? `Titre : ${formData.propertyTitle}\n` : ''}${propertyRef ? `Référence : ${propertyRef}\n` : formData.propertyId ? `Référence : ${formData.propertyId}\n` : ''}${formData.propertyId ? `Lien : https://m2square.com/properties/${formData.propertyId}\n` : ''}${propertyImageUrl ? `<img src="${propertyImageUrl}" alt="${formData.propertyTitle || 'Photo du bien'}" style="max-width:100%;height:auto;border-radius:4px;margin-top:10px" />\n` : ''}` : ''}
 
 MESSAGE DU CLIENT
 
