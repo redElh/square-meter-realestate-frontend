@@ -16,7 +16,8 @@ interface PropertyCardProps {
   id: number;
   title: string;
   description: string;
-  price: number; // Always in MAD (base currency)
+  price: number;
+  currency?: string;
   location: string;
   surface: number;
   bedrooms: number;
@@ -35,6 +36,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   title,
   description,
   price,
+  currency,
   location,
   surface,
   bedrooms,
@@ -132,7 +134,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               {t('properties.details.price')}
             </p>
             <p className="text-2xl font-bold text-gray-900">
-              {format(price)}
+              {format(price, (currency as any) || 'EUR')}
             </p>
           </div>
 

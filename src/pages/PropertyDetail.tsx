@@ -345,8 +345,8 @@ const PropertyDetail: React.FC = () => {
                 <div className="hidden sm:block w-px h-6 bg-white/30"></div>
                 <div className="text-lg sm:text-2xl lg:text-3xl font-serif font-light text-white">
                   {property.type === 'seasonal' || property.pricePeriod === 1
-                    ? t('properties.listing.fromPerDay', { price: formatPrice(property.price || 0) })
-                    : formatPrice(property.price || 0)}
+                    ? t('properties.listing.fromPerDay', { price: formatPrice(property.price || 0, property.currency as any || 'EUR') })
+                    : formatPrice(property.price || 0, property.currency as any || 'EUR')}
                 </div>
               </div>
             </div>
@@ -502,6 +502,7 @@ const PropertyDetail: React.FC = () => {
                     title={similar.title}
                     description={similar.description || ''}
                     price={similar.price || 0}
+                    currency={similar.currency}
                     location={similar.location || ''}
                     surface={similar.surface || 0}
                     bedrooms={similar.bedrooms || 0}
