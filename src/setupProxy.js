@@ -1,17 +1,28 @@
-// Proxy configuration for Create React App
-// This file is automatically picked up by CRA's dev server
-
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const express = require('express');
 
 module.exports = function(app) {
+
+  // ─── Auth & Reviews Proxy ───────────────────────────────────────────────────
+  // Proxy /auth/* and /api/reviews API requests to backend (port 4000)
+  app.use(
+    createProxyMiddleware({
+      target: 'http://localhost:4000',
+      changeOrigin: true,
+      pathFilter: (pathname) =>
+        (pathname.startsWith('/auth') && pathname !== '/auth') ||
+        pathname.startsWith('/api/reviews'),
+    })
+  );
+
+  // ─── Credentials for Apimo ─────────────────────────────────────────────────
   const credentials = '4567:d07da6e744bb033d1299469f1f6f7334531ec05c';
   const base64Credentials = Buffer.from(credentials).toString('base64');
-  
+
   console.log('🚀 Setting up proxy middleware...');
   console.log('🔑 Authorization header will be:', `Basic ${base64Credentials}`);
-  
-  // ChromaDB Proxy - Must come BEFORE body parser to avoid conflicts
+
+  // ─── ChromaDB Proxy ────────────────────────────────────────────────────────
   app.use(
     '/chroma',
     createProxyMiddleware({
@@ -35,12 +46,8 @@ module.exports = function(app) {
       logLevel: 'debug',
     })
   );
-  
-  // CRITICAL: Add body parser middleware AFTER ChromaDB proxy
-  // This ensures req.body is populated for other routes
-  app.use(express.json({ limit: '50mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-  
+
+  // ─── Apimo Proxy ───────────────────────────────────────────────────────────
   app.use(
     '/api/apimo',
     createProxyMiddleware({
@@ -48,10 +55,10 @@ module.exports = function(app) {
       changeOrigin: true,
       secure: false,
       pathRewrite: {
-        '^/api/apimo': '', // Remove /api/apimo prefix when forwarding
+        '^/api/apimo': '',
       },
       headers: {
-        'Authorization': `Basic ${base64Credentials}`
+        'Authorization': `Basic ${base64Credentials}`,
       },
       onProxyReq: (proxyReq, req, res) => {
         console.log('🔐 Proxy: Request intercepted');
@@ -65,7 +72,7 @@ module.exports = function(app) {
     })
   );
 
-  // Google Reviews - Playwright scraping (NO API KEY, NO BILLING)
+  // ─── Google Reviews ────────────────────────────────────────────────────────
   app.get('/api/google-reviews', async (req, res) => {
     try {
       console.log('📊 Google Reviews endpoint called');
@@ -73,16 +80,17 @@ module.exports = function(app) {
       await handler(req, res);
     } catch (error) {
       console.error('❌ Error in Google Reviews handler:', error);
-      res.status(500).json({ 
-        success: false, 
+      res.status(500).json({
+        success: false,
         error: error.message,
         reviews: [],
         count: 0,
-        source: 'error'
+        source: 'error',
       });
     }
   });
 
+  // ─── Article Views ─────────────────────────────────────────────────────────
   app.all('/api/article-views', async (req, res) => {
     try {
       console.log(`📈 Article views endpoint called: ${req.method}`);
@@ -90,25 +98,17 @@ module.exports = function(app) {
       await handler(req, res);
     } catch (error) {
       console.error('❌ Error in article views handler:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message,
-      });
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 
-  // WordPress REST API – custom handler that solves InfinityFree's JS/AES anti-bot challenge.
-  // InfinityFree (rf.gd) returns an HTML page with dynamically-generated AES-CBC values.
-  // The browser is supposed to decrypt them, set a cookie, then redirect.
-  // We replicate this server-side so the React app always gets JSON.
+  // ─── WordPress / InfinityFree Proxy ────────────────────────────────────────
   const http = require('http');
   const crypto = require('crypto');
-
   const WP_HOST = 'squaremeter-blog.rf.gd';
 
   function solveInfinityFreeChallenge(html) {
-    // Extract a=key, b=iv, c=ciphertext from the inline <script>
-    const m = html.match(/a=toNumbers\("([a-f0-9]+)"\),b=toNumbers\("([a-f0-9]+)"\),c=toNumbers\("([a-f0-9]+)"\)/);
+    const m = html.match(/a=toNumbers\(\"([a-f0-9]+)\"\),b=toNumbers\(\"([a-f0-9]+)\"\),c=toNumbers\(\"([a-f0-9]+)\"\)/);
     if (!m) return null;
     try {
       const key = Buffer.from(m[1], 'hex');
@@ -141,11 +141,9 @@ module.exports = function(app) {
   }
 
   app.use('/wp-api', async (req, res) => {
-    // Rewrite /wp-api/X  →  /wp-json/wp/v2/X
     const wpPath = '/wp-json/wp/v2' + req.url;
     console.log('📰 WP proxy:', wpPath);
     try {
-      // First attempt – no cookie
       let r = await wpRequest(wpPath, null);
       const ct = r.headers['content-type'] || '';
       if (ct.includes('json')) {
@@ -153,14 +151,12 @@ module.exports = function(app) {
         res.set('Access-Control-Allow-Origin', '*');
         return res.send(r.body);
       }
-      // Got HTML challenge – solve it
       const cookieVal = solveInfinityFreeChallenge(r.body);
       if (!cookieVal) {
         console.error('❌ WP: could not solve InfinityFree challenge');
         return res.status(502).json({ error: 'Could not solve anti-bot challenge' });
       }
       console.log('🔑 WP: challenge solved, retrying with cookie …');
-      // Second attempt – with solved cookie (add ?i=1 as the host expects)
       const sep = wpPath.includes('?') ? '&' : '?';
       r = await wpRequest(wpPath + sep + 'i=1', cookieVal);
       const ct2 = r.headers['content-type'] || '';
@@ -169,7 +165,6 @@ module.exports = function(app) {
         res.set('Access-Control-Allow-Origin', '*');
         return res.send(r.body);
       }
-      // Edge case: still not JSON; one more fold
       const ck2 = solveInfinityFreeChallenge(r.body) || cookieVal;
       r = await wpRequest(wpPath + sep + 'i=2', ck2);
       const ct3 = r.headers['content-type'] || '';
@@ -186,26 +181,18 @@ module.exports = function(app) {
     }
   });
 
-  // Property inquiry email sending
-  // Apply JSON body parser specifically to this route
+  // ─── Property Inquiry Email ────────────────────────────────────────────────
   const jsonParser = express.json({ limit: '50mb' });
   app.post('/api/send-property-inquiry', jsonParser, async (req, res) => {
     try {
       console.log('📧 Email endpoint called');
-      console.log('📦 Request body:', req.body);
-      console.log('📦 Request headers:', req.headers);
-      console.log('📦 Content-Type:', req.get('Content-Type'));
-      
-      // Check if body was parsed
       if (!req.body || Object.keys(req.body).length === 0) {
-        console.error('❌ req.body is empty or undefined!');
-        console.error('❌ This might be because Content-Type header is not application/json');
-        return res.status(400).json({ 
-          success: false, 
-          error: 'Request body is empty. Make sure Content-Type is application/json' 
+        console.error('❌ req.body is empty');
+        return res.status(400).json({
+          success: false,
+          error: 'Request body is empty. Make sure Content-Type is application/json',
         });
       }
-      
       const handler = require('../api/send-property-inquiry.js');
       await handler(req, res);
     } catch (error) {
@@ -214,31 +201,26 @@ module.exports = function(app) {
     }
   });
 
-  // Property Statistics endpoint - with explicit body parser
+  // ─── Property Statistics ───────────────────────────────────────────────────
   const statsParser = express.json({ limit: '50mb' });
   app.all('/api/property-stats', statsParser, async (req, res) => {
     try {
       console.log(`📊 Property stats endpoint called: ${req.method}`, req.url);
-      console.log(`📊 Request body:`, req.body);
-      console.log(`📊 Request headers:`, req.headers);
-      
-      // Check if body was parsed for POST/PUT requests
-      if ((req.method === 'POST' || req.method === 'PUT') && (!req.body || Object.keys(req.body).length === 0)) {
-        console.error('❌ Property-stats: req.body is empty or undefined!');
-        return res.status(400).json({ 
-          success: false, 
-          error: 'Request body is empty. Make sure Content-Type is application/json' 
+      if (
+        (req.method === 'POST' || req.method === 'PUT') &&
+        (!req.body || Object.keys(req.body).length === 0)
+      ) {
+        console.error('❌ Property-stats: req.body is empty');
+        return res.status(400).json({
+          success: false,
+          error: 'Request body is empty. Make sure Content-Type is application/json',
         });
       }
-      
       const handler = require('../api/property-stats.js');
       await handler(req, res);
     } catch (error) {
       console.error('❌ Error in property-stats handler:', error);
-      res.status(500).json({
-        success: false,
-        error: error.message,
-      });
+      res.status(500).json({ success: false, error: error.message });
     }
   });
 };

@@ -21,6 +21,7 @@ import { useCurrency } from '../hooks/useCurrency';
 import { useReviews } from '../contexts/ReviewsContext';
 import SEO from '../components/SEO/SEO';
 import ImageGalleryModal from '../components/ImageGalleryModal';
+import ReviewForm from '../components/ReviewForm';
 
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -711,6 +712,9 @@ const Home: React.FC = () => {
               <ArrowTopRightOnSquareIcon className="w-5 h-5" />
             </a>
           </div>
+
+          {/* Review Form */}
+          <ReviewForm />
         </div>
       </section>
 
