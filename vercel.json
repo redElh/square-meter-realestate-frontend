@@ -33,6 +33,10 @@
     "api/property-stats.js": {
       "maxDuration": 10,
       "memory": 512
+    },
+    "api/reviews.js": {
+      "maxDuration": 10,
+      "memory": 512
     }
   },
   "env": {
