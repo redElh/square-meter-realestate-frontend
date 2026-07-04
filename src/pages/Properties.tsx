@@ -547,6 +547,9 @@ const Properties: React.FC = () => {
               <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
 
               <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
+              {property.reference && (
+                <span className="text-gray-400 text-xs sm:text-xs ml-2 sm:ml-3">• {t('contact.form.propertyReference')}: {property.reference}</span>
+              )}
             </div>
           </div>
 

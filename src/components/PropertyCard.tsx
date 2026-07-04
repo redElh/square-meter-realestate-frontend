@@ -26,6 +26,7 @@ interface PropertyCardProps {
   floors?: number;
   images: string[];
   type: 'buy' | 'rent';
+  reference?: string;
   isExclusive?: boolean;
   isFavorite?: boolean;
   onToggleFavorite?: (id: number) => void;
@@ -45,6 +46,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   floors,
   images,
   type,
+  reference,
   isExclusive = false,
   isFavorite = false,
   onToggleFavorite
@@ -105,6 +107,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           <MapPinIcon className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
           <span className="text-sm">{location}</span>
         </div>
+
+        {/* Reference */}
+        {reference && (
+          <p className={`text-xs text-gray-400 mb-1 ${isRTL ? 'text-right' : ''}`}>
+            {t('contact.form.propertyReference')}: {reference}
+          </p>
+        )}
 
         {/* Description */}
         <p className={`text-gray-600 text-sm mb-4 line-clamp-2 ${isRTL ? 'text-right' : ''}`}>

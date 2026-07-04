@@ -511,6 +511,7 @@ const PropertyDetail: React.FC = () => {
                     floors={similar.floors}
                     images={similar.images && similar.images.length > 0 ? similar.images : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800']}
                     type={(similar.type as 'buy' | 'rent') || 'buy'}
+                    reference={similar.reference}
                     isExclusive={Number(similar.agreementType) === 3}
                   />
                 </div>
