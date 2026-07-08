@@ -64,24 +64,66 @@ const Properties: React.FC = () => {
   // Exclusive properties hero images
   const heroProperties = [
     {
-      image: "/photo-1.jfif",
+      image: "/photo-13.jpeg",
       title: "Villa Azure",
       location: "Côte d'Azur, France",
       price: "4,200,000 €",
       type: "buy"
     },
     {
-      image: "/photo-2.jfif",
+      image: "/photo-14.jpeg",
       title: "Château de la Renaissance",
       location: "Loire Valley, France",
       price: "8,500,000 €",
       type: "buy"
     },
     {
-      image: "/photo-3.jfif",
+      image: "/photo-15.jpeg",
       title: "Penthouse Skyline",
       location: "Paris 16ème, France",
       price: "12,500 €/mois",
+      type: "rent"
+    },
+    {
+      image: "/photo-16.jpeg",
+      title: "Domaine de la Mer",
+      location: "Saint-Tropez, France",
+      price: "6,800,000 €",
+      type: "buy"
+    },
+    {
+      image: "/photo-17.jpeg",
+      title: "Loft Industriel",
+      location: "Marseille, France",
+      price: "3,200 €/mois",
+      type: "rent"
+    },
+    {
+      image: "/photo-18.jpeg",
+      title: "Manoir des Vignes",
+      location: "Bordeaux, France",
+      price: "5,400,000 €",
+      type: "buy"
+    },
+    {
+      image: "/photo-19.jpeg",
+      title: "Appartement Haussmannien",
+      location: "Lyon, France",
+      price: "4,100 €/mois",
+      type: "rent"
+    },
+    {
+      image: "/photo-20.jpeg",
+      title: "Villa Contemporaine",
+      location: "Nice, France",
+      price: "7,200,000 €",
+      type: "buy"
+    },
+    {
+      image: "/photo-21.jpeg",
+      title: "Studio Design",
+      location: "Paris 3ème, France",
+      price: "1,800 €/mois",
       type: "rent"
     }
   ];

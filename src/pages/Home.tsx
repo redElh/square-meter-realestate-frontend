@@ -48,6 +48,8 @@ const Home: React.FC = () => {
 
   // Homepage hero images
   const heroImages = [
+    '/photo-11.jpeg',
+    '/photo-12.jpeg',
     '/photo-7.jpeg',
     '/photo-8.jpeg',
     '/photo-9.jpeg',

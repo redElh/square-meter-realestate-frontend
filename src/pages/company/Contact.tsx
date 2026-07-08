@@ -525,7 +525,7 @@ ${
 }\n`
     : ''
 }
-${formData.propertyId || formData.propertyTitle ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\n${formData.propertyTitle ? `Titre : ${formData.propertyTitle}\n` : ''}${propertyRef ? `Référence : ${propertyRef}\n` : formData.propertyId ? `Référence : ${formData.propertyId}\n` : ''}${formData.propertyId ? `Lien : https://m2square.com/properties/${formData.propertyId}\n` : ''}${propertyImageUrl ? `<img src="${propertyImageUrl}" alt="${formData.propertyTitle || 'Photo du bien'}" style="max-width:100%;height:auto;border-radius:4px;margin-top:10px" />\n` : ''}` : ''}
+${formData.propertyId || formData.propertyTitle ? `\n🏠 RÉFÉRENCE DU BIEN CONCERNÉ\n\n${formData.propertyTitle ? `Titre : ${formData.propertyTitle}\n` : ''}${propertyRef ? `Référence : ${propertyRef}\n` : formData.propertyId ? `Référence : ${formData.propertyId}\n` : ''}${formData.propertyId ? `Lien : https://www.squaremeter.ma/properties/${formData.propertyId}\n` : ''}${propertyImageUrl ? `<img src="${propertyImageUrl}" alt="${formData.propertyTitle || 'Photo du bien'}" style="max-width:100%;height:auto;border-radius:4px;margin-top:10px" />\n` : ''}` : ''}
 
 MESSAGE DU CLIENT
 
