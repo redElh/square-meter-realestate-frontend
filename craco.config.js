@@ -31,6 +31,14 @@ module.exports = {
         })
       );
 
+      // Allow .js imports from ESM packages (canvg/jspdf) without full specifiers
+      webpackConfig.module.rules.push({
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      });
+
       return webpackConfig;
     },
   },

@@ -3,7 +3,7 @@
  * Sophisticated real-time performance metrics with enterprise-grade visualizations
  */
 
-import React, { useState, useEffect, useMemo, useCallback, useId } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef, useId } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
@@ -29,8 +29,11 @@ import {
   SignalIcon,
   ArrowRightIcon,
   BoltIcon,
-  ChartBarIcon
+  ChartBarIcon,
+  DocumentArrowDownIcon
 } from '@heroicons/react/24/outline';
+import { buildPropertyStatsPdfBlob, downloadPdfBlob } from '../utils/generatePropertyStatsPdf';
+import PdfPreviewModal from '../components/PdfPreviewModal';
 import { 
   Area, 
   XAxis, 
@@ -153,6 +156,12 @@ const PropertyStatistics: React.FC = () => {
   const [previousStats, setPreviousStats] = useState<PropertyStats | null>(null);
   const [timeframe, setTimeframe] = useState<Timeframe>('7d');
   const [trendData, setTrendData] = useState<TrendData[]>([]);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [pdfPreview, setPdfPreview] = useState<{ blobUrl: string; filename: string } | null>(null);
+
+  const trendChartRef = useRef<HTMLDivElement>(null);
+  const pieChartRef = useRef<HTMLDivElement>(null);
+  const performanceRef = useRef<HTMLDivElement>(null);
 
   // Map i18n language to locale string for date formatting
   const getLocaleString = (lang: string): string => {
@@ -513,6 +522,49 @@ const PropertyStatistics: React.FC = () => {
     };
   }, [selectedProperty]);
 
+  // PDF generation handler — builds blob for preview
+  const handleGeneratePdf = useCallback(async () => {
+    if (!selectedProperty || !performanceMetrics) return;
+    setIsGeneratingPdf(true);
+    try {
+      const result = await buildPropertyStatsPdfBlob({
+        property: {
+          title: selectedProperty.title,
+          location: selectedProperty.location,
+          price: selectedProperty.price || 0,
+          currency: (selectedProperty.currency as string) || 'EUR',
+          surface: selectedProperty.surface || 0,
+          bedrooms: selectedProperty.bedrooms || 0,
+          engagementScore: selectedProperty.engagementScore || 0,
+        },
+        metrics: {
+          views: performanceMetrics.views,
+          inquiries: performanceMetrics.inquiries,
+          favorites: performanceMetrics.favorites,
+          clicks: performanceMetrics.clicks,
+          totalInteractions: performanceMetrics.totalInteractions,
+          engagementRate: performanceMetrics.engagementRate,
+          inquiryRate: performanceMetrics.inquiryRate,
+        },
+        chartRefs: {
+          trendChartRef,
+          pieChartRef,
+          performanceRef,
+        },
+        engagementScore: selectedProperty.engagementScore || 0,
+      });
+      setPdfPreview(result);
+    } catch (err) {
+      console.error('[PDF] Generation failed:', err);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  }, [selectedProperty, performanceMetrics]);
+
+  const handleDownloadPdf = useCallback(() => {
+    if (pdfPreview) downloadPdfBlob(pdfPreview.blobUrl, pdfPreview.filename);
+  }, [pdfPreview]);
+
   // Pie chart data for interaction breakdown
   const pieData = useMemo(() => {
     if (!performanceMetrics) return [];
@@ -710,6 +762,16 @@ const PropertyStatistics: React.FC = () => {
                   <ArrowPathIcon className={`w-4 h-4 ${isAutoRefresh ? 'animate-spin-slow' : ''}`} />
                   {isAutoRefresh ? t('stats.header.liveUpdates') : t('stats.header.updatesPaused')}
                 </button>
+
+                {/* PDF Export Button */}
+                <button
+                  onClick={handleGeneratePdf}
+                  disabled={!selectedProperty || isGeneratingPdf}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl border transition-all bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-lg shadow-blue-500/25 font-medium text-sm hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-indigo-600"
+                >
+                  <DocumentArrowDownIcon className={`w-4 h-4 ${isGeneratingPdf ? 'animate-bounce' : ''}`} />
+                  {isGeneratingPdf ? 'Generation...' : 'Apercu PDF'}
+                </button>
               </div>
             </div>
 
@@ -871,7 +933,7 @@ const PropertyStatistics: React.FC = () => {
             {/* Main Analytics Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
               {/* Trend Chart - Large Area */}
-              <div className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
+              <div ref={trendChartRef} className="lg:col-span-2 bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                   <div>
                     <h3 className="text-lg sm:text-xl font-bold text-gray-900">{t('stats.trends.title')}</h3>
@@ -953,7 +1015,7 @@ const PropertyStatistics: React.FC = () => {
               </div>
 
               {/* Engagement Metrics Panel */}
-              <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
+              <div ref={pieChartRef} className="bg-white rounded-3xl shadow-xl border border-gray-100 p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-6">{t('stats.engagement.title', { defaultValue: currentStatsUiFallback.engagementTitle })}</h3>
                 
                 <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 items-start">
@@ -1082,7 +1144,7 @@ const PropertyStatistics: React.FC = () => {
               </div>
 
               {/* Performance Score Card */}
-              <div className="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 text-white relative overflow-hidden">
+              <div ref={performanceRef} className="bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 rounded-3xl shadow-xl p-6 sm:p-8 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-gold/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl" />
                 
@@ -1185,6 +1247,18 @@ const PropertyStatistics: React.FC = () => {
           animation: fadeSlideIn 0.4s ease-out;
         }
       `}</style>
+
+      {/* PDF Preview Modal */}
+      <PdfPreviewModal
+        isOpen={!!pdfPreview}
+        blobUrl={pdfPreview?.blobUrl ?? null}
+        filename={pdfPreview?.filename ?? ''}
+        onClose={() => {
+          if (pdfPreview?.blobUrl) URL.revokeObjectURL(pdfPreview.blobUrl);
+          setPdfPreview(null);
+        }}
+        onDownload={handleDownloadPdf}
+      />
     </>
   );
 };
