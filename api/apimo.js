@@ -6,6 +6,27 @@ const ALLOWED_ORIGINS = [
   'https://squaremeter.ma',
 ];
 
+async function fetchWithRetry(url, options, retries = 2, delay = 1000) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      if (response.ok || attempt === retries) return response;
+      if (response.status === 429 || response.status >= 500) {
+        console.warn(`⚠️ Apimo returned ${response.status}, retry ${attempt + 1}/${retries} in ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 2;
+        continue;
+      }
+      return response;
+    } catch (err) {
+      if (attempt === retries) throw err;
+      console.warn(`⚠️ Apimo fetch error, retry ${attempt + 1}/${retries}: ${err.message}`);
+      await new Promise(r => setTimeout(r, delay));
+      delay *= 2;
+    }
+  }
+}
+
 export default async function handler(req, res) {
   // Restrict CORS to known origins
   const origin = req.headers.origin || '';
@@ -34,26 +55,21 @@ export default async function handler(req, res) {
   const token = process.env.APIMO_TOKEN;
   if (!providerId || !token) {
     console.error('❌ Missing APIMO credentials in environment variables');
-    return res.status(500).json({ error: 'API configuration error' });
+    return res.status(200).json({ properties: [], total_items: 0, error: 'API configuration error' });
   }
   const credentials = `${providerId}:${token}`;
   const base64Credentials = Buffer.from(credentials).toString('base64');
 
   // Extract the path after /api/apimo
-  // req.url will be like: /api/apimo/agencies/25311/properties?limit=1000
   const urlParts = req.url.split('?');
   const path = urlParts[0].replace('/api/apimo', '');
   const queryString = urlParts[1] || '';
   const apiUrl = `https://api.apimo.pro${path}${queryString ? '?' + queryString : ''}`;
 
-  console.log('🔗 Incoming URL:', req.url);
-  console.log('🔗 Extracted path:', path);
-  console.log('🔗 Query string:', queryString);
   console.log('🔗 Final API URL:', apiUrl);
-  console.log('🔐 Using credentials - providerId:', providerId);
 
   try {
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithRetry(apiUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Basic ${base64Credentials}`,
@@ -62,34 +78,30 @@ export default async function handler(req, res) {
       },
     });
 
-    const data = await response.json();
+    let data;
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error('❌ Apimo returned non-JSON:', response.status, text.substring(0, 200));
+      return res.status(200).json({ properties: [], total_items: 0, error: 'Apimo API returned unexpected response' });
+    }
 
     if (!response.ok) {
       console.error('❌ Apimo API Error:', response.status, data);
-      
-      // For authentication errors, return a friendly error but with 200 status
-      // to avoid breaking the frontend page load
-      if (response.status === 401 || response.status === 403) {
-        console.warn('⚠️ Authentication issue with Apimo API - returning empty data');
-        return res.status(200).json({ 
-          data: [],
-          error: 'Authentication error - returning cached/empty data',
-          status: response.status 
-        });
-      }
-      
-      return res.status(response.status).json(data);
+      return res.status(200).json({ properties: [], total_items: 0, error: `Apimo API error: ${response.status}` });
     }
 
     console.log('✅ Apimo API Success');
     return res.status(200).json(data);
   } catch (error) {
     console.error('❌ Proxy Error:', error);
-    // Return 200 with empty data on error instead of failing the page
-    return res.status(200).json({ 
-      data: [], 
+    return res.status(200).json({
+      properties: [],
+      total_items: 0,
       error: 'Temporary connection error - please try again',
-      message: error.message 
+      message: error.message
     });
   }
 }

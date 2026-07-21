@@ -657,9 +657,9 @@ const Properties: React.FC = () => {
         url={`${location.pathname}${location.search}`}
       />
       {/* Hero Section with Search Only - Updated with margin */}
-      <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white">
+      <section className="relative h-[70vh] sm:h-screen overflow-visible bg-white">
         {/* Background Carousel */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 overflow-hidden">
           {heroProperties.map((slide, index) => (
             <div
               key={index}

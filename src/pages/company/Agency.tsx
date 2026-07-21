@@ -97,33 +97,46 @@ const Agency: React.FC = () => {
   return (
     <div className="min-h-screen bg-white font-inter text-base">
       {/* Hero Section */}
-      <section className="relative py-24 sm:py-32 overflow-hidden bg-white">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-inter font-light text-gray-900 mb-4 sm:mb-6">
-              {t('agency.hero.title')}
-            </h1>
-            <div className="h-px bg-gray-200 w-16 sm:w-24 mx-auto mb-6 sm:mb-8"></div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-              <Link 
-                to="/careers" 
-                className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
-              >
-                <span className="flex items-center justify-center space-x-2">
-                  <span>{t('agency.hero.meetTeamButton')}</span>
-                  <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
-                </span>
-              </Link>
-              <Link 
-                to="/properties" 
-                className="border-2 border-[#023927] text-[#023927] px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-[#023927] hover:text-white transition-all duration-500 text-center"
-              >
-                <span>{t('agency.hero.discoverPropertiesButton')}</span>
-              </Link>
+      <div className="h-[70vh] sm:h-screen flex flex-col">
+        <section className="relative flex-1 overflow-hidden bg-white">
+          <div className="absolute inset-0">
+            <div
+              className="hidden sm:block absolute inset-0 bg-center bg-cover filter blur-xl scale-105 brightness-75 z-0"
+              style={{ backgroundImage: `url(/team-members.jpeg)` }}
+            />
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <img
+                src="/team-members.jpeg"
+                alt="Team Members"
+                className="w-full h-full object-cover sm:object-contain object-center"
+              />
             </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-20"></div>
           </div>
-        </div>
-      </section>
+
+          <div className="absolute bottom-16 sm:bottom-20 md:bottom-24 left-0 right-0 z-30 p-4 sm:p-8 lg:p-12">
+            <div className="container mx-auto px-2 sm:px-4">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                  <Link
+                    to="/careers"
+                    className="bg-white text-[#023927] px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-[#023927] hover:text-white transition-all duration-500 text-center"
+                  >
+                    <span className="flex items-center justify-center space-x-2">
+                      <span>{t('agency.hero.meetTeamButton')}</span>
+                      <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4" />
+                    </span>
+                  </Link>
+                  <Link
+                    to="/properties"
+                    className="border-2 border-white text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] transition-all duration-500 text-center"
+                  >
+                    <span>{t('agency.hero.discoverPropertiesButton')}</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+        </section>
+      </div>
 
       {/* Team Section - Placed immediately after hero */}
       <section className="py-8 sm:py-12 lg:py-20 bg-white">
