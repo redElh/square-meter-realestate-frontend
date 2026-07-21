@@ -1040,6 +1040,10 @@
       "accountTypeLabel": "Тип учетной записи *",
       "buyer": "Покупатель",
       "owner": "Владелец",
+      "seller": "Продавец",
+      "lessor": "Арендодатель",
+      "tenant": "Арендатор",
+      "traveler": "Путешественник",
       "passwordLabel": "Пароль *",
       "passwordPlaceholder": "••••••••",
       "confirmPasswordLabel": "Подтвердите пароль *",
@@ -1090,6 +1094,43 @@
       "medium": "Средний",
       "strong": "Сильный",
       "veryStrong": "Очень сильный"
+    },
+    "forgotPassword": {
+      "title": "Забыли пароль",
+      "subtitle": "Введите адрес электронной почты, и мы отправим вам ссылку для сброса пароля.",
+      "emailLabel": "Адрес электронной почты",
+      "emailPlaceholder": "your@email.com",
+      "submitButton": "Отправить ссылку",
+      "sendingButton": "Отправка...",
+      "successMessage": "Ссылка для сброса пароля отправлена на вашу электронную почту.",
+      "errorMessage": "Не удалось отправить ссылку. Пожалуйста, попробуйте снова.",
+      "backToLogin": "Вернуться к входу",
+      "securityTitle": "Безопасный сброс пароля",
+      "securityDescription": "Ссылка для сброса пароля истечет через 15 минут. Если вы не запрашивали сброс пароля, проигнорируйте это письмо."
+    },
+    "resetPassword": {
+      "title": "Сброс пароля",
+      "subtitle": "Введите новый пароль ниже.",
+      "newPasswordLabel": "Новый пароль",
+      "newPasswordPlaceholder": "Мин. 8 символов",
+      "confirmPasswordLabel": "Подтвердите новый пароль",
+      "confirmPasswordPlaceholder": "Повторите пароль",
+      "submitButton": "Сбросить пароль",
+      "resettingButton": "Сброс...",
+      "successMessage": "Пароль успешно сброшен! Теперь вы можете войти с новым паролем.",
+      "errorMessage": "Не удалось сбросить пароль. Пожалуйста, попробуйте снова.",
+      "invalidTokenTitle": "Недействительная ссылка",
+      "invalidTokenMessage": "Эта ссылка для сброса пароля недействительна или истекла.",
+      "invalidTokenButton": "Запросить новую ссылку",
+      "securityTitle": "Требования к паролю",
+      "securityDescription1": "Минимум 8 символов",
+      "securityDescription2": "Используйте комбинацию букв, цифр и символов",
+      "securityDescription3": "Избегайте распространенных слов или шаблонов"
+    },
+    "messages": {
+      "loginSuccess": "Вход выполнен успешно!",
+      "signupSuccess": "Аккаунт успешно создан!",
+      "resetSuccess": "Пароль успешно сброшен! Теперь вы можете войти с новым паролем."
     }
   },
   "validation": {

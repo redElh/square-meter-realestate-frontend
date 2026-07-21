@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LocalizationProvider } from './contexts/LocalizationContext';
 import { ReviewsProvider } from './contexts/ReviewsContext';
+import { ToastProvider } from './contexts/ToastContext';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 import Home from './pages/Home';
@@ -19,8 +20,13 @@ import Contact from './pages/company/Contact';
 import SellingMultiStep from './pages/clients/SellingMultiStep';
 import ConfidentialSelection from './pages/ConfidentialSelection';
 import Auth from './pages/auth/Auth';
+import OAuthSuccess from './pages/auth/OAuthSuccess';
+import OAuthError from './pages/auth/OAuthError';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 import Dashboard from './pages/auth/Dashboard';
 import ClientsProtectedRoute from './components/ProtectedRoute/ClientsProtectedRoute';
+import AuthProtectedRoute from './components/ProtectedRoute/AuthProtectedRoute';
 import Services from './pages/auth/Services';
 import NotFound from './pages/support/NotFound';
 import Markets from './pages/auth/Markets';
@@ -53,6 +59,7 @@ function App() {
             </div>
           }>        <Router>
             <ReviewsProvider>
+              <ToastProvider>
               <ScrollToTop />
               <div className="min-h-screen bg-ivory">
               <Header />
@@ -75,21 +82,25 @@ function App() {
                 <TravelerSpace />
               </ClientsProtectedRoute>
             )} />
+            <Route path="/voyageur" element={<TravelerSpace />} />
             <Route path="/agency" element={<Agency />} />
             <Route path="/mag" element={<Mag />} />
             <Route path="/mag/:id" element={<MagArticle />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/selling-multistep" element={<SellingMultiStep />} />
             <Route path="/confidential" element={<ConfidentialSelection />} />
-            <Route path="/auth" element={(
-              <ClientsProtectedRoute>
-                <Auth />
-              </ClientsProtectedRoute>
-            )} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/success" element={<OAuthSuccess />} />
+            <Route path="/auth/error" element={<OAuthError />} />
             <Route path="/dashboard" element={(
-              <ClientsProtectedRoute>
+              <AuthProtectedRoute>
                 <Dashboard />
-              </ClientsProtectedRoute>
+              </AuthProtectedRoute>
+            )} />
+            <Route path="/dashboard/:role/:id" element={(
+              <AuthProtectedRoute>
+                <Dashboard />
+              </AuthProtectedRoute>
             )} />
             <Route path="/services" element={<Services />} />
             <Route path="/markets" element={<Markets />} />
@@ -99,6 +110,8 @@ function App() {
             <Route path="/concierge" element={<Concierge />} />
             <Route path="/success" element={<Success />} />
             <Route path="/careers" element={<Careers />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/settings" element={<LanguageCurrency />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -106,6 +119,7 @@ function App() {
             <Footer />
             <RAGAssistant />
           </div>
+          </ToastProvider>
           </ReviewsProvider>
         </Router>
       </Suspense>

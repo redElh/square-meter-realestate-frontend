@@ -1062,6 +1062,10 @@
       "accountTypeLabel": "Kontotyp *",
       "buyer": "Käufer",
       "owner": "Eigentümer",
+      "seller": "Verkäufer",
+      "lessor": "Vermieter",
+      "tenant": "Mieter",
+      "traveler": "Reisender",
       "passwordLabel": "Passwort *",
       "passwordPlaceholder": "••••••••",
       "confirmPasswordLabel": "Passwort bestätigen *",
@@ -1112,6 +1116,43 @@
       "medium": "Mittel",
       "strong": "Stark",
       "veryStrong": "Sehr stark"
+    },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "subtitle": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "ihre@email.com",
+      "submitButton": "Link senden",
+      "sendingButton": "Senden...",
+      "successMessage": "Link zum Zurücksetzen des Passworts an Ihre E-Mail gesendet.",
+      "errorMessage": "Fehler beim Senden des Links. Bitte versuchen Sie es erneut.",
+      "backToLogin": "Zurück zur Anmeldung",
+      "securityTitle": "Sicheres Zurücksetzen",
+      "securityDescription": "Ihr Link läuft aus Sicherheitsgründen in 15 Minuten ab. Wenn Sie keine Zurücksetzung angefordert haben, ignorieren Sie diese E-Mail."
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Geben Sie unten Ihr neues Passwort ein.",
+      "newPasswordLabel": "Neues Passwort",
+      "newPasswordPlaceholder": "Mind. 8 Zeichen",
+      "confirmPasswordLabel": "Neues Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Wiederholen Sie Ihr Passwort",
+      "submitButton": "Passwort zurücksetzen",
+      "resettingButton": "Wird zurückgesetzt...",
+      "successMessage": "Passwort erfolgreich zurückgesetzt! Sie können sich jetzt mit Ihrem neuen Passwort anmelden.",
+      "errorMessage": "Passwort konnte nicht zurückgesetzt werden. Bitte versuchen Sie es erneut.",
+      "invalidTokenTitle": "Ungültiger Link",
+      "invalidTokenMessage": "Dieser Link ist ungültig oder abgelaufen.",
+      "invalidTokenButton": "Neuen Link anfordern",
+      "securityTitle": "Passwortanforderungen",
+      "securityDescription1": "Mindestens 8 Zeichen",
+      "securityDescription2": "Verwenden Sie eine Mischung aus Buchstaben, Zahlen und Symbolen",
+      "securityDescription3": "Vermeiden Sie gebräuchliche Wörter oder Muster"
+    },
+    "messages": {
+      "loginSuccess": "Anmeldung erfolgreich!",
+      "signupSuccess": "Konto erfolgreich erstellt!",
+      "resetSuccess": "Passwort erfolgreich zurückgesetzt! Sie können sich jetzt mit Ihrem neuen Passwort anmelden."
     }
   },
   "validation": {

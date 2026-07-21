@@ -1040,6 +1040,10 @@
       "accountTypeLabel": "نوع الحساب *",
       "buyer": "مشتري",
       "owner": "مالك",
+      "seller": "بائع",
+      "lessor": "مؤجر",
+      "tenant": "مستأجر",
+      "traveler": "مسافر",
       "passwordLabel": "كلمة المرور *",
       "passwordPlaceholder": "••••••••",
       "confirmPasswordLabel": "تأكيد كلمة المرور *",
@@ -1090,6 +1094,43 @@
       "medium": "متوسطة",
       "strong": "قوية",
       "veryStrong": "قوية جدًا"
+    },
+    "forgotPassword": {
+      "title": "نسيت كلمة المرور",
+      "subtitle": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور الخاصة بك.",
+      "emailLabel": "عنوان البريد الإلكتروني",
+      "emailPlaceholder": "your@email.com",
+      "submitButton": "إرسال رابط إعادة التعيين",
+      "sendingButton": "جارٍ الإرسال...",
+      "successMessage": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+      "errorMessage": "فشل إرسال رابط إعادة التعيين. يرجى المحاولة مرة أخرى.",
+      "backToLogin": "العودة إلى تسجيل الدخول",
+      "securityTitle": "إعادة تعيين آمنة",
+      "securityDescription": "سينتهي صلاحية رابط إعادة تعيين كلمة المرور خلال 15 دقيقة. إذا لم تطلب إعادة تعيين كلمة المرور، يرجى تجاهل هذا البريد الإلكتروني."
+    },
+    "resetPassword": {
+      "title": "إعادة تعيين كلمة المرور",
+      "subtitle": "أدخل كلمة المرور الجديدة أدناه.",
+      "newPasswordLabel": "كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "8 أحرف على الأقل",
+      "confirmPasswordLabel": "تأكيد كلمة المرور الجديدة",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+      "submitButton": "إعادة تعيين كلمة المرور",
+      "resettingButton": "جارٍ إعادة التعيين...",
+      "successMessage": "تم إعادة تعيين كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.",
+      "errorMessage": "تعذر إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
+      "invalidTokenTitle": "رابط إعادة تعيين غير صالح",
+      "invalidTokenMessage": "رابط إعادة تعيين كلمة المرور هذا غير صالح أو منتهي الصلاحية.",
+      "invalidTokenButton": "طلب رابط جديد",
+      "securityTitle": "متطلبات كلمة المرور",
+      "securityDescription1": "8 أحرف على الأقل",
+      "securityDescription2": "استخدم مزيجًا من الحروف والأرقام والرموز",
+      "securityDescription3": "تجنب الكلمات الشائعة أو الأنماط"
+    },
+    "messages": {
+      "loginSuccess": "تم تسجيل الدخول بنجاح!",
+      "signupSuccess": "تم إنشاء الحساب بنجاح!",
+      "resetSuccess": "تم إعادة تعيين كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة."
     }
   },
   "validation": {

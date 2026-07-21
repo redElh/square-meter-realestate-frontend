@@ -36,12 +36,23 @@ else
 fi
 
 echo ""
-echo "3️⃣  React app should be running..."
+echo "3️⃣  Starting Auth Backend..."
+if ps aux | grep "src/backend/index.js" | grep -v grep > /dev/null; then
+    echo "   ✅ Auth Backend already running"
+else
+    npm run backend > backend.log 2>&1 &
+    echo "   ✅ Auth Backend started in background"
+fi
+
+echo ""
+echo "4️⃣  React app should be running..."
 echo "   📱 Open: http://localhost:3000"
 echo ""
 echo "✨ Setup complete!"
 echo ""
 echo "📊 Monitoring:"
+echo "   - Backend logs: tail -f backend.log"
 echo "   - ChromaDB logs: tail -f chromadb.log"
 echo "   - ChromaDB status: ps aux | grep chroma"
+echo "   - Backend status: ps aux | grep backend"
 echo ""

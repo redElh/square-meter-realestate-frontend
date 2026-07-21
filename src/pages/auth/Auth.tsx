@@ -1,12 +1,46 @@
 // src/pages/Auth.tsx
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { EyeIcon, EyeSlashIcon, EnvelopeIcon, LockClosedIcon, UserIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, EnvelopeIcon, LockClosedIcon, UserIcon, ShieldCheckIcon, HomeIcon, KeyIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { useToast } from '../../contexts/ToastContext';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import zxcvbn from 'zxcvbn';
+
+type AuthMode = 'login' | 'signup';
+
+type AuthUser = {
+  id: string;
+  email: string;
+  role: string;
+};
+
+type AuthSuccessHandler = (mode: AuthMode, user: AuthUser) => void;
+
+const authServerBaseUrl = '';
+
+const authRedirectTarget = '/dashboard';
+
+const authRequest = async <T,>(path: string, body: unknown): Promise<T> => {
+  const response = await fetch(`/auth${path}`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload?.error || 'Authentication request failed');
+  }
+
+  return payload as T;
+};
 
 // --- Schemas ---
 // Define schemas as functions that accept t for translations
@@ -20,7 +54,7 @@ const createSignupSchema = (t: any) => z
     firstName: z.string().min(1, t('auth.validation.firstNameRequired')),
     lastName: z.string().min(1, t('auth.validation.lastNameRequired')),
     email: z.string().email(t('auth.validation.invalidEmail')),
-    userType: z.string().refine((val) => val === 'buyer' || val === 'owner', {
+    userType: z.string().refine((val) => ['buyer', 'seller', 'lessor', 'tenant', 'traveler'].includes(val), {
       message: t('auth.validation.selectAccountType'),
     }),
     password: z.string().min(8, t('auth.validation.passwordMinLength')),
@@ -34,7 +68,28 @@ type SignupValues = z.infer<ReturnType<typeof createSignupSchema>>;
 
 const Auth: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { showToast } = useToast();
   const [isLogin, setIsLogin] = useState(true);
+  const [oauthLoading, setOauthLoading] = useState<'google' | 'facebook' | null>(null);
+
+  const handleAuthSuccess: AuthSuccessHandler = (mode, user) => {
+    const msg = mode === 'login' ? t('auth.messages.loginSuccess') : t('auth.messages.signupSuccess');
+    showToast('success', msg);
+    setTimeout(() => {
+      if (user.role === 'traveler') {
+        navigate('/voyageur', { replace: true });
+      } else {
+        navigate(`/dashboard/${user.role}/${user.id}`, { replace: true });
+      }
+    }, 500);
+  };
+
+  const handleOAuth = (provider: 'google' | 'facebook') => {
+    setOauthLoading(provider);
+    // Direct link to backend OAuth endpoint
+    window.location.href = `http://localhost:4000/auth/${provider}`;
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -83,7 +138,15 @@ const Auth: React.FC = () => {
 
             {/* Forms */}
             <div className="mb-8">
-              {isLogin ? <LoginForm /> : <SignupForm />}
+              {isLogin ? (
+                <LoginForm
+                  onAuthenticated={(user) => handleAuthSuccess('login', user)}
+                />
+              ) : (
+                <SignupForm
+                  onAuthenticated={(user) => handleAuthSuccess('signup', user)}
+                />
+              )}
             </div>
 
             {/* Divider */}
@@ -98,20 +161,34 @@ const Auth: React.FC = () => {
 
             {/* Social Login */}
             <div className="grid grid-cols-2 gap-4">
-              <button className="flex items-center justify-center gap-3 border-2 border-gray-200 py-3 hover:border-[#023927] hover:bg-gray-50 transition-all duration-300 bg-white group">
+              <button
+                type="button"
+                onClick={() => handleOAuth('facebook')}
+                disabled={oauthLoading !== null}
+                className="flex items-center justify-center gap-3 border-2 border-gray-200 py-3 bg-white hover:bg-gray-50 hover:border-[#3b5998] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M22 12.07C22 6.48 17.52 2 11.93 2 6.34 2 1.86 6.48 1.86 12.07 1.86 16.5 5.06 20.24 9.26 21v-7.25H7.08v-2.68h2.18V9.69c0-2.16 1.29-3.35 3.25-3.35.94 0 1.94.17 1.94.17v2.13h-1.09c-1.08 0-1.42.67-1.42 1.36v1.62h2.42l-.39 2.68h-2.03V21c4.2-.76 7.4-4.5 7.4-8.93z" fill="#3b5998"/>
                 </svg>
-                <span className="font-inter font-medium text-gray-700 group-hover:text-[#023927] transition-colors duration-300">{t('auth.social.facebook')}</span>
+                <span className="font-inter font-medium text-gray-700 group-hover:text-[#3b5998] transition-colors">
+                  {oauthLoading === 'facebook' ? t('auth.social.loading') || 'Loading...' : t('auth.social.facebook')}
+                </span>
               </button>
-              <button className="flex items-center justify-center gap-3 border-2 border-gray-200 py-3 hover:border-[#023927] hover:bg-gray-50 transition-all duration-300 bg-white group">
+              <button
+                type="button"
+                onClick={() => handleOAuth('google')}
+                disabled={oauthLoading !== null}
+                className="flex items-center justify-center gap-3 border-2 border-gray-200 py-3 bg-white hover:bg-gray-50 hover:border-[#4285F4] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              >
                 <svg className="w-5 h-5" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                   <path fill="#EA4335" d="M24 9.5c3.8 0 6.5 1.6 8.5 3l6.2-6.2C35.5 3 30.1 1 24 1 14 1 5.4 6.6 1.9 14.8l7.6 5.9C11.2 14.1 17 9.5 24 9.5z"/>
                   <path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.2-.4-4.7H24v9h12.9c-.6 3.2-2.5 5.9-5.3 7.7l8 6.2C43.9 39.3 46.1 32.4 46.1 24.5z"/>
                   <path fill="#4A90E2" d="M8.1 28.8c-.5-1.4-.8-2.9-.8-4.4 0-1.5.3-3 .8-4.4L.7 14.1C-.4 16.8-.4 20.2.7 23c1.1 2.9 3.3 5.5 7.4 7.8l0-.0z"/>
                   <path fill="#FBBC05" d="M24 46.9c6.1 0 11.5-2 15.9-5.5l-8-6.2c-2.2 1.5-5 2.3-7.9 2.3-7 0-12.7-4.6-14.8-11.1L1.9 33.2C5.4 41.4 14 46.9 24 46.9z"/>
                 </svg>
-                <span className="font-inter font-medium text-gray-700 group-hover:text-[#023927] transition-colors duration-300">{t('auth.social.google')}</span>
+                <span className="font-inter font-medium text-gray-700 group-hover:text-[#4285F4] transition-colors">
+                  {oauthLoading === 'google' ? t('auth.social.loading') || 'Loading...' : t('auth.social.google')}
+                </span>
               </button>
             </div>
           </div>
@@ -132,16 +209,25 @@ const Auth: React.FC = () => {
   );
 };
 
-function LoginForm() {
+function LoginForm({ onAuthenticated }: { onAuthenticated: (user: AuthUser) => void }) {
   const { t } = useTranslation();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({
     resolver: zodResolver(createLoginSchema(t)),
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const onSubmit = async (data: LoginValues) => {
-    // TODO: call API
-    console.log('Login attempt:', data);
+    try {
+      setSubmitError(null);
+      const payload = await authRequest<{ user: AuthUser }>('/login', {
+        email: data.email,
+        password: data.password,
+      });
+      onAuthenticated(payload.user);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Unable to log in');
+    }
   };
 
   return (
@@ -204,17 +290,20 @@ function LoginForm() {
           <span>{t('auth.login.submitButton')}</span>
         </span>
       </button>
+
+      {submitError && <p className="font-inter text-red-600 text-sm text-center">{submitError}</p>}
     </form>
   );
 }
 
-function SignupForm() {
+function SignupForm({ onAuthenticated }: { onAuthenticated: (user: AuthUser) => void }) {
   const { t } = useTranslation();
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<SignupValues>({
     resolver: zodResolver(createSignupSchema(t)),
     defaultValues: { acceptTerms: false },
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const password = watch('password') || '';
 
   const result = useMemo(() => zxcvbn(password || ''), [password]);
@@ -232,8 +321,19 @@ function SignupForm() {
   };
 
   const onSubmit = async (data: SignupValues) => {
-    // TODO: call signup API
-    console.log('Signup attempt:', data);
+    try {
+      setSubmitError(null);
+      const payload = await authRequest<{ user: AuthUser }>('/register', {
+        email: data.email,
+        password: data.password,
+        role: data.userType,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      });
+      onAuthenticated(payload.user);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Unable to create account');
+    }
   };
 
   const getStrengthColor = (score: number) => {
@@ -311,7 +411,7 @@ function SignupForm() {
         <label className="block font-inter text-gray-900 text-sm mb-3 font-medium">
           {t('auth.signup.accountTypeLabel')}
         </label>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <label className="relative cursor-pointer">
             <input 
               {...register('userType')} 
@@ -328,12 +428,48 @@ function SignupForm() {
             <input 
               {...register('userType')} 
               type="radio" 
-              value="owner"
+              value="seller"
               className="peer sr-only"
             />
             <div className="border-2 border-gray-200 p-4 text-center transition-all duration-300 hover:border-gray-300 peer-checked:border-[#023927] peer-checked:bg-[#023927]/5">
               <ShieldCheckIcon className="w-6 h-6 mx-auto mb-2 text-gray-400 peer-checked:text-[#023927]" />
-              <span className="font-inter text-gray-700 font-medium">{t('auth.signup.owner')}</span>
+              <span className="font-inter text-gray-700 font-medium">{t('auth.signup.seller')}</span>
+            </div>
+          </label>
+          <label className="relative cursor-pointer">
+            <input 
+              {...register('userType')} 
+              type="radio" 
+              value="lessor"
+              className="peer sr-only"
+            />
+            <div className="border-2 border-gray-200 p-4 text-center transition-all duration-300 hover:border-gray-300 peer-checked:border-[#023927] peer-checked:bg-[#023927]/5">
+              <HomeIcon className="w-6 h-6 mx-auto mb-2 text-gray-400 peer-checked:text-[#023927]" />
+              <span className="font-inter text-gray-700 font-medium">{t('auth.signup.lessor')}</span>
+            </div>
+          </label>
+          <label className="relative cursor-pointer">
+            <input 
+              {...register('userType')} 
+              type="radio" 
+              value="tenant"
+              className="peer sr-only"
+            />
+            <div className="border-2 border-gray-200 p-4 text-center transition-all duration-300 hover:border-gray-300 peer-checked:border-[#023927] peer-checked:bg-[#023927]/5">
+              <KeyIcon className="w-6 h-6 mx-auto mb-2 text-gray-400 peer-checked:text-[#023927]" />
+              <span className="font-inter text-gray-700 font-medium">{t('auth.signup.tenant')}</span>
+            </div>
+          </label>
+          <label className="relative cursor-pointer">
+            <input 
+              {...register('userType')} 
+              type="radio" 
+              value="traveler"
+              className="peer sr-only"
+            />
+            <div className="border-2 border-gray-200 p-4 text-center transition-all duration-300 hover:border-gray-300 peer-checked:border-[#023927] peer-checked:bg-[#023927]/5">
+              <GlobeAltIcon className="w-6 h-6 mx-auto mb-2 text-gray-400 peer-checked:text-[#023927]" />
+              <span className="font-inter text-gray-700 font-medium">{t('auth.signup.traveler')}</span>
             </div>
           </label>
         </div>
@@ -418,6 +554,8 @@ function SignupForm() {
           <span>{t('auth.signup.submitButton')}</span>
         </span>
       </button>
+
+      {submitError && <p className="font-inter text-red-600 text-sm text-center">{submitError}</p>}
     </form>
   );
 }

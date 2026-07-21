@@ -40,9 +40,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
       email: 'jean.dupont@email.com',
       phone: '+33 1 23 45 67 89',
       birthDate: '1985-06-15',
-      nationality: 'Française',
-      language: 'Français',
-      avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400'
+      avatar: null as string | null
     },
     professional: {
       company: 'Dupont Industries',
@@ -54,10 +52,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
     preferences: {
       newsletter: true,
       smsNotifications: false,
-      emailAlerts: true,
-      language: 'fr',
-      currency: 'EUR',
-      timezone: 'Europe/Paris'
+      emailAlerts: true
     },
     security: {
       currentPassword: '',
@@ -75,11 +70,21 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
     confirm: false
   });
 
-  const activityStats = [
-    { label: t('userProfile.personal.views'), value: 47 },
-    { label: t('userProfile.personal.favorites'), value: 12 },
-    { label: t('userProfile.personal.contacts'), value: 8 },
-    { label: t('userProfile.personal.appointments'), value: 6 }
+  const [isAddingDocument, setIsAddingDocument] = useState(false);
+  const [newDocument, setNewDocument] = useState({
+    name: '',
+    type: '',
+    file: null as File | null
+  });
+
+  const documentTypes = [
+    'Pièce d\'identité',
+    'Justificatif de domicile',
+    'Attestation de financement',
+    'Attestation de prêt',
+    'Offre d\'achat',
+    'Compromis de vente',
+    'Autre'
   ];
 
   const documents = [
@@ -159,11 +164,17 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                 <div className="text-center mb-4 sm:mb-6 lg:mb-8">
                   <div className="relative inline-block mb-3 sm:mb-4 group">
                     <div className="relative">
-                      <img
-                        src={formData.personal.avatar}
-                        alt={`${formData.personal.firstName} ${formData.personal.lastName}`}
-                        className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 object-cover border-4 border-white shadow-lg mx-auto"
-                      />
+                      {formData.personal.avatar ? (
+                        <img
+                          src={formData.personal.avatar}
+                          alt={`${formData.personal.firstName} ${formData.personal.lastName}`}
+                          className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 object-cover border-4 border-white shadow-lg mx-auto"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 border-4 border-white shadow-lg mx-auto bg-emerald-500 flex items-center justify-center">
+                          <UserCircleIcon className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-white" />
+                        </div>
+                      )}
                       {isEditing && (
                         <button
                           onClick={triggerFileInput}
@@ -381,55 +392,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                           />
                         </div>
 
-                        <div>
-                          <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.personal.nationality')}</label>
-                          <select
-                            value={formData.personal.nationality}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              personal: { ...prev.personal, nationality: e.target.value }
-                            }))}
-                            disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                          >
-                            <option>{t('userProfile.personal.nationalities.french')}</option>
-                            <option>{t('userProfile.personal.nationalities.belgian')}</option>
-                            <option>{t('userProfile.personal.nationalities.swiss')}</option>
-                            <option>{t('userProfile.personal.nationalities.other')}</option>
-                          </select>
-                        </div>
 
-                        <div>
-                          <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.personal.language')}</label>
-                          <select
-                            value={formData.personal.language}
-                            onChange={(e) => setFormData(prev => ({
-                              ...prev,
-                              personal: { ...prev.personal, language: e.target.value }
-                            }))}
-                            disabled={!isEditing}
-                            className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
-                          >
-                            <option>{t('userProfile.personal.languages.french')}</option>
-                            <option>{t('userProfile.personal.languages.english')}</option>
-                            <option>{t('userProfile.personal.languages.german')}</option>
-                          </select>
-                        </div>
                       </div>
                     </div>
 
-                    {/* Activity Stats */}
-                    <div className="bg-white border border-gray-200 p-4 sm:p-6">
-                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">{t('userProfile.personal.yourActivity')}</h3>
-                      <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                        {activityStats.map((stat, index) => (
-                          <div key={index} className="text-center p-3 sm:p-4 bg-gray-50 border border-gray-200">
-                            <div className="text-2xl sm:text-3xl font-bold text-emerald-600 mb-1">{stat.value}</div>
-                            <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+
                   </div>
                 </div>
               )}
@@ -691,42 +658,6 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                       </div>
                     </div>
                   </div>
-
-                  <div className="bg-white border border-gray-200 p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-6">{t('userProfile.preferences.regionalSettings')}</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.preferences.language')}</label>
-                        <select
-                          value={formData.preferences.language}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            preferences: { ...prev.preferences, language: e.target.value }
-                          }))}
-                          className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white"
-                        >
-                          <option value="fr">Français</option>
-                          <option value="en">English</option>
-                          <option value="de">Deutsch</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.preferences.currency')}</label>
-                        <select
-                          value={formData.preferences.currency}
-                          onChange={(e) => setFormData(prev => ({
-                            ...prev,
-                            preferences: { ...prev.preferences, currency: e.target.value }
-                          }))}
-                          className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white"
-                        >
-                          <option value="EUR">EUR (€)</option>
-                          <option value="USD">USD ($)</option>
-                          <option value="GBP">GBP (£)</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               )}
 
@@ -784,10 +715,84 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => {
                     </div>
 
                     <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
-                      <button className="w-full py-3 sm:py-4 border-2 border-dashed border-gray-300 text-gray-600 text-sm sm:text-base font-medium hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all flex items-center justify-center gap-2">
-                        <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                        {t('userProfile.buttons.addDocument')}
-                      </button>
+                      {isAddingDocument ? (
+                        <div className="space-y-4">
+                          <h4 className="text-base sm:text-lg font-bold text-gray-900">{t('userProfile.documents.addNew', { defaultValue: 'Ajouter un document' })}</h4>
+
+                          {/* Document Name */}
+                          <div>
+                            <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.documents.documentName', { defaultValue: 'Nom du document' })}</label>
+                            <input
+                              type="text"
+                              value={newDocument.name}
+                              onChange={(e) => setNewDocument({ ...newDocument, name: e.target.value })}
+                              placeholder={t('userProfile.documents.namePlaceholder', { defaultValue: 'Ex: Passeport' })}
+                              className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all"
+                            />
+                          </div>
+
+                          {/* Document Type */}
+                          <div>
+                            <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.documents.documentType', { defaultValue: 'Type de document' })}</label>
+                            <select
+                              value={newDocument.type}
+                              onChange={(e) => setNewDocument({ ...newDocument, type: e.target.value })}
+                              className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white"
+                            >
+                              <option value="">{t('userProfile.documents.selectType', { defaultValue: 'Sélectionnez un type' })}</option>
+                              {documentTypes.map((type) => (
+                                <option key={type} value={type}>{type}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* File Input — shown only after type selection */}
+                          {newDocument.type && (
+                            <div>
+                              <label className="block font-medium text-gray-700 text-sm mb-2">{t('userProfile.documents.file', { defaultValue: 'Fichier' })}</label>
+                              <input
+                                type="file"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0] || null;
+                                  setNewDocument({ ...newDocument, file });
+                                }}
+                                className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-600 bg-white transition-all file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+                              />
+                            </div>
+                          )}
+
+                          {/* Actions */}
+                          <div className="flex items-center justify-end gap-3 pt-2">
+                            <button
+                              onClick={() => {
+                                setIsAddingDocument(false);
+                                setNewDocument({ name: '', type: '', file: null });
+                              }}
+                              className="px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium hover:border-gray-400 transition-all"
+                            >
+                              {t('userProfile.buttons.cancel')}
+                            </button>
+                            <button
+                              onClick={() => {
+                                console.log('New document:', newDocument);
+                                setIsAddingDocument(false);
+                                setNewDocument({ name: '', type: '', file: null });
+                              }}
+                              className="px-6 py-3 bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all"
+                            >
+                              {t('userProfile.buttons.save')}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setIsAddingDocument(true)}
+                          className="w-full py-3 sm:py-4 border-2 border-dashed border-gray-300 text-gray-600 text-sm sm:text-base font-medium hover:border-emerald-600 hover:text-emerald-600 hover:bg-emerald-50 transition-all flex items-center justify-center gap-2"
+                        >
+                          <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                          {t('userProfile.buttons.addDocument')}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

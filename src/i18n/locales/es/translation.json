@@ -1079,6 +1079,10 @@
       "accountTypeLabel": "Tipo de cuenta *",
       "buyer": "Comprador",
       "owner": "Propietario",
+      "seller": "Vendedor",
+      "lessor": "Arrendador",
+      "tenant": "Inquilino",
+      "traveler": "Viajero",
       "passwordLabel": "Contraseña *",
       "passwordPlaceholder": "••••••••",
       "confirmPasswordLabel": "Confirmar contraseña *",
@@ -1129,6 +1133,43 @@
       "medium": "Media",
       "strong": "Fuerte",
       "veryStrong": "Muy fuerte"
+    },
+    "forgotPassword": {
+      "title": "Olvidé mi contraseña",
+      "subtitle": "Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "su@email.com",
+      "submitButton": "Enviar enlace",
+      "sendingButton": "Enviando...",
+      "successMessage": "Enlace de restablecimiento enviado a su correo electrónico.",
+      "errorMessage": "Error al enviar el enlace. Por favor, inténtelo de nuevo.",
+      "backToLogin": "Volver a iniciar sesión",
+      "securityTitle": "Restablecimiento seguro",
+      "securityDescription": "Su enlace de restablecimiento caducará en 15 minutos por seguridad. Si no solicitó este restablecimiento, ignore este correo."
+    },
+    "resetPassword": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Ingrese su nueva contraseña a continuación.",
+      "newPasswordLabel": "Nueva contraseña",
+      "newPasswordPlaceholder": "Mín. 8 caracteres",
+      "confirmPasswordLabel": "Confirmar nueva contraseña",
+      "confirmPasswordPlaceholder": "Repita su contraseña",
+      "submitButton": "Restablecer contraseña",
+      "resettingButton": "Restableciendo...",
+      "successMessage": "¡Contraseña restablecida con éxito! Ahora puede iniciar sesión con su nueva contraseña.",
+      "errorMessage": "No se pudo restablecer la contraseña. Por favor, inténtelo de nuevo.",
+      "invalidTokenTitle": "Enlace inválido",
+      "invalidTokenMessage": "Este enlace de restablecimiento es inválido o ha caducado.",
+      "invalidTokenButton": "Solicitar nuevo enlace",
+      "securityTitle": "Requisitos de contraseña",
+      "securityDescription1": "Mínimo 8 caracteres",
+      "securityDescription2": "Use una combinación de letras, números y símbolos",
+      "securityDescription3": "Evite palabras comunes o patrones"
+    },
+    "messages": {
+      "loginSuccess": "¡Inicio de sesión exitoso!",
+      "signupSuccess": "¡Cuenta creada con éxito!",
+      "resetSuccess": "¡Contraseña restablecida con éxito! Ahora puede iniciar sesión con su nueva contraseña."
     }
   },
   "validation": {

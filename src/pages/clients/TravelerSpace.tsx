@@ -1,6 +1,8 @@
 // src/pages/TravelerSpace.tsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import MySpacesCard from '../auth/dashboard/MySpacesCard';
 import { 
   KeyIcon,
   WifiIcon,
@@ -27,7 +29,10 @@ import {
   GiftIcon,
   MapIcon,
   CheckIcon,
-  XMarkIcon
+  XMarkIcon,
+  ArrowRightOnRectangleIcon,
+  UserIcon,
+  GlobeAltIcon,
 } from '@heroicons/react/24/outline';
 import {
   CheckCircleIcon as CheckCircleIconSolid,
@@ -36,6 +41,7 @@ import {
 
 const TravelerSpace: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
@@ -45,6 +51,22 @@ const TravelerSpace: React.FC = () => {
   const [showIncidentForm, setShowIncidentForm] = useState(false);
   const [incidentDescription, setIncidentDescription] = useState('');
   const [showCheckoutFeedback, setShowCheckoutFeedback] = useState(false);
+  const [showSpaceModal, setShowSpaceModal] = useState(false);
+  const [linkedSpaces, setLinkedSpaces] = useState<string[]>([]);
+  const [userId, setUserId] = useState<string>('');
+  const [originalRole, setOriginalRole] = useState<string>('');
+
+  useEffect(() => {
+    const cached = localStorage.getItem('auth_user');
+    if (cached) {
+      try {
+        const data = JSON.parse(cached);
+        setLinkedSpaces(data.linkedSpaces || []);
+        setUserId(data.id || '');
+        setOriginalRole(data.originalRole || data.role || '');
+      } catch { /* ignore */ }
+    }
+  }, []);
 
   // Mock booking data
   const booking = {
@@ -223,6 +245,15 @@ const TravelerSpace: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6">
         {/* Header with Booking Info */}
         <div className="text-center mb-8">
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => setShowSpaceModal(true)}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-inter uppercase text-[#023927] border-2 border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300"
+            >
+              <ArrowRightOnRectangleIcon className="w-4 h-4" />
+              Mes espaces
+            </button>
+          </div>
           <h1 className="text-4xl md:text-5xl font-inter uppercase text-[#023927] mb-4">
             {t('travelerSpace.auth.title')}
           </h1>
@@ -950,6 +981,32 @@ const TravelerSpace: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Mes espaces Modal */}
+      {showSpaceModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowSpaceModal(false)} />
+          <div className="relative bg-white w-full max-w-md shadow-2xl overflow-y-auto max-h-[90vh]">
+            <div className="flex justify-end p-2">
+              <button
+                onClick={() => setShowSpaceModal(false)}
+                className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            </div>
+            <MySpacesCard
+              currentRole="traveler"
+              currentUserId={userId}
+              linkedSpaces={linkedSpaces}
+              originalRole={originalRole}
+              onSpacesChanged={(newLinked) => {
+                setLinkedSpaces(newLinked);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

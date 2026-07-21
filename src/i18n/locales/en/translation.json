@@ -1049,6 +1049,10 @@
       "accountTypeLabel": "Account type *",
       "buyer": "Buyer",
       "owner": "Owner",
+      "seller": "Seller",
+      "lessor": "Lessor",
+      "tenant": "Tenant",
+      "traveler": "Traveler",
       "passwordLabel": "Password *",
       "passwordPlaceholder": "••••••••",
       "confirmPasswordLabel": "Confirm password *",
@@ -1090,6 +1094,43 @@
       "medium": "Medium",
       "strong": "Strong",
       "veryStrong": "Very strong"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "subtitle": "Enter your email address and we'll send you a link to reset your password.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "your@email.com",
+      "submitButton": "Send Reset Link",
+      "sendingButton": "Sending...",
+      "successMessage": "Password reset link sent to your email.",
+      "errorMessage": "Failed to send reset link. Please try again.",
+      "backToLogin": "Back to Login",
+      "securityTitle": "Secure Password Reset",
+      "securityDescription": "Your password reset link will expire in 15 minutes for security purposes. If you didn't request a password reset, please ignore this email."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password below.",
+      "newPasswordLabel": "New Password",
+      "newPasswordPlaceholder": "Min. 8 characters",
+      "confirmPasswordLabel": "Confirm New Password",
+      "confirmPasswordPlaceholder": "Repeat your password",
+      "submitButton": "Reset Password",
+      "resettingButton": "Resetting...",
+      "successMessage": "Password reset successful! You can now login with your new password.",
+      "errorMessage": "Unable to reset password. Please try again.",
+      "invalidTokenTitle": "Invalid Reset Link",
+      "invalidTokenMessage": "This password reset link is invalid or has expired.",
+      "invalidTokenButton": "Request New Reset Link",
+      "securityTitle": "Password Requirements",
+      "securityDescription1": "Minimum 8 characters",
+      "securityDescription2": "Use a mix of letters, numbers, and symbols",
+      "securityDescription3": "Avoid common words or patterns"
+    },
+    "messages": {
+      "loginSuccess": "Login successful!",
+      "signupSuccess": "Account created successfully!",
+      "resetSuccess": "Password reset successful! You can now login with your new password."
     }
   },
   "validation": {

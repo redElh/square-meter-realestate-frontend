@@ -1071,6 +1071,10 @@
       "accountTypeLabel": "Type de compte *",
       "buyer": "Acheteur",
       "owner": "Propriétaire",
+      "seller": "Vendeur",
+      "lessor": "Bailleur",
+      "tenant": "Locataire",
+      "traveler": "Voyageur",
       "passwordLabel": "Mot de passe *",
       "passwordPlaceholder": "••••••••",
       "confirmPasswordLabel": "Confirmer le mot de passe *",
@@ -1121,6 +1125,43 @@
       "medium": "Moyen",
       "strong": "Fort",
       "veryStrong": "Très fort"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "emailLabel": "Adresse email",
+      "emailPlaceholder": "votre@email.com",
+      "submitButton": "Envoyer le lien",
+      "sendingButton": "Envoi en cours...",
+      "successMessage": "Lien de réinitialisation envoyé à votre email.",
+      "errorMessage": "Échec de l'envoi du lien. Veuillez réessayer.",
+      "backToLogin": "Retour à la connexion",
+      "securityTitle": "Réinitialisation sécurisée",
+      "securityDescription": "Votre lien de réinitialisation expirera dans 15 minutes. Si vous n'avez pas demandé cette réinitialisation, ignorez cet email."
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "subtitle": "Entrez votre nouveau mot de passe ci-dessous.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "Min. 8 caractères",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Répétez votre mot de passe",
+      "submitButton": "Réinitialiser",
+      "resettingButton": "Réinitialisation...",
+      "successMessage": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+      "errorMessage": "Impossible de réinitialiser le mot de passe. Veuillez réessayer.",
+      "invalidTokenTitle": "Lien invalide",
+      "invalidTokenMessage": "Ce lien de réinitialisation est invalide ou a expiré.",
+      "invalidTokenButton": "Demander un nouveau lien",
+      "securityTitle": "Exigences du mot de passe",
+      "securityDescription1": "Minimum 8 caractères",
+      "securityDescription2": "Utilisez un mélange de lettres, chiffres et symboles",
+      "securityDescription3": "Évitez les mots courants ou les modèles"
+    },
+    "messages": {
+      "loginSuccess": "Connexion réussie !",
+      "signupSuccess": "Compte créé avec succès !",
+      "resetSuccess": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
     }
   },
   "validation": {

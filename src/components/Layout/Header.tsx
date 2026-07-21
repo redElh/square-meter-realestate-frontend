@@ -1,6 +1,6 @@
 // src/components/Layout/Header.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useCurrency } from '../../hooks/useCurrency';
@@ -16,17 +16,22 @@ import {
   StarIcon,
   GlobeAltIcon,
   ChartBarIcon,
-  LockClosedIcon
+  LockClosedIcon,
+  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeHover, setActiveHover] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{ id: string; role: string } | null>(null);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const headerRef = useRef<HTMLElement | null>(null);
   const [headerHeight, setHeaderHeight] = useState<number>(0);
   const [scrollAlpha, setScrollAlpha] = useState<number>(0);
   const location = useLocation();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   useLocalization();
   const { getSymbol } = useCurrency();
@@ -59,17 +64,54 @@ const Header: React.FC = () => {
     setIsMenuOpen(false);
   }, [location]);
 
+  // Re-check auth on every route change
   useEffect(() => {
-    const h = headerRef.current?.offsetHeight ?? (isScrolled ? 64 : 96);
-    setHeaderHeight(h);
-  }, [isScrolled]);
+    const match = document.cookie.match(/(?:^|; )accessToken=([^;]*)/);
+    if (match) {
+      setIsAuthenticated(true);
 
-  // Check if we're on property detail page
-  const isPropertyDetailPage = location.pathname.includes('/properties/');
-  // Force scrolled state on property detail page
-  const effectiveIsScrolled = isPropertyDetailPage || isScrolled;
+      // Try to get cached user from session/local storage
+      const cachedUser = sessionStorage.getItem('auth_user') || localStorage.getItem('auth_user');
+      if (cachedUser) {
+        try {
+          setUser(JSON.parse(cachedUser));
+        } catch (e) {
+          sessionStorage.removeItem('auth_user');
+          localStorage.removeItem('auth_user');
+        }
+      }
+    } else {
+      setIsAuthenticated(false);
+      setUser(null);
+      sessionStorage.removeItem('auth_user');
+      localStorage.removeItem('auth_user');
+    }
+    setIsAuthChecking(false);
+  }, [location]);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
+    } finally {
+      document.cookie = 'accessToken=; Max-Age=0; path=/';
+      document.cookie = 'refreshToken=; Max-Age=0; path=/';
+      setIsAuthenticated(false);
+      setUser(null);
+      sessionStorage.removeItem('auth_user');
+      localStorage.removeItem('auth_user');
+      navigate('/auth');
+    }
+  };
 
   const upper = (s: string) => (s ? s.toLocaleUpperCase(i18n.language) : s);
+
+  const effectiveIsScrolled = isScrolled || isMenuOpen;
+
+  const isActivePath = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
+  const showClientSection = true;
 
   const navigation = {
     primary: [
@@ -77,23 +119,49 @@ const Header: React.FC = () => {
         path: '/properties',
         label: upper(t('navigation.properties')),
         Icon: HomeModernIcon,
-        description: t('header.exclusiveProperties')
+        description: t('header.exclusiveProperties'),
       },
       {
         path: '/owners',
         label: upper(t('navigation.owners')),
         Icon: UserGroupIcon,
-        description: t('header.prestigeRentals')
-      }
+        description: t('header.prestigeRentals'),
+      },
     ],
-    properties: [
+    company: [
       {
-        path: '/properties',
-        label: t('header.allProperties'),
-        Icon: HomeModernIcon,
-        category: 'properties',
-        description: t('header.discoverCollection')
-      }
+        path: '/agency',
+        label: t('navigation.agency'),
+        Icon: BuildingOfficeIcon,
+        category: 'company',
+      },
+      {
+        path: '/property-statistics',
+        label: t('navigation.statistics'),
+        Icon: ChartBarIcon,
+        category: 'company',
+        description: t('header.analyticsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.',
+        }),
+      },
+      {
+        path: '/services',
+        label: t('navigation.services'),
+        Icon: StarIcon,
+        category: 'company',
+      },
+      {
+        path: '/contact',
+        label: t('navigation.contact'),
+        Icon: PhoneIcon,
+        category: 'company',
+      },
+      {
+        path: '/mag',
+        label: t('navigation.magazine'),
+        Icon: NewspaperIcon,
+        category: 'company',
+      },
     ],
     clients: [
       {
@@ -102,8 +170,17 @@ const Header: React.FC = () => {
         Icon: PaperAirplaneIcon,
         category: 'clients',
         description: t('header.clientsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.'
-        })
+          defaultValue: 'Reserved for agency team members. Password required.',
+        }),
+      },
+      {
+        path: user?.role && user?.id ? `/dashboard/${user.role}/${user.id}` : '/dashboard',
+        label: t('navigation.dashboard'),
+        Icon: CogIcon,
+        category: 'clients',
+        description: t('header.clientsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.',
+        }),
       },
       {
         path: '/auth',
@@ -111,69 +188,10 @@ const Header: React.FC = () => {
         Icon: UserIcon,
         category: 'clients',
         description: t('header.clientsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.'
-        })
+          defaultValue: 'Reserved for agency team members. Password required.',
+        }),
       },
-      {
-        path: '/dashboard',
-        label: t('navigation.dashboard'),
-        Icon: CogIcon,
-        category: 'clients',
-        description: t('header.clientsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.'
-        })
-      }
     ],
-    company: [
-      {
-        path: '/agency',
-        label: t('navigation.agency'),
-        Icon: BuildingOfficeIcon,
-        category: 'company'
-      },
-      {
-        path: '/property-statistics',
-        label: t('navigation.statistics'),
-        Icon: ChartBarIcon,
-        category: 'company',
-        description: t('header.analyticsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.'
-        })
-      },
-      {
-        path: '/services',
-        label: t('navigation.services'),
-        Icon: StarIcon,
-        category: 'company'
-      },
-      {
-        path: '/contact',
-        label: t('navigation.contact'),
-        Icon: PhoneIcon,
-        category: 'company'
-      }
-      ,
-      {
-        path: '/mag',
-        label: t('navigation.magazine'),
-        Icon: NewspaperIcon,
-        category: 'company'
-      }
-      // Magazine temporarily hidden
-      // {
-      //   path: '/mag',
-      //   label: t('navigation.magazine'),
-      //   Icon: NewspaperIcon,
-      //   category: 'company'
-      // }
-    ],
-  };
-
-  // Show the Clients (Espace Clients) secondary menu section
-  const showClientSection = true;
-
-  const isActivePath = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
   const topAlpha = 0.82258841 + (1 - 0.82258841) * scrollAlpha;
@@ -192,19 +210,23 @@ const Header: React.FC = () => {
           background: headerBackground,
           boxShadow: isScrolled ? '0 8px 30px rgba(0,0,0,0.08)' : '0 2px 12px rgba(0,0,0,0.04)',
           backdropFilter: 'saturate(120%) blur(8px)',
-          transition: 'background-color 260ms ease, backdrop-filter 260ms ease, background-image 260ms ease, box-shadow 260ms ease'
+          transition:
+            'background-color 260ms ease, backdrop-filter 260ms ease, background-image 260ms ease, box-shadow 260ms ease',
         }}
       >
         <div className="container mx-auto px-1.5 sm:px-6 relative">
-          <div className={`flex items-center justify-between gap-1 sm:gap-4 transition-all duration-500 ${effectiveIsScrolled ? 'py-1.5 sm:py-3' : 'py-2 sm:py-5'}`}>
-
+          <div
+            className={`flex items-center justify-between gap-1 sm:gap-4 transition-all duration-500 ${
+              effectiveIsScrolled ? 'py-1.5 sm:py-3' : 'py-2 sm:py-5'
+            }`}
+          >
             {/* Left Corner - Language & Currency Selector */}
             <div className="flex items-center justify-center flex-shrink-0">
-              <Link 
-                to="/settings" 
-                className="relative group px-1 py-1 sm:px-4 sm:py-2.5 rounded-md sm:rounded-xl bg-white/80 hover:bg-white border border-gray-200 sm:border-2 hover:border-[#023927] transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-0.5 sm:gap-2" 
-                onClick={() => setActiveHover('lang')} 
-                onMouseEnter={() => setActiveHover('lang')} 
+              <Link
+                to="/settings"
+                className="relative group px-1 py-1 sm:px-4 sm:py-2.5 rounded-md sm:rounded-xl bg-white/80 hover:bg-white border border-gray-200 sm:border-2 hover:border-[#023927] transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-0.5 sm:gap-2"
+                onClick={() => setActiveHover('lang')}
+                onMouseEnter={() => setActiveHover('lang')}
                 onMouseLeave={() => setActiveHover(null)}
               >
                 <GlobeAltIcon className="w-3 h-3 sm:w-5 sm:h-5 text-gray-700 group-hover:text-[#023927] transition-colors duration-200" />
@@ -228,7 +250,7 @@ const Header: React.FC = () => {
                   onMouseLeave={() => setActiveHover(null)}
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
-                    <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
+                  <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
                     <span className="text-gray-800 text-[11px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200 max-w-[7rem] sm:max-w-none truncate">
                       {navigation.primary[0].label}
                     </span>
@@ -245,14 +267,20 @@ const Header: React.FC = () => {
               onMouseLeave={() => setActiveHover(null)}
             >
               <div className="flex flex-col items-center justify-center">
-                <div className={`relative transform group-hover:scale-105 transition-all duration-400 flex items-center justify-center ${effectiveIsScrolled ? 'scale-90 sm:scale-95' : 'scale-100 sm:scale-100'}`}>
-                  <div className={`relative ${
-                    effectiveIsScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-16 h-16 sm:w-32 sm:h-32'
-                  } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden mx-auto`}>
-                    <img 
-                      src="/logo-m2.png" 
-                      alt="Square Meter logo" 
-                      className="w-full h-full object-contain p-0 bg-transparent" 
+                <div
+                  className={`relative transform group-hover:scale-105 transition-all duration-400 flex items-center justify-center ${
+                    effectiveIsScrolled ? 'scale-90 sm:scale-95' : 'scale-100 sm:scale-100'
+                  }`}
+                >
+                  <div
+                    className={`relative ${
+                      effectiveIsScrolled ? 'w-14 h-14 sm:w-20 sm:h-20' : 'w-16 h-16 sm:w-32 sm:h-32'
+                    } bg-transparent rounded-lg sm:rounded-2xl transform group-hover:rotate-1 transition-all duration-300 flex items-center justify-center overflow-hidden mx-auto`}
+                  >
+                    <img
+                      src="/logo-m2.png"
+                      alt="Square Meter logo"
+                      className="w-full h-full object-contain p-0 bg-transparent"
                       style={{ background: 'transparent' }}
                       loading="eager"
                     />
@@ -260,13 +288,19 @@ const Header: React.FC = () => {
                 </div>
 
                 {/* Brand Text - Always visible */}
-                <div className={`mt-0.5 sm:-mt-2 text-center transition-all duration-500 w-full flex items-center justify-center ${effectiveIsScrolled ? 'scale-75 -translate-y-0.5 opacity-90' : 'scale-100 sm:scale-100 opacity-100'}`}>
+                <div
+                  className={`mt-0.5 sm:-mt-2 text-center transition-all duration-500 w-full flex items-center justify-center ${
+                    effectiveIsScrolled
+                      ? 'scale-75 -translate-y-0.5 opacity-90'
+                      : 'scale-100 sm:scale-100 opacity-100'
+                  }`}
+                >
                   <div className="flex flex-col items-center justify-center space-y-0 sm:space-y-1">
-                    <span className={`text-[9px] sm:text-sm font-semibold tracking-[0.1em] sm:tracking-[0.3em] uppercase transition-all duration-500 whitespace-nowrap ${
-                      activeHover === 'logo'
-                        ? 'text-gray-900'
-                        : 'text-gray-700'
-                    }`}>
+                    <span
+                      className={`text-[9px] sm:text-sm font-semibold tracking-[0.1em] sm:tracking-[0.3em] uppercase transition-all duration-500 whitespace-nowrap ${
+                        activeHover === 'logo' ? 'text-gray-900' : 'text-gray-700'
+                      }`}
+                    >
                       SQUARE METER
                     </span>
                     <span className="text-[8px] sm:text-xs text-gray-500 tracking-[0.08em] sm:tracking-[0.2em] transition-all duration-500 font-medium whitespace-nowrap">
@@ -287,7 +321,7 @@ const Header: React.FC = () => {
                   onMouseLeave={() => setActiveHover(null)}
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
-                    <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
+                  <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
                     <span className="text-gray-800 text-[11px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200 max-w-[7rem] sm:max-w-none truncate">
                       {navigation.primary[1].label}
                     </span>
@@ -309,14 +343,12 @@ const Header: React.FC = () => {
               {/* Transform between hamburger and close icon */}
               <div className="relative w-3.5 h-3.5 sm:w-6 sm:h-6">
                 {!isMenuOpen ? (
-                  // Hamburger icon
                   <>
                     <div className="absolute top-0.5 left-0 w-full h-0.5 bg-gray-800 transform transition-all duration-200" />
                     <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-0.5 bg-gray-800 transform transition-all duration-200" />
                     <div className="absolute bottom-0.5 left-0 w-full h-0.5 bg-gray-800 transform transition-all duration-200" />
                   </>
                 ) : (
-                  // Close icon (X)
                   <>
                     <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 transform -rotate-45 transition-all duration-200" />
                     <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 transform rotate-45 transition-all duration-200" />
@@ -333,18 +365,21 @@ const Header: React.FC = () => {
       {/* Spacer to offset the fixed header on non-hero pages */}
       {(() => {
         const heroRoots = ['/', '/properties', '/owners'];
-        const isHero = heroRoots.some((p) => location.pathname === p || location.pathname.startsWith(p + '/'));
+        const isHero = heroRoots.some(
+          (p) => location.pathname === p || location.pathname.startsWith(p + '/')
+        );
         if (isHero) return null;
         const h = headerHeight || (isScrolled ? 64 : 96);
-        return (
-          <div aria-hidden="true" style={{ height: `${h}px` }} className="w-full" />
-        );
+        return <div aria-hidden="true" style={{ height: `${h}px` }} className="w-full" />;
       })()}
 
       {/* Floating Menu Panel (full-width on mobile) */}
-      <div className={`fixed inset-0 z-60 transition-all duration-700 pointer-events-none ${
-        isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-      }`} style={{ zIndex: 99999 }}>
+      <div
+        className={`fixed inset-0 z-60 transition-all duration-700 pointer-events-none ${
+          isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        style={{ zIndex: 99999 }}
+      >
         {/* backdrop */}
         <div
           className={`absolute inset-0 bg-black/20 transition-all duration-700 ${
@@ -367,9 +402,10 @@ const Header: React.FC = () => {
             borderLeft: '1px solid rgba(0,0,0,0.06)',
             boxShadow: '-4px 0 20px rgba(0,0,0,0.06)',
             overflowY: 'auto',
-            WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
-            transition: 'top 500ms ease, height 500ms ease, background-color 260ms ease, backdrop-filter 260ms ease, background-image 260ms ease',
-            zIndex: 100000
+            WebkitOverflowScrolling: 'touch',
+            transition:
+              'top 500ms ease, height 500ms ease, background-color 260ms ease, backdrop-filter 260ms ease, background-image 260ms ease',
+            zIndex: 100000,
           }}
         >
           <div className="h-full">
@@ -396,11 +432,13 @@ const Header: React.FC = () => {
                         onClick={() => setIsMenuOpen(false)}
                       >
                         <div className="flex items-start space-x-3 sm:space-x-4">
-                          <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 relative ${
-                            isActivePath(item.path)
-                              ? 'bg-gray-100 text-gray-900 shadow-sm'
-                              : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
-                          }`}>
+                          <div
+                            className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 relative ${
+                              isActivePath(item.path)
+                                ? 'bg-gray-100 text-gray-900 shadow-sm'
+                                : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
+                            }`}
+                          >
                             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                             {isProtectedAnalytics && (
                               <LockClosedIcon className="w-3.5 h-3.5 absolute -top-1 -right-1 text-amber-600 bg-white rounded-full p-0.5 border border-amber-200" />
@@ -408,11 +446,11 @@ const Header: React.FC = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 min-w-0">
-                              <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
-                                isActivePath(item.path)
-                                  ? 'text-gray-900'
-                                  : 'text-gray-800'
-                              }`}>
+                              <span
+                                className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
+                                  isActivePath(item.path) ? 'text-gray-900' : 'text-gray-800'
+                                }`}
+                              >
                                 {item.label}
                               </span>
                               {isProtectedAnalytics && (
@@ -422,9 +460,11 @@ const Header: React.FC = () => {
                               )}
                             </div>
                             {item.description && (
-                              <p className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
-                                isProtectedAnalytics ? 'text-amber-700/90' : 'text-gray-600'
-                              }`}>
+                              <p
+                                className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
+                                  isProtectedAnalytics ? 'text-amber-700/90' : 'text-gray-600'
+                                }`}
+                              >
                                 {item.description}
                               </p>
                             )}
@@ -439,7 +479,7 @@ const Header: React.FC = () => {
                 </div>
               </div>
 
-              {/* Clients Section */}
+              {/* ── Espace Clients Section ── */}
               {showClientSection && (
                 <div>
                   <h3 className="text-gray-800 text-lg sm:text-xl font-bold tracking-widest uppercase mb-6 sm:mb-8">
@@ -448,56 +488,114 @@ const Header: React.FC = () => {
                   <div className="grid grid-cols-1 gap-3 sm:gap-4">
                     {navigation.clients.map((item, index) => {
                       const Icon = item.Icon;
-                      const isProtectedClient = true;
+                      const isAuthItem = item.path === '/auth';
+
                       return (
-                        <Link
+                        <div
                           key={item.path}
-                          to={item.path}
                           className={`group relative p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-500 border-2 ${
                             isActivePath(item.path)
                               ? 'bg-gray-50 border-gray-200 shadow-sm'
                               : 'bg-white/60 border-gray-100 hover:bg-gray-50 hover:border-gray-200 hover:shadow-sm'
                           }`}
                           style={{ transitionDelay: `${index * 100 + 200}ms` }}
-                          onClick={() => setIsMenuOpen(false)}
                         >
                           <div className="flex items-start space-x-3 sm:space-x-4">
-                            <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 relative ${
-                              isActivePath(item.path)
-                                ? 'bg-gray-100 text-gray-900 shadow-sm'
-                                : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
-                            }`}>
-                              <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                              {isProtectedClient && (
+                            <div
+                              className={`p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-500 relative ${
+                                isActivePath(item.path)
+                                  ? 'bg-gray-100 text-gray-900 shadow-sm'
+                                  : 'bg-white/60 text-gray-600 group-hover:bg-gray-100 group-hover:text-gray-900'
+                              }`}
+                            >
+                              {/* Auth item: swap icon to logout icon when authenticated */}
+                              {isAuthItem && isAuthenticated ? (
+                                <ArrowRightOnRectangleIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                              ) : (
+                                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                              )}
+                              {!isAuthItem && (
                                 <LockClosedIcon className="w-3.5 h-3.5 absolute -top-1 -right-1 text-amber-600 bg-white rounded-full p-0.5 border border-amber-200" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 min-w-0">
-                                <span className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
-                                  isActivePath(item.path)
-                                    ? 'text-gray-900'
-                                    : 'text-gray-800'
-                                }`}>
-                                  {item.label}
+                                <span
+                                  className={`text-base sm:text-lg font-semibold transition-all duration-500 truncate ${
+                                    isActivePath(item.path) ? 'text-gray-900' : 'text-gray-800'
+                                  }`}
+                                >
+                                  {/* Auth item: show "Déconnexion" when authenticated, "Connexion" otherwise */}
+                                  {isAuthItem
+                                    ? isAuthenticated
+                                      ? t('navigation.logout', { defaultValue: 'Déconnexion' })
+                                      : t('navigation.login', { defaultValue: 'Connexion' })
+                                    : item.label}
                                 </span>
-                                {isProtectedClient && (
+                                {!isAuthItem && (
                                   <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-amber-200 bg-amber-50 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-amber-700 whitespace-nowrap">
                                     {t('header.teamOnlyBadge', { defaultValue: 'Team only' })}
                                   </span>
                                 )}
                               </div>
-                              <p className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
-                                isProtectedClient ? 'text-amber-700/90' : 'text-gray-600'
-                              }`}>
-                                {item.description}
+                              <p
+                                className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
+                                  !isAuthItem ? 'text-amber-700/90' : 'text-gray-600'
+                                }`}
+                              >
+                                {isAuthItem && isAuthenticated
+                                  ? t('header.logoutDescription', {
+                                      defaultValue: 'Se déconnecter du compte.',
+                                    })
+                                  : item.description}
                               </p>
                             </div>
                           </div>
+
+                          {/* Arrow decoration */}
                           <div className="absolute top-4 sm:top-6 right-4 sm:right-6 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-500">
                             <div className="w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-t-2 border-gray-400 transform rotate-45" />
                           </div>
-                        </Link>
+
+                          {/* Action button / link at the bottom of the card */}
+                          <div className="mt-4">
+                            {isAuthItem ? (
+                              isAuthenticated ? (
+                                /* ── Authenticated: "Déconnexion" button ── */
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    void handleLogout();
+                                    setIsMenuOpen(false);
+                                  }}
+                                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 font-semibold hover:bg-gray-50 transition-colors"
+                                  disabled={isAuthChecking}
+                                >
+                                  <ArrowRightOnRectangleIcon className="w-4 h-4" />
+                                  <span>{t('navigation.logout', { defaultValue: 'Déconnexion' })}</span>
+                                </button>
+                              ) : (
+                                /* ── Not authenticated: "Connexion" link ── */
+                                <Link
+                                  to={item.path}
+                                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 font-semibold hover:bg-gray-50 transition-colors"
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  <UserIcon className="w-4 h-4" />
+                                  <span>{t('navigation.login', { defaultValue: 'Connexion' })}</span>
+                                </Link>
+                              )
+                            ) : (
+                              /* ── Other client items: full-card link ── */
+                              <Link
+                                to={item.path}
+                                className="absolute inset-0"
+                                onClick={() => setIsMenuOpen(false)}
+                                aria-label={item.label}
+                              />
+                            )}
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
@@ -507,8 +605,6 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
-
-
 
       {/* Add custom animations to your global CSS */}
       <style>{`
@@ -526,7 +622,6 @@ const Header: React.FC = () => {
         .animate-spin-slow {
           animation: spin-slow 8s linear infinite;
         }
-        /* Line clamp for description text */
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
