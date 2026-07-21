@@ -1,14 +1,22 @@
 // Vercel Serverless Function to proxy Apimo API requests
 // This avoids CORS issues and keeps credentials secure
 
+const ALLOWED_ORIGINS = [
+  'https://www.squaremeter.ma',
+  'https://squaremeter.ma',
+];
+
 export default async function handler(req, res) {
-  // Enable CORS
+  // Restrict CORS to known origins
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'Content-Type, Accept'
   );
 
   if (req.method === 'OPTIONS') {
@@ -16,9 +24,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Apimo API credentials
-  const providerId = process.env.APIMO_PROVIDER_ID || '4567';
-  const token = process.env.APIMO_TOKEN || 'd07da6e744bb033d1299469f1f6f7334531ec05c';
+  // Only allow GET requests
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Apimo API credentials — must be set in Vercel environment variables
+  const providerId = process.env.APIMO_PROVIDER_ID;
+  const token = process.env.APIMO_TOKEN;
+  if (!providerId || !token) {
+    console.error('❌ Missing APIMO credentials in environment variables');
+    return res.status(500).json({ error: 'API configuration error' });
+  }
   const credentials = `${providerId}:${token}`;
   const base64Credentials = Buffer.from(credentials).toString('base64');
 
@@ -37,13 +54,12 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(apiUrl, {
-      method: req.method,
+      method: 'GET',
       headers: {
         'Authorization': `Basic ${base64Credentials}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: req.method !== 'GET' ? JSON.stringify(req.body) : undefined,
     });
 
     const data = await response.json();

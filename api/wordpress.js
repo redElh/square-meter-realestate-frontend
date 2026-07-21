@@ -55,8 +55,12 @@ function wpRequest(path, cookie) {
 }
 
 module.exports = async (req, res) => {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Restrict CORS to known origins
+  const ALLOWED_ORIGINS = ['https://www.squaremeter.ma', 'https://squaremeter.ma'];
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   
@@ -67,7 +71,26 @@ module.exports = async (req, res) => {
   // Extract the WordPress API path from the query
   // /api/wordpress?path=/posts or /api/wordpress?path=/posts/123
   const wpPath = req.query.path || '/posts';
-  const fullPath = '/wp-json/wp/v2' + wpPath;
+
+  // V8 fix: Whitelist allowed WordPress API paths
+  const ALLOWED_PATHS = /^\/posts(\/\d+)?(\/)$/; // /posts or /posts/123
+  const ALLOWED_PATHS_FULL = /^\/(posts|pages|categories|tags|media|users|comments)(\/[\w-]+)?(\/\d+)?$/;
+
+  // Decode and validate the path
+  const decodedPath = decodeURIComponent(wpPath);
+  if (!ALLOWED_PATHS_FULL.test(decodedPath)) {
+    console.warn('⚠️ Blocked disallowed WP path:', decodedPath);
+    return res.status(403).json({ error: 'Path not allowed' });
+  }
+
+  // Only allow specific read-only endpoints
+  const pathSegment = decodedPath.split('/')[1];
+  const ALLOWED_ENDPOINTS = ['posts', 'pages', 'categories', 'tags'];
+  if (!ALLOWED_ENDPOINTS.includes(pathSegment)) {
+    return res.status(403).json({ error: 'Endpoint not allowed' });
+  }
+
+  const fullPath = '/wp-json/wp/v2' + decodedPath;
   
   console.log('📰 WP API Request:', fullPath);
 

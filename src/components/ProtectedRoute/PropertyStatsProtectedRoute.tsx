@@ -11,35 +11,10 @@ import {
   ChartBarIcon,
 } from '@heroicons/react/24/outline';
 
-const PROPERTY_STATS_PASSWORD = 'SM-TEAM::Analytics#2026!M2@A9qL7vR3';
 const PROPERTY_STATS_AUTH_KEY = 'property_stats_team_authenticated';
-const PROPERTY_STATS_ATTEMPTS_KEY = 'property_stats_team_attempts';
-const PROPERTY_STATS_LOCK_KEY = 'property_stats_team_lock_until';
 
 const MIN_PASSWORD_LENGTH = 12;
 const MAX_PASSWORD_LENGTH = 128;
-const MAX_FAILED_ATTEMPTS = 5;
-const LOCKOUT_DURATION_MS = 60 * 1000;
-
-// Strict allow-list blocks potentially dangerous payload characters while supporting strong passwords.
-const ALLOWED_PASSWORD_CHARACTERS = /^[A-Za-z0-9!@#$%^&*()_\-+=:|.?/]+$/;
-
-const constantTimeEquals = (first: string, second: string): boolean => {
-  const encoder = new TextEncoder();
-  const firstBytes = encoder.encode(first);
-  const secondBytes = encoder.encode(second);
-  const maxLength = Math.max(firstBytes.length, secondBytes.length);
-
-  let difference = firstBytes.length ^ secondBytes.length;
-
-  for (let index = 0; index < maxLength; index += 1) {
-    const firstByte = index < firstBytes.length ? firstBytes[index] : 0;
-    const secondByte = index < secondBytes.length ? secondBytes[index] : 0;
-    difference |= firstByte ^ secondByte;
-  }
-
-  return difference === 0;
-};
 
 interface PropertyStatsProtectedRouteProps {
   children: React.ReactNode;
@@ -51,32 +26,12 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [failedAttempts, setFailedAttempts] = useState(0);
-  const [lockUntil, setLockUntil] = useState<number | null>(null);
-
-  const resetProtectionState = () => {
-    setFailedAttempts(0);
-    setLockUntil(null);
-    sessionStorage.removeItem(PROPERTY_STATS_ATTEMPTS_KEY);
-    sessionStorage.removeItem(PROPERTY_STATS_LOCK_KEY);
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const authStatus = sessionStorage.getItem(PROPERTY_STATS_AUTH_KEY);
     if (authStatus === 'true') {
       setIsAuthenticated(true);
-    }
-
-    const storedAttempts = Number(sessionStorage.getItem(PROPERTY_STATS_ATTEMPTS_KEY) || '0');
-    if (Number.isFinite(storedAttempts) && storedAttempts > 0) {
-      setFailedAttempts(storedAttempts);
-    }
-
-    const storedLockUntil = Number(sessionStorage.getItem(PROPERTY_STATS_LOCK_KEY) || '0');
-    if (Number.isFinite(storedLockUntil) && storedLockUntil > Date.now()) {
-      setLockUntil(storedLockUntil);
-    } else {
-      sessionStorage.removeItem(PROPERTY_STATS_LOCK_KEY);
     }
   }, []);
 
@@ -107,32 +62,11 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
       });
     }
 
-    if (!ALLOWED_PASSWORD_CHARACTERS.test(candidate)) {
-      return t('statsProtection.invalidCharactersError', {
-        defaultValue: 'Invalid characters detected. Use only supported ASCII symbols.',
-      });
-    }
-
     return null;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (lockUntil && lockUntil > Date.now()) {
-      const seconds = Math.ceil((lockUntil - Date.now()) / 1000);
-      setError(
-        t('statsProtection.lockedError', {
-          seconds,
-          defaultValue: 'Too many failed attempts. Try again in {{seconds}} seconds.',
-        })
-      );
-      return;
-    }
-
-    if (lockUntil && lockUntil <= Date.now()) {
-      resetProtectionState();
-    }
 
     const normalizedPassword = password.normalize('NFKC');
     const validationError = validatePasswordInput(normalizedPassword);
@@ -142,42 +76,50 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
       return;
     }
 
-    if (constantTimeEquals(normalizedPassword, PROPERTY_STATS_PASSWORD)) {
-      sessionStorage.setItem(PROPERTY_STATS_AUTH_KEY, 'true');
-      setIsAuthenticated(true);
-      setError('');
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/verify-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: normalizedPassword, section: 'analytics' }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.authenticated) {
+        sessionStorage.setItem(PROPERTY_STATS_AUTH_KEY, 'true');
+        setIsAuthenticated(true);
+        setError('');
+        setPassword('');
+      } else if (res.status === 429) {
+        setError(
+          t('statsProtection.lockedError', {
+            seconds: data.retryAfter || 60,
+            defaultValue: 'Too many failed attempts. Try again in {{seconds}} seconds.',
+          })
+        );
+        setPassword('');
+      } else if (res.status === 401) {
+        const remaining = data.remainingAttempts ?? 0;
+        setError(
+          t('statsProtection.invalidPasswordWithAttempts', {
+            remainingAttempts: remaining,
+            defaultValue: 'Invalid password. {{remainingAttempts}} attempt(s) remaining.',
+          })
+        );
+        setPassword('');
+      } else {
+        setError(data.error || 'Authentication failed');
+        setPassword('');
+      }
+    } catch {
+      setError('Network error. Please try again.');
       setPassword('');
-      resetProtectionState();
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    const updatedAttempts = failedAttempts + 1;
-
-    if (updatedAttempts >= MAX_FAILED_ATTEMPTS) {
-      const nextLockUntil = Date.now() + LOCKOUT_DURATION_MS;
-      setLockUntil(nextLockUntil);
-      sessionStorage.setItem(PROPERTY_STATS_LOCK_KEY, String(nextLockUntil));
-      setFailedAttempts(0);
-      sessionStorage.removeItem(PROPERTY_STATS_ATTEMPTS_KEY);
-      setError(
-        t('statsProtection.lockedError', {
-          seconds: Math.ceil(LOCKOUT_DURATION_MS / 1000),
-          defaultValue: 'Too many failed attempts. Try again in {{seconds}} seconds.',
-        })
-      );
-      setPassword('');
-      return;
-    }
-
-    setFailedAttempts(updatedAttempts);
-    sessionStorage.setItem(PROPERTY_STATS_ATTEMPTS_KEY, String(updatedAttempts));
-    setError(
-      t('statsProtection.invalidPasswordWithAttempts', {
-        remainingAttempts: MAX_FAILED_ATTEMPTS - updatedAttempts,
-        defaultValue: 'Invalid password. {{remainingAttempts}} attempt(s) remaining.',
-      })
-    );
-    setPassword('');
   };
 
   if (isAuthenticated) {
@@ -291,6 +233,7 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
                       maxLength={MAX_PASSWORD_LENGTH}
                       aria-invalid={Boolean(error)}
                       autoFocus
+                      disabled={loading}
                     />
                     <button
                       type="button"
@@ -313,9 +256,10 @@ const PropertyStatsProtectedRoute: React.FC<PropertyStatsProtectedRouteProps> = 
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#023927] to-[#0a4d3a] px-5 py-2.5 sm:py-3 text-sm sm:text-base text-white font-semibold shadow-lg shadow-emerald-900/20 hover:from-[#04553d] hover:to-[#0f6248] transition-all"
+                  disabled={loading}
+                  className="w-full inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-[#023927] to-[#0a4d3a] px-5 py-2.5 sm:py-3 text-sm sm:text-base text-white font-semibold shadow-lg shadow-emerald-900/20 hover:from-[#04553d] hover:to-[#0f6248] transition-all disabled:opacity-50"
                 >
-                  {t('statsProtection.button', { defaultValue: 'Access Analytics Page' })}
+                  {loading ? '...' : t('statsProtection.button', { defaultValue: 'Access Analytics Page' })}
                 </button>
               </form>
             </div>

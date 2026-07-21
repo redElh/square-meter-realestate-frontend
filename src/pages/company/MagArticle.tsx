@@ -19,6 +19,7 @@ import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/24/solid';
 import { fetchViewCounts, incrementViewCount, getViewCount, formatViewCount } from '../../utils/articleViews';
 import { getReadingTime } from '../../utils/readingTime';
 import ShareButton from '../../components/ShareButton';
+import DOMPurify from 'dompurify';
 
 // ─── WordPress proxy ──────────────────────────────────────────────────────────
 // Development: use local proxy (/setupProxy.js)
@@ -134,6 +135,26 @@ function processContent(html: string): { content: string; toc: TocEntry[] } {
   return { content: div.innerHTML, toc };
 }
 
+/** Sanitize HTML to prevent XSS (V7 fix) */
+function sanitizeHtml(html: string): string {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      'p', 'br', 'strong', 'em', 'b', 'i', 'u', 's', 'a', 'img',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li', 'blockquote', 'pre', 'code',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td',
+      'div', 'span', 'figure', 'figcaption', 'hr',
+      'sup', 'sub', 'small', 'mark', 'del', 'ins',
+    ],
+    ALLOWED_ATTR: [
+      'href', 'src', 'alt', 'title', 'class', 'id', 'style',
+      'target', 'rel', 'width', 'height', 'loading',
+      'colspan', 'rowspan', 'scope',
+    ],
+    ALLOW_DATA_ATTR: false,
+  });
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 const MagArticle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -217,7 +238,7 @@ const MagArticle: React.FC = () => {
         // Process content: emoji → h2, inject IDs, build TOC
         const preprocessed = convertEmojiParasToH2(data.content.rendered);
         const { content: c, toc: t } = processContent(preprocessed);
-        setProcessedContent(c);
+        setProcessedContent(sanitizeHtml(c));
         setToc(t);
 
         // View counter - Only increment once per article load
@@ -318,7 +339,7 @@ const MagArticle: React.FC = () => {
         // Re-process content without translation
         const preprocessed = convertEmojiParasToH2(originalPost.content.rendered);
         const { content: c, toc: t } = processContent(preprocessed);
-        setProcessedContent(c);
+        setProcessedContent(sanitizeHtml(c));
         setToc(t);
         return;
       }
@@ -348,7 +369,7 @@ const MagArticle: React.FC = () => {
         // Process translated content
         const preprocessed = convertEmojiParasToH2(translatedPost.content.rendered);
         const { content: c, toc: t } = processContent(preprocessed);
-        setProcessedContent(c);
+        setProcessedContent(sanitizeHtml(c));
         setToc(t);
         
         // Translate related articles if any
@@ -386,7 +407,7 @@ const MagArticle: React.FC = () => {
         // Re-process original content
         const preprocessed = convertEmojiParasToH2(originalPost.content.rendered);
         const { content: c, toc: t } = processContent(preprocessed);
-        setProcessedContent(c);
+        setProcessedContent(sanitizeHtml(c));
         setToc(t);
       }
     };

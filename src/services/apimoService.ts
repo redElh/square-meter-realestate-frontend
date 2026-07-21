@@ -5,8 +5,6 @@ const APIMO_CONFIG = {
   // Use proxy in development and Vercel serverless function in production
   baseUrl: '/api/apimo',
   agencyId: '25311',
-  providerId: '4567',
-  token: 'd07da6e744bb033d1299469f1f6f7334531ec05c',
 };
 
 // Apimo API Response Types
@@ -467,11 +465,6 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
 // API Functions
 class ApimoService {
   private propertiesCache = new Map<string, Promise<{ properties: Property[]; total: number }>>();
-
-  private getAuthHeader(): string {
-    const credentials = `${APIMO_CONFIG.providerId}:${APIMO_CONFIG.token}`;
-    return `Basic ${btoa(credentials)}`;
-  }
 
   private buildPropertiesCacheKey(params?: {
     limit?: number;

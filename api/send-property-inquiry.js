@@ -6,13 +6,17 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 
 async function handler(req, res) {
-  // Enable CORS
+  // Restrict CORS to known origins
+  const ALLOWED_ORIGINS = ['https://www.squaremeter.ma', 'https://squaremeter.ma'];
+  const origin = req.headers.origin || '';
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    'Content-Type, Accept'
   );
 
   if (req.method === 'OPTIONS') {
@@ -196,75 +200,107 @@ async function handler(req, res) {
  * Send email using nodemailer
  */
 async function sendEmail(emailData) {
-  // Create transporter based on available configuration
-  let transporter;
+  const providers = [];
 
-  // Option 1: Gmail (requires App Password)
+  // Prefer explicit SMTP / SendGrid settings first when available, then Gmail as a fallback.
+  if (process.env.SMTP_HOST) {
+    providers.push({
+      name: 'custom-smtp',
+      transporter: nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      })
+    });
+  }
+
+  if (process.env.SENDGRID_API_KEY) {
+    providers.push({
+      name: 'sendgrid',
+      transporter: nodemailer.createTransport({
+        host: 'smtp.sendgrid.net',
+        port: 587,
+        auth: {
+          user: 'apikey',
+          pass: process.env.SENDGRID_API_KEY,
+        },
+      })
+    });
+  }
+
   if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-    console.log('📧 Using Gmail SMTP configuration');
-    transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // Use STARTTLS
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
+    providers.push({
+      name: 'gmail',
+      transporter: nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // Use STARTTLS
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      })
     });
   }
-  // Option 2: Custom SMTP
-  else if (process.env.SMTP_HOST) {
-    transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
-  }
-  // Option 3: SendGrid SMTP
-  else if (process.env.SENDGRID_API_KEY) {
-    transporter = nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY,
-      },
-    });
-  }
+
   // No email service configured
-  else {
+  if (providers.length === 0) {
     console.warn('⚠️ No email service configured. Please set environment variables.');
     console.log('Email data:', emailData);
     return;
   }
 
-  // Send email
   const senderName = emailData.senderName || 'Square Meter';
+  const fromAddress = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@squaremeter.com';
+
   console.log('📧 Preparing to send email with sender:', senderName);
   console.log('📎 Has attachments:', !!emailData.attachments && emailData.attachments.length > 0);
-  
-  const info = await transporter.sendMail({
-    from: `"${senderName}" <${process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@squaremeter.com'}>`,
-    to: emailData.to,
-    replyTo: emailData.replyTo,
-    subject: emailData.subject,
-    text: emailData.text,
-    html: emailData.html,
-    attachments: emailData.attachments || [],
-  });
 
-  console.log('✅ Email sent successfully:', info.messageId);
-  if (emailData.attachments && emailData.attachments.length > 0) {
-    console.log('✅ With', emailData.attachments.length, 'attachment(s)');
+  let lastError = null;
+
+  for (const provider of providers) {
+    try {
+      console.log(`📧 Trying email provider: ${provider.name}`);
+      const info = await provider.transporter.sendMail({
+        from: `"${senderName}" <${fromAddress}>`,
+        to: emailData.to,
+        replyTo: emailData.replyTo,
+        subject: emailData.subject,
+        text: emailData.text,
+        html: emailData.html,
+        attachments: emailData.attachments || [],
+      });
+
+      console.log('✅ Email sent successfully:', info.messageId);
+      if (emailData.attachments && emailData.attachments.length > 0) {
+        console.log('✅ With', emailData.attachments.length, 'attachment(s)');
+      }
+      return info;
+    } catch (error) {
+      lastError = error;
+      const errorMessage = error && error.message ? error.message : String(error);
+      console.error(`❌ Email send failed using ${provider.name}:`, errorMessage);
+
+      const authFailure = error?.code === 'EAUTH' || /535|authentication|badcredentials/i.test(errorMessage);
+      if (!authFailure) {
+        throw error;
+      }
+    }
   }
-  return info;
+
+  if (lastError) {
+    const authHint = 'Email authentication failed. Check the configured SMTP credentials or switch to another provider (SMTP or SendGrid).';
+    const wrappedError = new Error(`${authHint} Original error: ${lastError.message || lastError}`);
+    wrappedError.code = lastError.code || 'EAUTH';
+    throw wrappedError;
+  }
 }
 
 /**

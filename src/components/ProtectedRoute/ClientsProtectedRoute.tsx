@@ -3,10 +3,7 @@ import { LockClosedIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outli
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const CLIENTS_PASSWORD = 'SM-TEAM::Clients#2026!X7p9$ZqL';
 const CLIENTS_AUTH_KEY = 'clients_space_authenticated';
-const MAX_FAILED = 5;
-const LOCKOUT_MS = 60 * 1000; // 1 minute
 
 interface ClientsProtectedRouteProps {
   children: React.ReactNode;
@@ -18,18 +15,11 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
-  const [failed, setFailed] = useState(0);
-  const [lockUntil, setLockUntil] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const auth = sessionStorage.getItem(CLIENTS_AUTH_KEY);
     if (auth === 'true') setIsAuthenticated(true);
-
-    const storedFailed = Number(sessionStorage.getItem(`${CLIENTS_AUTH_KEY}_failed`) || '0');
-    if (Number.isFinite(storedFailed) && storedFailed > 0) setFailed(storedFailed);
-
-    const storedLock = Number(sessionStorage.getItem(`${CLIENTS_AUTH_KEY}_lock`) || '0');
-    if (Number.isFinite(storedLock) && storedLock > Date.now()) setLockUntil(storedLock);
   }, []);
 
   const validate = (candidate: string) => {
@@ -47,19 +37,8 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
     return null;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (lockUntil && lockUntil > Date.now()) {
-      const secs = Math.ceil((lockUntil - Date.now()) / 1000);
-      setError(
-        t('clientsProtection.lockedError', {
-          seconds: secs,
-          defaultValue: 'Too many attempts. Try again in {{seconds}} seconds.',
-        })
-      );
-      return;
-    }
 
     const err = validate(password);
     if (err) {
@@ -67,47 +46,59 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
       return;
     }
 
-    // constant-time compare
-    const equals = password.length === CLIENTS_PASSWORD.length &&
-      Array.from(password).reduce((acc, ch, i) => acc & (ch === CLIENTS_PASSWORD[i] ? 1 : 0), 1) === 1;
+    setLoading(true);
+    setError('');
 
-    if (equals) {
-      sessionStorage.setItem(CLIENTS_AUTH_KEY, 'true');
-      sessionStorage.removeItem(`${CLIENTS_AUTH_KEY}_failed`);
-      sessionStorage.removeItem(`${CLIENTS_AUTH_KEY}_lock`);
-      setIsAuthenticated(true);
-      setError('');
+    try {
+      const res = await fetch('/api/verify-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, section: 'clients' }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.authenticated) {
+        sessionStorage.setItem(CLIENTS_AUTH_KEY, 'true');
+        setIsAuthenticated(true);
+        setError('');
+        setPassword('');
+      } else if (res.status === 429) {
+        setError(
+          t('clientsProtection.lockedForError', {
+            seconds: data.retryAfter || 60,
+            defaultValue: 'Too many failed attempts. Locked for {{seconds}} seconds.',
+          })
+        );
+        setPassword('');
+      } else if (res.status === 401) {
+        const remaining = data.remainingAttempts ?? 0;
+        if (remaining <= 0) {
+          setError(
+            t('clientsProtection.lockedForError', {
+              seconds: 60,
+              defaultValue: 'Too many failed attempts. Locked for {{seconds}} seconds.',
+            })
+          );
+        } else {
+          setError(
+            t('clientsProtection.invalidPasswordWithAttempts', {
+              remainingAttempts: remaining,
+              defaultValue: 'Invalid password. {{remainingAttempts}} attempt(s) remaining.',
+            })
+          );
+        }
+        setPassword('');
+      } else {
+        setError(data.error || 'Authentication failed');
+        setPassword('');
+      }
+    } catch {
+      setError('Network error. Please try again.');
       setPassword('');
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    const next = failed + 1;
-    setFailed(next);
-    sessionStorage.setItem(`${CLIENTS_AUTH_KEY}_failed`, String(next));
-
-    if (next >= MAX_FAILED) {
-      const until = Date.now() + LOCKOUT_MS;
-      sessionStorage.setItem(`${CLIENTS_AUTH_KEY}_lock`, String(until));
-      setLockUntil(until);
-      setFailed(0);
-      sessionStorage.removeItem(`${CLIENTS_AUTH_KEY}_failed`);
-      setError(
-        t('clientsProtection.lockedForError', {
-          seconds: Math.ceil(LOCKOUT_MS / 1000),
-          defaultValue: 'Too many failed attempts. Locked for {{seconds}} seconds.',
-        })
-      );
-      setPassword('');
-      return;
-    }
-
-    setError(
-      t('clientsProtection.invalidPasswordWithAttempts', {
-        remainingAttempts: MAX_FAILED - next,
-        defaultValue: 'Invalid password. {{remainingAttempts}} attempt(s) remaining.',
-      })
-    );
-    setPassword('');
   };
 
   if (isAuthenticated) return <>{children}</>;
@@ -145,6 +136,7 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
                     defaultValue: 'Enter password',
                   })}
                   autoComplete="off"
+                  disabled={loading}
                 />
                 <button
                   type="button"
@@ -161,8 +153,12 @@ const ClientsProtectedRoute: React.FC<ClientsProtectedRouteProps> = ({ children 
 
             {error && <div className="text-sm text-red-600 bg-red-50 p-3 rounded">{error}</div>}
 
-            <button type="submit" className="w-full bg-emerald-900 text-white px-4 py-3 rounded-lg">
-              {t('clientsProtection.button', { defaultValue: 'Access Client Space' })}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-emerald-900 text-white px-4 py-3 rounded-lg disabled:opacity-50"
+            >
+              {loading ? '...' : t('clientsProtection.button', { defaultValue: 'Access Client Space' })}
             </button>
           </form>
 

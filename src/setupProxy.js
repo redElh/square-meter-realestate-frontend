@@ -15,12 +15,16 @@ module.exports = function(app) {
     })
   );
 
-  // ─── Credentials for Apimo ─────────────────────────────────────────────────
-  const credentials = '4567:d07da6e744bb033d1299469f1f6f7334531ec05c';
-  const base64Credentials = Buffer.from(credentials).toString('base64');
+  // ─── Credentials for Apimo (from environment variables) ──────────────────
+  const providerId = process.env.APIMO_PROVIDER_ID;
+  const token = process.env.APIMO_TOKEN;
+  if (!providerId || !token) {
+    console.warn('⚠️ APIMO credentials not set in environment variables');
+  }
+  const credentials = providerId && token ? `${providerId}:${token}` : '';
+  const base64Credentials = credentials ? Buffer.from(credentials).toString('base64') : '';
 
   console.log('🚀 Setting up proxy middleware...');
-  console.log('🔑 Authorization header will be:', `Basic ${base64Credentials}`);
 
   // ─── ChromaDB Proxy ────────────────────────────────────────────────────────
   app.use(

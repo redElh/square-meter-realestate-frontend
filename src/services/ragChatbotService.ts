@@ -1,9 +1,9 @@
-// RAG Chatbot Service with Google Gemini AI (FREE)
+// RAG Chatbot Service with Google Gemini AI
 // Provides intelligent property search and FAQ handling
+// AI calls are proxied through server-side /api/chatbot for security
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { vectorStoreService } from './vectorStoreService';
-import { apimoService, Property } from './apimoService';
+import { Property } from './apimoService';
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -31,8 +31,6 @@ export interface ConversationContext {
 }
 
 class RAGChatbotService {
-  private genAI: GoogleGenerativeAI | null = null;
-  private model: any = null;
   private conversationHistory: ChatMessage[] = [];
   private context: ConversationContext;
 
@@ -44,25 +42,14 @@ class RAGChatbotService {
   }
 
   /**
-   * Initialize Google Gemini client (FREE API)
+   * Initialize Google Gemini client
+   * Note: AI calls are proxied through server-side /api/chatbot for security (V6 fix)
    */
   initialize(apiKey?: string) {
-    const key = apiKey || process.env.REACT_APP_GEMINI_API_KEY;
-    
-    if (!key) {
-      console.warn('⚠️ Gemini API key not found. Please add REACT_APP_GEMINI_API_KEY to .env.local');
-      return false;
-    }
-
-    try {
-      this.genAI = new GoogleGenerativeAI(key);
-      this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-      console.log('✅ RAG Chatbot initialized with Gemini 2.5 Flash (FREE)');
-      return true;
-    } catch (error) {
-      console.error('❌ Failed to initialize Gemini:', error);
-      return false;
-    }
+    // Client-side no longer initializes Gemini directly.
+    // All AI calls go through the server-side /api/chatbot endpoint.
+    console.log('✅ RAG Chatbot initialized (server-side AI proxy)');
+    return true;
   }
 
   /**
@@ -413,37 +400,23 @@ class RAGChatbotService {
         );
 
         if (propertyResults.length > 0) {
-          // Use Gemini AI to create a personalized, intelligent response
-          if (this.model) {
-            try {
-              const propertyDescriptions = propertyResults.map((p, idx) => 
-                `${idx + 1}. ${p.title} - €${p.price?.toLocaleString()} - ${p.rooms} rooms, ${p.bedrooms} bedrooms - ${p.location || p.city}`
-              ).join('\n');
-              
-              const aiPrompt = `You are an expert real estate assistant for Square Meter Real Estate in Essaouira, Morocco.
+          // Use server-side AI to create a personalized response (V6 fix: no client-side API key)
+          try {
+            const propertyDescriptions = propertyResults.map((p, idx) => 
+              `${idx + 1}. ${p.title} - €${p.price?.toLocaleString()} - ${p.rooms} rooms, ${p.bedrooms} bedrooms - ${p.location || p.city}`
+            ).join('\n');
+            
+            const enrichedMessage = `User asked: "${userMessage}"\n\nWe found ${propertyResults.length} matching properties:\n${propertyDescriptions}\n\nRecommend the most suitable property and explain why. Keep response under 100 words.`;
 
-User asked: "${userMessage}"
-
-We found ${propertyResults.length} matching properties:
-${propertyDescriptions}
-
-Your task:
-1. If user wanted ONE specific property (cheapest, best, etc.), recommend the MOST SUITABLE ONE and explain why it's perfect for them
-2. If user wanted multiple properties, present ALL ${propertyResults.length} with enthusiasm
-3. Be conversational, professional, and highlight key features that match their criteria
-4. Focus ONLY on property details, viewing, and booking - nothing else
-5. Keep response under 100 words
-
-Respond in ${this.context.language === 'fr' ? 'French' : 'English'}:`;
-
-              const result = await this.model.generateContent(aiPrompt);
-              const response = await result.response;
-              responseContent = response.text();
-            } catch (error) {
-              console.error('AI response generation error:', error);
-              responseContent = this.formatSearchResponse(propertyResults, intent.filters, this.context.language);
-            }
-          } else {
+            const res = await fetch('/api/chatbot', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: enrichedMessage, language: this.context.language }),
+            });
+            const data = await res.json();
+            responseContent = data.response || this.formatSearchResponse(propertyResults, intent.filters, this.context.language);
+          } catch (error) {
+            console.error('AI response generation error:', error);
             responseContent = this.formatSearchResponse(propertyResults, intent.filters, this.context.language);
           }
           
@@ -485,22 +458,19 @@ Respond in ${this.context.language === 'fr' ? 'French' : 'English'}:`;
       }
 
       // If no specific handler, redirect to property search focus
-      if (!responseContent && this.model) {
+      if (!responseContent) {
+        // Use server-side AI proxy (V6 fix)
         try {
-          const systemPrompt = this.getSystemPrompt(this.context.language);
-          const conversationContext = this.conversationHistory
-            .slice(-6)
-            .map(msg => `${msg.role}: ${msg.content}`)
-            .join('\n');
-          
-          const prompt = `${systemPrompt}\n\nConversation history:\n${conversationContext}\n\nUser: ${userMessage}\n\nImportant: If the question is not about property search, viewing, or booking, politely redirect them to focus on finding properties or contact our team for other matters. Keep response under 50 words.\n\nAssistant:`;
-          
-          const result = await this.model.generateContent(prompt);
-          const response = await result.response;
-          responseContent = response.text();
-        } catch (geminiError: any) {
-          console.error('Gemini API error:', geminiError);
-          responseContent = 'I apologize, but I encountered an error. Please make sure your Gemini API key is valid.';
+          const res = await fetch('/api/chatbot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage, language: this.context.language }),
+          });
+          const data = await res.json();
+          responseContent = data.response || '';
+        } catch (aiError: any) {
+          console.error('AI proxy error:', aiError);
+          responseContent = '';
         }
       }
 
