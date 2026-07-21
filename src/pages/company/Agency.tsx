@@ -1,25 +1,19 @@
 // src/pages/Agency.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { 
   ChevronLeftIcon,
   ChevronRightIcon,
   ArrowRightIcon,
-  CalendarIcon,
-  PhoneIcon,
-  EnvelopeIcon,
   UserGroupIcon,
   BuildingLibraryIcon,
   ShieldCheckIcon,
-  ChartBarIcon,
-  MapPinIcon,
-  HomeIcon
+  ChartBarIcon
 } from '@heroicons/react/24/outline';
 
 const Agency: React.FC = () => {
   const { t } = useTranslation();
-  const [isVisible, setIsVisible] = useState(false);
   const [activeTeamMember, setActiveTeamMember] = useState(0);
 
   const teamMembers = [
@@ -42,15 +36,6 @@ const Agency: React.FC = () => {
       quote: t('agency.team.members.dimitri.quote')
     },
     {
-      id: 3,
-      name: t('agency.team.members.virginie.name'),
-      role: t('agency.team.members.virginie.role'),
-      image: '/member-3.jfif',
-      specialty: t('agency.team.members.virginie.specialty'),
-      languages: [t('languageNames.fr'), t('languageNames.en'), t('languageNames.es')],
-      quote: t('agency.team.members.virginie.quote')
-    },
-    {
       id: 4,
       name: t('agency.team.members.hayat.name'),
       role: t('agency.team.members.hayat.role'),
@@ -68,15 +53,6 @@ const Agency: React.FC = () => {
       languages: [t('languageNames.fr'), t('languageNames.ar'), t('languageNames.en')],
       quote: t('agency.team.members.yasmine.quote')
     },
-    {
-      id: 6,
-      name: t('agency.team.members.zineb.name'),
-      role: t('agency.team.members.zineb.role'),
-      image: '/member-6.jfif',
-      specialty: t('agency.team.members.zineb.specialty'),
-      languages: [t('languageNames.ar'), t('languageNames.fr'), t('languageNames.en')],
-      quote: t('agency.team.members.zineb.quote')
-    }
   ];
 
   const philosophyPrinciples = [
@@ -102,10 +78,6 @@ const Agency: React.FC = () => {
     }
   ];
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
   const nextTeamMember = () => {
     setActiveTeamMember((prev) => (prev + 1) % teamMembers.length);
   };
@@ -124,55 +96,33 @@ const Agency: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white font-inter text-base">
-      {/* Hero Section - match Properties page height and spacing */}
-      <section className="relative h-[60vh] sm:h-screen overflow-hidden bg-white -mt-24 sm:-mt-32">
-        {/* Background Image */}
-        <div className="absolute inset-0 mt-24 md:mt-28 lg:mt-32">
-          {/* Blurred background to fill empty space when main image is object-contain */}
-          <div
-            className="absolute inset-0 bg-center bg-cover filter blur-xl scale-105 brightness-75 z-0"
-            style={{ backgroundImage: `url(/team-image.jfif)` }}
-          />
-
-          {/* Main image centered on top */}
-          <div className="relative z-10 w-full h-full flex items-center justify-center">
-            <img
-              src="/team-image.jfif"
-              alt={t('agency.hero.title')}
-              className="w-full h-full object-contain object-center"
-            />
-          </div>
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-20"></div>
-        </div>
-
-        {/* Buttons Container */}
-        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
-            <Link 
-              to="/careers" 
-              className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
-            >
-              <span className="flex items-center justify-center space-x-2">
-                <span>{t('agency.hero.meetTeamButton')}</span>
-                <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-            </Link>
-            <Link 
-              to="/properties" 
-              className="border-2 border-white text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] transition-all duration-500 text-center"
-            >
-              <span>{t('agency.hero.discoverPropertiesButton')}</span>
-            </Link>
-          </div>
-          </div>
+      {/* Hero Section */}
+      <section className="relative py-24 sm:py-32 overflow-hidden bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-inter font-light text-gray-900 mb-4 sm:mb-6">
+              {t('agency.hero.title')}
+            </h1>
+            <div className="h-px bg-gray-200 w-16 sm:w-24 mx-auto mb-6 sm:mb-8"></div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <Link 
+                to="/careers" 
+                className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500 text-center"
+              >
+                <span className="flex items-center justify-center space-x-2">
+                  <span>{t('agency.hero.meetTeamButton')}</span>
+                  <ArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+                </span>
+              </Link>
+              <Link 
+                to="/properties" 
+                className="border-2 border-[#023927] text-[#023927] px-6 sm:px-12 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-[#023927] hover:text-white transition-all duration-500 text-center"
+              >
+                <span>{t('agency.hero.discoverPropertiesButton')}</span>
+              </Link>
+            </div>
           </div>
         </div>
-
-        {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
       </section>
 
       {/* Team Section - Placed immediately after hero */}
