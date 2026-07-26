@@ -15,6 +15,7 @@ import {
   CogIcon,
   StarIcon,
   GlobeAltIcon,
+  ChartBarIcon,
   LockClosedIcon,
   ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
@@ -110,7 +111,7 @@ const Header: React.FC = () => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
-  const showClientSection = false;
+  const showClientSection = true;
 
   const navigation = {
     primary: [
@@ -134,7 +135,15 @@ const Header: React.FC = () => {
         Icon: BuildingOfficeIcon,
         category: 'company',
       },
-
+      {
+        path: '/property-statistics',
+        label: t('navigation.statistics'),
+        Icon: ChartBarIcon,
+        category: 'company',
+        description: t('header.analyticsProtectedDescription', {
+          defaultValue: 'Reserved for agency team members. Password required.',
+        }),
+      },
       {
         path: '/services',
         label: t('navigation.services'),
