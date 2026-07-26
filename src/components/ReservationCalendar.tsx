@@ -111,7 +111,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">{t('propertyDetail.reservation.total') || 'Total'}</span>
               <span className="font-semibold text-[#023927]">
-                {selectedDays > 0 ? formatPrice(totalPrice) : '-'}
+                {selectedDays > 0 ? `${t('propertyDetail.reservation.priceFrom') || 'à partir de'} ${formatPrice(totalPrice)}` : '-'}
               </span>
             </div>
             <div className="text-xs text-gray-500">
