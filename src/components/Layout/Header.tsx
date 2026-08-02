@@ -111,7 +111,8 @@ const Header: React.FC = () => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
 
-  const showClientSection = true;
+  const isDev = process.env.NODE_ENV === 'development';
+  const showClientSection = isDev;
 
   const navigation = {
     primary: [
@@ -135,15 +136,19 @@ const Header: React.FC = () => {
         Icon: BuildingOfficeIcon,
         category: 'company',
       },
-      {
-        path: '/property-statistics',
-        label: t('navigation.statistics'),
-        Icon: ChartBarIcon,
-        category: 'company',
-        description: t('header.analyticsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.',
-        }),
-      },
+      ...(isDev
+        ? [
+            {
+              path: '/property-statistics',
+              label: t('navigation.statistics'),
+              Icon: ChartBarIcon,
+              category: 'company',
+              description: t('header.analyticsProtectedDescription', {
+                defaultValue: 'Reserved for agency team members. Password required.',
+              }),
+            },
+          ]
+        : []),
       {
         path: '/services',
         label: t('navigation.services'),

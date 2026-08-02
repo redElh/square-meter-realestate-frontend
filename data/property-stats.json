@@ -23,13 +23,21 @@
     "clicks": 0,
     "updatedAt": "2026-04-26T14:18:47.409Z"
   },
-  "86483102": {
-    "propertyId": "86483102",
-    "views": 1,
+  "86483093": {
+    "propertyId": "86483093",
+    "views": 2,
     "inquiries": 0,
     "favorites": 0,
     "clicks": 0,
-    "updatedAt": "2026-04-26T14:17:36.235Z"
+    "updatedAt": "2026-08-02T20:23:57.157Z"
+  },
+  "86483102": {
+    "propertyId": "86483102",
+    "views": 3,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-08-02T20:08:03.159Z"
   },
   "86681076": {
     "propertyId": "86681076",
@@ -46,6 +54,14 @@
     "favorites": 0,
     "clicks": 14,
     "updatedAt": "2026-04-16T01:00:54.807Z"
+  },
+  "86681109": {
+    "propertyId": "86681109",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-08-02T20:13:48.532Z"
   },
   "86686477": {
     "propertyId": "86686477",
@@ -73,11 +89,11 @@
   },
   "86709240": {
     "propertyId": "86709240",
-    "views": 4,
+    "views": 7,
     "inquiries": 0,
     "favorites": 0,
     "clicks": 2,
-    "updatedAt": "2026-05-29T21:26:58.195Z"
+    "updatedAt": "2026-08-02T20:10:58.552Z"
   },
   "86709605": {
     "propertyId": "86709605",
@@ -119,6 +135,14 @@
     "clicks": 5,
     "updatedAt": "2026-06-19T18:17:39.854Z"
   },
+  "86875844": {
+    "propertyId": "86875844",
+    "views": 1,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-08-02T20:23:48.555Z"
+  },
   "87072337": {
     "propertyId": "87072337",
     "views": 2,
@@ -126,5 +150,13 @@
     "favorites": 0,
     "clicks": 0,
     "updatedAt": "2026-06-22T13:00:00.171Z"
+  },
+  "87221044": {
+    "propertyId": "87221044",
+    "views": 2,
+    "inquiries": 0,
+    "favorites": 0,
+    "clicks": 0,
+    "updatedAt": "2026-08-02T20:08:50.955Z"
   }
 }

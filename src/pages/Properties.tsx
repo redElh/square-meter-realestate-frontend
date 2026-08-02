@@ -35,17 +35,25 @@ const Properties: React.FC = () => {
   );
   const [properties, setProperties] = useState<Property[]>([]);
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(null);
-  const [propertyTypeFilter, setPropertyTypeFilter] = useState<string>('');
-  const [sortBy, setSortBy] = useState<string>('newest');
+  const [locationFilter, setLocationFilter] = useState(searchParams.get('location') || '');
+  const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(() => {
+    const value = searchParams.get('bedrooms');
+    const parsed = Number(value);
+    return value !== null && !Number.isNaN(parsed) ? parsed : null;
+  });
+  const [propertyTypeFilter, setPropertyTypeFilter] = useState(searchParams.get('propertyType') || '');
+  const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
-  const [showMoreFilters, setShowMoreFilters] = useState(false);
-  const [propertyZone, setPropertyZone] = useState<'normal' | 'exclusive'>('normal');
+  const [showMoreFilters, setShowMoreFilters] = useState(
+    Boolean(searchParams.get('location') || searchParams.get('bedrooms') || searchParams.get('propertyType'))
+  );
+  const [propertyZone, setPropertyZone] = useState<'normal' | 'exclusive'>(
+    searchParams.get('zone') === 'exclusive' ? 'exclusive' : 'normal'
+  );
   const propertiesListRef = useRef<HTMLDivElement>(null);
   const hasInitializedFiltersRef = useRef(false);
   const location = useLocation();
@@ -355,6 +363,36 @@ const Properties: React.FC = () => {
       nextParams.delete('type');
     }
 
+    if (locationFilter) {
+      nextParams.set('location', locationFilter);
+    } else {
+      nextParams.delete('location');
+    }
+
+    if (bedroomsFilter !== null) {
+      nextParams.set('bedrooms', String(bedroomsFilter));
+    } else {
+      nextParams.delete('bedrooms');
+    }
+
+    if (propertyTypeFilter) {
+      nextParams.set('propertyType', propertyTypeFilter);
+    } else {
+      nextParams.delete('propertyType');
+    }
+
+    if (sortBy && sortBy !== 'newest') {
+      nextParams.set('sort', sortBy);
+    } else {
+      nextParams.delete('sort');
+    }
+
+    if (propertyZone === 'exclusive') {
+      nextParams.set('zone', 'exclusive');
+    } else {
+      nextParams.delete('zone');
+    }
+
     if (currentPage > 1) {
       nextParams.set('page', String(currentPage));
     } else {
@@ -364,7 +402,7 @@ const Properties: React.FC = () => {
     if (nextParams.toString() !== searchParams.toString()) {
       setSearchParams(nextParams, { replace: true });
     }
-  }, [filter, currentPage, searchParams, setSearchParams]);
+  }, [filter, locationFilter, bedroomsFilter, propertyTypeFilter, sortBy, propertyZone, currentPage, searchParams, setSearchParams]);
 
   useEffect(() => {
     if (loading || totalPages === 0) return;

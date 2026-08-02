@@ -38,7 +38,6 @@ import Success from './pages/special-pages/Success';
 import Careers from './pages/special-pages/Careers';
 import LanguageCurrency from './pages/Settings/LanguageCurrency';
 import PropertyStatistics from './pages/PropertyStatistics';
-import PropertyStatsProtectedRoute from './components/ProtectedRoute/PropertyStatsProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import RAGAssistant from './components/AIAssistant/RAGAssistant';
 
@@ -68,14 +67,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/properties" element={<Properties />} />
             <Route path="/properties/:id" element={<PropertyDetail />} />
-            <Route
-              path="/property-statistics"
-              element={(
-                <PropertyStatsProtectedRoute>
-                  <PropertyStatistics />
-                </PropertyStatsProtectedRoute>
-              )}
-            />
+            <Route path="/property-statistics" element={<PropertyStatistics />} />
             <Route path="/owners" element={<Owners />} />
             <Route path="/traveler" element={(
               <ClientsProtectedRoute>
