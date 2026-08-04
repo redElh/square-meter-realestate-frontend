@@ -440,7 +440,7 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     city: cityName,
     zipcode,
     country: apimoProperty.country,
-    surface: apimoProperty.area?.value || 0,
+    surface: apimoProperty.area?.value || apimoProperty.area?.total || 0,
     landSurface: apimoProperty.area?.total,
     rooms: Number(apimoProperty.rooms) || 0,
     bedrooms: apimoProperty.bedrooms || 0,
