@@ -73,8 +73,7 @@ module.exports = async (req, res) => {
   const wpPath = req.query.path || '/posts';
 
   // V8 fix: Whitelist allowed WordPress API paths
-  const ALLOWED_PATHS = /^\/posts(\/\d+)?(\/)$/; // /posts or /posts/123
-  const ALLOWED_PATHS_FULL = /^\/(posts|pages|categories|tags|media|users|comments)(\/[\w-]+)?(\/\d+)?$/;
+  const ALLOWED_PATHS_FULL = /^\/(posts|pages|categories|tags|media|users|comments)(\/[\w-]+)?(\/\d+)?(\?.*)?$/;
 
   // Decode and validate the path
   const decodedPath = decodeURIComponent(wpPath);
@@ -84,7 +83,7 @@ module.exports = async (req, res) => {
   }
 
   // Only allow specific read-only endpoints
-  const pathSegment = decodedPath.split('/')[1];
+  const pathSegment = decodedPath.split('?')[0].split('/')[1];
   const ALLOWED_ENDPOINTS = ['posts', 'pages', 'categories', 'tags'];
   if (!ALLOWED_ENDPOINTS.includes(pathSegment)) {
     return res.status(403).json({ error: 'Endpoint not allowed' });
