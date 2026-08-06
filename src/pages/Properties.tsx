@@ -686,6 +686,47 @@ const Properties: React.FC = () => {
 
   const seoData = getSEOData();
 
+  const renderTypeButton = (key: string, label: string, count: number) => (
+    <button
+      key={key}
+      onClick={() => setFilter(key)}
+      className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 ${
+        filter === key
+          ? 'border-white bg-white/95 text-[#023927]'
+          : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+      }`}
+      style={{ borderRadius: '0' }}
+    >
+      <div className="flex items-center justify-between">
+        <span>{label}</span>
+        <span className={`text-xs sm:text-sm px-1.5 sm:px-2.5 py-0.5 sm:py-1 ${
+          filter === key 
+            ? 'bg-[#023927]/10 text-[#023927]' 
+            : 'bg-white/30 text-white'
+        }`}>
+          {count}
+        </span>
+      </div>
+    </button>
+  );
+
+  const renderZoneButton = (zone: 'normal' | 'exclusive') => (
+    <button
+      key={zone}
+      onClick={() => setPropertyZone(zone)}
+      className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 ${
+        propertyZone === zone
+          ? 'border-white bg-white/95 text-[#023927]'
+          : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+      }`}
+      style={{ borderRadius: '0' }}
+    >
+      {zone === 'normal'
+        ? t('header.allProperties', { defaultValue: 'All Properties' })
+        : t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })}
+    </button>
+  );
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
@@ -720,55 +761,43 @@ const Properties: React.FC = () => {
           <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
             {/* Primary Filter Buttons: Buy, Rent, Vacation */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4">
-              {propertyTypes.map(({ key, label, count }) => (
-                <button
-                  key={key}
-                  onClick={() => setFilter(key)}
-                  className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 ${
-                    filter === key
-                      ? 'border-white bg-white/95 text-[#023927]'
-                      : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                  }`}
-                  style={{ borderRadius: '0' }}
-                >
-                  <div className="flex items-center justify-between">
-                    <span>{label}</span>
-                    <span className={`text-xs sm:text-sm px-1.5 sm:px-2.5 py-0.5 sm:py-1 ${
-                      filter === key 
-                        ? 'bg-[#023927]/10 text-[#023927]' 
-                        : 'bg-white/30 text-white'
-                    }`}>
-                      {count}
-                    </span>
-                  </div>
-                </button>
-              ))}
+              {filter === 'all'
+                ? propertyTypes.map(({ key, label, count }) => renderTypeButton(key, label, count))
+                : [
+                    ...propertyTypes
+                      .filter(({ key }) => key === filter)
+                      .map(({ key, label, count }) => renderTypeButton(key, label, count)),
+                    renderZoneButton('normal'),
+                    renderZoneButton('exclusive'),
+                  ]}
             </div>
 
-            <div className="mb-4">
-              <div className="grid grid-cols-2 gap-3 mb-3 sm:mb-4">
-                <button
-                  onClick={() => setPropertyZone('normal')}
-                  className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
-                    propertyZone === 'normal'
-                      ? 'border-white bg-white/95 text-[#023927]'
-                      : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                  }`}
-                >
-                  {t('header.allProperties', { defaultValue: 'All Properties' })}
-                </button>
-                <button
-                  onClick={() => setPropertyZone('exclusive')}
-                  className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
-                    propertyZone === 'exclusive'
-                      ? 'border-white bg-white/95 text-[#023927]'
-                      : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                  }`}
-                >
-                  {t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })}
-                </button>
+            {filter === 'all' && (
+              <div className="mb-4">
+                <div className="grid grid-cols-2 gap-3 mb-3 sm:mb-4">
+                  <button
+                    onClick={() => setPropertyZone('normal')}
+                    className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
+                      propertyZone === 'normal'
+                        ? 'border-white bg-white/95 text-[#023927]'
+                        : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+                    }`}
+                  >
+                    {t('header.allProperties', { defaultValue: 'All Properties' })}
+                  </button>
+                  <button
+                    onClick={() => setPropertyZone('exclusive')}
+                    className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
+                      propertyZone === 'exclusive'
+                        ? 'border-white bg-white/95 text-[#023927]'
+                        : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+                    }`}
+                  >
+                    {t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* More Filters Toggle & Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4">

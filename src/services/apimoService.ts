@@ -341,7 +341,9 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
                   apimoProperty.comments?.[0];
   
   const title = comment?.title || getPropertyTypeLabel(apimoProperty.type, apimoProperty.subtype);
-  const description = comment?.comment_full || comment?.comment || comment?.hook || '';
+  // comment_full may contain a stub like `"` or `""` from the CMS; fall back to the real comment text
+  const fullComment = (comment?.comment_full || '').trim();
+  const description = (fullComment.length > 2 ? fullComment : '') || comment?.comment || comment?.hook || '';
   
   console.log(`📋 [${apimoProperty.id}] API Title: "${title}"`);
   

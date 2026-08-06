@@ -188,6 +188,11 @@ const PropertyDetail: React.FC = () => {
 
   const isExclusiveProperty = Number(property.agreementType) === 3;
 
+  // Apimo descriptions use \r\n\r\n between paragraphs - preserve them on the page
+  const descriptionParagraphs = property.description
+    ? property.description.split(/\r?\n+/).map((p) => p.trim()).filter(Boolean)
+    : [];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Reservation Saved Notification */}
@@ -264,7 +269,7 @@ const PropertyDetail: React.FC = () => {
 
         <button
           onClick={() => openGallery(activeImage)}
-          className="absolute top-[110px] sm:top-[130px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 bg-black/65 hover:bg-black/80 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 backdrop-blur-sm transition-colors duration-300 flex items-center gap-1.5 sm:gap-2"
+          className="absolute top-[110px] sm:top-[130px] mt-20 right-2 sm:right-4 md:right-6 lg:right-8 z-30 bg-black/65 hover:bg-black/80 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 backdrop-blur-sm transition-colors duration-300 flex items-center gap-1.5 sm:gap-2"
           style={{ borderRadius: '0' }}
         >
           <CameraIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -400,9 +405,17 @@ const PropertyDetail: React.FC = () => {
               <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-3 border-b border-gray-200">
                 {t('propertyDetail.sections.description')}
               </h2>
-              <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-                {property.description}
-              </p>
+              {descriptionParagraphs.length > 0 ? (
+                descriptionParagraphs.map((paragraph, index) => (
+                  <p key={index} className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4 last:mb-0">
+                    {paragraph}
+                  </p>
+                ))
+              ) : (
+                <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+                  {property.description}
+                </p>
+              )}
             </div>
 
             {/* Contact Section - Horizontal layout */}
