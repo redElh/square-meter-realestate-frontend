@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalization } from '../contexts/LocalizationContext';
 import { useCurrency } from '../hooks/useCurrency';
+import { isSoldStatus } from '../services/apimoService';
 import { 
   MapPinIcon, 
   HomeIcon, 
@@ -26,6 +27,7 @@ interface PropertyCardProps {
   floors?: number;
   images: string[];
   type: 'buy' | 'rent';
+  status?: number;
   reference?: string;
   isExclusive?: boolean;
   isFavorite?: boolean;
@@ -46,6 +48,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   floors,
   images,
   type,
+  status,
   reference,
   isExclusive = false,
   isFavorite = false,
@@ -70,8 +73,12 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
         
         {/* Type Badge */}
         <div className={`absolute top-4 ${isRTL ? 'left-4 items-start' : 'right-4 items-end'} flex flex-col gap-2`}>
-          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold text-gray-900">
-            {type === 'buy' ? t('properties.filters.buy') : t('properties.filters.rent')}
+          <span className={`px-3 py-1 backdrop-blur-sm rounded-full text-xs font-semibold uppercase tracking-wide ${
+            isSoldStatus(status)
+              ? 'bg-gray-200/95 text-gray-700'
+              : 'bg-white/90 text-gray-900'
+          }`}>
+            {isSoldStatus(status) ? (type === 'buy' ? t('properties.filters.sold') : t('properties.filters.rented')) : type === 'buy' ? t('properties.filters.buy') : t('properties.filters.rent')}
           </span>
           {isExclusive && (
             <span className="px-3 py-1 bg-[#023927]/95 backdrop-blur-sm rounded-full text-xs font-semibold text-white uppercase tracking-wide">
@@ -128,7 +135,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           </div>
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
             <span className="font-medium">{rooms || 0}</span>
-            <span className={isRTL ? 'mr-1' : 'ml-1'}>{t('properties.details.rooms')}</span>
+            <span className={isRTL ? 'mr-1' : 'ml-1'}>{t('properties.details.bedrooms')}</span>
           </div>
           <div className={`flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
             <span className="font-medium">{floors || 0}</span>

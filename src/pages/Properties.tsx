@@ -11,15 +11,19 @@ import {
   HomeIcon,
   CheckIcon,
   Square2StackIcon,
-  ArrowTopRightOnSquareIcon
+  ArrowTopRightOnSquareIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+  ChevronUpIcon
 } from '@heroicons/react/24/outline';
 import {
   HeartIcon as HeartIconSolid
 } from '@heroicons/react/24/solid';
-import { apimoService, Property } from '../services/apimoService';
+import { apimoService, Property, isSoldStatus } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
 import SEO from '../components/SEO/SEO';
 import ImageGalleryModal from '../components/ImageGalleryModal';
+import FilterDropdown from '../components/FilterDropdown';
 
 const Properties: React.FC = () => {
   const { t } = useTranslation();
@@ -35,7 +39,7 @@ const Properties: React.FC = () => {
   );
   const [properties, setProperties] = useState<Property[]>([]);
   const [filter, setFilter] = useState<string>(searchParams.get('type') || 'all');
-  const [locationFilter, setLocationFilter] = useState(searchParams.get('location') || '');
+  const [query, setQuery] = useState(searchParams.get('q') || '');
   const [bedroomsFilter, setBedroomsFilter] = useState<number | null>(() => {
     const value = searchParams.get('bedrooms');
     const parsed = Number(value);
@@ -49,13 +53,13 @@ const Properties: React.FC = () => {
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
   const [showMoreFilters, setShowMoreFilters] = useState(
-    Boolean(searchParams.get('location') || searchParams.get('bedrooms') || searchParams.get('propertyType'))
-  );
-  const [propertyZone, setPropertyZone] = useState<'normal' | 'exclusive'>(
-    searchParams.get('zone') === 'exclusive' ? 'exclusive' : 'normal'
+    Boolean(searchParams.get('bedrooms') || searchParams.get('propertyType'))
   );
   const propertiesListRef = useRef<HTMLDivElement>(null);
+  const firstPropertyCardRef = useRef<HTMLDivElement>(null);
   const hasInitializedFiltersRef = useRef(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const suppressScrollTopRef = useRef(false);
   const location = useLocation();
   
   // Gallery modal state
@@ -231,17 +235,15 @@ const Properties: React.FC = () => {
   }, [t, currentLanguage]);
 
   const isExclusiveProperty = (property: Property): boolean => Number(property.agreementType) === 3;
-  const exclusiveProperties = properties.filter(isExclusiveProperty);
-  const activeSourceProperties = propertyZone === 'exclusive' ? exclusiveProperties : properties;
+  const activeSourceProperties = properties;
 
   const filterAndSortProperties = (
     sourceProperties: Property[],
     options: {
       typeFilter: string;
-      location: string;
+      query: string;
       bedrooms: number | null;
       propertyType: string;
-      query: string;
       sort: string;
     }
   ): Property[] => {
@@ -257,13 +259,13 @@ const Properties: React.FC = () => {
 
     const filtered = sourceProperties.filter((property) => {
       const typeMatch = options.typeFilter === 'all' || property.type === options.typeFilter;
-      const locationMatch = !options.location || property.location.toLowerCase().includes(options.location.toLowerCase());
       const roomsMatch = !options.bedrooms || ((Number(property.rooms) || 0) >= options.bedrooms);
       const propertyTypeMatch = !options.propertyType || (() => {
         const title = property.title?.toLowerCase() || '';
-        if (options.propertyType === 'apartment') return title.includes('appartement') || title.includes('apartment') || title.includes('riad');
+        if (options.propertyType === 'apartment') return title.includes('appartement') || title.includes('apartment');
         if (options.propertyType === 'villa') return title.includes('villa');
         if (options.propertyType === 'land') return title.includes('terrain') || title.includes('land');
+        if (options.propertyType === 'riad') return title.includes('riad');
         if (options.propertyType === 'other') return !title.includes('appartement') && !title.includes('apartment') && !title.includes('villa') && !title.includes('terrain') && !title.includes('land') && !title.includes('riad');
         return true;
       })();
@@ -272,7 +274,10 @@ const Properties: React.FC = () => {
         const query = options.query.toLowerCase().trim();
         const searchFields = [
           property.title?.toLowerCase() || '',
+          String(property.reference ?? '').toLowerCase(),
           property.location?.toLowerCase() || '',
+          property.city?.toLowerCase() || '',
+          String(property.zipcode ?? '').toLowerCase(),
           property.description?.toLowerCase() || '',
           property.type?.toLowerCase() || '',
           property.rooms?.toString() || '',
@@ -285,21 +290,19 @@ const Properties: React.FC = () => {
         return queryWords.every(word => searchFields.includes(word));
       })();
 
-      return typeMatch && locationMatch && roomsMatch && propertyTypeMatch && searchMatch;
+      return typeMatch && roomsMatch && propertyTypeMatch && searchMatch;
     });
 
     const sorted = [...filtered];
     sorted.sort((a, b) => {
-      // 1. Exclusive properties first if in 'normal' zone
-      if (propertyZone === 'normal') {
-        const aIsExclusive = isExclusiveProperty(a);
-        const bIsExclusive = isExclusiveProperty(b);
-        
-        if (aIsExclusive && !bIsExclusive) return -1;
-        if (!aIsExclusive && bIsExclusive) return 1;
-      }
+      // Exclusive properties always shown on top
+      const aIsExclusive = isExclusiveProperty(a);
+      const bIsExclusive = isExclusiveProperty(b);
 
-      // 2. Apply requested sort
+      if (aIsExclusive && !bIsExclusive) return -1;
+      if (!aIsExclusive && bIsExclusive) return 1;
+
+      // Apply requested sort
       switch (options.sort) {
         case 'priceAsc':
           return getSortablePrice(a) - getSortablePrice(b);
@@ -318,10 +321,9 @@ const Properties: React.FC = () => {
 
   const filteredAndSortedProperties = filterAndSortProperties(activeSourceProperties, {
     typeFilter: filter,
-    location: locationFilter,
+    query,
     bedrooms: bedroomsFilter,
     propertyType: propertyTypeFilter,
-    query: '',
     sort: sortBy,
   });
 
@@ -338,6 +340,32 @@ const Properties: React.FC = () => {
     });
   };
 
+  const handleScrollTopClick = () => {
+    suppressScrollTopRef.current = true;
+    setShowScrollTop(false);
+    scrollToPropertiesList();
+  };
+
+  useEffect(() => {
+    const onScroll = () => {
+      const rect = firstPropertyCardRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      if (rect.top >= 0) {
+        suppressScrollTopRef.current = false;
+        if (showScrollTop) setShowScrollTop(false);
+        return;
+      }
+
+      if (!suppressScrollTopRef.current && !showScrollTop) {
+        setShowScrollTop(true);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [showScrollTop]);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     scrollToPropertiesList();
@@ -352,7 +380,7 @@ const Properties: React.FC = () => {
     }
 
     setCurrentPage(1);
-  }, [filter, locationFilter, bedroomsFilter, propertyTypeFilter, sortBy, propertyZone, loading, properties.length]);
+  }, [filter, query, bedroomsFilter, propertyTypeFilter, sortBy, loading, properties.length]);
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams);
@@ -363,10 +391,10 @@ const Properties: React.FC = () => {
       nextParams.delete('type');
     }
 
-    if (locationFilter) {
-      nextParams.set('location', locationFilter);
+    if (query) {
+      nextParams.set('q', query);
     } else {
-      nextParams.delete('location');
+      nextParams.delete('q');
     }
 
     if (bedroomsFilter !== null) {
@@ -387,12 +415,6 @@ const Properties: React.FC = () => {
       nextParams.delete('sort');
     }
 
-    if (propertyZone === 'exclusive') {
-      nextParams.set('zone', 'exclusive');
-    } else {
-      nextParams.delete('zone');
-    }
-
     if (currentPage > 1) {
       nextParams.set('page', String(currentPage));
     } else {
@@ -402,7 +424,7 @@ const Properties: React.FC = () => {
     if (nextParams.toString() !== searchParams.toString()) {
       setSearchParams(nextParams, { replace: true });
     }
-  }, [filter, locationFilter, bedroomsFilter, propertyTypeFilter, sortBy, propertyZone, currentPage, searchParams, setSearchParams]);
+  }, [filter, query, bedroomsFilter, propertyTypeFilter, sortBy, currentPage, searchParams, setSearchParams]);
 
   useEffect(() => {
     if (loading || totalPages === 0) return;
@@ -441,23 +463,23 @@ const Properties: React.FC = () => {
   };
 
   const propertyTypes = [
-    { key: 'buy', label: t('properties.filters.buy'), count: activeSourceProperties.filter(p => p.type === 'buy').length },
-    { key: 'rent', label: t('properties.filters.rent'), count: activeSourceProperties.filter(p => p.type === 'rent').length },
-    { key: 'seasonal', label: t('properties.filters.vacation'), count: activeSourceProperties.filter(p => p.type === 'seasonal').length },
+    { key: 'buy', label: t('properties.filters.buy') },
+    { key: 'rent', label: t('properties.filters.rent') },
+    { key: 'seasonal', label: t('properties.filters.vacation') },
   ];
 
-  const locations = Array.from(new Set(activeSourceProperties.map(p => p.location)));
   const bedroomOptions = [1, 2, 3, 4, 5, 6];
   const propertyTypeOptions = [
     { value: 'apartment', label: t('properties.propertyTypes.apartment') },
     { value: 'villa', label: t('properties.propertyTypes.villa') },
     { value: 'land', label: t('properties.propertyTypes.land') },
+    { value: 'riad', label: t('properties.propertyTypes.riad') },
     { value: 'other', label: t('properties.propertyTypes.other') }
   ];
 
   const resetFilters = () => {
     setFilter('all');
-    setLocationFilter('');
+    setQuery('');
     setBedroomsFilter(null);
     setPropertyTypeFilter('');
     setSortBy('newest');
@@ -466,7 +488,7 @@ const Properties: React.FC = () => {
 
   const activeFiltersCount = [
     filter !== 'all',
-    locationFilter !== '',
+    query !== '',
     bedroomsFilter !== null,
     propertyTypeFilter !== '',
   ].filter(Boolean).length;
@@ -617,12 +639,14 @@ const Properties: React.FC = () => {
           <div className="flex-1 min-w-0 w-full sm:w-auto">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
               <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
-                property.type === 'buy'
+                isSoldStatus(property.status)
+                  ? 'bg-gray-100 text-gray-700 border border-gray-300'
+                  : property.type === 'buy'
                   ? 'bg-blue-50 text-blue-800 border border-blue-200'
                   : property.type === 'rent'
                   ? 'bg-green-50 text-green-800 border border-green-200'
                   : 'bg-purple-50 text-purple-800 border border-purple-200'
-              }`}>{property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
+              }`}>{isSoldStatus(property.status) ? (property.type === 'buy' ? t('properties.listing.sold') : t('properties.listing.rented')) : property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
 
               <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
 
@@ -673,12 +697,9 @@ const Properties: React.FC = () => {
   const getSEOData = () => {
     const filterType = filter === 'buy' ? 'Vente' : filter === 'rent' ? 'Location' : filter === 'seasonal' ? 'Location Saisonnière' : '';
     const visibleCount = filteredAndSortedProperties.length;
-    const zoneLabel = propertyZone === 'exclusive'
-      ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })
-      : t('header.allProperties', { defaultValue: 'All Properties' });
     const title = filterType ? `${filterType} - Biens Immobiliers Essaouira` : 'Tous nos Biens Immobiliers à Essaouira';
     const description = filterType 
-      ? `Découvrez nos biens en ${filterType.toLowerCase()} à Essaouira. ${visibleCount} propriétés disponibles dans la section ${zoneLabel}. Villas, appartements et biens d'exception.`
+      ? `Découvrez nos biens en ${filterType.toLowerCase()} à Essaouira. ${visibleCount} propriétés disponibles. Villas, appartements et biens d'exception.`
       : `Explorez notre catalogue complet de ${properties.length} biens immobiliers à Essaouira. Vente, location et location saisonnière de propriétés d'exception.`;
     
     return { title, description };
@@ -686,44 +707,18 @@ const Properties: React.FC = () => {
 
   const seoData = getSEOData();
 
-  const renderTypeButton = (key: string, label: string, count: number) => (
+  const renderTypeButton = (key: string, label: string) => (
     <button
       key={key}
-      onClick={() => setFilter(key)}
-      className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 ${
+      onClick={() => setFilter(filter === key ? 'all' : key)}
+      className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 flex items-center justify-center ${
         filter === key
           ? 'border-white bg-white/95 text-[#023927]'
           : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
       }`}
       style={{ borderRadius: '0' }}
     >
-      <div className="flex items-center justify-between">
-        <span>{label}</span>
-        <span className={`text-xs sm:text-sm px-1.5 sm:px-2.5 py-0.5 sm:py-1 ${
-          filter === key 
-            ? 'bg-[#023927]/10 text-[#023927]' 
-            : 'bg-white/30 text-white'
-        }`}>
-          {count}
-        </span>
-      </div>
-    </button>
-  );
-
-  const renderZoneButton = (zone: 'normal' | 'exclusive') => (
-    <button
-      key={zone}
-      onClick={() => setPropertyZone(zone)}
-      className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 ${
-        propertyZone === zone
-          ? 'border-white bg-white/95 text-[#023927]'
-          : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-      }`}
-      style={{ borderRadius: '0' }}
-    >
-      {zone === 'normal'
-        ? t('header.allProperties', { defaultValue: 'All Properties' })
-        : t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })}
+      {label}
     </button>
   );
 
@@ -761,43 +756,33 @@ const Properties: React.FC = () => {
           <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
             {/* Primary Filter Buttons: Buy, Rent, Vacation */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4">
-              {filter === 'all'
-                ? propertyTypes.map(({ key, label, count }) => renderTypeButton(key, label, count))
-                : [
-                    ...propertyTypes
-                      .filter(({ key }) => key === filter)
-                      .map(({ key, label, count }) => renderTypeButton(key, label, count)),
-                    renderZoneButton('normal'),
-                    renderZoneButton('exclusive'),
-                  ]}
+              {propertyTypes.map(({ key, label }) => renderTypeButton(key, label))}
             </div>
 
-            {filter === 'all' && (
-              <div className="mb-4">
-                <div className="grid grid-cols-2 gap-3 mb-3 sm:mb-4">
+            {/* Search Input */}
+            <div className="mb-4">
+              <div className="relative group">
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder={t('properties.search.placeholder')}
+                  className="peer w-full pl-12 pr-10 py-3 sm:py-4 border-2 border-white/60 bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:border-white focus:shadow-[0_10px_35px_rgba(255,255,255,0.35)] transition-all duration-300"
+                  style={{ borderRadius: '0' }}
+                />
+                <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                {query && (
                   <button
-                    onClick={() => setPropertyZone('normal')}
-                    className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
-                      propertyZone === 'normal'
-                        ? 'border-white bg-white/95 text-[#023927]'
-                        : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                    }`}
+                    type="button"
+                    onClick={() => setQuery('')}
+                    aria-label={t('common.clear', { defaultValue: 'Clear' })}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700 transition-colors"
                   >
-                    {t('header.allProperties', { defaultValue: 'All Properties' })}
+                    <XMarkIcon className="w-5 h-5" />
                   </button>
-                  <button
-                    onClick={() => setPropertyZone('exclusive')}
-                    className={`w-full p-2.5 sm:p-3 border-2 text-xs sm:text-sm font-medium uppercase tracking-wider transition-all duration-300 ${
-                      propertyZone === 'exclusive'
-                        ? 'border-white bg-white/95 text-[#023927]'
-                        : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                    }`}
-                  >
-                    {t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' })}
-                  </button>
-                </div>
+                )}
               </div>
-            )}
+            </div>
 
             {/* More Filters Toggle & Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4">
@@ -836,65 +821,42 @@ const Properties: React.FC = () => {
               </button>
             </div>
 
-            {/* Collapsible Location & Room Filters */}
+            {/* Collapsible Bedrooms & Property Type Filters */}
             <div 
               className={`overflow-hidden transition-all duration-500 ease-in-out ${
                 showMoreFilters ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-2">
-                {/* Location Filter */}
-                <div>
-                  <label className="block text-white text-sm sm:text-base font-medium mb-2">
-                    {t('properties.filters.location')}
-                  </label>
-                  <select 
-                    value={locationFilter}
-                    onChange={(e) => setLocationFilter(e.target.value)}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-white/50 focus:outline-none focus:border-white bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base"
-                    style={{ borderRadius: '0' }}
-                  >
-                    <option value="">{t('properties.filters.allLocations')}</option>
-                    {locations.map(location => (
-                      <option key={location} value={location}>{location}</option>
-                    ))}
-                  </select>
-                </div>
-
                 {/* Bedrooms Filter */}
                 <div>
-                  <label className="block text-white text-sm sm:text-base font-medium mb-2">
-                    {t('properties.filters.bedrooms')}
-                  </label>
-                  <select 
-                    value={bedroomsFilter || ''}
-                    onChange={(e) => setBedroomsFilter(e.target.value ? parseInt(e.target.value) : null)}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-white/50 focus:outline-none focus:border-white bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base"
-                    style={{ borderRadius: '0' }}
-                  >
-                    <option value="">{t('properties.filters.allBedrooms')}</option>
-                    {bedroomOptions.map(beds => (
-                      <option key={beds} value={beds}>{beds}+ {t('properties.filters.bedroomsLabel')}</option>
-                    ))}
-                  </select>
+                  <FilterDropdown
+                    label={t('properties.filters.bedrooms')}
+                    value={bedroomsFilter !== null ? String(bedroomsFilter) : ''}
+                    placeholder={t('properties.filters.allBedrooms')}
+                    onChange={(v) => setBedroomsFilter(v === '' ? null : parseInt(v, 10))}
+                    options={[
+                      { value: '', label: t('properties.filters.allBedrooms') },
+                      ...bedroomOptions.map(beds => ({
+                        value: String(beds),
+                        label: `${beds}+ ${t('properties.filters.bedroomsLabel')}`,
+                      })),
+                    ]}
+                  />
                 </div>
 
                 {/* Property Type Filter */}
                 <div>
-                  <label className="block text-white text-sm sm:text-base font-medium mb-2">
-                    {t('properties.filters.propertyType')}
-                  </label>
-                  <select 
+                  <FilterDropdown
+                    label={t('properties.filters.propertyType')}
                     value={propertyTypeFilter}
-                    onChange={(e) => setPropertyTypeFilter(e.target.value)}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border-2 border-white/50 focus:outline-none focus:border-white bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base"
-                    style={{ borderRadius: '0' }}
-                  >
-                    <option value="">{t('properties.filters.allPropertyTypes')}</option>
-                    {propertyTypeOptions.map(type => (
-                      <option key={type.value} value={type.value}>{type.label}</option>
-                    ))}
-                  </select>
+                    placeholder={t('properties.filters.allPropertyTypes')}
+                    onChange={setPropertyTypeFilter}
+                    options={[
+                      { value: '', label: t('properties.filters.allPropertyTypes') },
+                      ...propertyTypeOptions,
+                    ]}
+                  />
                 </div>
               </div>
             </div>
@@ -902,7 +864,7 @@ const Properties: React.FC = () => {
             {/* Results count indicator */}
             <div className="text-center mt-4">
               <span className="text-xs sm:text-sm text-white/90 font-medium px-3 py-1.5 bg-black/30 backdrop-blur-sm inline-block">
-                {filteredAndSortedProperties.length} {t('properties.search.results')} · {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'All Properties' })}
+                {filteredAndSortedProperties.length} {t('properties.search.results')}
               </span>
             </div>
           </div>
@@ -965,20 +927,23 @@ const Properties: React.FC = () => {
               <div className="mb-6 sm:mb-12">
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
-                    {filteredAndSortedProperties.length} {propertyZone === 'exclusive' ? t('header.exclusiveProperties', { defaultValue: 'Exclusive Properties' }) : t('header.allProperties', { defaultValue: 'All Properties' })}
+                    {filteredAndSortedProperties.length} {t('properties.search.results')}
                   </h3>
                   <div className="flex items-center space-x-2 sm:space-x-3">
                     <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
-                    <select
+                    <FilterDropdown
+                      variant="light"
+                      compact
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="border-2 border-gray-300 px-2 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base focus:outline-none focus:border-[#023927]"
-                    >
-                      <option value="newest">{t('properties.listing.newest')}</option>
-                      <option value="priceAsc">{t('properties.listing.priceAsc')}</option>
-                      <option value="priceDesc">{t('properties.listing.priceDesc')}</option>
-                      <option value="surface">{t('properties.listing.surface')}</option>
-                    </select>
+                      onChange={setSortBy}
+                      placeholder={t('properties.listing.newest')}
+                      options={[
+                        { value: 'newest', label: t('properties.listing.newest') },
+                        { value: 'priceAsc', label: t('properties.listing.priceAsc') },
+                        { value: 'priceDesc', label: t('properties.listing.priceDesc') },
+                        { value: 'surface', label: t('properties.listing.surface') },
+                      ]}
+                    />
                   </div>
                 </div>
                 <div className="h-px bg-gray-200 w-full"></div>
@@ -1011,7 +976,14 @@ const Properties: React.FC = () => {
               ) : (
                 <>
                   <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
-                    {paginatedProperties.map((property) => renderPropertyCard(property, currentPage))}
+                    {paginatedProperties.map((property, index) => (
+                      <div
+                        key={property.id}
+                        ref={index === 0 ? firstPropertyCardRef : undefined}
+                      >
+                        {renderPropertyCard(property, currentPage)}
+                      </div>
+                    ))}
                   </div>
 
                   {totalPages > 1 && (
@@ -1066,6 +1038,16 @@ const Properties: React.FC = () => {
         propertyTitle={galleryTitle}
         initialIndex={galleryInitialIndex}
       />
+
+      {showScrollTop && (
+        <button
+          onClick={handleScrollTopClick}
+          aria-label="Back to top"
+          className="fixed bottom-28 right-8 w-11 h-11 bg-[#023927] text-white flex items-center justify-center shadow-lg hover:bg-[#023927]/90 transition-all duration-300 z-40"
+        >
+          <ChevronUpIcon className="w-5 h-5" />
+        </button>
+      )}
     </div>
   );
 };

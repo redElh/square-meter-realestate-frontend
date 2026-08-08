@@ -238,6 +238,7 @@ export interface Property {
   title: string;
   description: string;
   type: 'buy' | 'rent' | 'seasonal';
+  status?: number; // APIMO status (1=published, 30/31/32=sold, etc.)
   price: number;
   pricePeriod?: number; // 1=Jour, 2=Semaine, 3=Quinzaine, 4=Mois, 5=Trimestre, 6=Bimensuel, 7=Semestre, 8=An
   location: string;
@@ -284,6 +285,10 @@ export interface Property {
   services?: string[];
   energyRating?: string;
 }
+
+// APIMO statuses considered as sold
+export const SOLD_STATUSES = [30, 31, 32];
+export const isSoldStatus = (status?: number): boolean => !!status && SOLD_STATUSES.includes(status);
 
 // Mapping functions
 const getCategoryType = (category: number, subcategory: number): 'buy' | 'rent' | 'seasonal' => {
@@ -335,9 +340,11 @@ const getPropertyTypeLabel = (type: number, subtype: number): string => {
 };
 
 const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr', t?: any): Property => {
-  // Get title directly from API (in English or French) - we'll translate it later
-  const comment = apimoProperty.comments?.find(c => c.language === 'en') || 
-                  apimoProperty.comments?.find(c => c.language === 'fr') || 
+  // Get title directly from API - prefer the comment matching the requested
+  // language, falling back to French, English, then any comment.
+  const comment = apimoProperty.comments?.find(c => c.language === language) ||
+                  apimoProperty.comments?.find(c => c.language === 'fr') ||
+                  apimoProperty.comments?.find(c => c.language === 'en') ||
                   apimoProperty.comments?.[0];
   
   const title = comment?.title || getPropertyTypeLabel(apimoProperty.type, apimoProperty.subtype);
@@ -433,6 +440,7 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     title,
     description,
     type: getCategoryType(apimoProperty.category, apimoProperty.subcategory),
+    status: apimoProperty.status,
     category: apimoProperty.type, // APIMO type number for filtering
     subtype: apimoProperty.subtype, // APIMO subtype number
     price: apimoProperty.price?.value || 0,
@@ -444,8 +452,8 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     country: apimoProperty.country,
     surface: apimoProperty.area?.value || apimoProperty.area?.total || 0,
     landSurface: apimoProperty.area?.total,
-    rooms: Number(apimoProperty.rooms) || 0,
-    bedrooms: apimoProperty.bedrooms || 0,
+    rooms: Number(apimoProperty.bedrooms) || Number(apimoProperty.rooms) || 0,
+    bedrooms: Number(apimoProperty.bedrooms) || Number(apimoProperty.rooms) || 0,
     bathrooms,
     floors,
     images,
@@ -500,57 +508,77 @@ class ApimoService {
 
       const requestPromise = (async () => {
       console.log('🔧 apimoService.getProperties called with params:', params);
-      const queryParams = new URLSearchParams();
-      if (params?.limit) queryParams.append('limit', params.limit.toString());
-      if (params?.offset) queryParams.append('offset', params.offset.toString());
-      if (params?.timestamp) queryParams.append('timestamp', params.timestamp.toString());
-      if (params?.step) queryParams.append('step', params.step.toString());
-      if (params?.status) queryParams.append('status', params.status.toString());
-      if (params?.group) queryParams.append('group', params.group.toString());
+      // The Apimo API accepts a single status per request. When no explicit
+      // status is requested, fetch live (1) and sold (30/31/32) listings and
+      // merge them so sold properties stay visible with a "Vendu" tag.
+      const statusesToFetch = params?.status !== undefined ? [params.status] : [1, 30, 31, 32];
+      console.log('📂 Fetching statuses:', statusesToFetch);
 
-      const url = `${APIMO_CONFIG.baseUrl}/agencies/${APIMO_CONFIG.agencyId}/properties${
-        queryParams.toString() ? '?' + queryParams.toString() : ''
-      }`;
-      
-      console.log('📍 Fetching from URL:', url);
-      console.log('🌐 Environment:', process.env.NODE_ENV);
-      console.log('🔑 Base URL:', APIMO_CONFIG.baseUrl);
+      const results = await Promise.all(statusesToFetch.map(async (status) => {
+        const queryParams = new URLSearchParams();
+        if (params?.limit) queryParams.append('limit', params.limit.toString());
+        if (params?.offset) queryParams.append('offset', params.offset.toString());
+        if (params?.timestamp) queryParams.append('timestamp', params.timestamp.toString());
+        if (params?.step) queryParams.append('step', params.step.toString());
+        queryParams.append('status', status.toString());
+        if (params?.group) queryParams.append('group', params.group.toString());
 
-      // The proxy/serverless function handles authentication
-      const headers: HeadersInit = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      };
+        const url = `${APIMO_CONFIG.baseUrl}/agencies/${APIMO_CONFIG.agencyId}/properties${
+          queryParams.toString() ? '?' + queryParams.toString() : ''
+        }`;
 
-      console.log('📤 Sending request...');
-      const response = await fetch(url, {
-        method: 'GET',
-        headers,
-      });
+        console.log('📍 Fetching from URL:', url);
+        console.log('🌐 Environment:', process.env.NODE_ENV);
+        console.log('🔑 Base URL:', APIMO_CONFIG.baseUrl);
 
-      console.log('📥 Response status:', response.status, response.statusText);
+        // The proxy/serverless function handles authentication
+        const headers: HeadersInit = {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        };
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ API Error Response:', errorText);
-        throw new Error(`Apimo API error: ${response.status} ${response.statusText}`);
-      }
+        console.log('📤 Sending request...');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers,
+        });
 
-      console.log('📦 Parsing response JSON...');
-      const data: ApimoResponse = await response.json();
-      console.log('📊 Received data:', data);
-      
+        console.log('📥 Response status:', response.status, response.statusText);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('❌ API Error Response:', errorText);
+          throw new Error(`Apimo API error: ${response.status} ${response.statusText}`);
+        }
+
+        console.log('📦 Parsing response JSON...');
+        const data: ApimoResponse = await response.json();
+        return { properties: data.properties || [], total_items: data.total_items || 0 };
+      }));
+
+      console.log('📊 Received data:', results);
+
       console.log('🔄 Mapping properties...');
-      const properties = data.properties.map(prop => mapApimoToProperty(prop, language || 'fr', t));
-      
-      // Translate property names for all non-English languages
-      if (language && language !== 'en') {
+      const seen = new Set<string>();
+      const uniqueProperties = results.flatMap(result => result.properties).filter(prop => {
+        const id = String(prop.id);
+        if (seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+      const properties = uniqueProperties.map(prop => mapApimoToProperty(prop, language || 'fr', t));
+
+      // Translate property names for all languages except English and French.
+      // French titles/descriptions come straight from the API and must not be altered.
+      if (language && language !== 'en' && language !== 'fr') {
         await this.translatePropertyNames(properties, language, params?.translateDescriptions !== false);
       }
 
       return {
         properties,
-        total: data.total_items,
+        total: statusesToFetch.length === 1
+          ? results[0].total_items
+          : properties.length,
       };
       })();
 

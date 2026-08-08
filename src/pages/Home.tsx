@@ -16,7 +16,7 @@ import {
 import {
   HeartIcon as HeartIconSolid
 } from '@heroicons/react/24/solid';
-import { apimoService, Property } from '../services/apimoService';
+import { apimoService, Property, isSoldStatus } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
 import { useReviews } from '../contexts/ReviewsContext';
 import SEO from '../components/SEO/SEO';
@@ -296,24 +296,18 @@ const Home: React.FC = () => {
               
               {/* Boutons d'action - Nouveau design */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
-                <Link 
-                  to="/properties?type=buy" 
-                  className="group relative bg-white text-gray-900 px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
+                <Link
+                  to="/properties?type=buy"
+                  className="border-2 border-white/50 bg-white/20 text-white backdrop-blur-sm px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider text-center text-sm sm:text-base hover:border-white hover:bg-white/40 transition-all duration-300"
                 >
-                  <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                  <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    {t('home.hero.buyButton')}
-                  </span>
+                  {t('home.hero.buyButton')}
                 </Link>
-                
-                <Link 
-                  to="/properties?type=rent" 
-                  className="group relative border-2 border-white text-white px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
+
+                <Link
+                  to="/properties?type=rent"
+                  className="border-2 border-white/50 bg-white/20 text-white backdrop-blur-sm px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider text-center text-sm sm:text-base hover:border-white hover:bg-white/40 transition-all duration-300"
                 >
-                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                    {t('home.hero.rentButton')}
-                  </span>
+                  {t('home.hero.rentButton')}
                 </Link>
               </div>
 
@@ -330,6 +324,12 @@ const Home: React.FC = () => {
           >
             <ChevronLeftIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
           </button>
+          <button
+            onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroImages.length)}
+            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-1.5 sm:p-2 transition-all duration-300"
+          >
+            <ChevronRightIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+          </button>
           <div className="flex gap-1.5 sm:gap-2">
             {heroImages.map((_, index) => (
               <button
@@ -341,12 +341,6 @@ const Home: React.FC = () => {
               />
             ))}
           </div>
-          <button
-            onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroImages.length)}
-            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-1.5 sm:p-2 transition-all duration-300"
-          >
-            <ChevronRightIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
-          </button>
         </div>
 
         {/* Indicateur de scroll */}
@@ -548,12 +542,14 @@ const Home: React.FC = () => {
                           <div className="flex-1 min-w-0 w-full sm:w-auto">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                               <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
-                                property.type === 'buy' 
+                                isSoldStatus(property.status)
+                                  ? 'bg-gray-100 text-gray-700 border border-gray-300'
+                                  : property.type === 'buy' 
                                   ? 'bg-blue-50 text-blue-800 border border-blue-200' 
                                   : property.type === 'rent'
                                   ? 'bg-green-50 text-green-800 border border-green-200'
                                   : 'bg-purple-50 text-purple-800 border border-purple-200'
-                              }`}>{property.type === 'buy' ? t('home.featured.forSale') : property.type === 'rent' ? t('home.featured.forRent') : t('home.featured.vacation')}</span>
+                              }`}>{isSoldStatus(property.status) ? (property.type === 'buy' ? t('home.featured.sold') : t('home.featured.rented')) : property.type === 'buy' ? t('home.featured.forSale') : property.type === 'rent' ? t('home.featured.forRent') : t('home.featured.vacation')}</span>
 
                               <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
 

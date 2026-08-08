@@ -119,7 +119,7 @@
   },
   "home": {
     "hero": {
-      "title": "Immobilier d'Exception",
+      "title": "Agence Immobilière",
       "subtitle": "Découvrez les propriétés les plus prestigieuses au monde",
       "cta": "Explorer la Collection",
       "buyButton": "Acheter",
@@ -180,7 +180,9 @@
       "viewAll": "Voir toutes les propriétés",
       "exclusive": "Exclusif",
       "photos": "photos",
-      "forSale": "À Acheter",
+      "forSale": "À vendre",
+      "sold": "Vendu",
+      "rented": "Loué",
       "forRent": "À Louer",
       "vacation": "Vacances",
       "viewButton": "Voir les Détails",
@@ -506,14 +508,16 @@
       "suggestions": "Suggestions",
       "paris": "Paris",
       "bedrooms3Plus": "3+ chambres",
-      "toBuy": "À acheter",
+      "toBuy": "À vendre",
       "vacation": "Vacances",
       "tailoredExploration": "Exploration Sur Mesure"
     },
     "filters": {
       "title": "Affinez votre recherche avec nos filtres intelligents",
       "all": "Tout",
-      "buy": "À acheter",
+      "buy": "À vendre",
+      "sold": "Vendu",
+      "rented": "Loué",
       "rent": "À louer",
       "vacation": "Vacances",
       "type": "Type de bien",
@@ -543,7 +547,9 @@
       "loading": "Chargement...",
       "exclusive": "EXCLUSIF",
       "photos": "photos",
-      "forSale": "À ACHETER",
+      "forSale": "À VENDRE",
+      "sold": "VENDU",
+      "rented": "LOUÉ",
       "forRent": "À LOUER",
       "forVacation": "VACANCES",
       "fromPerDay": "à partir de {{price}}/jour",
@@ -591,6 +597,7 @@
       "apartment": "Appartement",
       "villa": "Villa",
       "land": "Terrain",
+      "riad": "Riad",
       "other": "Autre"
     }
     ,

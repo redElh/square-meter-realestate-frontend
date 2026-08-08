@@ -13,7 +13,7 @@ import {
   PhoneIcon,
   EnvelopeIcon
 } from '@heroicons/react/24/outline';
-import { apimoService, Property } from '../services/apimoService';
+import { apimoService, Property, isSoldStatus } from '../services/apimoService';
 import propertyStatsService from '../services/propertyStatsService';
 import PropertyCard from '../components/PropertyCard';
 import { useCurrency } from '../hooks/useCurrency';
@@ -323,13 +323,15 @@ const PropertyDetail: React.FC = () => {
               {/* Property Type Badge */}
               <div className="inline-flex items-center gap-2 mb-1 sm:mb-4">
                 <span className={`px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider ${
-                  property.type === 'buy' 
+                  isSoldStatus(property.status)
+                    ? 'bg-gray-100 text-gray-700 border border-gray-300'
+                    : property.type === 'buy' 
                     ? 'bg-blue-50 text-blue-800 border border-blue-200' 
                     : property.type === 'rent'
                     ? 'bg-green-50 text-green-800 border border-green-200'
                     : 'bg-purple-50 text-purple-800 border border-purple-200'
                 }`}>
-                  {property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}
+                  {isSoldStatus(property.status) ? (property.type === 'buy' ? t('properties.listing.sold') : t('properties.listing.rented')) : property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}
                 </span>
                 {isExclusiveProperty && (
                   <span className="px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider bg-[#023927] text-white border border-[#023927]">
@@ -365,7 +367,7 @@ const PropertyDetail: React.FC = () => {
               {[
                 { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
                 { value: property.landSurface ? `${property.landSurface} m²` : '-', label: t('propertyDetail.stats.land') },
-                { value: property.rooms || 0, label: t('propertyDetail.stats.rooms') },
+                { value: property.bedrooms || 0, label: t('propertyDetail.stats.bedrooms') },
                 { value: property.floors || 0, label: t('propertyDetail.stats.floors') },
                 { value: property.yearBuilt || '-', label: t('propertyDetail.stats.year') }
               ].map((stat, index) => (
@@ -525,6 +527,7 @@ const PropertyDetail: React.FC = () => {
                     images={similar.images && similar.images.length > 0 ? similar.images : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800']}
                     type={(similar.type as 'buy' | 'rent') || 'buy'}
                     reference={similar.reference}
+                    status={similar.status}
                     isExclusive={Number(similar.agreementType) === 3}
                   />
                 </div>

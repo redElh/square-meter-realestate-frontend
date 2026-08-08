@@ -256,7 +256,7 @@ const Header: React.FC = () => {
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
                   <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
-                    <span className="text-gray-800 text-[11px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200 max-w-[7rem] sm:max-w-none truncate">
+                    <span className="text-gray-800 text-[11px] sm:text-lg font-medium group-hover:text-black tracking-tight sm:tracking-wide transition-[color] duration-300 ease-in-out max-w-[7rem] sm:max-w-none truncate">
                       {navigation.primary[0].label}
                     </span>
                   </div>
@@ -308,7 +308,7 @@ const Header: React.FC = () => {
                     >
                       SQUARE METER
                     </span>
-                    <span className="text-[8px] sm:text-xs text-gray-500 tracking-[0.08em] sm:tracking-[0.2em] transition-all duration-500 font-medium whitespace-nowrap">
+                    <span className={`text-[8px] sm:text-xs tracking-[0.08em] sm:tracking-[0.2em] transition-all duration-500 font-medium whitespace-nowrap ${effectiveIsScrolled ? 'text-gray-500' : 'text-white'}`}>
                       {t('brand.subtitle')}
                     </span>
                   </div>
@@ -327,7 +327,7 @@ const Header: React.FC = () => {
                   onFocus={(e) => (e.currentTarget as HTMLAnchorElement).blur()}
                 >
                   <div className="px-2 py-1 sm:px-6 sm:py-3 mx-0 sm:mx-2 rounded-md sm:rounded-2xl transition-all duration-200 hover:bg-white/10 cursor-pointer">
-                    <span className="text-gray-800 text-[11px] sm:text-lg font-medium tracking-tight sm:tracking-wide transition-colors duration-200 max-w-[7rem] sm:max-w-none truncate">
+                    <span className="text-gray-800 text-[11px] sm:text-lg font-medium group-hover:text-black tracking-tight sm:tracking-wide transition-[color] duration-300 ease-in-out max-w-[7rem] sm:max-w-none truncate">
                       {navigation.primary[1].label}
                     </span>
                   </div>

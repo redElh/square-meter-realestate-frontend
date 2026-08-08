@@ -279,7 +279,7 @@ export const RAGAssistant: React.FC<RAGAssistantProps> = ({ initialOpen = false 
                                 </span>
                                 {property.rooms && (
                                   <span className="text-[10px] sm:text-xs text-gray-500">
-                                    • {property.rooms} rooms
+                                    • {property.rooms} bedrooms
                                   </span>
                                 )}
                               </div>
