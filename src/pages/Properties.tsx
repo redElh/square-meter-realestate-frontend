@@ -1,5 +1,5 @@
 // src/pages/Properties.tsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -76,6 +76,16 @@ const Properties: React.FC = () => {
   const hasInitializedFiltersRef = useRef(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const suppressScrollTopRef = useRef(false);
+  const propertyTypeCarouselRef = useRef<HTMLDivElement>(null);
+  const propertyTypeTrackRef = useRef<HTMLDivElement>(null);
+  const carouselStepRef = useRef(0);
+  const [propertyTypeCarouselHover, setPropertyTypeCarouselHover] = useState(false);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const [carouselSliding, setCarouselSliding] = useState(false);
+  const [carouselRotation, setCarouselRotation] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 768
+  );
   const location = useLocation();
   
   // Gallery modal state
@@ -249,6 +259,39 @@ const Properties: React.FC = () => {
 
     fetchProperties();
   }, [t, currentLanguage]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile || carouselPaused || propertyTypeCarouselHover) return;
+
+    let slideTimeoutId: number | undefined;
+
+    const intervalId = window.setInterval(() => {
+      const track = propertyTypeTrackRef.current;
+      const first = track?.children[0] as HTMLElement | undefined;
+      const second = track?.children[1] as HTMLElement | undefined;
+      const step = second
+        ? second.getBoundingClientRect().left - first.getBoundingClientRect().left
+        : first?.getBoundingClientRect().width || 0;
+      if (step <= 0) return;
+      carouselStepRef.current = step;
+      setCarouselSliding(true);
+      slideTimeoutId = window.setTimeout(() => {
+        setCarouselRotation((r) => r + 1);
+        setCarouselSliding(false);
+      }, 520);
+    }, 2600);
+
+    return () => {
+      window.clearInterval(intervalId);
+      if (slideTimeoutId) window.clearTimeout(slideTimeoutId);
+    };
+  }, [isMobile, carouselPaused, propertyTypeCarouselHover]);
 
   const isExclusiveProperty = (property: Property): boolean => Number(property.agreementType) === 3;
   const activeSourceProperties = properties;
@@ -540,13 +583,23 @@ const Properties: React.FC = () => {
   ];
 
   const bedroomOptions = [1, 2, 3, 4, 5, 6];
-  const propertyTypeOptions = [
-    { value: 'apartment', label: t('properties.propertyTypes.apartment') },
-    { value: 'villa', label: t('properties.propertyTypes.villa') },
-    { value: 'land', label: t('properties.propertyTypes.land') },
-    { value: 'riad', label: t('properties.propertyTypes.riad') },
-    { value: 'other', label: t('properties.propertyTypes.other') }
-  ];
+  const propertyTypeOptions = useMemo(
+    () => [
+      { value: 'apartment', label: t('properties.propertyTypes.apartment') },
+      { value: 'villa', label: t('properties.propertyTypes.villa') },
+      { value: 'land', label: t('properties.propertyTypes.land') },
+      { value: 'riad', label: t('properties.propertyTypes.riad') },
+      { value: 'other', label: t('properties.propertyTypes.other') },
+    ],
+    [t]
+  );
+
+  const rotatedPropertyTypes = useMemo(() => {
+    const n = propertyTypeOptions.length;
+    if (n === 0) return [];
+    const offset = ((carouselRotation % n) + n) % n;
+    return [...propertyTypeOptions.slice(offset), ...propertyTypeOptions.slice(0, offset)];
+  }, [propertyTypeOptions, carouselRotation]);
   const locationOptions = [
     { value: 'Arbaa Ida Ougourd 44005', label: 'Arbaa Ida Ougourd 44005' },
     { value: 'Essaouira 44000', label: 'Essaouira 44000' },
@@ -565,6 +618,7 @@ const Properties: React.FC = () => {
     setLocationFilter('');
     setSortBy('newest');
     setCurrentPage(1);
+    setCarouselPaused(false);
   };
 
   const activeFiltersCount = [
@@ -789,6 +843,23 @@ const Properties: React.FC = () => {
 
   const seoData = getSEOData();
 
+  const handlePropertyTypeCarouselMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const container = propertyTypeCarouselRef.current;
+    if (!container) return;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    if (maxScroll <= 0) return;
+    const rect = container.getBoundingClientRect();
+    const fraction = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    container.scrollLeft = fraction * maxScroll;
+  };
+
+  const handlePropertyTypeCarouselLeave = () => {
+    setPropertyTypeCarouselHover(false);
+    if (propertyTypeCarouselRef.current) {
+      propertyTypeCarouselRef.current.scrollLeft = 0;
+    }
+  };
+
   const renderTypeButton = (key: string, label: string) => (
     <button
       key={key}
@@ -880,42 +951,72 @@ const Properties: React.FC = () => {
               </div>
             )}
 
-            {/* Property Type Checkboxes - when a transaction type is selected */}
+            {/* Property Type Checkboxes - carousel when a transaction type is selected */}
             {filter !== 'all' && (
-              <div className="flex flex-col items-center gap-2 sm:gap-3 mb-4">
-                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-                  {propertyTypeOptions.map(({ value, label }) => {
-                    const isSelected = propertyTypeFilter === value;
-                    return (
-                      <button
-                        key={value}
-                        type="button"
-                        onClick={() => setPropertyTypeFilter(isSelected ? '' : value)}
-                        aria-pressed={isSelected}
-                        className={`group flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 border-2 backdrop-blur-sm transition-all duration-300 ${
-                          isSelected
-                            ? 'border-white bg-white/95 text-[#023927] scale-105'
-                            : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                        }`}
-                        style={{ borderRadius: '0' }}
-                      >
-                        <span
-                          className={`flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 border-2 transition-all duration-300 ${
+              <div className="flex flex-col items-center gap-2 sm:gap-3 mb-4 w-full">
+                <div
+                  ref={propertyTypeCarouselRef}
+                  onMouseEnter={isMobile ? () => setPropertyTypeCarouselHover(true) : undefined}
+                  onMouseMove={isMobile ? handlePropertyTypeCarouselMove : undefined}
+                  onMouseLeave={isMobile ? handlePropertyTypeCarouselLeave : undefined}
+                  className={`flex items-center max-w-full no-scrollbar transition-all duration-300 ${
+                    isMobile ? 'overflow-x-auto' : 'justify-center'
+                  } ${
+                    isMobile && propertyTypeCarouselHover
+                      ? 'cursor-grab active:cursor-grabbing'
+                      : isMobile
+                      ? 'cursor-pointer'
+                      : ''
+                  }`}
+                >
+                  <div
+                    ref={propertyTypeTrackRef}
+                    style={
+                      isMobile && !propertyTypeCarouselHover && carouselSliding
+                        ? {
+                            transform: `translateX(${-carouselStepRef.current}px)`,
+                            transition: 'transform 0.5s ease',
+                          }
+                        : undefined
+                    }
+                    className="flex w-max gap-1.5 sm:gap-3"
+                  >
+                    {rotatedPropertyTypes.map(({ value, label }) => {
+                      const isSelected = propertyTypeFilter === value;
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => {
+                            setCarouselPaused(!isSelected);
+                            setPropertyTypeFilter(isSelected ? '' : value);
+                          }}
+                          aria-pressed={isSelected}
+                          className={`group flex items-center gap-1 sm:gap-2 px-2 sm:px-5 py-1.5 sm:py-2.5 border-2 backdrop-blur-sm transition-all duration-300 whitespace-nowrap ${
                             isSelected
-                              ? 'bg-[#023927] border-[#023927]'
-                              : 'border-white/70 bg-transparent group-hover:border-white'
+                              ? 'border-white bg-white/95 text-[#023927] scale-105'
+                              : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
                           }`}
+                          style={{ borderRadius: '0' }}
                         >
-                          <CheckIcon
-                            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-white transition-all duration-300 ${
-                              isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+                          <span
+                            className={`flex items-center justify-center w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 transition-all duration-300 ${
+                              isSelected
+                                ? 'bg-[#023927] border-[#023927]'
+                                : 'border-white/70 bg-transparent group-hover:border-white'
                             }`}
-                          />
-                        </span>
-                        <span className="text-xs sm:text-sm font-medium uppercase tracking-wide">{label}</span>
-                      </button>
-                    );
-                  })}
+                          >
+                            <CheckIcon
+                              className={`w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-white transition-all duration-300 ${
+                                isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+                              }`}
+                            />
+                          </span>
+                          <span className="text-[10px] sm:text-sm font-medium uppercase tracking-wide">{label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
@@ -931,30 +1032,32 @@ const Properties: React.FC = () => {
                   {showMoreFilters ? `− ${t('properties.filters.lessFilters')}` : `+ ${t('properties.filters.moreFilters')}`}
                 </span>
               </button>
-              
-              {activeFiltersCount > 0 && (
+
+              <div className="flex w-full sm:w-auto gap-3 sm:gap-4">
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={resetFilters}
+                    className="group relative flex-1 sm:flex-none border-2 border-white text-white px-2 sm:px-8 py-2 sm:py-4 font-inter uppercase tracking-normal sm:tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight sm:text-base whitespace-normal sm:whitespace-nowrap"
+                  >
+                    <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                    <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                      {t('properties.filters.resetAll')} ({activeFiltersCount})
+                    </span>
+                  </button>
+                )}
+
                 <button
-                  onClick={resetFilters}
-                  className="group relative border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base whitespace-nowrap"
+                  onClick={() => {
+                    scrollToPropertiesList();
+                  }}
+                  className="group relative flex-1 sm:flex-none bg-white text-gray-900 px-2 sm:px-8 py-2 sm:py-4 font-inter uppercase tracking-normal sm:tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight sm:text-base whitespace-normal sm:whitespace-nowrap"
                 >
-                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                    {t('properties.filters.resetAll')} ({activeFiltersCount})
+                  <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                    {t('properties.filters.apply')}
                   </span>
                 </button>
-              )}
-              
-              <button
-                onClick={() => {
-                  scrollToPropertiesList();
-                }}
-                className="group relative bg-white text-gray-900 px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base whitespace-nowrap"
-              >
-                <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                  {t('properties.filters.apply')}
-                </span>
-              </button>
+              </div>
             </div>
 
             {/* Collapsible Bedrooms & Property Type Filters */}
