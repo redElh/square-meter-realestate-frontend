@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { DayPicker, DateRange } from 'react-day-picker';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { DayPicker, DateRange, DayButtonProps } from 'react-day-picker';
 import { format, addDays, startOfDay, differenceInCalendarDays, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 import { enUS } from 'date-fns/locale/en-US';
@@ -102,6 +102,8 @@ const CALENDAR_THEME = `
     transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
     color: #374151;
     font-size: 0.875rem;
+    user-select: none;
+    touch-action: manipulation;
   }
 
   .reservation-calendar .rdp-day:not(.rdp-outside):not(.rdp-disabled) .rdp-day_button:hover {
@@ -126,6 +128,25 @@ const CALENDAR_THEME = `
   .reservation-calendar .rdp-range_start .rdp-day_button,
   .reservation-calendar .rdp-range_end .rdp-day_button {
     color: #ffffff !important;
+  }
+
+  .reservation-calendar .rdp-range_start .rdp-day_button,
+  .reservation-calendar .rdp-range_end .rdp-day_button {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .reservation-calendar .rdp-range_start .rdp-day_button:hover,
+  .reservation-calendar .rdp-range_end .rdp-day_button:hover {
+    color: #023927 !important;
+    background-color: #e8f3ee !important;
+  }
+
+  .reservation-calendar .rdp-range_start .rdp-day_button:active,
+  .reservation-calendar .rdp-range_end .rdp-day_button:active {
+    cursor: grabbing;
+    color: #023927 !important;
+    background-color: #dcefe7 !important;
   }
 
   .reservation-calendar .rdp-range_middle .rdp-day_button:hover {
@@ -221,6 +242,80 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < 768
   );
+  const [dragging, setDragging] = useState<'from' | 'to' | null>(null);
+
+  const rangeRef = useRef(range);
+  const draggingRef = useRef<'from' | 'to' | null>(null);
+  const suppressNextSelectRef = useRef(false);
+
+  useEffect(() => {
+    rangeRef.current = range;
+  }, [range]);
+
+  useEffect(() => {
+    const handleGlobalPointerUp = () => {
+      if (draggingRef.current) {
+        draggingRef.current = null;
+        setDragging(null);
+        window.setTimeout(() => {
+          suppressNextSelectRef.current = false;
+        }, 0);
+      }
+    };
+    window.addEventListener('pointerup', handleGlobalPointerUp);
+    return () => window.removeEventListener('pointerup', handleGlobalPointerUp);
+  }, []);
+
+  const updateDraggedEndpoint = (hovered: Date) => {
+    const current = rangeRef.current;
+    if (!current) return;
+    const candidate = startOfDay(hovered);
+
+    if (draggingRef.current === 'from' && current.to) {
+      const maxFrom = startOfDay(current.to);
+      const newFrom = candidate > maxFrom ? maxFrom : candidate;
+      setRange({ from: newFrom, to: current.to });
+    } else if (draggingRef.current === 'to' && current.from) {
+      const minTo = startOfDay(current.from);
+      const newTo = candidate < minTo ? minTo : candidate;
+      setRange({ from: current.from, to: newTo });
+    }
+  };
+
+  const handleDayMouseEnter = (date: Date) => {
+    setHoveredDate(date);
+    if (draggingRef.current) {
+      updateDraggedEndpoint(date);
+    }
+  };
+
+  const DayButton = useMemo<React.FC<DayButtonProps>>(
+    () =>
+      ({ modifiers, ...props }) => {
+        const isStart = !!modifiers.range_start;
+        const isEnd = !!modifiers.range_end;
+        const isDraggable = isStart || isEnd;
+        return (
+          <button
+            {...props}
+            onPointerDown={(e) => {
+              props.onPointerDown?.(e);
+              const current = rangeRef.current;
+              if (!isDraggable || !current?.from || !current?.to) return;
+              e.preventDefault();
+              draggingRef.current = isStart ? 'from' : 'to';
+              setDragging(isStart ? 'from' : 'to');
+              suppressNextSelectRef.current = true;
+            }}
+            onPointerUp={() => {
+              draggingRef.current = null;
+              setDragging(null);
+            }}
+          />
+        );
+      },
+    []
+  );
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -311,7 +406,9 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 mb-6">
               <div
                 className={`relative px-3 sm:px-4 py-3 border-2 transition-all duration-300 ${
-                  range?.from
+                  dragging === 'from'
+                    ? 'border-[#023927] bg-[#023927]/10 ring-2 ring-[#023927]/25 scale-[1.03]'
+                    : range?.from
                     ? 'border-[#023927] bg-[#023927]/5'
                     : 'border-gray-200 bg-gray-50'
                 }`}
@@ -337,7 +434,9 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
 
               <div
                 className={`relative px-3 sm:px-4 py-3 border-2 transition-all duration-300 ${
-                  range?.to
+                  dragging === 'to'
+                    ? 'border-[#023927] bg-[#023927]/10 ring-2 ring-[#023927]/25 scale-[1.03]'
+                    : range?.to
                     ? 'border-[#023927] bg-[#023927]/5'
                     : isPickingDeparture
                     ? 'border-[#023927]/60 bg-[#023927]/5 reservation-pulse'
@@ -365,13 +464,20 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
             <DayPicker
               mode="range"
               selected={range}
-              onSelect={setRange}
+              onSelect={(next) => {
+                if (suppressNextSelectRef.current) {
+                  suppressNextSelectRef.current = false;
+                  return;
+                }
+                setRange(next);
+              }}
               locale={currentLocale}
               numberOfMonths={isMobile ? 1 : 2}
               disabled={{ before: today }}
-              onDayMouseEnter={(date) => setHoveredDate(date)}
+              onDayMouseEnter={handleDayMouseEnter}
               onDayMouseLeave={() => setHoveredDate(undefined)}
               className="reservation-calendar border border-gray-100 rounded-lg p-4 sm:p-5 bg-white shadow-sm mx-auto md:mx-0"
+              components={{ DayButton }}
               modifiers={{
                 hoverRange: hoverRangeMatcher,
                 hoverEnd: hoverEndMatcher,
