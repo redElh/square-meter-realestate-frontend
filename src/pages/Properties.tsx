@@ -61,6 +61,7 @@ const Properties: React.FC = () => {
     return value !== null && !Number.isNaN(parsed) ? parsed : null;
   });
   const [propertyTypeFilter, setPropertyTypeFilter] = useState(searchParams.get('propertyType') || '');
+  const [locationFilter, setLocationFilter] = useState(searchParams.get('location') || '');
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -68,7 +69,7 @@ const Properties: React.FC = () => {
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
   const [showMoreFilters, setShowMoreFilters] = useState(
-    Boolean(searchParams.get('bedrooms') || searchParams.get('propertyType'))
+    Boolean(searchParams.get('bedrooms') || searchParams.get('propertyType') || searchParams.get('location'))
   );
   const propertiesListRef = useRef<HTMLDivElement>(null);
   const firstPropertyCardRef = useRef<HTMLDivElement>(null);
@@ -259,6 +260,7 @@ const Properties: React.FC = () => {
       query: string;
       bedrooms: number | null;
       propertyType: string;
+      location: string;
       sort: string;
     }
   ): Property[] => {
@@ -345,7 +347,14 @@ const Properties: React.FC = () => {
         return queryWords.every(word => searchFields.includes(word));
       })();
 
-      return typeMatch && roomsMatch && propertyTypeMatch && searchMatch;
+      const locationMatch = !options.location || (() => {
+        const searchable = normalizeForSearch(
+          [property.location, property.city, property.zipcode].filter(Boolean).join(' ')
+        );
+        return searchable.includes(normalizeForSearch(options.location));
+      })();
+
+      return typeMatch && roomsMatch && propertyTypeMatch && searchMatch && locationMatch;
     });
 
     const sorted = [...filtered];
@@ -379,6 +388,7 @@ const Properties: React.FC = () => {
     query,
     bedrooms: bedroomsFilter,
     propertyType: propertyTypeFilter,
+    location: locationFilter,
     sort: sortBy,
   });
 
@@ -435,7 +445,7 @@ const Properties: React.FC = () => {
     }
 
     setCurrentPage(1);
-  }, [filter, query, bedroomsFilter, propertyTypeFilter, sortBy, loading, properties.length]);
+  }, [filter, query, bedroomsFilter, propertyTypeFilter, locationFilter, sortBy, loading, properties.length]);
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams);
@@ -464,6 +474,12 @@ const Properties: React.FC = () => {
       nextParams.delete('propertyType');
     }
 
+    if (locationFilter) {
+      nextParams.set('location', locationFilter);
+    } else {
+      nextParams.delete('location');
+    }
+
     if (sortBy && sortBy !== 'newest') {
       nextParams.set('sort', sortBy);
     } else {
@@ -479,7 +495,7 @@ const Properties: React.FC = () => {
     if (nextParams.toString() !== searchParams.toString()) {
       setSearchParams(nextParams, { replace: true });
     }
-  }, [filter, query, bedroomsFilter, propertyTypeFilter, sortBy, currentPage, searchParams, setSearchParams]);
+  }, [filter, query, bedroomsFilter, propertyTypeFilter, locationFilter, sortBy, currentPage, searchParams, setSearchParams]);
 
   useEffect(() => {
     if (loading || totalPages === 0) return;
@@ -531,12 +547,22 @@ const Properties: React.FC = () => {
     { value: 'riad', label: t('properties.propertyTypes.riad') },
     { value: 'other', label: t('properties.propertyTypes.other') }
   ];
+  const locationOptions = [
+    { value: 'Arbaa Ida Ougourd 44005', label: 'Arbaa Ida Ougourd 44005' },
+    { value: 'Essaouira 44000', label: 'Essaouira 44000' },
+    { value: 'Marrakech 40000', label: 'Marrakech 40000' },
+    { value: 'Ounagha 44133', label: 'Ounagha 44133' },
+    { value: 'Sidi Ahmed Essayeh 44082', label: 'Sidi Ahmed Essayeh 44082' },
+    { value: 'Sidi Kaouki 44125', label: 'Sidi Kaouki 44125' },
+    { value: 'Tidzi 44075', label: 'Tidzi 44075' },
+  ];
 
   const resetFilters = () => {
     setFilter('all');
     setQuery('');
     setBedroomsFilter(null);
     setPropertyTypeFilter('');
+    setLocationFilter('');
     setSortBy('newest');
     setCurrentPage(1);
   };
@@ -546,6 +572,7 @@ const Properties: React.FC = () => {
     query !== '',
     bedroomsFilter !== null,
     propertyTypeFilter !== '',
+    locationFilter !== '',
   ].filter(Boolean).length;
 
   
@@ -853,6 +880,46 @@ const Properties: React.FC = () => {
               </div>
             )}
 
+            {/* Property Type Checkboxes - when a transaction type is selected */}
+            {filter !== 'all' && (
+              <div className="flex flex-col items-center gap-2 sm:gap-3 mb-4">
+                <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
+                  {propertyTypeOptions.map(({ value, label }) => {
+                    const isSelected = propertyTypeFilter === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setPropertyTypeFilter(isSelected ? '' : value)}
+                        aria-pressed={isSelected}
+                        className={`group flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 border-2 backdrop-blur-sm transition-all duration-300 ${
+                          isSelected
+                            ? 'border-white bg-white/95 text-[#023927] scale-105'
+                            : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
+                        }`}
+                        style={{ borderRadius: '0' }}
+                      >
+                        <span
+                          className={`flex items-center justify-center w-4 h-4 sm:w-5 sm:h-5 border-2 transition-all duration-300 ${
+                            isSelected
+                              ? 'bg-[#023927] border-[#023927]'
+                              : 'border-white/70 bg-transparent group-hover:border-white'
+                          }`}
+                        >
+                          <CheckIcon
+                            className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-white transition-all duration-300 ${
+                              isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
+                            }`}
+                          />
+                        </span>
+                        <span className="text-xs sm:text-sm font-medium uppercase tracking-wide">{label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* More Filters Toggle & Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4">
               <button
@@ -914,16 +981,16 @@ const Properties: React.FC = () => {
                   />
                 </div>
 
-                {/* Property Type Filter */}
+                {/* Location Filter */}
                 <div>
                   <FilterDropdown
-                    label={t('properties.filters.propertyType')}
-                    value={propertyTypeFilter}
-                    placeholder={t('properties.filters.allPropertyTypes')}
-                    onChange={setPropertyTypeFilter}
+                    label={t('properties.filters.location')}
+                    value={locationFilter}
+                    placeholder={t('properties.filters.allLocations')}
+                    onChange={setLocationFilter}
                     options={[
-                      { value: '', label: t('properties.filters.allPropertyTypes') },
-                      ...propertyTypeOptions,
+                      { value: '', label: t('properties.filters.allLocations') },
+                      ...locationOptions,
                     ]}
                   />
                 </div>
