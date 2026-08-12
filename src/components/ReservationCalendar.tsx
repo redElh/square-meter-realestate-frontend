@@ -263,7 +263,27 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
       }
     };
     window.addEventListener('pointerup', handleGlobalPointerUp);
-    return () => window.removeEventListener('pointerup', handleGlobalPointerUp);
+    window.addEventListener('pointercancel', handleGlobalPointerUp);
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalPointerUp);
+      window.removeEventListener('pointercancel', handleGlobalPointerUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleGlobalPointerMove = (e: PointerEvent) => {
+      if (!draggingRef.current) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+      const dayEl = el?.closest?.('[data-rdp-date]') as HTMLElement | null;
+      if (!dayEl) return;
+      const iso = dayEl.getAttribute('data-rdp-date');
+      if (!iso) return;
+      const [year, month, day] = iso.split('-').map(Number);
+      if (!year || !month || !day) return;
+      updateDraggedEndpoint(new Date(year, month - 1, day));
+    };
+    window.addEventListener('pointermove', handleGlobalPointerMove);
+    return () => window.removeEventListener('pointermove', handleGlobalPointerMove);
   }, []);
 
   const updateDraggedEndpoint = (hovered: Date) => {
@@ -291,13 +311,14 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
 
   const DayButton = useMemo<React.FC<DayButtonProps>>(
     () =>
-      ({ modifiers, ...props }) => {
+      ({ modifiers, day, ...props }) => {
         const isStart = !!modifiers.range_start;
         const isEnd = !!modifiers.range_end;
         const isDraggable = isStart || isEnd;
         return (
           <button
             {...props}
+            data-rdp-date={day?.isoDate}
             onPointerDown={(e) => {
               props.onPointerDown?.(e);
               const current = rangeRef.current;
@@ -306,6 +327,11 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
               draggingRef.current = isStart ? 'from' : 'to';
               setDragging(isStart ? 'from' : 'to');
               suppressNextSelectRef.current = true;
+            }}
+            onPointerEnter={() => {
+              if (draggingRef.current && day?.date) {
+                updateDraggedEndpoint(day.date);
+              }
             }}
             onPointerUp={() => {
               draggingRef.current = null;
