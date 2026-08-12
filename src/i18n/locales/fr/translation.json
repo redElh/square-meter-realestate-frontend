@@ -360,6 +360,7 @@
       "pickArrival": "Choisissez votre date d’arrivée pour commencer",
       "pickDeparture": "Choisissez votre date de départ pour terminer la sélection",
       "datesConfirmed": "Sélection confirmée — ajustez vos dates ou réservez",
+      "dragHint": "Astuce : faites glisser les jours d'arrivée et de départ pour ajuster votre sélection",
       "quickPick": "Sélection rapide",
       "quickPickWeekend": "Week-end",
       "quickPickWeek": "Semaine",

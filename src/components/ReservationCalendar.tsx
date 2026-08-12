@@ -487,6 +487,15 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
               </div>
             </div>
 
+            <div className="mb-3 flex items-center justify-center gap-2 text-xs sm:text-sm text-[#023927]/80 font-medium">
+              <MoonIcon className="w-4 h-4 flex-shrink-0" />
+              <span>
+                {t('propertyDetail.reservation.dragHint', {
+                  defaultValue: "Astuce : faites glisser les jours d'arrivée et de départ pour ajuster votre sélection",
+                })}
+              </span>
+            </div>
+
             <DayPicker
               mode="range"
               selected={range}

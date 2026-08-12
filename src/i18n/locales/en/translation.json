@@ -360,6 +360,7 @@
       "pickArrival": "Choose your arrival date to begin",
       "pickDeparture": "Choose your departure date to finish your selection",
       "datesConfirmed": "Selection confirmed — adjust your dates or book",
+      "dragHint": "Tip: drag the check-in and check-out days to adjust your selection",
       "quickPick": "Quick pick",
       "quickPickWeekend": "Weekend",
       "quickPickWeek": "Week",
