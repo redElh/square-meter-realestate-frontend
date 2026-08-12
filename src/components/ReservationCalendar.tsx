@@ -3,6 +3,11 @@ import { DayPicker, DateRange, DayButtonProps } from 'react-day-picker';
 import { format, addDays, startOfDay, differenceInCalendarDays, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
 import { enUS } from 'date-fns/locale/en-US';
+import { de } from 'date-fns/locale/de';
+import { es } from 'date-fns/locale/es';
+import { ru } from 'date-fns/locale/ru';
+import { ar } from 'date-fns/locale/ar';
+import type { Locale } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
 import {
   UsersIcon,
@@ -349,7 +354,15 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const currentLocale = i18n.language === 'fr' ? fr : enUS;
+  const dateFnsLocales: Record<string, Locale> = {
+    fr,
+    en: enUS,
+    de,
+    es,
+    ru,
+    ar,
+  };
+  const currentLocale = dateFnsLocales[i18n.language.split('-')[0]] || enUS;
 
   const selectedDays = range?.from && range?.to
     ? Math.max(1, differenceInCalendarDays(range.to, range.from))
