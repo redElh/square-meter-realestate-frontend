@@ -25,6 +25,21 @@ import SEO from '../components/SEO/SEO';
 import ImageGalleryModal from '../components/ImageGalleryModal';
 import FilterDropdown from '../components/FilterDropdown';
 
+const normalizeForSearch = (value: string): string =>
+  value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/m²|m\s*2/g, ' m2 ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const TYPE_SEARCH_KEYWORDS: Record<string, string> = {
+  buy: 'vente achat acheter a-vendre sale',
+  rent: 'location louer a-louer rent rental',
+  seasonal: 'vacances saison week-end weekend holiday',
+};
+
 const Properties: React.FC = () => {
   const { t } = useTranslation();
   const { format: formatCurrencyPrice, convertPrice } = useCurrency();
@@ -271,22 +286,62 @@ const Properties: React.FC = () => {
       })();
 
       const searchMatch = !options.query || (() => {
-        const query = options.query.toLowerCase().trim();
-        const searchFields = [
-          property.title?.toLowerCase() || '',
-          String(property.reference ?? '').toLowerCase(),
-          property.location?.toLowerCase() || '',
-          property.city?.toLowerCase() || '',
-          String(property.zipcode ?? '').toLowerCase(),
-          property.description?.toLowerCase() || '',
-          property.type?.toLowerCase() || '',
-          property.rooms?.toString() || '',
-          property.surface?.toString() || '',
-          `${property.rooms} ${t('common.rooms')}`.toLowerCase(),
-          `${property.surface} m²`,
-        ].join(' ');
+        const query = normalizeForSearch(options.query);
 
-        const queryWords = query.split(/\s+/).filter(word => word.length > 0);
+        const rooms = Number(property.rooms) > 0 ? Number(property.rooms) : (Number(property.bedrooms) > 0 ? Number(property.bedrooms) : 0);
+        const bathrooms = Number(property.bathrooms) > 0 ? Number(property.bathrooms) : 0;
+        const floors = Number(property.floors) > 0 ? Number(property.floors) : 0;
+        const surface = Number(property.surface) > 0 ? Number(property.surface) : 0;
+
+        const rawFields: string[] = [
+          property.title,
+          String(property.reference ?? ''),
+          property.location,
+          property.city,
+          String(property.zipcode ?? ''),
+          property.description,
+          property.country,
+          property.type,
+        ];
+
+        if (rooms > 0) {
+          rawFields.push(
+            String(rooms),
+            `${rooms} pieces`,
+            `${rooms} chambres`,
+            `${rooms} rooms`,
+            `${rooms} bedrooms`
+          );
+        }
+
+        if (bathrooms > 0) {
+          rawFields.push(
+            String(bathrooms),
+            `${bathrooms} salle de bain`,
+            `${bathrooms} bain`,
+            `${bathrooms} sdb`,
+            `${bathrooms} bathroom`
+          );
+        }
+
+        if (floors > 0) {
+          rawFields.push(
+            String(floors),
+            `${floors} etage`,
+            `${floors} etages`,
+            `${floors} floor`
+          );
+        }
+
+        if (surface > 0) {
+          rawFields.push(String(surface), `${surface} m2`, `${surface} metres carres`);
+        }
+
+        rawFields.push(TYPE_SEARCH_KEYWORDS[property.type] || '');
+
+        const searchFields = normalizeForSearch(rawFields.join(' '));
+        const queryWords = query.split(/\s+/).map(word => word.replace(/\+$/, '')).filter(word => word.length > 0);
+
         return queryWords.every(word => searchFields.includes(word));
       })();
 
@@ -722,6 +777,30 @@ const Properties: React.FC = () => {
     </button>
   );
 
+  const searchInput = (
+    <div className="relative group">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder={t('properties.search.placeholder')}
+        className="peer w-full pl-12 pr-10 py-3 sm:py-4 border-2 border-white/60 bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:border-white focus:shadow-[0_10px_35px_rgba(255,255,255,0.35)] transition-all duration-300"
+        style={{ borderRadius: '0' }}
+      />
+      <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+      {query && (
+        <button
+          type="button"
+          onClick={() => setQuery('')}
+          aria-label={t('common.clear', { defaultValue: 'Clear' })}
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700 transition-colors"
+        >
+          <XMarkIcon className="w-5 h-5" />
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
@@ -754,35 +833,25 @@ const Properties: React.FC = () => {
         {/* Centered Filter Controls */}
         <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
           <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
-            {/* Primary Filter Buttons: Buy, Rent, Vacation */}
+            {/* Primary Filter Buttons: Buy, Rent, Vacation + Search */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4">
-              {propertyTypes.map(({ key, label }) => renderTypeButton(key, label))}
+              {propertyTypes.map(({ key, label }) => {
+                if (filter !== 'all' && filter !== key) return null;
+                return renderTypeButton(key, label);
+              })}
+
+              {filter !== 'all' && (
+                <div className="col-span-2">
+                  {searchInput}
+                </div>
+              )}
             </div>
 
-            {/* Search Input */}
-            <div className="mb-4">
-              <div className="relative group">
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t('properties.search.placeholder')}
-                  className="peer w-full pl-12 pr-10 py-3 sm:py-4 border-2 border-white/60 bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:border-white focus:shadow-[0_10px_35px_rgba(255,255,255,0.35)] transition-all duration-300"
-                  style={{ borderRadius: '0' }}
-                />
-                <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                {query && (
-                  <button
-                    type="button"
-                    onClick={() => setQuery('')}
-                    aria-label={t('common.clear', { defaultValue: 'Clear' })}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700 transition-colors"
-                  >
-                    <XMarkIcon className="w-5 h-5" />
-                  </button>
-                )}
+            {filter === 'all' && (
+              <div className="mb-4">
+                {searchInput}
               </div>
-            </div>
+            )}
 
             {/* More Filters Toggle & Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4">
@@ -827,7 +896,7 @@ const Properties: React.FC = () => {
                 showMoreFilters ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-2">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
                 {/* Bedrooms Filter */}
                 <div>
                   <FilterDropdown
