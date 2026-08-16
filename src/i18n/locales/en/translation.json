@@ -27,7 +27,8 @@
     "and": "and",
     "month": "month",
     "week": "week",
-    "year": "year"
+    "year": "year",
+    "page": "Page"
   },
   "brand": {
     "subtitle": "REAL ESTATE"
@@ -529,6 +530,7 @@
       "title": "Refine your search with our smart filters",
       "all": "All",
       "buy": "For Sale",
+      "toBuy": "To Buy",
       "sold": "Sold",
       "rented": "Rented",
       "rent": "For Rent",
@@ -536,6 +538,13 @@
       "type": "Property Type",
       "location": "Location",
       "allLocations": "All locations",
+      "surfaceMin": "Min surface",
+      "surfaceMax": "Max surface",
+      "budgetMin": "Min budget",
+      "budgetMax": "Max budget",
+      "minPlaceholder": "Min",
+      "maxPlaceholder": "Max",
+      "viewResults": "View filtered results",
       "bedrooms": "Bedrooms",
       "bedroomsLabel": "bedrooms",
       "allBedrooms": "All",
@@ -1505,7 +1514,9 @@
       "emailPlaceholder": "vip@example.com",
       "sendingLink": "Sending...",
       "receiveLinkButton": "Receive my access link",
-      "secureConnection": "Secure connection • Encrypted data"
+      "secureConnection": "Secure connection • Encrypted data",
+      "verifying": "Verifying your email...",
+      "invalidEmail": "No traveler account found with this email. Please check your email address."
     },
     "booking": {
       "checkIn": "CHECK-IN",

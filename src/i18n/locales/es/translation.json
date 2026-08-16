@@ -27,7 +27,8 @@
     "and": "y",
     "month": "mes",
     "week": "semana",
-    "year": "año"
+    "year": "año",
+    "page": "Página"
   },
   "brand": {
     "subtitle": "INMOBILIARIA"
@@ -530,6 +531,7 @@
       "title": "Refina tu búsqueda con nuestros filtros inteligentes",
       "all": "Todo",
       "buy": "Comprar",
+      "toBuy": "Para comprar",
       "sold": "Vendido",
       "rented": "Alquilado",
       "rent": "Alquilar",
@@ -537,6 +539,13 @@
       "type": "Tipo de propiedad",
       "location": "Ubicación",
       "allLocations": "Todas las ubicaciones",
+      "surfaceMin": "Superficie mín",
+      "surfaceMax": "Superficie máx",
+      "budgetMin": "Presupuesto mín",
+      "budgetMax": "Presupuesto máx",
+      "minPlaceholder": "Mín",
+      "maxPlaceholder": "Máx",
+      "viewResults": "Ver el resultado del filtro",
       "bedrooms": "Habitaciones",
       "bedroomsLabel": "habitaciones",
       "allBedrooms": "Todas",
@@ -1544,7 +1553,9 @@
       "emailPlaceholder": "vip@ejemplo.com",
       "sendingLink": "Enviando...",
       "receiveLinkButton": "Recibir mi enlace de acceso",
-      "secureConnection": "Conexión segura • Datos encriptados"
+      "secureConnection": "Conexión segura • Datos encriptados",
+      "verifying": "Verificando su email...",
+      "invalidEmail": "No se encontró ninguna cuenta de viajero con este email. Verifique su dirección de email."
     },
     "booking": {
       "checkIn": "ENTRADA",

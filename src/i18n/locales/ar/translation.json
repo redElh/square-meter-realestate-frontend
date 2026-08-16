@@ -27,7 +27,8 @@
     "and": "و",
     "month": "شهر",
     "week": "أسبوع",
-    "year": "سنة"
+    "year": "سنة",
+    "page": "صفحة"
   },
   "brand": {
     "subtitle": "العقارات"
@@ -530,6 +531,7 @@
       "title": "حسّن بحثك باستخدام مرشحاتنا الذكية",
       "all": "الكل",
       "buy": "شراء",
+      "toBuy": "للشراء",
       "sold": "مباع",
       "rented": "مُؤجَّر",
       "rent": "إيجار",
@@ -537,6 +539,13 @@
       "type": "نوع العقار",
       "location": "الموقع",
       "allLocations": "جميع المواقع",
+      "surfaceMin": "أدنى مساحة",
+      "surfaceMax": "أقصى مساحة",
+      "budgetMin": "أدنى ميزانية",
+      "budgetMax": "أقصى ميزانية",
+      "minPlaceholder": "الحد الأدنى",
+      "maxPlaceholder": "الحد الأقصى",
+      "viewResults": "عرض نتيجة التصفية",
       "bedrooms": "غرف النوم",
       "bedroomsLabel": "غرف نوم",
       "allBedrooms": "الكل",
@@ -1506,7 +1515,9 @@
       "emailPlaceholder": "vip@example.com",
       "sendingLink": "جارٍ الإرسال...",
       "receiveLinkButton": "تلقي رابط الوصول",
-      "secureConnection": "اتصال آمن • بيانات مشفرة"
+      "secureConnection": "اتصال آمن • بيانات مشفرة",
+      "verifying": "جارٍ التحقق من بريدك الإلكتروني...",
+      "invalidEmail": "لم يتم العثور على حساب مسافر بهذا البريد الإلكتروني. تحقق من عنوان بريدك الإلكتروني."
     },
     "booking": {
       "checkIn": "تسجيل الوصول",

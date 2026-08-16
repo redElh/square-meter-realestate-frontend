@@ -27,7 +27,8 @@
     "and": "et",
     "month": "mois",
     "week": "semaine",
-    "year": "an"
+    "year": "an",
+    "page": "Page"
   },
   "brand": {
     "subtitle": "IMMOBILIER"
@@ -529,6 +530,7 @@
       "title": "Affinez votre recherche avec nos filtres intelligents",
       "all": "Tout",
       "buy": "À vendre",
+      "toBuy": "À acheter",
       "sold": "Vendu",
       "rented": "Loué",
       "rent": "À louer",
@@ -536,6 +538,13 @@
       "type": "Type de bien",
       "location": "Localisation",
       "allLocations": "Toutes les localisations",
+      "surfaceMin": "Surface min",
+      "surfaceMax": "Surface max",
+      "budgetMin": "Budget min",
+      "budgetMax": "Budget max",
+      "minPlaceholder": "Min",
+      "maxPlaceholder": "Max",
+      "viewResults": "Voir le résultat du filtrage",
       "bedrooms": "Chambres",
       "bedroomsLabel": "chambres",
       "allBedrooms": "Toutes",
@@ -1536,7 +1545,9 @@
       "emailPlaceholder": "vip@example.com",
       "sendingLink": "Envoi en cours...",
       "receiveLinkButton": "Recevoir mon lien d'accès",
-      "secureConnection": "Connexion sécurisée • Données cryptées"
+      "secureConnection": "Connexion sécurisée • Données cryptées",
+      "verifying": "Vérification de votre email...",
+      "invalidEmail": "Aucun compte voyageur trouvé avec cet email. Vérifiez votre adresse email."
     },
     "booking": {
       "checkIn": "CHECK-IN",

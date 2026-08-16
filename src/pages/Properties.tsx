@@ -42,7 +42,7 @@ const TYPE_SEARCH_KEYWORDS: Record<string, string> = {
 
 const Properties: React.FC = () => {
   const { t } = useTranslation();
-  const { format: formatCurrencyPrice, convertPrice } = useCurrency();
+  const { format: formatCurrencyPrice, convertPrice, getSymbol } = useCurrency();
   const PROPERTIES_PER_PAGE = 10;
   const [searchParams, setSearchParams] = useSearchParams();
   const pageFromQuery = Number(searchParams.get('page')) || 0;
@@ -62,15 +62,33 @@ const Properties: React.FC = () => {
   });
   const [propertyTypeFilter, setPropertyTypeFilter] = useState(searchParams.get('propertyType') || '');
   const [locationFilter, setLocationFilter] = useState(searchParams.get('location') || '');
+  const [surfaceMin, setSurfaceMin] = useState<number | null>(() => {
+    const value = searchParams.get('surfaceMin');
+    const parsed = Number(value);
+    return value !== null && !Number.isNaN(parsed) ? parsed : null;
+  });
+  const [surfaceMax, setSurfaceMax] = useState<number | null>(() => {
+    const value = searchParams.get('surfaceMax');
+    const parsed = Number(value);
+    return value !== null && !Number.isNaN(parsed) ? parsed : null;
+  });
+  const [budgetMin, setBudgetMin] = useState<number | null>(() => {
+    const value = searchParams.get('budgetMin');
+    const parsed = Number(value);
+    return value !== null && !Number.isNaN(parsed) ? parsed : null;
+  });
+  const [budgetMax, setBudgetMax] = useState<number | null>(() => {
+    const value = searchParams.get('budgetMax');
+    const parsed = Number(value);
+    return value !== null && !Number.isNaN(parsed) ? parsed : null;
+  });
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
   const [isHeroPlaying] = useState(true);
-  const [showMoreFilters, setShowMoreFilters] = useState(
-    Boolean(searchParams.get('bedrooms') || searchParams.get('propertyType') || searchParams.get('location'))
-  );
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
   const propertiesListRef = useRef<HTMLDivElement>(null);
   const firstPropertyCardRef = useRef<HTMLDivElement>(null);
   const hasInitializedFiltersRef = useRef(false);
@@ -267,6 +285,20 @@ const Properties: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (!showMoreFilters) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowMoreFilters(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showMoreFilters]);
+
+  useEffect(() => {
     if (!isMobile || carouselPaused || propertyTypeCarouselHover) return;
 
     let slideTimeoutId: number | undefined;
@@ -304,6 +336,10 @@ const Properties: React.FC = () => {
       bedrooms: number | null;
       propertyType: string;
       location: string;
+      surfaceMin: number | null;
+      surfaceMax: number | null;
+      budgetMin: number | null;
+      budgetMax: number | null;
       sort: string;
     }
   ): Property[] => {
@@ -397,7 +433,17 @@ const Properties: React.FC = () => {
         return searchable.includes(normalizeForSearch(options.location));
       })();
 
-      return typeMatch && roomsMatch && propertyTypeMatch && searchMatch && locationMatch;
+      const surfaceMatch = (options.surfaceMin == null || property.surface >= options.surfaceMin)
+        && (options.surfaceMax == null || property.surface <= options.surfaceMax);
+
+      const budgetMatch = (() => {
+        const convertedPrice = getSortablePrice(property);
+        if (options.budgetMin != null && convertedPrice < options.budgetMin) return false;
+        if (options.budgetMax != null && convertedPrice > options.budgetMax) return false;
+        return true;
+      })();
+
+      return typeMatch && roomsMatch && propertyTypeMatch && searchMatch && locationMatch && surfaceMatch && budgetMatch;
     });
 
     const sorted = [...filtered];
@@ -432,6 +478,10 @@ const Properties: React.FC = () => {
     bedrooms: bedroomsFilter,
     propertyType: propertyTypeFilter,
     location: locationFilter,
+    surfaceMin,
+    surfaceMax,
+    budgetMin,
+    budgetMax,
     sort: sortBy,
   });
 
@@ -488,7 +538,7 @@ const Properties: React.FC = () => {
     }
 
     setCurrentPage(1);
-  }, [filter, query, bedroomsFilter, propertyTypeFilter, locationFilter, sortBy, loading, properties.length]);
+  }, [filter, query, bedroomsFilter, propertyTypeFilter, locationFilter, surfaceMin, surfaceMax, budgetMin, budgetMax, sortBy, loading, properties.length]);
 
   useEffect(() => {
     const nextParams = new URLSearchParams(searchParams);
@@ -523,6 +573,30 @@ const Properties: React.FC = () => {
       nextParams.delete('location');
     }
 
+    if (surfaceMin !== null) {
+      nextParams.set('surfaceMin', String(surfaceMin));
+    } else {
+      nextParams.delete('surfaceMin');
+    }
+
+    if (surfaceMax !== null) {
+      nextParams.set('surfaceMax', String(surfaceMax));
+    } else {
+      nextParams.delete('surfaceMax');
+    }
+
+    if (budgetMin !== null) {
+      nextParams.set('budgetMin', String(budgetMin));
+    } else {
+      nextParams.delete('budgetMin');
+    }
+
+    if (budgetMax !== null) {
+      nextParams.set('budgetMax', String(budgetMax));
+    } else {
+      nextParams.delete('budgetMax');
+    }
+
     if (sortBy && sortBy !== 'newest') {
       nextParams.set('sort', sortBy);
     } else {
@@ -538,7 +612,7 @@ const Properties: React.FC = () => {
     if (nextParams.toString() !== searchParams.toString()) {
       setSearchParams(nextParams, { replace: true });
     }
-  }, [filter, query, bedroomsFilter, propertyTypeFilter, locationFilter, sortBy, currentPage, searchParams, setSearchParams]);
+  }, [filter, query, bedroomsFilter, propertyTypeFilter, locationFilter, surfaceMin, surfaceMax, budgetMin, budgetMax, sortBy, currentPage, searchParams, setSearchParams]);
 
   useEffect(() => {
     if (loading || totalPages === 0) return;
@@ -577,7 +651,7 @@ const Properties: React.FC = () => {
   };
 
   const propertyTypes = [
-    { key: 'buy', label: t('properties.filters.buy') },
+    { key: 'buy', label: t('properties.filters.toBuy') },
     { key: 'rent', label: t('properties.filters.rent') },
     { key: 'seasonal', label: t('properties.filters.vacation') },
   ];
@@ -595,11 +669,14 @@ const Properties: React.FC = () => {
   );
 
   const rotatedPropertyTypes = useMemo(() => {
-    const n = propertyTypeOptions.length;
+    const options = filter === 'seasonal'
+      ? propertyTypeOptions.filter(option => option.value !== 'land')
+      : propertyTypeOptions;
+    const n = options.length;
     if (n === 0) return [];
     const offset = ((carouselRotation % n) + n) % n;
-    return [...propertyTypeOptions.slice(offset), ...propertyTypeOptions.slice(0, offset)];
-  }, [propertyTypeOptions, carouselRotation]);
+    return [...options.slice(offset), ...options.slice(0, offset)];
+  }, [propertyTypeOptions, carouselRotation, filter]);
   const locationOptions = [
     { value: 'Arbaa Ida Ougourd 44005', label: 'Arbaa Ida Ougourd 44005' },
     { value: 'Essaouira 44000', label: 'Essaouira 44000' },
@@ -616,6 +693,10 @@ const Properties: React.FC = () => {
     setBedroomsFilter(null);
     setPropertyTypeFilter('');
     setLocationFilter('');
+    setSurfaceMin(null);
+    setSurfaceMax(null);
+    setBudgetMin(null);
+    setBudgetMax(null);
     setSortBy('newest');
     setCurrentPage(1);
     setCarouselPaused(false);
@@ -627,6 +708,10 @@ const Properties: React.FC = () => {
     bedroomsFilter !== null,
     propertyTypeFilter !== '',
     locationFilter !== '',
+    surfaceMin !== null,
+    surfaceMax !== null,
+    budgetMin !== null,
+    budgetMax !== null,
   ].filter(Boolean).length;
 
   
@@ -692,7 +777,7 @@ const Properties: React.FC = () => {
       {/* MAIN CARD CONTAINER - Horizontal Layout */}
       <div className="flex flex-col">
         {/* IMAGE SECTION - Left side with primary + secondary images */}
-        <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
+        <div className="w-full flex flex-col md:flex-row h-[240px] sm:h-[300px] lg:h-[360px]">
           {/* Primary Image - Larger on left */}
           <div
             className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer"
@@ -770,42 +855,36 @@ const Properties: React.FC = () => {
           </div>
         </div>
 
-        {/* DETAILS SECTION - compact single-line summary */}
-        <div className="w-full p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
-          <div className="flex-1 min-w-0 w-full sm:w-auto">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-              <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
-                isSoldStatus(property.status)
-                  ? 'bg-gray-100 text-gray-700 border border-gray-300'
-                  : property.type === 'buy'
-                  ? 'bg-blue-50 text-blue-800 border border-blue-200'
-                  : property.type === 'rent'
-                  ? 'bg-green-50 text-green-800 border border-green-200'
-                  : 'bg-purple-50 text-purple-800 border border-purple-200'
-              }`}>{isSoldStatus(property.status) ? (property.type === 'buy' ? t('properties.listing.sold') : t('properties.listing.rented')) : property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
+        {/* DETAILS SECTION - stacked so all content fits in two-column layout */}
+        <div className="w-full p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 min-w-0">
+            <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
+              isSoldStatus(property.status)
+                ? 'bg-gray-100 text-gray-700 border border-gray-300'
+                : property.type === 'buy'
+                ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                : property.type === 'rent'
+                ? 'bg-green-50 text-green-800 border border-green-200'
+                : 'bg-purple-50 text-purple-800 border border-purple-200'
+            }`}>{isSoldStatus(property.status) ? (property.type === 'buy' ? t('properties.listing.sold') : t('properties.listing.rented')) : property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}</span>
 
-              <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
-
-              <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
-              {property.reference && (
-                <span className="text-gray-400 text-xs sm:text-xs ml-2 sm:ml-3">• {t('contact.form.propertyReference')}: {property.reference}</span>
-              )}
-            </div>
+            <h3 className="flex-1 min-w-0 text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
           </div>
 
-          <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
-            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.rooms || 0}</span></div>
-            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.floors || 0}</span></div>
-            <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
+          <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 min-w-0 text-xs sm:text-sm text-gray-500">
+            <span className="truncate">• {property.location}</span>
+            {property.reference && (
+              <span className="text-gray-400 truncate">• {t('contact.form.propertyReference')}: {property.reference}</span>
+            )}
           </div>
 
-          <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
-            <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.rooms || 0}</span></div>
-            <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.floors || 0}</span></div>
-            <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
+          <div className="flex items-center text-xs sm:text-sm text-gray-600 space-x-4 whitespace-nowrap">
+            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="ml-0.5 sm:ml-1">{property.rooms || 0}</span></div>
+            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="ml-0.5 sm:ml-1">{property.floors || 0}</span></div>
+            <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="ml-0.5 sm:ml-1">{property.surface.toFixed(0)} m²</span></div>
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex items-center justify-between gap-2 sm:gap-3 pt-2 sm:pt-3 border-t border-gray-100">
             <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">
               {formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}
             </div>
@@ -1060,46 +1139,6 @@ const Properties: React.FC = () => {
               </div>
             </div>
 
-            {/* Collapsible Bedrooms & Property Type Filters */}
-            <div 
-              className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                showMoreFilters ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-              }`}
-            >
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
-                {/* Bedrooms Filter */}
-                <div>
-                  <FilterDropdown
-                    label={t('properties.filters.bedrooms')}
-                    value={bedroomsFilter !== null ? String(bedroomsFilter) : ''}
-                    placeholder={t('properties.filters.allBedrooms')}
-                    onChange={(v) => setBedroomsFilter(v === '' ? null : parseInt(v, 10))}
-                    options={[
-                      { value: '', label: t('properties.filters.allBedrooms') },
-                      ...bedroomOptions.map(beds => ({
-                        value: String(beds),
-                        label: `${beds}+ ${t('properties.filters.bedroomsLabel')}`,
-                      })),
-                    ]}
-                  />
-                </div>
-
-                {/* Location Filter */}
-                <div>
-                  <FilterDropdown
-                    label={t('properties.filters.location')}
-                    value={locationFilter}
-                    placeholder={t('properties.filters.allLocations')}
-                    onChange={setLocationFilter}
-                    options={[
-                      { value: '', label: t('properties.filters.allLocations') },
-                      ...locationOptions,
-                    ]}
-                  />
-                </div>
-              </div>
-            </div>
-            
             {/* Results count indicator */}
             <div className="text-center mt-4">
               <span className="text-xs sm:text-sm text-white/90 font-medium px-3 py-1.5 bg-black/30 backdrop-blur-sm inline-block">
@@ -1151,15 +1190,25 @@ const Properties: React.FC = () => {
 
       {/* Property Cards Section - REVOLUTIONARY NEW LAYOUT */}
       <section ref={propertiesListRef} className="py-6 sm:py-12 bg-white">
-        <div className="container mx-auto px-4 sm:px-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {loading ? (
-            <div className="flex justify-center items-center py-20 sm:py-40">
-              <div className="relative">
-                <div className="animate-spin h-16 w-16 sm:h-24 sm:w-24 border-2 border-[#023927] border-t-transparent"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-[#023927] font-light text-sm sm:text-lg">{t('properties.listing.loading')}</span>
+            <div className="flex flex-col items-center justify-center py-20 sm:py-40">
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32">
+                <div
+                  className="absolute inset-0 rounded-full border-4 border-[#023927]/15 border-t-[#023927] animate-spin"
+                  style={{ animationDuration: '1.2s', animationTimingFunction: 'cubic-bezier(0.65, 0, 0.35, 1)' }}
+                ></div>
+                <div
+                  className="absolute inset-2 rounded-full border-2 border-[#c8a97e]/30 border-b-[#c8a97e] animate-spin"
+                  style={{ animationDuration: '2s', animationDirection: 'reverse', animationTimingFunction: 'linear' }}
+                ></div>
+                <div className="absolute inset-3 rounded-full overflow-hidden bg-white shadow-xl ring-1 ring-gray-100">
+                  <img src="/logo-m2-circle.png" alt="Square Meter" className="w-full h-full object-cover" />
                 </div>
               </div>
+              <span className="mt-6 text-[#023927] font-light tracking-wide text-sm sm:text-lg">
+                {t('properties.listing.loading')}
+              </span>
             </div>
           ) : (
             <>
@@ -1214,7 +1263,7 @@ const Properties: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  <div className="space-y-4 sm:space-y-8 max-w-6xl mx-auto">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 w-full">
                     {paginatedProperties.map((property, index) => (
                       <div
                         key={property.id}
@@ -1268,6 +1317,158 @@ const Properties: React.FC = () => {
           )}
         </div>
       </section>
+
+      {/* More Filters Modal */}
+      {showMoreFilters && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setShowMoreFilters(false)}
+          ></div>
+
+          <div className="relative w-full max-w-2xl bg-white shadow-2xl animate-modal-in flex flex-col max-h-[90vh] overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 sm:px-8 py-4 sm:py-5 bg-[#023927] text-white flex-shrink-0">
+              <h3 className="font-inter uppercase tracking-wider text-base sm:text-xl font-medium">
+                {t('properties.filters.title')}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowMoreFilters(false)}
+                aria-label={t('common.close', { defaultValue: 'Close' })}
+                className="p-1 hover:opacity-70 transition-opacity duration-200"
+              >
+                <XMarkIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto px-5 sm:px-8 py-5 sm:py-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <FilterDropdown
+                variant="light"
+                label={t('properties.filters.bedrooms')}
+                value={bedroomsFilter !== null ? String(bedroomsFilter) : ''}
+                placeholder={t('properties.filters.allBedrooms')}
+                onChange={(v) => setBedroomsFilter(v === '' ? null : parseInt(v, 10))}
+                options={[
+                  { value: '', label: t('properties.filters.allBedrooms') },
+                  ...bedroomOptions.map(beds => ({
+                    value: String(beds),
+                    label: `${beds}+ ${t('properties.filters.bedroomsLabel')}`,
+                  })),
+                ]}
+              />
+
+              <FilterDropdown
+                variant="light"
+                label={t('properties.filters.location')}
+                value={locationFilter}
+                placeholder={t('properties.filters.allLocations')}
+                onChange={setLocationFilter}
+                options={[
+                  { value: '', label: t('properties.filters.allLocations') },
+                  ...locationOptions,
+                ]}
+              />
+
+              <div>
+                <label className="block text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mb-1.5">
+                  {t('properties.filters.surfaceMin')}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={surfaceMin ?? ''}
+                  onChange={(e) => setSurfaceMin(e.target.value === '' ? null : Number(e.target.value))}
+                  placeholder={t('properties.filters.minPlaceholder')}
+                  className="w-full border-2 border-gray-300 bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#023927] transition-colors duration-300"
+                  style={{ borderRadius: '0' }}
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mb-1.5">
+                  {t('properties.filters.surfaceMax')}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={surfaceMax ?? ''}
+                  onChange={(e) => setSurfaceMax(e.target.value === '' ? null : Number(e.target.value))}
+                  placeholder={t('properties.filters.maxPlaceholder')}
+                  className="w-full border-2 border-gray-300 bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#023927] transition-colors duration-300"
+                  style={{ borderRadius: '0' }}
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mb-1.5">
+                  {t('properties.filters.budgetMin')}
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm sm:text-base pointer-events-none">
+                    {getSymbol()}
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={budgetMin ?? ''}
+                    onChange={(e) => setBudgetMin(e.target.value === '' ? null : Number(e.target.value))}
+                    placeholder={t('properties.filters.minPlaceholder')}
+                    className="w-full border-2 border-gray-300 bg-white pl-8 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#023927] transition-colors duration-300"
+                    style={{ borderRadius: '0' }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] sm:text-xs uppercase tracking-wider text-gray-500 mb-1.5">
+                  {t('properties.filters.budgetMax')}
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm sm:text-base pointer-events-none">
+                    {getSymbol()}
+                  </span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={budgetMax ?? ''}
+                    onChange={(e) => setBudgetMax(e.target.value === '' ? null : Number(e.target.value))}
+                    placeholder={t('properties.filters.maxPlaceholder')}
+                    className="w-full border-2 border-gray-300 bg-white pl-8 sm:pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#023927] transition-colors duration-300"
+                    style={{ borderRadius: '0' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-gray-100 px-5 sm:px-8 py-4 sm:py-5 flex items-center justify-between gap-3 sm:gap-4 flex-shrink-0">
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="group relative border-2 border-[#023927] text-[#023927] px-5 sm:px-8 py-2 sm:py-3 font-inter uppercase tracking-wider text-xs sm:text-sm transition-all duration-500 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-[#023927] transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                  {t('properties.filters.resetAll')} ({activeFiltersCount})
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setShowMoreFilters(false);
+                  setTimeout(() => scrollToPropertiesList(), 150);
+                }}
+                className="bg-[#023927] text-white px-5 sm:px-8 py-2 sm:py-3 font-inter uppercase tracking-wider text-xs sm:text-sm hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
+              >
+                {t('properties.filters.viewResults')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Image Gallery Modal */}
       <ImageGalleryModal

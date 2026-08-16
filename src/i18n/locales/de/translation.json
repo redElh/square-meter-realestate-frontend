@@ -319,7 +319,8 @@
       "floors": "Etagen",
       "bedrooms": "Schlafzimmer",
       "bathrooms": "Badezimmer",
-      "year": "Jahr"
+    "year": "Jahr",
+    "page": "Seite"
     },
     "sections": {
       "description": "Beschreibung",
@@ -542,6 +543,7 @@
       "title": "Verfeinern Sie Ihre Suche mit unseren intelligenten Filtern",
       "all": "Alle",
       "buy": "Zu kaufen",
+      "toBuy": "Zu kaufen",
       "sold": "Verkauft",
       "rented": "Vermietet",
       "rent": "Zu vermieten",
@@ -549,6 +551,13 @@
       "type": "Immobilientyp",
       "location": "Standort",
       "allLocations": "Alle Standorte",
+      "surfaceMin": "Min. Fläche",
+      "surfaceMax": "Max. Fläche",
+      "budgetMin": "Min. Budget",
+      "budgetMax": "Max. Budget",
+      "minPlaceholder": "Min",
+      "maxPlaceholder": "Max",
+      "viewResults": "Filterergebnis ansehen",
       "bedrooms": "Schlafzimmer",
       "bedroomsLabel": "Schlafzimmer",
       "allBedrooms": "Alle",
@@ -1527,7 +1536,9 @@
       "emailPlaceholder": "vip@beispiel.de",
       "sendingLink": "Wird gesendet...",
       "receiveLinkButton": "Meinen Zugangslink erhalten",
-      "secureConnection": "Sichere Verbindung • Verschlüsselte Daten"
+      "secureConnection": "Sichere Verbindung • Verschlüsselte Daten",
+      "verifying": "Ihre E-Mail wird überprüft...",
+      "invalidEmail": "Kein Reisenden-Konto mit dieser E-Mail gefunden. Bitte überprüfen Sie Ihre E-Mail-Adresse."
     },
     "booking": {
       "checkIn": "CHECK-IN",
