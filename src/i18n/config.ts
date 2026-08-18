@@ -20,13 +20,21 @@ export const resources = {
   ru: { translation: translationRU },
 } as const;
 
+const supportedLngs = ['fr', 'en', 'ar', 'es', 'de', 'ru'];
+
+const storedLng = localStorage.getItem('appLanguage');
+const validLng = storedLng && supportedLngs.includes(storedLng) ? storedLng : 'fr';
+if (storedLng && !supportedLngs.includes(storedLng)) {
+  localStorage.removeItem('appLanguage');
+}
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: 'fr',
-    lng: localStorage.getItem('appLanguage') || 'fr',
+    lng: validLng,
     debug: false,
     
     interpolation: {
