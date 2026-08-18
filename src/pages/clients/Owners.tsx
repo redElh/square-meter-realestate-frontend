@@ -100,16 +100,16 @@ const Owners: React.FC = () => {
         <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
           <div className="container mx-auto px-4 sm:px-6">
             <div className="transform transition-all duration-1000 delay-300 translate-y-0 opacity-100">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
             <Link 
               to="/selling-multistep?step=1"
-              className="bg-white text-[#023927] px-6 sm:px-12 py-3 sm:py-5 font-medium uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-[#023927] hover:text-white transition-all duration-500 border-2 border-white text-center"
+              className="border-2 border-white/50 bg-white/20 text-white backdrop-blur-sm px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider text-center text-sm sm:text-base hover:border-white hover:bg-white/40 transition-all duration-300"
             >
               {t('owners.hero.estimateButton')}
             </Link>
             <Link 
               to="/contact?type=management"
-              className="bg-[#023927] text-white px-6 sm:px-12 py-3 sm:py-5 font-medium uppercase tracking-wider text-sm sm:text-base lg:text-lg hover:bg-white hover:text-[#023927] transition-all duration-500 border-2 border-[#023927] text-center"
+              className="border-2 border-white/50 bg-white/20 text-white backdrop-blur-sm px-8 sm:px-10 py-2.5 sm:py-4 font-inter uppercase tracking-wider text-center text-sm sm:text-base hover:border-white hover:bg-white/40 transition-all duration-300"
             >
               {t('owners.hero.manageButton')}
             </Link>
@@ -119,7 +119,7 @@ const Owners: React.FC = () => {
         </div>
 
         {/* Carousel Controls */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-2 sm:space-x-4">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center space-x-2 sm:space-x-4 bg-black/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-white/20">
           <button
             onClick={prevSlide}
             className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"

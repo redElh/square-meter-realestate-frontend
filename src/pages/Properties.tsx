@@ -14,7 +14,11 @@ import {
   ArrowTopRightOnSquareIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  ArrowsPointingOutIcon,
+  BanknotesIcon,
+  PlusIcon,
+  MinusIcon
 } from '@heroicons/react/24/outline';
 import {
   HeartIcon as HeartIconSolid
@@ -357,12 +361,13 @@ const Properties: React.FC = () => {
       const typeMatch = options.typeFilter === 'all' || property.type === options.typeFilter;
       const roomsMatch = !options.bedrooms || ((Number(property.rooms) || 0) >= options.bedrooms);
       const propertyTypeMatch = !options.propertyType || (() => {
-        const title = property.title?.toLowerCase() || '';
-        if (options.propertyType === 'apartment') return title.includes('appartement') || title.includes('apartment');
-        if (options.propertyType === 'villa') return title.includes('villa');
-        if (options.propertyType === 'land') return title.includes('terrain') || title.includes('land');
-        if (options.propertyType === 'riad') return title.includes('riad');
-        if (options.propertyType === 'other') return !title.includes('appartement') && !title.includes('apartment') && !title.includes('villa') && !title.includes('terrain') && !title.includes('land') && !title.includes('riad');
+        const cat = property.category;
+        const sub = property.subtype;
+        if (options.propertyType === 'apartment') return cat === 1;
+        if (options.propertyType === 'villa') return (cat === 2 || cat === 9) && sub !== 58;
+        if (options.propertyType === 'land') return cat === 3;
+        if (options.propertyType === 'riad') return (cat === 2 || cat === 9) && sub === 58;
+        if (options.propertyType === 'other') return ![1, 2, 3, 9].includes(cat || 0);
         return true;
       })();
 
@@ -769,10 +774,18 @@ const Properties: React.FC = () => {
   };
 
   const renderPropertyCard = (property: Property, pageContext?: number) => (
-    <div
-      key={property.id}
-      id={`property-card-${property.id}`}
-      className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
+    <Link
+      to={`/properties/${property.id}`}
+      onClick={() => {
+        if (typeof pageContext === 'number') {
+          sessionStorage.setItem('properties:lastViewedId', String(property.id));
+          sessionStorage.setItem('properties:lastViewedPage', String(pageContext));
+        } else {
+          sessionStorage.removeItem('properties:lastViewedId');
+          sessionStorage.removeItem('properties:lastViewedPage');
+        }
+      }}
+      className="block bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200"
     >
       {/* MAIN CARD CONTAINER - Horizontal Layout */}
       <div className="flex flex-col">
@@ -781,7 +794,7 @@ const Properties: React.FC = () => {
           {/* Primary Image - Larger on left */}
           <div
             className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer"
-            onClick={() => openGallery(property.images, property.title, 0)}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); openGallery(property.images, property.title, 0); }}
           >
             <img
               src={property.images[0]}
@@ -801,6 +814,7 @@ const Properties: React.FC = () => {
             {/* Favorite Button */}
             <button
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 toggleFavorite(property.id);
               }}
@@ -826,7 +840,7 @@ const Properties: React.FC = () => {
               <div
                 key={imgIndex}
                 className="flex-1 relative overflow-hidden group/secondary cursor-pointer"
-                onClick={() => openGallery(property.images, property.title, imgIndex + 1)}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); openGallery(property.images, property.title, imgIndex + 1); }}
               >
                 <img
                   src={img}
@@ -906,7 +920,7 @@ const Properties: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 
   const getSEOData = () => {
@@ -939,21 +953,6 @@ const Properties: React.FC = () => {
     }
   };
 
-  const renderTypeButton = (key: string, label: string) => (
-    <button
-      key={key}
-      onClick={() => setFilter(filter === key ? 'all' : key)}
-      className={`w-full p-3 sm:p-5 border-2 text-sm sm:text-base font-medium backdrop-blur-sm transition-all duration-300 flex items-center justify-center ${
-        filter === key
-          ? 'border-white bg-white/95 text-[#023927]'
-          : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-      }`}
-      style={{ borderRadius: '0' }}
-    >
-      {label}
-    </button>
-  );
-
   const searchInput = (
     <div className="relative group">
       <input
@@ -961,18 +960,18 @@ const Properties: React.FC = () => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder={t('properties.search.placeholder')}
-        className="peer w-full pl-12 pr-10 py-3 sm:py-4 border-2 border-white/60 bg-white/95 backdrop-blur-sm text-gray-900 text-sm sm:text-base placeholder-gray-500 focus:outline-none focus:border-white focus:shadow-[0_10px_35px_rgba(255,255,255,0.35)] transition-all duration-300"
+        className="peer w-full pl-10 pr-10 py-2 sm:py-2.5 border-2 border-gray-200 bg-white text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:border-[#023927]/40 focus:shadow-[0_2px_12px_rgba(2,57,39,0.08)] transition-all duration-300"
         style={{ borderRadius: '0' }}
       />
-      <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+      <MagnifyingGlassIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
       {query && (
         <button
           type="button"
           onClick={() => setQuery('')}
           aria-label={t('common.clear', { defaultValue: 'Clear' })}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700 transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-gray-400 hover:text-gray-700 transition-colors"
         >
-          <XMarkIcon className="w-5 h-5" />
+          <XMarkIcon className="w-4 h-4" />
         </button>
       )}
     </div>
@@ -1008,100 +1007,64 @@ const Properties: React.FC = () => {
         </div>
 
         {/* Centered Filter Controls */}
-        <div className="absolute bottom-24 sm:bottom-20 left-0 right-0 z-20">
-          <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
-            {/* Primary Filter Buttons: Buy, Rent, Vacation + Search */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4">
-              {propertyTypes.map(({ key, label }) => {
-                if (filter !== 'all' && filter !== key) return null;
-                return renderTypeButton(key, label);
-              })}
-
-              {filter !== 'all' && (
-                <div className="col-span-2">
-                  {searchInput}
-                </div>
-              )}
-            </div>
-
-            {filter === 'all' && (
-              <div className="mb-4">
-                {searchInput}
+        <div className="absolute bottom-32 sm:bottom-28 left-0 right-0 z-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-10">
+            {/* Filter Controls Row */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 lg:gap-4 items-stretch sm:items-end mb-4">
+              <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
+                <FilterDropdown
+                  variant="hero"
+                  value={filter}
+                  onChange={setFilter}
+                  placeholder={t('properties.filters.allTypes')}
+                  options={[
+                    { value: 'all', label: t('properties.filters.allTypes') },
+                    ...propertyTypes.map(({ key, label }) => ({ value: key, label })),
+                  ]}
+                />
               </div>
-            )}
-
-            {/* Property Type Checkboxes - carousel when a transaction type is selected */}
-            {filter !== 'all' && (
-              <div className="flex flex-col items-center gap-2 sm:gap-3 mb-4 w-full">
-                <div
-                  ref={propertyTypeCarouselRef}
-                  onMouseEnter={isMobile ? () => setPropertyTypeCarouselHover(true) : undefined}
-                  onMouseMove={isMobile ? handlePropertyTypeCarouselMove : undefined}
-                  onMouseLeave={isMobile ? handlePropertyTypeCarouselLeave : undefined}
-                  className={`flex items-center max-w-full no-scrollbar transition-all duration-300 ${
-                    isMobile ? 'overflow-x-auto' : 'justify-center'
-                  } ${
-                    isMobile && propertyTypeCarouselHover
-                      ? 'cursor-grab active:cursor-grabbing'
-                      : isMobile
-                      ? 'cursor-pointer'
-                      : ''
-                  }`}
-                >
-                  <div
-                    ref={propertyTypeTrackRef}
-                    style={
-                      isMobile && !propertyTypeCarouselHover && carouselSliding
-                        ? {
-                            transform: `translateX(${-carouselStepRef.current}px)`,
-                            transition: 'transform 0.5s ease',
-                          }
-                        : undefined
-                    }
-                    className="flex w-max gap-1.5 sm:gap-3"
-                  >
-                    {rotatedPropertyTypes.map(({ value, label }) => {
-                      const isSelected = propertyTypeFilter === value;
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          onClick={() => {
-                            setCarouselPaused(!isSelected);
-                            setPropertyTypeFilter(isSelected ? '' : value);
-                          }}
-                          aria-pressed={isSelected}
-                          className={`group flex items-center gap-1 sm:gap-2 px-2 sm:px-5 py-1.5 sm:py-2.5 border-2 backdrop-blur-sm transition-all duration-300 whitespace-nowrap ${
-                            isSelected
-                              ? 'border-white bg-white/95 text-[#023927] scale-105'
-                              : 'border-white/50 bg-white/20 text-white hover:border-white hover:bg-white/40'
-                          }`}
-                          style={{ borderRadius: '0' }}
-                        >
-                          <span
-                            className={`flex items-center justify-center w-3.5 h-3.5 sm:w-5 sm:h-5 border-2 transition-all duration-300 ${
-                              isSelected
-                                ? 'bg-[#023927] border-[#023927]'
-                                : 'border-white/70 bg-transparent group-hover:border-white'
-                            }`}
-                          >
-                            <CheckIcon
-                              className={`w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-white transition-all duration-300 ${
-                                isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-50'
-                              }`}
-                            />
-                          </span>
-                          <span className="text-[10px] sm:text-sm font-medium uppercase tracking-wide">{label}</span>
-                        </button>
-                      );
-                    })}
+              <div className="flex-1 flex gap-3 sm:gap-3 lg:gap-4 min-w-0">
+                <div className="flex-1 min-w-0">
+                  <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
+                    <ArrowsPointingOutIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    {t('properties.filters.surfaceMin')}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="0"
+                      value={surfaceMin ?? ''}
+                      onChange={(e) => setSurfaceMin(e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder={t('properties.filters.minPlaceholder')}
+                      className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      style={{ borderRadius: '0' }}
+                    />
+                    <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">m²</span>
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
+                    <BanknotesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    {t('properties.filters.budgetMax')}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      min="0"
+                      value={budgetMax ?? ''}
+                      onChange={(e) => setBudgetMax(e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder={t('properties.filters.maxPlaceholder')}
+                      className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      style={{ borderRadius: '0' }}
+                    />
+                    <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">{getSymbol()}</span>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
 
             {/* More Filters Toggle & Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4 w-full">
               <button
                 onClick={() => setShowMoreFilters(!showMoreFilters)}
                 className="group relative flex-1 border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
@@ -1124,32 +1087,14 @@ const Properties: React.FC = () => {
                     </span>
                   </button>
                 )}
-
-                <button
-                  onClick={() => {
-                    scrollToPropertiesList();
-                  }}
-                  className="group relative flex-1 sm:flex-none bg-white text-gray-900 px-2 sm:px-8 py-2 sm:py-4 font-inter uppercase tracking-normal sm:tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight sm:text-base whitespace-normal sm:whitespace-nowrap"
-                >
-                  <div className="absolute inset-0 bg-[#023927] transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                  <span className="relative z-10 group-hover:text-white transition-colors duration-500">
-                    {t('properties.filters.apply')}
-                  </span>
-                </button>
               </div>
             </div>
 
-            {/* Results count indicator */}
-            <div className="text-center mt-4">
-              <span className="text-xs sm:text-sm text-white/90 font-medium px-3 py-1.5 bg-black/30 backdrop-blur-sm inline-block">
-                {filteredAndSortedProperties.length} {t('properties.search.results')}
-              </span>
-            </div>
           </div>
         </div>
 
         {/* Carousel Controls - Minimal */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-2 sm:space-x-4">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center space-x-2 sm:space-x-4 bg-black/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-white/20">
           <button
             onClick={prevHeroSlide}
             className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
@@ -1213,11 +1158,16 @@ const Properties: React.FC = () => {
           ) : (
             <>
               <div className="mb-6 sm:mb-12">
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-4">
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-inter font-light text-gray-900 mb-3 sm:mb-4 lg:mb-0">
-                    {filteredAndSortedProperties.length} {t('properties.search.results')}
-                  </h3>
-                  <div className="flex items-center space-x-2 sm:space-x-3">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <span className="text-gray-500 text-sm sm:text-base font-inter flex-shrink-0">
+                      {filteredAndSortedProperties.length} {t('properties.listing.results')}
+                    </span>
+                    <div className="w-64 sm:w-80">
+                      {searchInput}
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
                     <span className="text-gray-500 text-sm sm:text-base">{t('properties.listing.sortBy')}</span>
                     <FilterDropdown
                       variant="light"
@@ -1344,6 +1294,20 @@ const Properties: React.FC = () => {
 
             {/* Body */}
             <div className="flex-1 overflow-y-auto px-5 sm:px-8 py-5 sm:py-7 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              {filter !== 'all' && (
+                <FilterDropdown
+                  variant="light"
+                  label={t('properties.filters.type')}
+                  value={propertyTypeFilter}
+                  placeholder={t('properties.filters.allTypes')}
+                  onChange={setPropertyTypeFilter}
+                  options={[
+                    { value: '', label: t('properties.filters.allTypes') },
+                    ...propertyTypeOptions,
+                  ]}
+                />
+              )}
+
               <FilterDropdown
                 variant="light"
                 label={t('properties.filters.bedrooms')}
