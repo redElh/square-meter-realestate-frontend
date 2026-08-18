@@ -529,6 +529,8 @@
     "filters": {
       "title": "Refine your search with our smart filters",
       "all": "All",
+
+      "allTypes": "All types",
       "buy": "For Sale",
       "toBuy": "To Buy",
       "sold": "Sold",
@@ -560,6 +562,8 @@
     },
     "listing": {
       "available": "Properties available",
+
+      "results": "results",
       "sortBy": "Sort by:",
       "relevance": "Relevance",
       "priceAsc": "Price ascending",
@@ -1611,7 +1615,32 @@
       "experienceLabel": "Square Meter Experience",
       "downloadCard": "Download card",
       "presentCard": "Present your privilege card to enjoy your exclusive discount",
-      "seeDetails": "See details"
+      "seeDetails": "See details",
+      "filterAll": "All partners",
+      "offreExclusive": "Exclusive Offer",
+      "offreRemise": "Discount",
+      "offreRemiseCode": "Discount (with promo code)",
+      "offreFixe": "Fixed discount",
+      "deRemise": "off",
+      "deRemiseCode": "off (with promo code)",
+      "surLaPartie": "on the session",
+      "valableUneSeuleFois": "One-time use only",
+      "nonCumulable": "Not combinable with other offers",
+      "presentezVotreCarte": "Present your privilege card",
+      "noPartners": "No partners in this category",
+      "generalInfo": "General Information",
+      "labelName": "Name",
+      "labelCategory": "Category",
+      "labelDescription": "Description",
+      "labelAddress": "Address",
+      "labelPhone": "Phone",
+      "labelWebsite": "Website",
+      "itineraire": "Itinerary",
+      "appeler": "Call",
+      "details": "Details",
+      "openMaps": "Open on Google Maps",
+      "email": "Send email",
+      "close": "Close"
     },
     "activities": {
       "title": "Activity Concierge",
@@ -1619,7 +1648,34 @@
       "available": "Available",
       "full": "Full",
       "bookViaWhatsapp": "Book via WhatsApp",
-      "experienceMessage": "Enjoy a unique experience organized by our concierge"
+      "experienceMessage": "Enjoy a unique experience organized by our concierge",
+      "filterAll": "All",
+      "availableCount": "{{count}} activit(y|ies) available",
+      "perPerson": "person",
+      "onRequest": "On request",
+      "seeDetails": "See details",
+      "email": "Email",
+      "requestBooking": "Booking request",
+      "noActivities": "No activities in this category",
+      "commission": "Commission",
+      "modal": {
+        "activityDetails": "Activity Details",
+        "duration": "Duration",
+        "price": "Price",
+        "availability": "Availability",
+        "capacity": "Capacity",
+        "included": "Included",
+        "notIncluded": "Not included",
+        "description": "Description",
+        "pricing": "Pricing",
+        "securePayment": "Secure payment",
+        "freeCancellation": "Free cancellation up to 24h before",
+        "assistance247": "24/7 assistance",
+        "exclusiveExperience": "You benefit from an exclusive experience",
+        "bookWhatsapp": "Book via WhatsApp",
+        "sendRequest": "Send a request",
+        "close": "Close"
+      }
     },
     "departure": {
       "title": "At departure time",
@@ -1687,11 +1743,21 @@
       "nautical": "NAUTICAL",
       "shopping": "SHOPPING",
       "sport": "SPORT",
-      "transport": "TRANSPORT"
+      "transport": "TRANSPORT",
+      "adventure": "LEISURE & ADVENTURE",
+      "nauticalSports": "WATER SPORTS"
     },
     "whatsappMessages": {
       "bookActivity": "Hello, I would like to book:",
       "extendStay": "Hello, I would like to extend my stay"
+    },
+    "activityCategories": {
+      "nautical": "Nautical",
+      "gastronomy": "Gastronomy",
+      "wellness": "Wellness",
+      "adventure": "Adventure",
+      "sport": "Sport",
+      "leisure": "Leisure"
     }
   },
   "agency": {

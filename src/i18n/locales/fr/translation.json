@@ -529,6 +529,8 @@
     "filters": {
       "title": "Affinez votre recherche avec nos filtres intelligents",
       "all": "Tout",
+
+      "allTypes": "Tous les types",
       "buy": "À vendre",
       "toBuy": "À acheter",
       "sold": "Vendu",
@@ -560,6 +562,8 @@
     },
     "listing": {
       "available": "Biens disponibles",
+
+      "results": "résultats",
       "sortBy": "Trier par :",
       "relevance": "Pertinence",
       "priceAsc": "Prix croissant",
@@ -1642,7 +1646,32 @@
       "experienceLabel": "Square Meter Experience",
       "downloadCard": "Télécharger la carte",
       "presentCard": "Présentez votre carte privilège pour bénéficier de votre remise exclusive",
-      "seeDetails": "Voir les détails"
+      "seeDetails": "Voir les détails",
+      "filterAll": "Tous les partenaires",
+      "offreExclusive": "Offre Exclusive",
+      "offreRemise": "Remise",
+      "offreRemiseCode": "Remise (avec code promo)",
+      "offreFixe": "Réduction fixe",
+      "deRemise": "de remise",
+      "deRemiseCode": "de remise (avec code promo)",
+      "surLaPartie": "sur la partie",
+      "valableUneSeuleFois": "Valable une seule fois",
+      "nonCumulable": "Non cumulable avec d'autres offres",
+      "presentezVotreCarte": "Présentez votre carte privilège",
+      "noPartners": "Aucun partenaire dans cette catégorie",
+      "generalInfo": "Informations Générales",
+      "labelName": "Nom",
+      "labelCategory": "Catégorie",
+      "labelDescription": "Description",
+      "labelAddress": "Adresse",
+      "labelPhone": "Téléphone",
+      "labelWebsite": "Site web",
+      "itineraire": "Itinéraire",
+      "appeler": "Appeler",
+      "details": "Détails",
+      "openMaps": "Ouvrir sur Google Maps",
+      "email": "Envoyer un email",
+      "close": "Fermer"
     },
     "activities": {
       "title": "Conciergerie d'Activités",
@@ -1650,7 +1679,34 @@
       "available": "Disponible",
       "full": "Complet",
       "bookViaWhatsapp": "Réserver via WhatsApp",
-      "experienceMessage": "Profitez d'une expérience unique organisée par notre conciergerie"
+      "experienceMessage": "Profitez d'une expérience unique organisée par notre conciergerie",
+      "filterAll": "Toutes",
+      "availableCount": "{{count}} activité(s) disponible(s)",
+      "perPerson": "personne",
+      "onRequest": "Sur demande",
+      "seeDetails": "Voir les détails",
+      "email": "Email",
+      "requestBooking": "Demande de réservation",
+      "noActivities": "Aucune activité dans cette catégorie",
+      "commission": "Commission",
+      "modal": {
+        "activityDetails": "Détails de l'activité",
+        "duration": "Durée",
+        "price": "Prix",
+        "availability": "Disponibilité",
+        "capacity": "Capacité",
+        "included": "Inclus",
+        "notIncluded": "Non inclus",
+        "description": "Description",
+        "pricing": "Tarifs",
+        "securePayment": "Paiement sécurisé",
+        "freeCancellation": "Annulation gratuite jusqu'à 24h avant",
+        "assistance247": "Assistance 24/7",
+        "exclusiveExperience": "Vous bénéficiez d'une expérience exclusive",
+        "bookWhatsapp": "Réserver via WhatsApp",
+        "sendRequest": "Envoyer une demande",
+        "close": "Fermer"
+      }
     },
     "departure": {
       "title": "Au moment du départ",
@@ -1718,11 +1774,21 @@
       "nautical": "NAUTIQUE",
       "shopping": "SHOPPING",
       "sport": "SPORT",
-      "transport": "TRANSPORT"
+      "transport": "TRANSPORT",
+      "adventure": "LOISIRS & AVENTURE",
+      "nauticalSports": "SPORTS & NAUTISME"
     },
     "whatsappMessages": {
       "bookActivity": "Bonjour, je souhaite réserver:",
       "extendStay": "Bonjour, je souhaite prolonger mon séjour"
+    },
+    "activityCategories": {
+      "nautical": "Nautique",
+      "gastronomy": "Gastronomie",
+      "wellness": "Bien-être",
+      "adventure": "Aventure",
+      "sport": "Sport",
+      "leisure": "Loisirs"
     }
   },
   "agency": {

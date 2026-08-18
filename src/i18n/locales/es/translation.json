@@ -530,6 +530,8 @@
     "filters": {
       "title": "Refina tu búsqueda con nuestros filtros inteligentes",
       "all": "Todo",
+
+      "allTypes": "Todos los tipos",
       "buy": "Comprar",
       "toBuy": "Para comprar",
       "sold": "Vendido",
@@ -561,6 +563,8 @@
     },
     "listing": {
       "available": "Propiedades disponibles",
+
+      "results": "resultados",
       "sortBy": "Ordenar por:",
       "relevance": "Relevancia",
       "priceAsc": "Precio ascendente",

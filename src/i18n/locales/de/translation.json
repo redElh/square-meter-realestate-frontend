@@ -542,6 +542,8 @@
     "filters": {
       "title": "Verfeinern Sie Ihre Suche mit unseren intelligenten Filtern",
       "all": "Alle",
+
+      "allTypes": "Alle Typen",
       "buy": "Zu kaufen",
       "toBuy": "Zu kaufen",
       "sold": "Verkauft",
@@ -573,6 +575,8 @@
     },
     "listing": {
       "available": "Immobilien verfügbar",
+
+      "results": "Ergebnisse",
       "sortBy": "Sortieren nach:",
       "relevance": "Relevanz",
       "priceAsc": "Preis aufsteigend",
