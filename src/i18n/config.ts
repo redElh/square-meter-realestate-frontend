@@ -27,20 +27,23 @@ i18n
     resources,
     fallbackLng: 'fr',
     lng: localStorage.getItem('appLanguage') || 'fr',
-    debug: process.env.NODE_ENV === 'development',
+    debug: false,
     
     interpolation: {
       escapeValue: false, // React already escapes values
     },
 
+    supportedLngs: ['fr', 'en', 'ar', 'es', 'de', 'ru'],
+    nonExplicitSupportedLngs: true,
+
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage'],
       caches: ['localStorage'],
       lookupLocalStorage: 'appLanguage',
     },
 
     react: {
-      useSuspense: true,
+      useSuspense: false,
     },
   });
 
