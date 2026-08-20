@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
     },
     { 
       name: 'Google', 
-      href: 'https://share.google/4Gx34x0fGmMnTP29b', 
+      href: 'https://squaremeter.ma', 
       image: '/google.png',
       label: t('footer.social.google')
     }

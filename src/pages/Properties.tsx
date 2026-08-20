@@ -1008,7 +1008,7 @@ const Properties: React.FC = () => {
 
         {/* Centered Filter Controls */}
         <div className="absolute bottom-32 sm:bottom-28 left-0 right-0 z-20">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-10">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10">
             {/* Filter Controls Row */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 lg:gap-4 items-stretch sm:items-end mb-4">
               <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
@@ -1023,51 +1023,75 @@ const Properties: React.FC = () => {
                   ]}
                 />
               </div>
-              <div className="flex-1 flex gap-3 sm:gap-3 lg:gap-4 min-w-0">
-                <div className="flex-1 min-w-0">
-                  <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
-                    <ArrowsPointingOutIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    {t('properties.filters.surfaceMin')}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      min="0"
-                      value={surfaceMin ?? ''}
-                      onChange={(e) => setSurfaceMin(e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder={t('properties.filters.minPlaceholder')}
-                      className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      style={{ borderRadius: '0' }}
-                    />
-                    <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">m²</span>
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
-                    <BanknotesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    {t('properties.filters.budgetMax')}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      min="0"
-                      value={budgetMax ?? ''}
-                      onChange={(e) => setBudgetMax(e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder={t('properties.filters.maxPlaceholder')}
-                      className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      style={{ borderRadius: '0' }}
-                    />
-                    <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">{getSymbol()}</span>
-                  </div>
+              <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
+                <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
+                  <ArrowsPointingOutIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  {t('properties.filters.surfaceMin')}
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="0"
+                    value={surfaceMin ?? ''}
+                    onChange={(e) => setSurfaceMin(e.target.value === '' ? null : Number(e.target.value))}
+                    placeholder={t('properties.filters.minPlaceholder')}
+                    className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    style={{ borderRadius: '0' }}
+                  />
+                  <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">m²</span>
                 </div>
               </div>
+              <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
+                <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
+                  <BanknotesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  {t('properties.filters.budgetMax')}
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="0"
+                    value={budgetMax ?? ''}
+                    onChange={(e) => setBudgetMax(e.target.value === '' ? null : Number(e.target.value))}
+                    placeholder={t('properties.filters.maxPlaceholder')}
+                    className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    style={{ borderRadius: '0' }}
+                  />
+                  <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">{getSymbol()}</span>
+                </div>
+              </div>
+
+              {/* More Filters & Reset — inline on desktop */}
+              <div className="hidden sm:flex w-full sm:w-44 lg:w-52 flex-shrink-0 items-end">
+                <button
+                  onClick={() => setShowMoreFilters(!showMoreFilters)}
+                  className="group relative w-full border-2 border-white text-white px-4 py-2.5 sm:py-3 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
+                >
+                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                    {showMoreFilters ? `− ${t('properties.filters.lessFilters')}` : `+ ${t('properties.filters.moreFilters')}`}
+                  </span>
+                </button>
+              </div>
+              {activeFiltersCount > 0 && (
+                <div className="hidden sm:flex w-full sm:w-44 lg:w-52 flex-shrink-0 items-end">
+                  <button
+                    onClick={resetFilters}
+                    className="group relative w-full border-2 border-white text-white px-4 py-3 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] sm:text-xs whitespace-nowrap"
+                  >
+                    <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                    <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                      {t('properties.filters.resetAll')} ({activeFiltersCount})
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* More Filters Toggle & Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-center mb-4 w-full">
+            {/* More Filters Toggle & Action Buttons — mobile only */}
+            <div className="flex flex-col gap-3 items-stretch mb-4 w-full sm:hidden">
               <button
                 onClick={() => setShowMoreFilters(!showMoreFilters)}
-                className="group relative flex-1 border-2 border-white text-white px-6 sm:px-8 py-2.5 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
+                className="group relative flex-1 border-2 border-white text-white px-6 py-2.5 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm"
               >
                 <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
                 <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
@@ -1075,19 +1099,17 @@ const Properties: React.FC = () => {
                 </span>
               </button>
 
-              <div className="flex w-full sm:w-auto gap-3 sm:gap-4">
-                {activeFiltersCount > 0 && (
-                  <button
-                    onClick={resetFilters}
-                    className="group relative flex-1 sm:flex-none border-2 border-white text-white px-2 sm:px-8 py-2 sm:py-4 font-inter uppercase tracking-normal sm:tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight sm:text-base whitespace-normal sm:whitespace-nowrap"
-                  >
-                    <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                    <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                      {t('properties.filters.resetAll')} ({activeFiltersCount})
-                    </span>
-                  </button>
-                )}
-              </div>
+              {activeFiltersCount > 0 && (
+                <button
+                  onClick={resetFilters}
+                  className="group relative flex-1 border-2 border-white text-white px-2 py-2 font-inter uppercase tracking-normal transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight whitespace-normal"
+                >
+                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
+                    {t('properties.filters.resetAll')} ({activeFiltersCount})
+                  </span>
+                </button>
+              )}
             </div>
 
           </div>
