@@ -212,7 +212,7 @@ const Services: React.FC = () => {
         </div>
 
         {/* Carousel Controls */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 z-30 flex items-center space-x-2 sm:space-x-4">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center space-x-2 sm:space-x-4 bg-black/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-white/20">
           <button
             onClick={prevHeroSlide}
             className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
@@ -229,12 +229,12 @@ const Services: React.FC = () => {
           </button>
           
           {/* Slide Indicators */}
-          <div className="flex space-x-2">
+          <div className="flex space-x-1.5 sm:space-x-2">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveHeroSlide(index)}
-                className={`w-2 h-2 transition-all duration-300 ${
+                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 transition-all duration-300 ${
                   index === activeHeroSlide 
                     ? 'bg-white scale-125' 
                     : 'bg-white/60 hover:bg-white/80'
@@ -244,9 +244,6 @@ const Services: React.FC = () => {
             ))}
           </div>
         </div>
-
-        {/* Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/50 to-transparent"></div>
       </section>
 
       {/* Main Content */}
