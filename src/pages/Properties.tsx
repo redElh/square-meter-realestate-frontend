@@ -1010,7 +1010,7 @@ const Properties: React.FC = () => {
         <div className="absolute bottom-32 sm:bottom-28 left-0 right-0 z-20">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10">
             {/* Filter Controls Row */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-3 lg:gap-4 items-stretch sm:items-end mb-4">
+            <div className={`flex flex-col sm:flex-row gap-3 sm:gap-3 lg:gap-4 items-stretch sm:items-end mb-4 ${activeFiltersCount === 0 ? 'sm:justify-center' : ''}`}>
               <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
                 <FilterDropdown
                   variant="hero"
