@@ -53,21 +53,6 @@ const Services: React.FC = () => {
       image: "/photo-6.jfif",
       title: t('services.hero.slide3'),
       subtitle: t('services.hero.subtitle3')
-    },
-    {
-      image: "/photo-7.jfif",
-      title: t('services.hero.slide1'),
-      subtitle: t('services.hero.subtitle1')
-    },
-    {
-      image: "/photo-8.jfif",
-      title: t('services.hero.slide2'),
-      subtitle: t('services.hero.subtitle2')
-    },
-    {
-      image: "/photo-9.jfif",
-      title: t('services.hero.slide3'),
-      subtitle: t('services.hero.subtitle3')
     }
   ];
 
@@ -194,14 +179,14 @@ const Services: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
               <Link 
                 to="/contact" 
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-white/95 backdrop-blur-sm text-[#023927] border-2 border-white hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-all duration-500 font-inter font-medium text-sm sm:text-base lg:text-lg"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 hover:bg-white/40 hover:border-white transition-all duration-500 font-inter font-medium text-sm sm:text-base lg:text-lg"
                 style={{ borderRadius: '0' }}
               >
                 {t('services.hero.ctaAppointment')}
               </Link>
               <Link 
                 to="/agency" 
-                className="px-6 sm:px-8 py-3 sm:py-4 bg-white/20 backdrop-blur-sm text-white border-2 border-white hover:bg-white hover:text-[#023927] transition-all duration-500 font-inter font-medium text-sm sm:text-base lg:text-lg"
+                className="px-6 sm:px-8 py-3 sm:py-4 bg-white/20 backdrop-blur-sm text-white border-2 border-white/50 hover:bg-white/40 hover:border-white transition-all duration-500 font-inter font-medium text-sm sm:text-base lg:text-lg"
                 style={{ borderRadius: '0' }}
               >
                 {t('services.hero.ctaMeetTeam')}
