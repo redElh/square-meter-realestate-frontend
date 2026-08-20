@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocalization } from '../../contexts/LocalizationContext';
 import { useCurrency } from '../../hooks/useCurrency';
+import { getCookie, refreshAccessToken, AUTH_USER_CHANGED_EVENT } from '../../utils/auth';
 import {
   HomeModernIcon,
   UserGroupIcon,
@@ -66,8 +67,9 @@ const Header: React.FC = () => {
 
   // Re-check auth on every route change
   useEffect(() => {
-    const match = document.cookie.match(/(?:^|; )accessToken=([^;]*)/);
-    if (match) {
+    let cancelled = false;
+
+    const setAuthenticated = () => {
       setIsAuthenticated(true);
 
       // Try to get cached user from session/local storage
@@ -80,14 +82,60 @@ const Header: React.FC = () => {
           localStorage.removeItem('auth_user');
         }
       }
-    } else {
+      setIsAuthChecking(false);
+    };
+
+    const setUnauthenticated = () => {
       setIsAuthenticated(false);
       setUser(null);
       sessionStorage.removeItem('auth_user');
       localStorage.removeItem('auth_user');
-    }
-    setIsAuthChecking(false);
+      setIsAuthChecking(false);
+    };
+
+    const checkAuth = async () => {
+      if (getCookie('accessToken')) {
+        setAuthenticated();
+        return;
+      }
+
+      // Access token expired/missing but a refresh token exists: try to refresh silently.
+      if (getCookie('refreshToken')) {
+        const refreshed = await refreshAccessToken();
+        if (cancelled) return;
+        if (refreshed) {
+          setAuthenticated();
+          return;
+        }
+      }
+
+      setUnauthenticated();
+    };
+
+    checkAuth();
+
+    return () => {
+      cancelled = true;
+    };
   }, [location]);
+
+  // Re-sync user whenever auth_user is persisted (e.g. after switching spaces),
+  // since the Header may read it before the target page writes it.
+  useEffect(() => {
+    const syncUser = () => {
+      const cachedUser = sessionStorage.getItem('auth_user') || localStorage.getItem('auth_user');
+      if (cachedUser) {
+        try {
+          setUser(JSON.parse(cachedUser));
+        } catch (e) {
+          sessionStorage.removeItem('auth_user');
+          localStorage.removeItem('auth_user');
+        }
+      }
+    };
+    window.addEventListener(AUTH_USER_CHANGED_EVENT, syncUser);
+    return () => window.removeEventListener(AUTH_USER_CHANGED_EVENT, syncUser);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -113,6 +161,8 @@ const Header: React.FC = () => {
 
   const isDev = process.env.NODE_ENV === 'development';
   const showClientSection = isDev;
+  const isLoggedIn = !!user?.role;
+  const isTravelerMode = user?.role === 'traveler';
 
   const navigation = {
     primary: [
@@ -169,24 +219,32 @@ const Header: React.FC = () => {
       },
     ],
     clients: [
-      {
-        path: '/traveler',
-        label: t('header.travelerSpace'),
-        Icon: PaperAirplaneIcon,
-        category: 'clients',
-        description: t('header.clientsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.',
-        }),
-      },
-      {
-        path: user?.role && user?.id ? `/dashboard/${user.role}/${user.id}` : '/dashboard',
-        label: t('navigation.dashboard'),
-        Icon: CogIcon,
-        category: 'clients',
-        description: t('header.clientsProtectedDescription', {
-          defaultValue: 'Reserved for agency team members. Password required.',
-        }),
-      },
+      ...(!isLoggedIn || isTravelerMode
+        ? [
+            {
+              path: '/traveler',
+              label: t('header.travelerSpace'),
+              Icon: PaperAirplaneIcon,
+              category: 'clients',
+              description: t('header.prestigeForTravel', {
+                defaultValue: 'Prestige rentals for your travels.',
+              }),
+            },
+          ]
+        : []),
+      ...(!isLoggedIn || !isTravelerMode
+        ? [
+            {
+              path: user?.role && user?.id ? `/dashboard/${user.role}/${user.id}` : '/dashboard',
+              label: t('navigation.dashboard'),
+              Icon: CogIcon,
+              category: 'clients',
+              description: t('header.dashboardDescription', {
+                defaultValue: 'Manage your interactions and purchases.',
+              }),
+            },
+          ]
+        : []),
       {
         path: '/auth',
         label: t('navigation.login'),
@@ -369,7 +427,7 @@ const Header: React.FC = () => {
 
       {/* Spacer to offset the fixed header on non-hero pages */}
       {(() => {
-        const heroRoots = ['/', '/properties', '/owners'];
+        const heroRoots = ['/', '/properties', '/owners', '/services', '/mag'];
         const isHero = heroRoots.some(
           (p) => location.pathname === p || location.pathname.startsWith(p + '/')
         );
@@ -519,9 +577,6 @@ const Header: React.FC = () => {
                               ) : (
                                 <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                               )}
-                              {!isAuthItem && (
-                                <LockClosedIcon className="w-3.5 h-3.5 absolute -top-1 -right-1 text-amber-600 bg-white rounded-full p-0.5 border border-amber-200" />
-                              )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 min-w-0">
@@ -537,17 +592,8 @@ const Header: React.FC = () => {
                                       : t('navigation.login', { defaultValue: 'Connexion' })
                                     : item.label}
                                 </span>
-                                {!isAuthItem && (
-                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-amber-200 bg-amber-50 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-amber-700 whitespace-nowrap">
-                                    {t('header.teamOnlyBadge', { defaultValue: 'Team only' })}
-                                  </span>
-                                )}
                               </div>
-                              <p
-                                className={`text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 ${
-                                  !isAuthItem ? 'text-amber-700/90' : 'text-gray-600'
-                                }`}
-                              >
+                              <p className="text-xs sm:text-sm mt-1 transition-colors duration-300 line-clamp-2 text-gray-600">
                                 {isAuthItem && isAuthenticated
                                   ? t('header.logoutDescription', {
                                       defaultValue: 'Se déconnecter du compte.',
