@@ -153,7 +153,7 @@ const Services: React.FC = () => {
       {/* Hero Section - Matching Properties/Mag Page Style */}
       <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white">
         {/* Background Carousel */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 overflow-hidden">
           {heroSlides.map((slide, index) => (
             <div
               key={index}
