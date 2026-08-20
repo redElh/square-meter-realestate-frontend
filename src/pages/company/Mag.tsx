@@ -397,7 +397,7 @@ const Mag: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section - Matching Properties Page Style */}
-      <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white -mt-24 sm:-mt-32">
+      <section className="relative h-[70vh] sm:h-screen overflow-hidden bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0">
           {heroSlides.map((slide, index) => (
