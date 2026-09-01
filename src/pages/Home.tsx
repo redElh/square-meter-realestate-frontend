@@ -316,27 +316,31 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* Carousel Navigation */}
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 flex items-center gap-2 sm:gap-4 z-30">
+        {/* Carousel Navigation — modern centered pill (like properties page) */}
+        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 sm:gap-3 bg-black/20 backdrop-blur-xl rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.24)]">
           <button
             onClick={() => setHeroSlideIndex((prev) => (prev - 1 + heroImages.length) % heroImages.length)}
-            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-1.5 sm:p-2 transition-all duration-300"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white backdrop-blur-sm flex items-center justify-center text-white hover:text-gray-900 border border-white/20 hover:border-white transition-all duration-300 hover:scale-105 active:scale-95"
+            aria-label="Previous slide"
           >
-            <ChevronLeftIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+            <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={() => setHeroSlideIndex((prev) => (prev + 1) % heroImages.length)}
-            className="bg-white/20 hover:bg-white/40 backdrop-blur-sm p-1.5 sm:p-2 transition-all duration-300"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white backdrop-blur-sm flex items-center justify-center text-white hover:text-gray-900 border border-white/20 hover:border-white transition-all duration-300 hover:scale-105 active:scale-95"
+            aria-label="Next slide"
           >
-            <ChevronRightIcon className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+            <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
-          <div className="flex gap-1.5 sm:gap-2">
+          <div className="w-px h-5 sm:h-6 bg-white/20 mx-1 hidden sm:block"></div>
+          <div className="flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-0">
             {heroImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setHeroSlideIndex(index)}
-                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${
-                  index === heroSlideIndex ? 'bg-white w-6 sm:w-8' : 'bg-white/50'
+                aria-label={`Go to slide ${index + 1}`}
+                className={`rounded-full transition-all duration-500 ${
+                  index === heroSlideIndex ? 'bg-white w-6 sm:w-8 h-1.5 sm:h-1.5 shadow-[0_0_10px_rgba(255,255,255,0.6)]' : 'bg-white/50 hover:bg-white/80 w-1.5 h-1.5 sm:w-2 sm:h-2'
                 }`}
               />
             ))}
@@ -465,143 +469,135 @@ const Home: React.FC = () => {
                 className="flex transition-all duration-700 ease-in-out" 
                 style={{ transform: `translateX(-${featuredIndex * 100}%)` }}
               >
-                {featuredProperties.map((property) => (
-                  <div key={property.id} className="w-full flex-shrink-0 px-2">
-                    <div className="bg-white border-2 border-gray-100 group transition-all duration-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] hover:border-gray-200">
-                      {/* MAIN CARD CONTAINER - Horizontal Layout */}
-                      <div className="flex flex-col">
-                        {/* IMAGE SECTION - Left side with primary + secondary images */}
-                        <div className="w-full flex flex-col md:flex-row h-[300px] sm:h-[400px] lg:h-[500px]">
-                          {/* Primary Image - Larger on left */}
-                          <div className="md:w-2/3 h-2/3 md:h-full relative overflow-hidden cursor-pointer" onClick={() => openGallery(property.images, property.title, 0)}>
-                            <img
-                              src={property.images[0]}
-                              alt={property.title}
-                              className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
-                            />
-                            
-                            {/* Overlay Badges */}
-                            <div className="absolute top-3 sm:top-6 left-3 sm:left-6 flex flex-col gap-1.5 sm:gap-2">
+                {featuredProperties.map((property) => {
+                  const sold = isSoldStatus(property.status);
+                  const statusLabel = sold
+                    ? (property.type === 'buy' ? t('home.featured.sold') : t('home.featured.rented'))
+                    : property.type === 'buy' ? t('home.featured.forSale') : property.type === 'rent' ? t('home.featured.forRent') : t('home.featured.vacation');
+                  return (
+                  <div key={property.id} className="w-full flex-shrink-0 px-2 sm:px-3">
+                    <div className="group relative bg-white border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-[0_24px_64px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-700">
+                      {/* hairline gold accent top */}
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-[#C8A97E]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                      <div className="p-[2px] sm:p-[3px] bg-gray-100/60">
+                        {/* IMAGE MOSAIC */}
+                        <div className="flex flex-col md:flex-row gap-[2px] sm:gap-[3px] bg-gray-100 h-[360px] sm:h-[440px] lg:h-[420px] overflow-hidden">
+                          {/* Primary */}
+                          <div className="md:w-[68%] h-[58%] md:h-full relative overflow-hidden bg-gray-50 cursor-pointer" onClick={() => openGallery(property.images, property.title, 0)}>
+                            <img src={property.images[0]} alt={property.title} className="w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent"></div>
+                            {/* top bar */}
+                            <div className="absolute top-3 sm:top-4 left-3 sm:left-4 right-14 flex items-center gap-2 flex-wrap">
                               {property.featured && (
-                                <span className="bg-[#023927] text-white px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider max-w-max">
+                                <span className="inline-flex items-center gap-1.5 bg-white/92 backdrop-blur-xl border border-[#C8A97E]/25 px-2.5 sm:px-3 py-1 text-[10px] tracking-[0.18em] uppercase font-semibold text-[#023927] shadow-sm">
+                                  <span className="w-1 h-1 rounded-full bg-[#C8A97E]"></span>
                                   {t('home.featured.exclusive')}
                                 </span>
                               )}
-                              {/* Confidential badge removed by request */}
+                              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] tracking-[0.14em] uppercase font-medium backdrop-blur-xl border shadow-sm ${sold ? 'bg-gray-900 text-white border-gray-800' : 'bg-white/90 text-gray-700 border-white/60'}`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${sold ? 'bg-gray-400' : 'bg-emerald-500'}`}></span>
+                                {statusLabel}
+                              </span>
                             </div>
-                            
-                            {/* Favorite Button */}
-                            <button 
-                              onClick={() => toggleFavorite(property.id)}
-                              className="absolute top-3 sm:top-6 right-3 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-all duration-300 group/fav"
-                            >
-                              {favorites.includes(property.id) ? (
-                                <HeartIconSolid className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
-                              ) : (
-                                <HeartIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 group-hover/fav:text-red-500 transition-colors" />
-                              )}
+                            {/* fav */}
+                            <button onClick={(e) => { e.stopPropagation(); toggleFavorite(property.id); }} className="absolute top-3 sm:top-4 right-3 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center justify-center hover:bg-white hover:scale-105 active:scale-95 transition-all duration-300 group/fav">
+                              {favorites.includes(property.id) ? <HeartIconSolid className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" /> : <HeartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover/fav:text-red-500 transition-colors" />}
                             </button>
-                            
-                            {/* Image Counter */}
-                            <div className="absolute bottom-3 sm:bottom-6 left-3 sm:left-6 bg-black/80 text-white px-2 sm:px-4 py-1.5 sm:py-2 flex items-center space-x-1.5 sm:space-x-2 backdrop-blur-sm">
-                              <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                              <span className="text-xs sm:text-sm">{property.images.length} {t('home.featured.photos')}</span>
+                            {/* bottom — single refined counter */}
+                            <div className="absolute bottom-0 left-0 p-3 sm:p-4">
+                              <div className="inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-md border border-white/15 text-white px-2.5 py-1 text-[11px] tracking-wide shadow-sm">
+                                <CameraIcon className="w-3.5 h-3.5 opacity-80" />
+                                <span>{property.images.length} {t('home.featured.photos')}</span>
+                              </div>
                             </div>
                           </div>
-                          
-                          {/* Secondary Images - Stacked vertically on right */}
-                          <div className="md:w-1/3 h-1/3 md:h-full flex flex-row md:flex-col gap-1 sm:gap-2 p-1 sm:p-2">
-                            {property.images.slice(1, 3).map((img, imgIndex) => (
-                              <div 
-                                key={imgIndex} 
-                                className="flex-1 relative overflow-hidden group/secondary cursor-pointer"
-                                onClick={() => openGallery(property.images, property.title, imgIndex + 1)}
-                              >
-                                <img
-                                  src={img}
-                                  alt={`${property.title} ${imgIndex + 2}`}
-                                  className="w-full h-full object-cover transition-transform duration-700 group-hover/secondary:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300"></div>
-                                {/* View More Overlay for last image */}
+                          {/* Secondary thumbs */}
+                          <div className="md:w-[32%] h-[42%] md:h-full flex flex-row md:flex-col gap-[2px] sm:gap-[3px]">
+                            {(property.images.slice(1, 3).length ? property.images.slice(1, 3) : [property.images[0], property.images[0]]).map((img, imgIndex) => (
+                              <div key={imgIndex} className="flex-1 relative overflow-hidden bg-gray-50 group/thumb cursor-pointer" onClick={() => openGallery(property.images, property.title, imgIndex + 1)}>
+                                <img src={img} alt={`${property.title} ${imgIndex + 2}`} className="w-full h-full object-cover transition-transform duration-700 group-hover/thumb:scale-[1.04]" />
+                                <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/10 transition-colors duration-300"></div>
                                 {imgIndex === 1 && property.images.length > 3 && (
-                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover/secondary:opacity-100 transition-opacity duration-300">
-                                    <div className="text-white text-center p-2 sm:p-4">
-                                      <ArrowTopRightOnSquareIcon className="w-4 h-4 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2" />
-                                      <span className="text-[10px] sm:text-xs font-medium">+{property.images.length - 3} photos</span>
-                                    </div>
+                                  <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex flex-col items-center justify-center text-white opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-300">
+                                    <ArrowTopRightOnSquareIcon className="w-5 h-5 mb-1" />
+                                    <span className="text-xs font-medium tracking-wide">+{property.images.length - 3}</span>
+                                  </div>
+                                )}
+                                {imgIndex === 1 && (
+                                  <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-xl border border-white/50 text-gray-900 px-2 py-1 text-[10px] tracking-[0.14em] uppercase font-semibold flex items-center gap-1 shadow-sm">
+                                    <Square2StackIcon className="w-3 h-3 text-gray-500" />
+                                    Galerie
                                   </div>
                                 )}
                               </div>
                             ))}
                           </div>
                         </div>
-                        
-                        {/* DETAILS SECTION - compact single-line summary */}
-                        <div className="w-full p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
-                          <div className="flex-1 min-w-0 w-full sm:w-auto">
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                              <span className={`px-2 py-1 text-[10px] sm:text-xs font-medium tracking-wider self-start ${
-                                isSoldStatus(property.status)
-                                  ? 'bg-gray-100 text-gray-700 border border-gray-300'
-                                  : property.type === 'buy' 
-                                  ? 'bg-blue-50 text-blue-800 border border-blue-200' 
-                                  : property.type === 'rent'
-                                  ? 'bg-green-50 text-green-800 border border-green-200'
-                                  : 'bg-purple-50 text-purple-800 border border-purple-200'
-                              }`}>{isSoldStatus(property.status) ? (property.type === 'buy' ? t('home.featured.sold') : t('home.featured.rented')) : property.type === 'buy' ? t('home.featured.forSale') : property.type === 'rent' ? t('home.featured.forRent') : t('home.featured.vacation')}</span>
-
-                              <h3 className="text-base sm:text-lg font-inter font-medium text-gray-900 truncate">{property.title}</h3>
-
-                              <span className="text-gray-500 text-xs sm:text-sm truncate">• {property.location}</span>
+                      </div>
+                      {/* DETAILS — editorial, airy without footer */}
+                      <div className="px-5 sm:px-7 lg:px-8 pt-6 sm:pt-7 pb-6 sm:pb-7">
+                        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5 lg:gap-8">
+                          {/* left */}
+                          <div className="flex gap-3 sm:gap-4 min-w-0 flex-1">
+                            <div className="hidden sm:block w-px self-stretch bg-gradient-to-b from-[#C8A97E] via-[#C8A97E]/30 to-transparent shrink-0"></div>
+                            <div className="min-w-0 flex-1">
+                              <h3 className="font-serif text-[19px] sm:text-[21px] lg:text-[23px] leading-[1.02] tracking-[-0.025em] font-light text-gray-900 truncate group-hover:text-[#023927] transition-colors duration-500">{property.title}</h3>
+                              <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] sm:text-[13px] text-gray-500">
+                                <span className="truncate font-light">— {property.location}</span>
+                                {property.reference && <span className="hidden sm:inline text-gray-300">•</span>}
+                                {property.reference && <span className="hidden sm:inline text-[11px] tracking-wide text-gray-400 font-mono">Réf. {property.reference}</span>}
+                              </div>
+                              <div className="mt-3.5 flex items-center gap-2.5 sm:gap-3.5 text-[11px] tracking-[0.16em] uppercase font-medium text-gray-500">
+                                <span className="inline-flex items-center gap-1.5"><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {property.rooms || 0} ch.</span>
+                                <span className="w-px h-3.5 bg-gray-200"></span>
+                                <span className="inline-flex items-center gap-1.5"><Square2StackIcon className="w-3.5 h-3.5 text-gray-400" /> {property.surface.toFixed(0)} m²</span>
+                                <span className="w-px h-3.5 bg-gray-200 hidden sm:block"></span>
+                                <span className="hidden sm:inline-flex items-center gap-1.5"><CheckIcon className="w-3.5 h-3.5 text-gray-400" /> {property.floors || 0} ét.</span>
+                              </div>
                             </div>
                           </div>
-
-                          <div className="flex sm:hidden items-center text-xs text-gray-600 space-x-3 w-full">
-                            <div className="flex items-center gap-1"><HomeIcon className="w-3 h-3" /> <span className="ml-0.5">{property.rooms || 0}</span></div>
-                            <div className="flex items-center gap-1"><CheckIcon className="w-3 h-3" /> <span className="ml-0.5">{property.floors || 0}</span></div>
-                            <div className="flex items-center gap-1"><Square2StackIcon className="w-3 h-3" /> <span className="ml-0.5">{property.surface.toFixed(0)} m²</span></div>
-                          </div>
-
-                          <div className="hidden sm:flex items-center text-sm text-gray-600 space-x-4 whitespace-nowrap">
-                            <div className="flex items-center gap-1"><HomeIcon className="w-4 h-4" /> <span className="ml-1">{property.rooms || 0}</span></div>
-                            <div className="flex items-center gap-1"><CheckIcon className="w-4 h-4" /> <span className="ml-1">{property.floors || 0}</span></div>
-                            <div className="flex items-center gap-1"><Square2StackIcon className="w-4 h-4" /> <span className="ml-1">{property.surface.toFixed(0)} m²</span></div>
-                          </div>
-
-                          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                            <div className="font-serif text-[#023927] font-bold text-base sm:text-lg whitespace-nowrap">{formatPrice(property.price, property.type, property.currency, property.pricePeriod)}</div>
-                            <Link
-                              to={`/properties/${property.id}`}
-                              className="bg-white border-2 border-[#023927] text-[#023927] px-4 sm:px-3 py-2 text-xs sm:text-sm uppercase font-medium hover:bg-[#023927] hover:text-white transition-all duration-300"
-                            >
-                              {t('home.featured.viewButton')}
+                          {/* right price */}
+                          <div className="flex lg:flex-col items-center lg:items-end justify-between lg:justify-start gap-4 lg:text-right shrink-0 lg:min-w-[190px] border-t lg:border-t-0 border-gray-100 pt-4 lg:pt-0">
+                            <div>
+                              <div className="font-serif text-[21px] sm:text-[23px] lg:text-[25px] leading-none tracking-[-0.02em] font-light text-[#023927]">{formatPrice(property.price, property.type, property.currency, property.pricePeriod)}</div>
+                              <div className="text-[10px] tracking-[0.18em] uppercase text-gray-400 mt-1.5 font-medium">{property.type === 'buy' ? 'Prix net vendeur' : property.type === 'rent' ? 'Par mois' : 'Saisonnier'}</div>
+                            </div>
+                            <Link to={`/properties/${property.id}`} className="group/cta inline-flex items-center gap-2.5 sm:gap-3 shrink-0">
+                              <span className="relative text-[11px] sm:text-xs tracking-[0.18em] uppercase font-semibold text-[#023927]">Découvrir
+                                <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#023927] group-hover/cta:w-full transition-all duration-500 ease-out"></span>
+                              </span>
+                              <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#023927]/15 bg-white flex items-center justify-center text-[#023927] group-hover/cta:bg-[#023927] group-hover/cta:text-white group-hover/cta:border-[#023927] group-hover/cta:scale-105 transition-all duration-300 shadow-sm">
+                                <ArrowRightIcon className="w-3.5 h-3.5" />
+                              </span>
                             </Link>
                           </div>
                         </div>
                       </div>
+                      {/* hover outer hairline */}
+                      <div className="pointer-events-none absolute inset-0 border border-transparent group-hover:border-[#C8A97E]/0 lg:group-hover:border-[#C8A97E]/10 transition-colors duration-700"></div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
-            {/* Elegant Navigation Buttons */}
+            {/* Modern Centered Navigation — floating glass, vertically centered */}
             <button 
               onClick={prevFeatured} 
               disabled={featuredProperties.length <= 1}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-30 pointer-events-auto disabled:opacity-40 disabled:cursor-not-allowed"
+              className="absolute left-2 sm:left-0 top-1/2 -translate-y-1/2 sm:-translate-x-5 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-xl rounded-full border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-[#023927] hover:border-[#023927] hover:text-white hover:shadow-[0_12px_40px_rgba(2,57,39,0.25)] hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.08)] z-30 pointer-events-auto disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
               aria-label="Previous property"
             >
-              <ChevronLeftIcon className="w-6 h-6" />
+              <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
             <button 
               onClick={nextFeatured} 
               disabled={featuredProperties.length <= 1}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white border-2 border-gray-200 flex items-center justify-center text-gray-800 hover:border-[#023927] hover:bg-[#023927] hover:text-white transition-all duration-300 shadow-lg z-30 pointer-events-auto disabled:opacity-40 disabled:cursor-not-allowed"
+              className="absolute right-2 sm:right-0 top-1/2 -translate-y-1/2 sm:translate-x-5 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-xl rounded-full border border-gray-100 flex items-center justify-center text-gray-700 hover:bg-[#023927] hover:border-[#023927] hover:text-white hover:shadow-[0_12px_40px_rgba(2,57,39,0.25)] hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.08)] z-30 pointer-events-auto disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
               aria-label="Next property"
             >
-              <ChevronRightIcon className="w-6 h-6" />
+              <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
             {/* Elegant Slide Indicators */}

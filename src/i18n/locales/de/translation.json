@@ -319,8 +319,8 @@
       "floors": "Etagen",
       "bedrooms": "Schlafzimmer",
       "bathrooms": "Badezimmer",
-    "year": "Jahr",
-    "page": "Seite"
+      "year": "Jahr",
+      "page": "Seite"
     },
     "sections": {
       "description": "Beschreibung",
@@ -479,10 +479,22 @@
       ]
     },
     "stats": [
-      { "number": "98%", "label": "Erfolgsrate" },
-      { "number": "45T", "label": "Durchschnittliche Zeit" },
-      { "number": "+25%", "label": "Wertsteigerung" },
-      { "number": "500+", "label": "Verkaufte Immobilien" }
+      {
+        "number": "98%",
+        "label": "Erfolgsrate"
+      },
+      {
+        "number": "45T",
+        "label": "Durchschnittliche Zeit"
+      },
+      {
+        "number": "+25%",
+        "label": "Wertsteigerung"
+      },
+      {
+        "number": "500+",
+        "label": "Verkaufte Immobilien"
+      }
     ],
     "management": {
       "title": "Prestige-Verwaltung",
@@ -490,19 +502,31 @@
         {
           "title": "Mietverwaltung",
           "description": "Vollständige Verwaltung Ihrer Mietimmobilie mit strenger Mieterauswahl.",
-          "features": ["Mieterauswahl", "Mietverwaltung", "Vorbeugende Wartung"],
+          "features": [
+            "Mieterauswahl",
+            "Mietverwaltung",
+            "Vorbeugende Wartung"
+          ],
           "price": "8% der Miete"
         },
         {
           "title": "Saisonale Vermietung",
           "description": "Optimieren Sie Ihre Einnahmen durch unsere professionelle Verwaltung saisonaler Vermietungen.",
-          "features": ["Premium-Buchung", "Check-in/out", "Professionelle Reinigung"],
+          "features": [
+            "Premium-Buchung",
+            "Check-in/out",
+            "Professionelle Reinigung"
+          ],
           "price": "20% des Umsatzes"
         },
         {
           "title": "Concierge-Service",
           "description": "Wartung, Reinigung und maßgeschneiderte Dienstleistungen zur Erhaltung der Exzellenz Ihrer Immobilie.",
-          "features": ["Regelmäßige Wartung", "VIP-Services", "24/7 Wartung"],
+          "features": [
+            "Regelmäßige Wartung",
+            "VIP-Services",
+            "24/7 Wartung"
+          ],
           "price": "Auf Anfrage"
         }
       ],
@@ -511,10 +535,22 @@
     "additionalServices": {
       "title": "Zusätzliche Dienstleistungen",
       "items": [
-        { "title": "Rendite-Audit", "description": "Detaillierte Analyse Ihrer Investitionsleistung" },
-        { "title": "Prestige-Renovierung", "description": "Baukoordination mit außergewöhnlichen Handwerkern" },
-        { "title": "Immobilien-Staging", "description": "Professionelles Staging zur Maximierung der Attraktivität" },
-        { "title": "Premium-Versicherung", "description": "Versicherungslösungen für außergewöhnliche Immobilien" }
+        {
+          "title": "Rendite-Audit",
+          "description": "Detaillierte Analyse Ihrer Investitionsleistung"
+        },
+        {
+          "title": "Prestige-Renovierung",
+          "description": "Baukoordination mit außergewöhnlichen Handwerkern"
+        },
+        {
+          "title": "Immobilien-Staging",
+          "description": "Professionelles Staging zur Maximierung der Attraktivität"
+        },
+        {
+          "title": "Premium-Versicherung",
+          "description": "Versicherungslösungen für außergewöhnliche Immobilien"
+        }
       ],
       "contactButton": "Kontaktieren Sie unser Expertenteam"
     }
@@ -542,7 +578,6 @@
     "filters": {
       "title": "Verfeinern Sie Ihre Suche mit unseren intelligenten Filtern",
       "all": "Alle",
-
       "allTypes": "Alle Typen",
       "buy": "Zu kaufen",
       "toBuy": "Zu kaufen",
@@ -575,9 +610,11 @@
     },
     "listing": {
       "available": "Immobilien verfügbar",
-
+      "availableShort": "Verfügbar",
+      "subtitle": "Exklusive Immobilien in Essaouira",
       "results": "Ergebnisse",
       "sortBy": "Sortieren nach:",
+      "sortByShort": "Sortieren",
       "relevance": "Relevanz",
       "priceAsc": "Preis aufsteigend",
       "priceDesc": "Preis absteigend",
@@ -638,8 +675,7 @@
       "land": "Grundstück",
       "riad": "Riad",
       "other": "Andere"
-    }
-    ,
+    },
     "mock": {
       "titles": {
         "villaAzure": "Villa Azure",
@@ -675,7 +711,66 @@
     "cancel": "Abbrechen",
     "success": "Einstellungen erfolgreich aktualisiert",
     "languageDesc": "Wählen Sie Ihre bevorzugte Anzeigesprache",
-    "currencyDesc": "Wählen Sie Ihre bevorzugte Währung für Preise"
+    "currencyDesc": "Wählen Sie Ihre bevorzugte Währung für Preise",
+    "heroBadgeExclusive": "Exklusiv • Privat",
+    "heroBadgeSecure": "Sicher & vertraulich",
+    "heroTitle1": "Personalisiere",
+    "heroTitle2": "dein Erlebnis",
+    "heroRegionalPreferences": "Regionale Einstellungen",
+    "heroLivePreview": "Live-Vorschau",
+    "heroStoredEncrypted": "Lokal gespeichert • verschlüsselt",
+    "heroRefined": "— für Essaouira verfeinert, sofort auf alle Inserate und Bewertungen angewendet.",
+    "previewLive": "Live-Vorschau",
+    "previewHowPrices": "So werden Preise angezeigt",
+    "previewUpToDate": "• Aktuell",
+    "previewUnsaved": "• Ungespeicherte Änderungen",
+    "previewVilla": "Essaouira • Villa",
+    "previewAppliedEverywhere": "Überall angewendet",
+    "previewHint": "Preise werden sofort mit Live-Marktkursen umgerechnet. Sprache aktualisiert auch Daten und Formate.",
+    "previewForProperty": "für eine Immobilie zu 2 500 000 MAD",
+    "previewExample": "Beispiel",
+    "previewLiveBadge": "Live",
+    "selected": "Ausgewählt: {{name}}",
+    "current": "AKTUELL",
+    "tipRtl": "Tipp: Die Wahl von العربية aktiviert automatisch das Rechts-nach-links-Layout auf der gesamten Seite. Du kannst es jederzeit ändern.",
+    "ratesHint": "Kurse live. Nur Anzeige — Transaktionen bleiben in der Inseratswährung. Deine Wahl wird auf diesem Gerät gespeichert.",
+    "statusSaved": "Alle Einstellungen gespeichert",
+    "statusUnsaved": "Du hast ungespeicherte Änderungen",
+    "statusWillApply": "• wird bei nächster Navigation angewendet",
+    "nextCurrency": "Weiter: Währung →",
+    "backLanguage": "← Zurück zur Sprache",
+    "assistanceTitle": "Brauchst du Hilfe?",
+    "assistanceMultilingualTitle": "Mehrsprachiger Support",
+    "assistanceMultilingualDesc": "24/7 in deiner bevorzugten Sprache — Chat oder Anruf",
+    "assistanceRatesTitle": "Live-Wechselkurse",
+    "assistanceRatesDesc": "Live-Umrechnung über alle Inserate",
+    "assistanceConcierge": "Concierge • Essaouira • +212 7 00 00 06 44",
+    "summaryTitle": "Deine Auswahl",
+    "summarySubtitle": "Vor dem Anwenden prüfen",
+    "summaryLanguage": "Sprache",
+    "summaryCurrency": "Währung",
+    "summaryHint": "Änderungen werden sicher auf diesem Gerät gespeichert und auf Inserate, Karten und PDFs angewendet.",
+    "secureTitle": "Sicher & Vertraulich",
+    "secureDesc": "Einstellungen werden lokal gespeichert und nie geteilt. Ändere sie jederzeit — dein Surfen bleibt privat.",
+    "noChanges": "Keine Änderungen zum Anwenden — deine Einstellungen sind aktuell.",
+    "toastDetail": "Einstellungen synchronisiert • {{lang}} · {{curr}}",
+    "languageSuffix": "— Oberfläche, Daten & Formatierung.",
+    "currencySuffix": "— Live-Kurse, überall angewendet.",
+    "languageNames": {
+      "en": "Englisch",
+      "fr": "Französisch",
+      "ar": "Arabisch",
+      "es": "Spanisch",
+      "de": "Deutsch",
+      "ru": "Russisch"
+    },
+    "currencyNames": {
+      "MAD": "Marokkanischer Dirham",
+      "AED": "Emirati Dirham",
+      "EUR": "Euro",
+      "USD": "US-Dollar",
+      "GBP": "Britisches Pfund"
+    }
   },
   "ai": {
     "assistant": "KI-Assistent",
@@ -933,19 +1028,56 @@
       "conditionLabel": "Zustand der Immobilie *"
     },
     "propertyTypes": [
-      { "value": "apartment", "label": "Wohnung" },
-      { "value": "house", "label": "Haus" },
-      { "value": "villa", "label": "Villa" },
-      { "value": "loft", "label": "Loft" },
-      { "value": "penthouse", "label": "Penthouse" },
-      { "value": "castle", "label": "Schloss" },
-      { "value": "other", "label": "Andere" }
+      {
+        "value": "apartment",
+        "label": "Wohnung"
+      },
+      {
+        "value": "house",
+        "label": "Haus"
+      },
+      {
+        "value": "villa",
+        "label": "Villa"
+      },
+      {
+        "value": "loft",
+        "label": "Loft"
+      },
+      {
+        "value": "penthouse",
+        "label": "Penthouse"
+      },
+      {
+        "value": "castle",
+        "label": "Schloss"
+      },
+      {
+        "value": "other",
+        "label": "Andere"
+      }
     ],
     "conditions": [
-      { "value": "excellent", "label": "Ausgezeichneter Zustand", "description": "Kürzlich renoviert, neuwertig" },
-      { "value": "very-good", "label": "Sehr guter Zustand", "description": "Gut gepflegt, bezugsfertig" },
-      { "value": "good", "label": "Guter Zustand", "description": "Einige Auffrischungsarbeiten erforderlich" },
-      { "value": "renovation", "label": "Zu renovieren", "description": "Renovierungsprojekt erforderlich" }
+      {
+        "value": "excellent",
+        "label": "Ausgezeichneter Zustand",
+        "description": "Kürzlich renoviert, neuwertig"
+      },
+      {
+        "value": "very-good",
+        "label": "Sehr guter Zustand",
+        "description": "Gut gepflegt, bezugsfertig"
+      },
+      {
+        "value": "good",
+        "label": "Guter Zustand",
+        "description": "Einige Auffrischungsarbeiten erforderlich"
+      },
+      {
+        "value": "renovation",
+        "label": "Zu renovieren",
+        "description": "Renovierungsprojekt erforderlich"
+      }
     ],
     "step2": {
       "title": "Ausstattung & Merkmale",
@@ -953,18 +1085,54 @@
       "selectedSummary": "Ausgewählte Ausstattungen ({{count}})"
     },
     "features": [
-      { "value": "terrace", "label": "Terrasse" },
-      { "value": "balcony", "label": "Balkon" },
-      { "value": "garden", "label": "Garten" },
-      { "value": "pool", "label": "Pool" },
-      { "value": "parking", "label": "Parkplatz" },
-      { "value": "elevator", "label": "Aufzug" },
-      { "value": "fireplace", "label": "Kamin" },
-      { "value": "ac", "label": "Klimaanlage" },
-      { "value": "alarm", "label": "Alarm" },
-      { "value": "smart-home", "label": "Smart Home" },
-      { "value": "wine-cellar", "label": "Weinkeller" },
-      { "value": "gym", "label": "Fitnessstudio" }
+      {
+        "value": "terrace",
+        "label": "Terrasse"
+      },
+      {
+        "value": "balcony",
+        "label": "Balkon"
+      },
+      {
+        "value": "garden",
+        "label": "Garten"
+      },
+      {
+        "value": "pool",
+        "label": "Pool"
+      },
+      {
+        "value": "parking",
+        "label": "Parkplatz"
+      },
+      {
+        "value": "elevator",
+        "label": "Aufzug"
+      },
+      {
+        "value": "fireplace",
+        "label": "Kamin"
+      },
+      {
+        "value": "ac",
+        "label": "Klimaanlage"
+      },
+      {
+        "value": "alarm",
+        "label": "Alarm"
+      },
+      {
+        "value": "smart-home",
+        "label": "Smart Home"
+      },
+      {
+        "value": "wine-cellar",
+        "label": "Weinkeller"
+      },
+      {
+        "value": "gym",
+        "label": "Fitnessstudio"
+      }
     ],
     "step3": {
       "timelineLabel": "Gewünschter Verkaufszeitplan *",
@@ -976,10 +1144,26 @@
       "motivationPlaceholder": "Beschreiben Sie kurz die Gründe für Ihr Verkaufsprojekt (Umzug, Investition, Erbschaft...)"
     },
     "timelines": [
-      { "value": "urgent", "label": "Dringend (1-3 Monate)", "description": "Schneller Verkauf gewünscht" },
-      { "value": "medium", "label": "Mittel (3-6 Monate)", "description": "Standard-Zeitplan" },
-      { "value": "flexible", "label": "Flexibel (6+ Monate)", "description": "Keine Zeitbeschränkung" },
-      { "value": "undefined", "label": "Zu definieren", "description": "Abhängig vom Markt" }
+      {
+        "value": "urgent",
+        "label": "Dringend (1-3 Monate)",
+        "description": "Schneller Verkauf gewünscht"
+      },
+      {
+        "value": "medium",
+        "label": "Mittel (3-6 Monate)",
+        "description": "Standard-Zeitplan"
+      },
+      {
+        "value": "flexible",
+        "label": "Flexibel (6+ Monate)",
+        "description": "Keine Zeitbeschränkung"
+      },
+      {
+        "value": "undefined",
+        "label": "Zu definieren",
+        "description": "Abhängig vom Markt"
+      }
     ],
     "step4": {
       "personalInfoTitle": "Persönliche Informationen",
@@ -2451,9 +2635,7 @@
       "inquiries": "Anfragen",
       "favorites": "Favoriten",
       "interactions": "Interaktionen",
-      "views": "Aufrufe",
-      "inquiries": "Anfragen",
-      "interactions": "Interaktionen"
+      "views": "Aufrufe"
     },
     "trends": {
       "title": "Leistungstrends",

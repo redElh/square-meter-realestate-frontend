@@ -467,10 +467,22 @@
       ]
     },
     "stats": [
-      { "number": "98%", "label": "معدل النجاح" },
-      { "number": "45ي", "label": "الوقت المتوسط" },
-      { "number": "+25%", "label": "التقييم" },
-      { "number": "500+", "label": "عقارات مباعة" }
+      {
+        "number": "98%",
+        "label": "معدل النجاح"
+      },
+      {
+        "number": "45ي",
+        "label": "الوقت المتوسط"
+      },
+      {
+        "number": "+25%",
+        "label": "التقييم"
+      },
+      {
+        "number": "500+",
+        "label": "عقارات مباعة"
+      }
     ],
     "management": {
       "title": "إدارة مرموقة",
@@ -478,19 +490,31 @@
         {
           "title": "إدارة الإيجار",
           "description": "إدارة كاملة لعقارك المؤجر مع اختيار صارم للمستأجرين.",
-          "features": ["اختيار المستأجر", "إدارة الإيجارات", "صيانة وقائية"],
+          "features": [
+            "اختيار المستأجر",
+            "إدارة الإيجارات",
+            "صيانة وقائية"
+          ],
           "price": "8% من الإيجار"
         },
         {
           "title": "إيجار موسمي",
           "description": "حسّن دخلك من خلال إدارتنا المهنية للإيجارات الموسمية.",
-          "features": ["حجز مميز", "تسجيل دخول/خروج", "تنظيف احترافي"],
+          "features": [
+            "حجز مميز",
+            "تسجيل دخول/خروج",
+            "تنظيف احترافي"
+          ],
           "price": "20% من الإيرادات"
         },
         {
           "title": "خدمة الكونسيرج",
           "description": "صيانة ونظافة وخدمات مخصصة للحفاظ على تميز عقارك.",
-          "features": ["صيانة منتظمة", "خدمات VIP", "صيانة 24/7"],
+          "features": [
+            "صيانة منتظمة",
+            "خدمات VIP",
+            "صيانة 24/7"
+          ],
           "price": "حسب الطلب"
         }
       ],
@@ -499,10 +523,22 @@
     "additionalServices": {
       "title": "خدمات إضافية",
       "items": [
-        { "title": "تدقيق الأداء", "description": "تحليل مفصل لأداء استثمارك" },
-        { "title": "تجديد مرموق", "description": "تنسيق الأعمال مع حرفيين استثنائيين" },
-        { "title": "تصميم عقاري", "description": "تصميم احترافي لزيادة الجاذبية" },
-        { "title": "تأمين مميز", "description": "حلول تأمين مكيفة للعقارات الاستثنائية" }
+        {
+          "title": "تدقيق الأداء",
+          "description": "تحليل مفصل لأداء استثمارك"
+        },
+        {
+          "title": "تجديد مرموق",
+          "description": "تنسيق الأعمال مع حرفيين استثنائيين"
+        },
+        {
+          "title": "تصميم عقاري",
+          "description": "تصميم احترافي لزيادة الجاذبية"
+        },
+        {
+          "title": "تأمين مميز",
+          "description": "حلول تأمين مكيفة للعقارات الاستثنائية"
+        }
       ],
       "contactButton": "اتصل بفريق خبرائنا"
     }
@@ -530,7 +566,6 @@
     "filters": {
       "title": "حسّن بحثك باستخدام مرشحاتنا الذكية",
       "all": "الكل",
-
       "allTypes": "جميع الأنواع",
       "buy": "شراء",
       "toBuy": "للشراء",
@@ -562,9 +597,11 @@
     },
     "listing": {
       "available": "عقارات متاحة",
-
+      "availableShort": "متاح",
+      "subtitle": "عقارات استثنائية في الصويرة",
       "results": "نتائج",
       "sortBy": "ترتيب حسب:",
+      "sortByShort": "ترتيب",
       "relevance": "الصلة",
       "priceAsc": "السعر تصاعدياً",
       "priceDesc": "السعر تنازلياً",
@@ -616,8 +653,7 @@
       "penthouse": "بنتهاوس",
       "chateau": "قلعة",
       "land": "أرض"
-    }
-    ,
+    },
     "mock": {
       "titles": {
         "villaAzure": "فيلا أزور",
@@ -653,7 +689,66 @@
     "cancel": "إلغاء",
     "success": "تم تحديث الإعدادات بنجاح",
     "languageDesc": "اختر لغة العرض المفضلة لديك",
-    "currencyDesc": "اختر العملة المفضلة لديك للأسعار"
+    "currencyDesc": "اختر العملة المفضلة لديك للأسعار",
+    "heroBadgeExclusive": "حصري • خاص",
+    "heroBadgeSecure": "آمن وسري",
+    "heroTitle1": "خصص",
+    "heroTitle2": "تجربتك",
+    "heroRegionalPreferences": "التفضيلات الإقليمية",
+    "heroLivePreview": "معاينة مباشرة",
+    "heroStoredEncrypted": "مخزن محلياً • مشفر",
+    "heroRefined": "— مخصص للصويرة، يُطبق فوراً على جميع الإعلانات والتقييمات.",
+    "previewLive": "معاينة مباشرة",
+    "previewHowPrices": "كيف ستظهر الأسعار",
+    "previewUpToDate": "• محدث",
+    "previewUnsaved": "• تغييرات غير محفوظة",
+    "previewVilla": "الصويرة • فيلا",
+    "previewAppliedEverywhere": "مطبق في كل مكان",
+    "previewHint": "يتم تحويل الأسعار فوراً بأسعار السوق المباشرة. اللغة تحدث التواريخ والتنسيقات أيضاً.",
+    "previewForProperty": "لعقار بقيمة 2 500 000 درهم",
+    "previewExample": "مثال",
+    "previewLiveBadge": "مباشر",
+    "selected": "المحدد: {{name}}",
+    "current": "حالي",
+    "tipRtl": "نصيحة: اختيار العربية يفعّل تلقائياً تخطيط من اليمين لليسار في الموقع. يمكنك تغييره في أي وقت.",
+    "ratesHint": "الأسعار مباشرة. للعرض فقط — تظل المعاملات بعملة الإعلان. يتم حفظ اختيارك على هذا الجهاز.",
+    "statusSaved": "تم حفظ جميع التفضيلات",
+    "statusUnsaved": "لديك تغييرات غير محفوظة",
+    "statusWillApply": "• سيتم التطبيق عند التنقل التالي",
+    "nextCurrency": "التالي: العملة →",
+    "backLanguage": "← الرجوع إلى اللغة",
+    "assistanceTitle": "تحتاج مساعدة؟",
+    "assistanceMultilingualTitle": "دعم متعدد اللغات",
+    "assistanceMultilingualDesc": "24/7 بلغتك المفضلة — دردشة أو اتصال",
+    "assistanceRatesTitle": "أسعار صرف مباشرة",
+    "assistanceRatesDesc": "تحويل مباشر عبر جميع الإعلانات",
+    "assistanceConcierge": "الكونسيرج • الصويرة • +212 7 00 00 06 44",
+    "summaryTitle": "اختيارك",
+    "summarySubtitle": "راجع قبل التطبيق",
+    "summaryLanguage": "اللغة",
+    "summaryCurrency": "العملة",
+    "summaryHint": "يتم تخزين التغييرات بأمان على هذا الجهاز وتطبيقها على الإعلانات والخرائط وملفات PDF.",
+    "secureTitle": "آمن وسري",
+    "secureDesc": "يتم حفظ التفضيلات محلياً ولا تتم مشاركتها أبداً. غيّرها في أي وقت — يظل تصفحك خاصاً.",
+    "noChanges": "لا توجد تغييرات للتطبيق — تفضيلاتك محدثة.",
+    "toastDetail": "تمت مزامنة التفضيلات • {{lang}} · {{curr}}",
+    "languageSuffix": "— الواجهة والتواريخ والتنسيق.",
+    "currencySuffix": "— أسعار مباشرة، مطبقة في كل مكان.",
+    "languageNames": {
+      "en": "الإنجليزية",
+      "fr": "الفرنسية",
+      "ar": "العربية",
+      "es": "الإسبانية",
+      "de": "الألمانية",
+      "ru": "الروسية"
+    },
+    "currencyNames": {
+      "MAD": "الدرهم المغربي",
+      "AED": "الدرهم الإماراتي",
+      "EUR": "اليورو",
+      "USD": "الدولار الأمريكي",
+      "GBP": "الجنيه الإسترليني"
+    }
   },
   "ai": {
     "assistant": "المساعد الذكي",
@@ -912,19 +1007,56 @@
       "conditionLabel": "حالة العقار *"
     },
     "propertyTypes": [
-      { "value": "apartment", "label": "شقة" },
-      { "value": "house", "label": "منزل" },
-      { "value": "villa", "label": "فيلا" },
-      { "value": "loft", "label": "لوفت" },
-      { "value": "penthouse", "label": "بنتهاوس" },
-      { "value": "castle", "label": "قصر" },
-      { "value": "other", "label": "أخرى" }
+      {
+        "value": "apartment",
+        "label": "شقة"
+      },
+      {
+        "value": "house",
+        "label": "منزل"
+      },
+      {
+        "value": "villa",
+        "label": "فيلا"
+      },
+      {
+        "value": "loft",
+        "label": "لوفت"
+      },
+      {
+        "value": "penthouse",
+        "label": "بنتهاوس"
+      },
+      {
+        "value": "castle",
+        "label": "قصر"
+      },
+      {
+        "value": "other",
+        "label": "أخرى"
+      }
     ],
     "conditions": [
-      { "value": "excellent", "label": "حالة ممتازة", "description": "تم تجديده مؤخرًا، جديد" },
-      { "value": "very-good", "label": "حالة جيدة جدًا", "description": "محفوظ جيدًا، جاهز للسكن" },
-      { "value": "good", "label": "حالة جيدة", "description": "بحاجة إلى بعض أعمال التحديث" },
-      { "value": "renovation", "label": "للتجديد", "description": "مشروع تجديد مطلوب" }
+      {
+        "value": "excellent",
+        "label": "حالة ممتازة",
+        "description": "تم تجديده مؤخرًا، جديد"
+      },
+      {
+        "value": "very-good",
+        "label": "حالة جيدة جدًا",
+        "description": "محفوظ جيدًا، جاهز للسكن"
+      },
+      {
+        "value": "good",
+        "label": "حالة جيدة",
+        "description": "بحاجة إلى بعض أعمال التحديث"
+      },
+      {
+        "value": "renovation",
+        "label": "للتجديد",
+        "description": "مشروع تجديد مطلوب"
+      }
     ],
     "step2": {
       "title": "وسائل الراحة والميزات",
@@ -932,18 +1064,54 @@
       "selectedSummary": "وسائل الراحة المحددة ({{count}})"
     },
     "features": [
-      { "value": "terrace", "label": "شرفة" },
-      { "value": "balcony", "label": "بلكونة" },
-      { "value": "garden", "label": "حديقة" },
-      { "value": "pool", "label": "مسبح" },
-      { "value": "parking", "label": "موقف سيارات" },
-      { "value": "elevator", "label": "مصعد" },
-      { "value": "fireplace", "label": "مدفأة" },
-      { "value": "ac", "label": "تكييف" },
-      { "value": "alarm", "label": "إنذار" },
-      { "value": "smart-home", "label": "منزل ذكي" },
-      { "value": "wine-cellar", "label": "قبو نبيذ" },
-      { "value": "gym", "label": "صالة رياضية" }
+      {
+        "value": "terrace",
+        "label": "شرفة"
+      },
+      {
+        "value": "balcony",
+        "label": "بلكونة"
+      },
+      {
+        "value": "garden",
+        "label": "حديقة"
+      },
+      {
+        "value": "pool",
+        "label": "مسبح"
+      },
+      {
+        "value": "parking",
+        "label": "موقف سيارات"
+      },
+      {
+        "value": "elevator",
+        "label": "مصعد"
+      },
+      {
+        "value": "fireplace",
+        "label": "مدفأة"
+      },
+      {
+        "value": "ac",
+        "label": "تكييف"
+      },
+      {
+        "value": "alarm",
+        "label": "إنذار"
+      },
+      {
+        "value": "smart-home",
+        "label": "منزل ذكي"
+      },
+      {
+        "value": "wine-cellar",
+        "label": "قبو نبيذ"
+      },
+      {
+        "value": "gym",
+        "label": "صالة رياضية"
+      }
     ],
     "step3": {
       "timelineLabel": "الجدول الزمني المطلوب للبيع *",
@@ -955,10 +1123,26 @@
       "motivationPlaceholder": "صِف باختصار أسباب مشروع البيع الخاص بك (انتقال، استثمار، ميراث...)"
     },
     "timelines": [
-      { "value": "urgent", "label": "عاجل (1-3 أشهر)", "description": "بيع سريع مطلوب" },
-      { "value": "medium", "label": "متوسط (3-6 أشهر)", "description": "جدول زمني قياسي" },
-      { "value": "flexible", "label": "مرن (6+ أشهر)", "description": "لا قيود زمنية" },
-      { "value": "undefined", "label": "للتحديد", "description": "حسب السوق" }
+      {
+        "value": "urgent",
+        "label": "عاجل (1-3 أشهر)",
+        "description": "بيع سريع مطلوب"
+      },
+      {
+        "value": "medium",
+        "label": "متوسط (3-6 أشهر)",
+        "description": "جدول زمني قياسي"
+      },
+      {
+        "value": "flexible",
+        "label": "مرن (6+ أشهر)",
+        "description": "لا قيود زمنية"
+      },
+      {
+        "value": "undefined",
+        "label": "للتحديد",
+        "description": "حسب السوق"
+      }
     ],
     "step4": {
       "personalInfoTitle": "المعلومات الشخصية",
@@ -1698,7 +1882,7 @@
       "bookActivity": "مرحبا، أود الحجز:",
       "extendStay": "مرحبا، أود تمديد إقامتي"
     }
-  },  
+  },
   "agency": {
     "hero": {
       "slide1": "التميز العقاري",
@@ -2430,9 +2614,7 @@
       "inquiries": "الاستفسارات",
       "favorites": "المفضلة",
       "interactions": "التفاعلات",
-      "views": "المشاهدات",
-      "inquiries": "الاستفسارات",
-      "interactions": "التفاعلات"
+      "views": "المشاهدات"
     },
     "trends": {
       "title": "اتجاهات الأداء",

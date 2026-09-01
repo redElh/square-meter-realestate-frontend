@@ -466,10 +466,22 @@
       ]
     },
     "stats": [
-      { "number": "98%", "label": "Success rate" },
-      { "number": "45d", "label": "Average time" },
-      { "number": "+25%", "label": "Valuation" },
-      { "number": "500+", "label": "Properties sold" }
+      {
+        "number": "98%",
+        "label": "Success rate"
+      },
+      {
+        "number": "45d",
+        "label": "Average time"
+      },
+      {
+        "number": "+25%",
+        "label": "Valuation"
+      },
+      {
+        "number": "500+",
+        "label": "Properties sold"
+      }
     ],
     "management": {
       "title": "Prestige Management",
@@ -477,19 +489,31 @@
         {
           "title": "Rental Management",
           "description": "Complete management of your rental property with rigorous tenant selection.",
-          "features": ["Tenant selection", "Rent management", "Preventive maintenance"],
+          "features": [
+            "Tenant selection",
+            "Rent management",
+            "Preventive maintenance"
+          ],
           "price": "8% of rent"
         },
         {
           "title": "Seasonal Rental",
           "description": "Optimize your income through our professional seasonal rental management.",
-          "features": ["Premium booking", "Check-in/out", "Professional cleaning"],
+          "features": [
+            "Premium booking",
+            "Check-in/out",
+            "Professional cleaning"
+          ],
           "price": "20% of revenue"
         },
         {
           "title": "Concierge Service",
           "description": "Maintenance, cleaning and tailor-made services to preserve your property's excellence.",
-          "features": ["Regular maintenance", "VIP services", "24/7 maintenance"],
+          "features": [
+            "Regular maintenance",
+            "VIP services",
+            "24/7 maintenance"
+          ],
           "price": "On quote"
         }
       ],
@@ -498,10 +522,22 @@
     "additionalServices": {
       "title": "Additional Services",
       "items": [
-        { "title": "Performance Audit", "description": "Detailed analysis of your investment performance" },
-        { "title": "Prestige Renovation", "description": "Work coordination with exceptional craftsmen" },
-        { "title": "Property Staging", "description": "Professional staging to maximize attractiveness" },
-        { "title": "Premium Insurance", "description": "Insurance solutions adapted to exceptional properties" }
+        {
+          "title": "Performance Audit",
+          "description": "Detailed analysis of your investment performance"
+        },
+        {
+          "title": "Prestige Renovation",
+          "description": "Work coordination with exceptional craftsmen"
+        },
+        {
+          "title": "Property Staging",
+          "description": "Professional staging to maximize attractiveness"
+        },
+        {
+          "title": "Premium Insurance",
+          "description": "Insurance solutions adapted to exceptional properties"
+        }
       ],
       "contactButton": "Contact our team of experts"
     }
@@ -529,7 +565,6 @@
     "filters": {
       "title": "Refine your search with our smart filters",
       "all": "All",
-
       "allTypes": "All types",
       "buy": "For Sale",
       "toBuy": "To Buy",
@@ -562,9 +597,11 @@
     },
     "listing": {
       "available": "Properties available",
-
+      "availableShort": "Available",
+      "subtitle": "Exceptional properties in Essaouira",
       "results": "results",
       "sortBy": "Sort by:",
+      "sortByShort": "Sort",
       "relevance": "Relevance",
       "priceAsc": "Price ascending",
       "priceDesc": "Price descending",
@@ -625,8 +662,7 @@
       "land": "Land",
       "riad": "Riad",
       "other": "Other"
-    }
-    ,
+    },
     "mock": {
       "titles": {
         "villaAzure": "Villa Azure",
@@ -644,7 +680,7 @@
       },
       "locations": {
         "paris16": "Paris 16th",
-        "paris8": "Paris 8th", 
+        "paris8": "Paris 8th",
         "paris4": "Paris 4th",
         "saintTropez": "Saint-Tropez",
         "gordes": "Gordes",
@@ -662,7 +698,66 @@
     "cancel": "Cancel",
     "success": "Settings updated successfully",
     "languageDesc": "Select your preferred display language",
-    "currencyDesc": "Select your preferred currency for prices"
+    "currencyDesc": "Select your preferred currency for prices",
+    "heroBadgeExclusive": "Exclusive • Private",
+    "heroBadgeSecure": "Secure & confidential",
+    "heroTitle1": "Personalize",
+    "heroTitle2": "your experience",
+    "heroRegionalPreferences": "Regional Preferences",
+    "heroLivePreview": "Live preview",
+    "heroStoredEncrypted": "Stored locally • encrypted",
+    "heroRefined": "— refined for Essaouira, applied instantly across every listing and valuation.",
+    "previewLive": "Live Preview",
+    "previewHowPrices": "How prices will appear",
+    "previewUpToDate": "• Up to date",
+    "previewUnsaved": "• Unsaved changes",
+    "previewVilla": "Essaouira • Villa",
+    "previewAppliedEverywhere": "Applied everywhere",
+    "previewHint": "Prices convert instantly using live market rates. Language also updates dates and formatting.",
+    "previewForProperty": "for a 2 500 000 MAD property",
+    "previewExample": "Example",
+    "previewLiveBadge": "Live",
+    "selected": "Selected: {{name}}",
+    "current": "CURRENT",
+    "tipRtl": "Tip: choosing العربية automatically enables right-to-left layout across the site. You can change it anytime.",
+    "ratesHint": "Rates update live. Display only — transactions remain in the listing currency. Your choice is saved on this device.",
+    "statusSaved": "All preferences saved",
+    "statusUnsaved": "You have unsaved changes",
+    "statusWillApply": "• will apply on next navigation",
+    "nextCurrency": "Next: Currency →",
+    "backLanguage": "← Back to Language",
+    "assistanceTitle": "Need assistance?",
+    "assistanceMultilingualTitle": "Multilingual support",
+    "assistanceMultilingualDesc": "24/7 in your preferred language — chat or call",
+    "assistanceRatesTitle": "Real-time exchange rates",
+    "assistanceRatesDesc": "Live market conversion across all listings",
+    "assistanceConcierge": "Concierge • Essaouira • +212 7 00 00 06 44",
+    "summaryTitle": "Your selection",
+    "summarySubtitle": "Review before applying",
+    "summaryLanguage": "Language",
+    "summaryCurrency": "Currency",
+    "summaryHint": "Changes are stored securely on this device and applied across all listings, maps and PDFs.",
+    "secureTitle": "Secure & Confidential",
+    "secureDesc": "Preferences are saved locally and never shared. Change them anytime — your browsing remains private.",
+    "noChanges": "No changes to apply — your preferences are up to date.",
+    "toastDetail": "Preferences synchronized • {{lang}} · {{curr}}",
+    "languageSuffix": "— interface, dates & formatting.",
+    "currencySuffix": "— live rates, applied everywhere.",
+    "languageNames": {
+      "en": "English",
+      "fr": "French",
+      "ar": "Arabic",
+      "es": "Spanish",
+      "de": "German",
+      "ru": "Russian"
+    },
+    "currencyNames": {
+      "MAD": "Moroccan Dirham",
+      "AED": "Emirati Dirham",
+      "EUR": "Euro",
+      "USD": "US Dollar",
+      "GBP": "British Pound"
+    }
   },
   "ai": {
     "assistant": "AI Assistant",
@@ -920,19 +1015,56 @@
       "conditionLabel": "Property condition *"
     },
     "propertyTypes": [
-      { "value": "apartment", "label": "Apartment" },
-      { "value": "house", "label": "House" },
-      { "value": "villa", "label": "Villa" },
-      { "value": "loft", "label": "Loft" },
-      { "value": "penthouse", "label": "Penthouse" },
-      { "value": "castle", "label": "Castle" },
-      { "value": "other", "label": "Other" }
+      {
+        "value": "apartment",
+        "label": "Apartment"
+      },
+      {
+        "value": "house",
+        "label": "House"
+      },
+      {
+        "value": "villa",
+        "label": "Villa"
+      },
+      {
+        "value": "loft",
+        "label": "Loft"
+      },
+      {
+        "value": "penthouse",
+        "label": "Penthouse"
+      },
+      {
+        "value": "castle",
+        "label": "Castle"
+      },
+      {
+        "value": "other",
+        "label": "Other"
+      }
     ],
     "conditions": [
-      { "value": "excellent", "label": "Excellent condition", "description": "Recently renovated, like new" },
-      { "value": "very-good", "label": "Very good condition", "description": "Well maintained, ready to move in" },
-      { "value": "good", "label": "Good condition", "description": "Some refreshing work needed" },
-      { "value": "renovation", "label": "To renovate", "description": "Renovation project required" }
+      {
+        "value": "excellent",
+        "label": "Excellent condition",
+        "description": "Recently renovated, like new"
+      },
+      {
+        "value": "very-good",
+        "label": "Very good condition",
+        "description": "Well maintained, ready to move in"
+      },
+      {
+        "value": "good",
+        "label": "Good condition",
+        "description": "Some refreshing work needed"
+      },
+      {
+        "value": "renovation",
+        "label": "To renovate",
+        "description": "Renovation project required"
+      }
     ],
     "step2": {
       "title": "Amenities & Features",
@@ -940,18 +1072,54 @@
       "selectedSummary": "Selected amenities ({{count}})"
     },
     "features": [
-      { "value": "terrace", "label": "Terrace" },
-      { "value": "balcony", "label": "Balcony" },
-      { "value": "garden", "label": "Garden" },
-      { "value": "pool", "label": "Pool" },
-      { "value": "parking", "label": "Parking" },
-      { "value": "elevator", "label": "Elevator" },
-      { "value": "fireplace", "label": "Fireplace" },
-      { "value": "ac", "label": "Air Conditioning" },
-      { "value": "alarm", "label": "Alarm" },
-      { "value": "smart-home", "label": "Smart Home" },
-      { "value": "wine-cellar", "label": "Wine Cellar" },
-      { "value": "gym", "label": "Gym" }
+      {
+        "value": "terrace",
+        "label": "Terrace"
+      },
+      {
+        "value": "balcony",
+        "label": "Balcony"
+      },
+      {
+        "value": "garden",
+        "label": "Garden"
+      },
+      {
+        "value": "pool",
+        "label": "Pool"
+      },
+      {
+        "value": "parking",
+        "label": "Parking"
+      },
+      {
+        "value": "elevator",
+        "label": "Elevator"
+      },
+      {
+        "value": "fireplace",
+        "label": "Fireplace"
+      },
+      {
+        "value": "ac",
+        "label": "Air Conditioning"
+      },
+      {
+        "value": "alarm",
+        "label": "Alarm"
+      },
+      {
+        "value": "smart-home",
+        "label": "Smart Home"
+      },
+      {
+        "value": "wine-cellar",
+        "label": "Wine Cellar"
+      },
+      {
+        "value": "gym",
+        "label": "Gym"
+      }
     ],
     "step3": {
       "timelineLabel": "Desired sale timeline *",
@@ -963,10 +1131,26 @@
       "motivationPlaceholder": "Briefly describe the reasons for your sale project (relocation, investment, inheritance...)"
     },
     "timelines": [
-      { "value": "urgent", "label": "Urgent (1-3 months)", "description": "Quick sale desired" },
-      { "value": "medium", "label": "Medium (3-6 months)", "description": "Standard timeline" },
-      { "value": "flexible", "label": "Flexible (6+ months)", "description": "No time constraint" },
-      { "value": "undefined", "label": "To be defined", "description": "Depending on market" }
+      {
+        "value": "urgent",
+        "label": "Urgent (1-3 months)",
+        "description": "Quick sale desired"
+      },
+      {
+        "value": "medium",
+        "label": "Medium (3-6 months)",
+        "description": "Standard timeline"
+      },
+      {
+        "value": "flexible",
+        "label": "Flexible (6+ months)",
+        "description": "No time constraint"
+      },
+      {
+        "value": "undefined",
+        "label": "To be defined",
+        "description": "Depending on market"
+      }
     ],
     "step4": {
       "personalInfoTitle": "Personal Information",
@@ -1668,6 +1852,8 @@
         "notIncluded": "Not included",
         "description": "Description",
         "pricing": "Pricing",
+        "partenaire": "Partner",
+        "gallery": "Gallery",
         "securePayment": "Secure payment",
         "freeCancellation": "Free cancellation up to 24h before",
         "assistance247": "24/7 assistance",
@@ -2491,9 +2677,7 @@
       "inquiries": "Inquiries",
       "favorites": "Favorites",
       "interactions": "Interactions",
-      "views": "Views",
-      "inquiries": "Inquiries",
-      "interactions": "Interactions"
+      "views": "Views"
     },
     "trends": {
       "title": "Performance Trends",

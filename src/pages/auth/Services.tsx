@@ -196,35 +196,34 @@ const Services: React.FC = () => {
           </div>
         </div>
 
-        {/* Carousel Controls */}
-        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center space-x-2 sm:space-x-4 bg-black/20 backdrop-blur-sm rounded-full px-4 sm:px-6 py-2 sm:py-3 border border-white/20">
+        {/* Carousel Controls — unified premium pill (matches Home hero) */}
+        <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 sm:gap-3 bg-black/20 backdrop-blur-xl rounded-full px-3 sm:px-5 py-2 sm:py-2.5 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.24)]">
           <button
             onClick={prevHeroSlide}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
-            style={{ borderRadius: '0' }}
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white backdrop-blur-sm flex items-center justify-center text-white hover:text-gray-900 border border-white/20 hover:border-white transition-all duration-300 hover:scale-105 active:scale-95"
+            aria-label="Previous slide"
           >
             <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button
             onClick={nextHeroSlide}
-            className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
-            style={{ borderRadius: '0' }}
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/15 hover:bg-white backdrop-blur-sm flex items-center justify-center text-white hover:text-gray-900 border border-white/20 hover:border-white transition-all duration-300 hover:scale-105 active:scale-95"
+            aria-label="Next slide"
           >
             <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
-          
-          {/* Slide Indicators */}
-          <div className="flex space-x-1.5 sm:space-x-2">
+          <div className="w-px h-5 sm:h-6 bg-white/20 mx-1 hidden sm:block"></div>
+          <div className="flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-0">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setActiveHeroSlide(index)}
-                className={`w-1.5 h-1.5 sm:w-2 sm:h-2 transition-all duration-300 ${
-                  index === activeHeroSlide 
-                    ? 'bg-white scale-125' 
-                    : 'bg-white/60 hover:bg-white/80'
+                aria-label={`Go to slide ${index + 1}`}
+                className={`rounded-full transition-all duration-500 ${
+                  index === activeHeroSlide
+                    ? 'bg-white w-6 sm:w-8 h-1.5 sm:h-1.5 shadow-[0_0_10px_rgba(255,255,255,0.6)]'
+                    : 'bg-white/50 hover:bg-white/80 w-1.5 h-1.5 sm:w-2 sm:h-2'
                 }`}
-                style={{ borderRadius: '0' }}
               />
             ))}
           </div>

@@ -300,7 +300,8 @@
       "subtitle": "Nuestros expertos están aquí para guiarte en cada paso",
       "button": "Contáctanos"
     }
-  },  "propertyDetail": {
+  },
+  "propertyDetail": {
     "exclusive": "EXCLUSIVO",
     "stats": {
       "surface": "Superficie",
@@ -468,10 +469,22 @@
       ]
     },
     "stats": [
-      { "number": "98%", "label": "Tasa de éxito" },
-      { "number": "45d", "label": "Tiempo promedio" },
-      { "number": "+25%", "label": "Valoración" },
-      { "number": "500+", "label": "Propiedades vendidas" }
+      {
+        "number": "98%",
+        "label": "Tasa de éxito"
+      },
+      {
+        "number": "45d",
+        "label": "Tiempo promedio"
+      },
+      {
+        "number": "+25%",
+        "label": "Valoración"
+      },
+      {
+        "number": "500+",
+        "label": "Propiedades vendidas"
+      }
     ],
     "management": {
       "title": "Gestión de Prestigio",
@@ -479,19 +492,31 @@
         {
           "title": "Gestión de Alquiler",
           "description": "Gestión completa de su propiedad de alquiler con selección rigurosa de inquilinos.",
-          "features": ["Selección de inquilino", "Gestión de alquileres", "Mantenimiento preventivo"],
+          "features": [
+            "Selección de inquilino",
+            "Gestión de alquileres",
+            "Mantenimiento preventivo"
+          ],
           "price": "8% del alquiler"
         },
         {
           "title": "Alquiler Estacional",
           "description": "Optimice sus ingresos a través de nuestra gestión profesional de alquileres estacionales.",
-          "features": ["Reserva premium", "Check-in/out", "Limpieza profesional"],
+          "features": [
+            "Reserva premium",
+            "Check-in/out",
+            "Limpieza profesional"
+          ],
           "price": "20% de los ingresos"
         },
         {
           "title": "Servicio de Concierge",
           "description": "Mantenimiento, limpieza y servicios a medida para preservar la excelencia de su propiedad.",
-          "features": ["Mantenimiento regular", "Servicios VIP", "Mantenimiento 24/7"],
+          "features": [
+            "Mantenimiento regular",
+            "Servicios VIP",
+            "Mantenimiento 24/7"
+          ],
           "price": "Bajo presupuesto"
         }
       ],
@@ -500,14 +525,27 @@
     "additionalServices": {
       "title": "Servicios Adicionales",
       "items": [
-        { "title": "Auditoría de Rendimiento", "description": "Análisis detallado del rendimiento de su inversión" },
-        { "title": "Renovación de Prestigio", "description": "Coordinación de obras con artesanos excepcionales" },
-        { "title": "Staging Inmobiliario", "description": "Puesta en escena profesional para maximizar el atractivo" },
-        { "title": "Seguros Premium", "description": "Soluciones de seguro adaptadas a propiedades excepcionales" }
+        {
+          "title": "Auditoría de Rendimiento",
+          "description": "Análisis detallado del rendimiento de su inversión"
+        },
+        {
+          "title": "Renovación de Prestigio",
+          "description": "Coordinación de obras con artesanos excepcionales"
+        },
+        {
+          "title": "Staging Inmobiliario",
+          "description": "Puesta en escena profesional para maximizar el atractivo"
+        },
+        {
+          "title": "Seguros Premium",
+          "description": "Soluciones de seguro adaptadas a propiedades excepcionales"
+        }
       ],
       "contactButton": "Contacte a nuestro equipo de expertos"
     }
-  },  "properties": {
+  },
+  "properties": {
     "title": "Nuestras propiedades",
     "hero": {
       "title": "Tu Viaje Inmobiliario Comienza Aquí",
@@ -530,7 +568,6 @@
     "filters": {
       "title": "Refina tu búsqueda con nuestros filtros inteligentes",
       "all": "Todo",
-
       "allTypes": "Todos los tipos",
       "buy": "Comprar",
       "toBuy": "Para comprar",
@@ -563,9 +600,11 @@
     },
     "listing": {
       "available": "Propiedades disponibles",
-
+      "availableShort": "Disponibles",
+      "subtitle": "Propiedades excepcionales en Essaouira",
       "results": "resultados",
       "sortBy": "Ordenar por:",
+      "sortByShort": "Ordenar",
       "relevance": "Relevancia",
       "priceAsc": "Precio ascendente",
       "priceDesc": "Precio descendente",
@@ -626,8 +665,7 @@
       "land": "Terreno",
       "riad": "Riad",
       "other": "Otro"
-    }
-    ,
+    },
     "mock": {
       "titles": {
         "villaAzure": "Villa Azure",
@@ -663,66 +701,183 @@
     "cancel": "Cancelar",
     "success": "Configuración actualizada con éxito",
     "languageDesc": "Selecciona tu idioma de visualización preferido",
-    "currencyDesc": "Selecciona tu moneda preferida para los precios"
+    "currencyDesc": "Selecciona tu moneda preferida para los precios",
+    "heroBadgeExclusive": "Exclusivo • Privado",
+    "heroBadgeSecure": "Seguro y confidencial",
+    "heroTitle1": "Personaliza",
+    "heroTitle2": "tu experiencia",
+    "heroRegionalPreferences": "Preferencias regionales",
+    "heroLivePreview": "Vista previa en vivo",
+    "heroStoredEncrypted": "Almacenado localmente • cifrado",
+    "heroRefined": "— refinado para Essaouira, aplicado al instante en todos los anuncios y valoraciones.",
+    "previewLive": "Vista previa",
+    "previewHowPrices": "Así se verán los precios",
+    "previewUpToDate": "• Actualizado",
+    "previewUnsaved": "• Cambios sin guardar",
+    "previewVilla": "Essaouira • Villa",
+    "previewAppliedEverywhere": "Aplicado en todas partes",
+    "previewHint": "Los precios se convierten al instante con tasas de mercado. El idioma también actualiza fechas y formatos.",
+    "previewForProperty": "para una propiedad de 2 500 000 MAD",
+    "previewExample": "Ejemplo",
+    "previewLiveBadge": "En vivo",
+    "selected": "Seleccionado: {{name}}",
+    "current": "ACTUAL",
+    "tipRtl": "Consejo: elegir العربية activa automáticamente el diseño de derecha a izquierda en todo el sitio. Puedes cambiarlo en cualquier momento.",
+    "ratesHint": "Tasas en vivo. Solo visualización — las transacciones permanecen en la moneda del anuncio. Tu elección se guarda en este dispositivo.",
+    "statusSaved": "Todas las preferencias guardadas",
+    "statusUnsaved": "Tienes cambios sin guardar",
+    "statusWillApply": "• se aplicará en la próxima navegación",
+    "nextCurrency": "Siguiente: Moneda →",
+    "backLanguage": "← Volver al idioma",
+    "assistanceTitle": "¿Necesitas ayuda?",
+    "assistanceMultilingualTitle": "Soporte multilingüe",
+    "assistanceMultilingualDesc": "24/7 en tu idioma preferido — chat o llamada",
+    "assistanceRatesTitle": "Tipos de cambio en vivo",
+    "assistanceRatesDesc": "Conversión en vivo en todos los anuncios",
+    "assistanceConcierge": "Conserjería • Essaouira • +212 7 00 00 06 44",
+    "summaryTitle": "Tu selección",
+    "summarySubtitle": "Revisa antes de aplicar",
+    "summaryLanguage": "Idioma",
+    "summaryCurrency": "Moneda",
+    "summaryHint": "Los cambios se almacenan de forma segura en este dispositivo y se aplican a anuncios, mapas y PDFs.",
+    "secureTitle": "Seguro y Confidencial",
+    "secureDesc": "Las preferencias se guardan localmente y nunca se comparten. Cámbialas cuando quieras — tu navegación permanece privada.",
+    "noChanges": "Sin cambios que aplicar — tus preferencias están actualizadas.",
+    "toastDetail": "Preferencias sincronizadas • {{lang}} · {{curr}}",
+    "languageSuffix": "— interfaz, fechas y formato.",
+    "currencySuffix": "— tasas en vivo, aplicado en todas partes.",
+    "languageNames": {
+      "en": "Inglés",
+      "fr": "Francés",
+      "ar": "Árabe",
+      "es": "Español",
+      "de": "Alemán",
+      "ru": "Ruso"
+    },
+    "currencyNames": {
+      "MAD": "Dírham marroquí",
+      "AED": "Dírham emiratí",
+      "EUR": "Euro",
+      "USD": "Dólar estadounidense",
+      "GBP": "Libra esterlina"
+    }
   },
   "auth": {
-    "login": "Iniciar sesión",
-    "register": "Registrarse",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "noAccount": "¿No tienes cuenta?",
-    "hasAccount": "¿Ya tienes cuenta?",
-    "signIn": "Iniciar sesión",
-    "signUp": "Registrarse"
-  },
-  "contact": {
-    "title": "Contáctanos",
-    "subtitle": "Estamos aquí para ayudar",
-    "name": "Nombre",
-    "email": "Correo electrónico",
-    "phone": "Teléfono",
-    "message": "Mensaje",
-    "send": "Enviar mensaje",
-    "success": "Mensaje enviado con éxito",
-    "error": "Error al enviar el mensaje"
-  },
-  "ai": {
-    "assistant": "Asistente IA",
-    "greeting": "¡Hola! 👋",
-    "help": "¿Cómo puedo ayudarte?",
-    "typing": "La IA está pensando...",
-    "placeholder": "Escribe tu mensaje...",
-    "voicePlaceholder": "🎤 Te escucho...",
-    "suggestions": "Sugerencias:",
-    "quickQuestions": "Preguntas rápidas:",
-    "online": "En línea",
-    "searchProperties": "Buscar propiedades",
-    "bookAppointment": "Reservar cita",
-    "getEstimate": "Obtener valoración",
-    "budgetHelp": "Ayuda con el presupuesto",
-    "neighborhoodInfo": "Información del barrio"
-  },
-  "chat": {
-    "title": "Asistente IA",
-    "subtitle": "Siempre aquí para ayudar",
-    "betaWarning": "En desarrollo - Puede cometer errores",
-    "placeholder": "Escribe tu mensaje...",
-    "send": "Enviar",
-    "listening": "Escuchando...",
-    "error": "Lo siento, encontré un error. Por favor, inténtalo de nuevo.",
-    "welcome": "¡Bienvenido! ¿Cómo puedo ayudarte hoy?",
-    "typing": "IA está escribiendo...",
-    "viewProperty": "Ver Propiedad",
-    "bookViewing": "Reservar Visita",
-    "contactAgent": "Contactar Agente",
-    "searchProperties": "Buscar Propiedades"
-  },
-  "errors": {
-    "pageNotFound": "Página no encontrada",
-    "somethingWrong": "Algo salió mal",
-    "tryAgain": "Por favor, inténtalo de nuevo",
-    "goHome": "Ir a la página principal"
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "Acceda a su espacio personal para gestionar sus propiedades y seguir sus proyectos.",
+      "emailLabel": "Dirección de correo electrónico *",
+      "emailPlaceholder": "su@email.com",
+      "passwordLabel": "Contraseña *",
+      "passwordPlaceholder": "••••••••",
+      "rememberMe": "Recuérdame",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submitButton": "Iniciar sesión"
+    },
+    "signup": {
+      "title": "Registro",
+      "subtitle": "Únase a nuestra comunidad exclusiva y acceda a propiedades excepcionales.",
+      "firstNameLabel": "Nombre *",
+      "firstNamePlaceholder": "Juan",
+      "lastNameLabel": "Apellido *",
+      "lastNamePlaceholder": "Pérez",
+      "emailLabel": "Dirección de correo electrónico *",
+      "emailPlaceholder": "su@email.com",
+      "accountTypeLabel": "Tipo de cuenta *",
+      "buyer": "Comprador",
+      "owner": "Propietario",
+      "seller": "Vendedor",
+      "lessor": "Arrendador",
+      "tenant": "Inquilino",
+      "traveler": "Viajero",
+      "passwordLabel": "Contraseña *",
+      "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Confirmar contraseña *",
+      "confirmPasswordPlaceholder": "••••••••",
+      "passwordStrength": "Fuerza de la contraseña",
+      "acceptTerms": "Acepto los",
+      "termsLink": "términos y condiciones",
+      "and": "y la",
+      "privacyLink": "política de privacidad",
+      "submitButton": "Crear cuenta"
+    },
+    "tabs": {
+      "login": "Iniciar sesión",
+      "signup": "Registro"
+    },
+    "social": {
+      "divider": "O continuar con",
+      "facebook": "Facebook",
+      "google": "Google"
+    },
+    "security": {
+      "title": "Seguridad Garantizada",
+      "description": "Toda su información está protegida mediante cifrado de nivel bancario. Nunca compartimos sus datos con terceros."
+    },
+    "validation": {
+      "required": "Este campo es obligatorio",
+      "minLength": "Mínimo {{min}} caracteres requeridos",
+      "maxLength": "Máximo {{max}} caracteres permitidos",
+      "email": "Por favor ingrese un correo electrónico válido",
+      "phone": "Por favor ingrese un número de teléfono válido",
+      "number": "Por favor ingrese un número válido",
+      "positive": "Debe ser un número positivo",
+      "integer": "Debe ser un número entero",
+      "lettersOnly": "Solo se permiten letras y espacios",
+      "invalidEmail": "Correo electrónico no válido",
+      "passwordTooShort": "Contraseña demasiado corta",
+      "firstNameRequired": "Nombre requerido",
+      "lastNameRequired": "Apellido requerido",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+      "confirmPassword": "Confirmar contraseña",
+      "passwordsMismatch": "Las contraseñas no coinciden",
+      "acceptTermsRequired": "Debe aceptar los términos y condiciones",
+      "selectAccountType": "Por favor seleccione un tipo de cuenta"
+    },
+    "passwordStrength": {
+      "veryWeak": "Muy débil",
+      "weak": "Débil",
+      "medium": "Media",
+      "strong": "Fuerte",
+      "veryStrong": "Muy fuerte"
+    },
+    "forgotPassword": {
+      "title": "Olvidé mi contraseña",
+      "subtitle": "Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "su@email.com",
+      "submitButton": "Enviar enlace",
+      "sendingButton": "Enviando...",
+      "successMessage": "Enlace de restablecimiento enviado a su correo electrónico.",
+      "errorMessage": "Error al enviar el enlace. Por favor, inténtelo de nuevo.",
+      "backToLogin": "Volver a iniciar sesión",
+      "securityTitle": "Restablecimiento seguro",
+      "securityDescription": "Su enlace de restablecimiento caducará en 15 minutos por seguridad. Si no solicitó este restablecimiento, ignore este correo."
+    },
+    "resetPassword": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Ingrese su nueva contraseña a continuación.",
+      "newPasswordLabel": "Nueva contraseña",
+      "newPasswordPlaceholder": "Mín. 8 caracteres",
+      "confirmPasswordLabel": "Confirmar nueva contraseña",
+      "confirmPasswordPlaceholder": "Repita su contraseña",
+      "submitButton": "Restablecer contraseña",
+      "resettingButton": "Restableciendo...",
+      "successMessage": "¡Contraseña restablecida con éxito! Ahora puede iniciar sesión con su nueva contraseña.",
+      "errorMessage": "No se pudo restablecer la contraseña. Por favor, inténtelo de nuevo.",
+      "invalidTokenTitle": "Enlace inválido",
+      "invalidTokenMessage": "Este enlace de restablecimiento es inválido o ha caducado.",
+      "invalidTokenButton": "Solicitar nuevo enlace",
+      "securityTitle": "Requisitos de contraseña",
+      "securityDescription1": "Mínimo 8 caracteres",
+      "securityDescription2": "Use una combinación de letras, números y símbolos",
+      "securityDescription3": "Evite palabras comunes o patrones"
+    },
+    "messages": {
+      "loginSuccess": "¡Inicio de sesión exitoso!",
+      "signupSuccess": "¡Cuenta creada con éxito!",
+      "resetSuccess": "¡Contraseña restablecida con éxito! Ahora puede iniciar sesión con su nueva contraseña."
+    }
   },
   "contact": {
     "hero": {
@@ -886,6 +1041,43 @@
       "guests": "Personas"
     }
   },
+  "ai": {
+    "assistant": "Asistente IA",
+    "greeting": "¡Hola! 👋",
+    "help": "¿Cómo puedo ayudarte?",
+    "typing": "La IA está pensando...",
+    "placeholder": "Escribe tu mensaje...",
+    "voicePlaceholder": "🎤 Te escucho...",
+    "suggestions": "Sugerencias:",
+    "quickQuestions": "Preguntas rápidas:",
+    "online": "En línea",
+    "searchProperties": "Buscar propiedades",
+    "bookAppointment": "Reservar cita",
+    "getEstimate": "Obtener valoración",
+    "budgetHelp": "Ayuda con el presupuesto",
+    "neighborhoodInfo": "Información del barrio"
+  },
+  "chat": {
+    "title": "Asistente IA",
+    "subtitle": "Siempre aquí para ayudar",
+    "betaWarning": "En desarrollo - Puede cometer errores",
+    "placeholder": "Escribe tu mensaje...",
+    "send": "Enviar",
+    "listening": "Escuchando...",
+    "error": "Lo siento, encontré un error. Por favor, inténtalo de nuevo.",
+    "welcome": "¡Bienvenido! ¿Cómo puedo ayudarte hoy?",
+    "typing": "IA está escribiendo...",
+    "viewProperty": "Ver Propiedad",
+    "bookViewing": "Reservar Visita",
+    "contactAgent": "Contactar Agente",
+    "searchProperties": "Buscar Propiedades"
+  },
+  "errors": {
+    "pageNotFound": "Página no encontrada",
+    "somethingWrong": "Algo salió mal",
+    "tryAgain": "Por favor, inténtalo de nuevo",
+    "goHome": "Ir a la página principal"
+  },
   "sellingMultiStep": {
     "hero": {
       "slides": [
@@ -943,19 +1135,56 @@
       "conditionLabel": "Estado de la propiedad *"
     },
     "propertyTypes": [
-      { "value": "apartment", "label": "Apartamento" },
-      { "value": "house", "label": "Casa" },
-      { "value": "villa", "label": "Villa" },
-      { "value": "loft", "label": "Loft" },
-      { "value": "penthouse", "label": "Ático" },
-      { "value": "castle", "label": "Castillo" },
-      { "value": "other", "label": "Otro" }
+      {
+        "value": "apartment",
+        "label": "Apartamento"
+      },
+      {
+        "value": "house",
+        "label": "Casa"
+      },
+      {
+        "value": "villa",
+        "label": "Villa"
+      },
+      {
+        "value": "loft",
+        "label": "Loft"
+      },
+      {
+        "value": "penthouse",
+        "label": "Ático"
+      },
+      {
+        "value": "castle",
+        "label": "Castillo"
+      },
+      {
+        "value": "other",
+        "label": "Otro"
+      }
     ],
     "conditions": [
-      { "value": "excellent", "label": "Excelente estado", "description": "Recientemente renovado, como nuevo" },
-      { "value": "very-good", "label": "Muy buen estado", "description": "Bien mantenido, listo para mudarse" },
-      { "value": "good", "label": "Buen estado", "description": "Algunos trabajos de refresco necesarios" },
-      { "value": "renovation", "label": "Para renovar", "description": "Proyecto de renovación requerido" }
+      {
+        "value": "excellent",
+        "label": "Excelente estado",
+        "description": "Recientemente renovado, como nuevo"
+      },
+      {
+        "value": "very-good",
+        "label": "Muy buen estado",
+        "description": "Bien mantenido, listo para mudarse"
+      },
+      {
+        "value": "good",
+        "label": "Buen estado",
+        "description": "Algunos trabajos de refresco necesarios"
+      },
+      {
+        "value": "renovation",
+        "label": "Para renovar",
+        "description": "Proyecto de renovación requerido"
+      }
     ],
     "step2": {
       "title": "Comodidades y Características",
@@ -963,18 +1192,54 @@
       "selectedSummary": "Comodidades seleccionadas ({{count}})"
     },
     "features": [
-      { "value": "terrace", "label": "Terraza" },
-      { "value": "balcony", "label": "Balcón" },
-      { "value": "garden", "label": "Jardín" },
-      { "value": "pool", "label": "Piscina" },
-      { "value": "parking", "label": "Parking" },
-      { "value": "elevator", "label": "Ascensor" },
-      { "value": "fireplace", "label": "Chimenea" },
-      { "value": "ac", "label": "Aire Acondicionado" },
-      { "value": "alarm", "label": "Alarma" },
-      { "value": "smart-home", "label": "Domótica" },
-      { "value": "wine-cellar", "label": "Bodega" },
-      { "value": "gym", "label": "Gimnasio" }
+      {
+        "value": "terrace",
+        "label": "Terraza"
+      },
+      {
+        "value": "balcony",
+        "label": "Balcón"
+      },
+      {
+        "value": "garden",
+        "label": "Jardín"
+      },
+      {
+        "value": "pool",
+        "label": "Piscina"
+      },
+      {
+        "value": "parking",
+        "label": "Parking"
+      },
+      {
+        "value": "elevator",
+        "label": "Ascensor"
+      },
+      {
+        "value": "fireplace",
+        "label": "Chimenea"
+      },
+      {
+        "value": "ac",
+        "label": "Aire Acondicionado"
+      },
+      {
+        "value": "alarm",
+        "label": "Alarma"
+      },
+      {
+        "value": "smart-home",
+        "label": "Domótica"
+      },
+      {
+        "value": "wine-cellar",
+        "label": "Bodega"
+      },
+      {
+        "value": "gym",
+        "label": "Gimnasio"
+      }
     ],
     "step3": {
       "timelineLabel": "Plazo de venta deseado *",
@@ -986,10 +1251,26 @@
       "motivationPlaceholder": "Describa brevemente las razones de su proyecto de venta (mudanza, inversión, herencia...)"
     },
     "timelines": [
-      { "value": "urgent", "label": "Urgente (1-3 meses)", "description": "Venta rápida deseada" },
-      { "value": "medium", "label": "Medio (3-6 meses)", "description": "Plazo estándar" },
-      { "value": "flexible", "label": "Flexible (6+ meses)", "description": "Sin restricción de tiempo" },
-      { "value": "undefined", "label": "Por definir", "description": "Según el mercado" }
+      {
+        "value": "urgent",
+        "label": "Urgente (1-3 meses)",
+        "description": "Venta rápida deseada"
+      },
+      {
+        "value": "medium",
+        "label": "Medio (3-6 meses)",
+        "description": "Plazo estándar"
+      },
+      {
+        "value": "flexible",
+        "label": "Flexible (6+ meses)",
+        "description": "Sin restricción de tiempo"
+      },
+      {
+        "value": "undefined",
+        "label": "Por definir",
+        "description": "Según el mercado"
+      }
     ],
     "step4": {
       "personalInfoTitle": "Información Personal",
@@ -1038,13 +1319,6 @@
     }
   },
   "footer": {
-    "about": "Sobre nosotros",
-    "services": "Servicios",
-    "legal": "Legal",
-    "followUs": "Síguenos",
-    "allRightsReserved": "Todos los derechos reservados",
-    "description": "Tu socio en inmobiliaria excepcional"  },
-  "footer": {
     "brand": {
       "description": "La excelencia inmobiliaria reinventada. Ofrecemos propiedades excepcionales para clientes exigentes que buscan prestigio y autenticidad."
     },
@@ -1087,123 +1361,6 @@
       "copyright": "© {{year}} Square Meter. Todos los derechos reservados.",
       "privacy": "Privacidad",
       "terms": "Términos"
-    }
-  },
-  "auth": {
-    "login": {
-      "title": "Iniciar sesión",
-      "subtitle": "Acceda a su espacio personal para gestionar sus propiedades y seguir sus proyectos.",
-      "emailLabel": "Dirección de correo electrónico *",
-      "emailPlaceholder": "su@email.com",
-      "passwordLabel": "Contraseña *",
-      "passwordPlaceholder": "••••••••",
-      "rememberMe": "Recuérdame",
-      "forgotPassword": "¿Olvidaste tu contraseña?",
-      "submitButton": "Iniciar sesión"
-    },
-    "signup": {
-      "title": "Registro",
-      "subtitle": "Únase a nuestra comunidad exclusiva y acceda a propiedades excepcionales.",
-      "firstNameLabel": "Nombre *",
-      "firstNamePlaceholder": "Juan",
-      "lastNameLabel": "Apellido *",
-      "lastNamePlaceholder": "Pérez",
-      "emailLabel": "Dirección de correo electrónico *",
-      "emailPlaceholder": "su@email.com",
-      "accountTypeLabel": "Tipo de cuenta *",
-      "buyer": "Comprador",
-      "owner": "Propietario",
-      "seller": "Vendedor",
-      "lessor": "Arrendador",
-      "tenant": "Inquilino",
-      "traveler": "Viajero",
-      "passwordLabel": "Contraseña *",
-      "passwordPlaceholder": "••••••••",
-      "confirmPasswordLabel": "Confirmar contraseña *",
-      "confirmPasswordPlaceholder": "••••••••",
-      "passwordStrength": "Fuerza de la contraseña",
-      "acceptTerms": "Acepto los",
-      "termsLink": "términos y condiciones",
-      "and": "y la",
-      "privacyLink": "política de privacidad",
-      "submitButton": "Crear cuenta"
-    },
-    "tabs": {
-      "login": "Iniciar sesión",
-      "signup": "Registro"
-    },
-    "social": {
-      "divider": "O continuar con",
-      "facebook": "Facebook",
-      "google": "Google"
-    },
-    "security": {
-      "title": "Seguridad Garantizada",
-      "description": "Toda su información está protegida mediante cifrado de nivel bancario. Nunca compartimos sus datos con terceros."
-    },
-    "validation": {
-      "required": "Este campo es obligatorio",
-      "minLength": "Mínimo {{min}} caracteres requeridos",
-      "maxLength": "Máximo {{max}} caracteres permitidos",
-      "email": "Por favor ingrese un correo electrónico válido",
-      "phone": "Por favor ingrese un número de teléfono válido",
-      "number": "Por favor ingrese un número válido",
-      "positive": "Debe ser un número positivo",
-      "integer": "Debe ser un número entero",
-      "lettersOnly": "Solo se permiten letras y espacios",
-      "invalidEmail": "Correo electrónico no válido",
-      "passwordTooShort": "Contraseña demasiado corta",
-      "firstNameRequired": "Nombre requerido",
-      "lastNameRequired": "Apellido requerido",
-      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
-      "confirmPassword": "Confirmar contraseña",
-      "passwordsMismatch": "Las contraseñas no coinciden",
-      "acceptTermsRequired": "Debe aceptar los términos y condiciones",
-      "selectAccountType": "Por favor seleccione un tipo de cuenta"
-    },
-    "passwordStrength": {
-      "veryWeak": "Muy débil",
-      "weak": "Débil",
-      "medium": "Media",
-      "strong": "Fuerte",
-      "veryStrong": "Muy fuerte"
-    },
-    "forgotPassword": {
-      "title": "Olvidé mi contraseña",
-      "subtitle": "Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña.",
-      "emailLabel": "Correo electrónico",
-      "emailPlaceholder": "su@email.com",
-      "submitButton": "Enviar enlace",
-      "sendingButton": "Enviando...",
-      "successMessage": "Enlace de restablecimiento enviado a su correo electrónico.",
-      "errorMessage": "Error al enviar el enlace. Por favor, inténtelo de nuevo.",
-      "backToLogin": "Volver a iniciar sesión",
-      "securityTitle": "Restablecimiento seguro",
-      "securityDescription": "Su enlace de restablecimiento caducará en 15 minutos por seguridad. Si no solicitó este restablecimiento, ignore este correo."
-    },
-    "resetPassword": {
-      "title": "Restablecer contraseña",
-      "subtitle": "Ingrese su nueva contraseña a continuación.",
-      "newPasswordLabel": "Nueva contraseña",
-      "newPasswordPlaceholder": "Mín. 8 caracteres",
-      "confirmPasswordLabel": "Confirmar nueva contraseña",
-      "confirmPasswordPlaceholder": "Repita su contraseña",
-      "submitButton": "Restablecer contraseña",
-      "resettingButton": "Restableciendo...",
-      "successMessage": "¡Contraseña restablecida con éxito! Ahora puede iniciar sesión con su nueva contraseña.",
-      "errorMessage": "No se pudo restablecer la contraseña. Por favor, inténtelo de nuevo.",
-      "invalidTokenTitle": "Enlace inválido",
-      "invalidTokenMessage": "Este enlace de restablecimiento es inválido o ha caducado.",
-      "invalidTokenButton": "Solicitar nuevo enlace",
-      "securityTitle": "Requisitos de contraseña",
-      "securityDescription1": "Mínimo 8 caracteres",
-      "securityDescription2": "Use una combinación de letras, números y símbolos",
-      "securityDescription3": "Evite palabras comunes o patrones"
-    },
-    "messages": {
-      "loginSuccess": "¡Inicio de sesión exitoso!",
-      "signupSuccess": "¡Cuenta creada con éxito!",
-      "resetSuccess": "¡Contraseña restablecida con éxito! Ahora puede iniciar sesión con su nueva contraseña."
     }
   },
   "validation": {
@@ -2134,10 +2291,6 @@
       "description": "Descubra nuestras propiedades excepcionales en Marruecos e internacionalmente.",
       "viewButton": "Ver propiedades"
     },
-    "sticky": {
-      "description": "Descubra nuestras propiedades excepcionales en Marruecos e internacionalmente.",
-      "viewButton": "Ver propiedades"
-    },
     "article": {
       "notFound": "Artículo no encontrado",
       "backToMagazine": "Volver a la revista",
@@ -2472,9 +2625,7 @@
       "inquiries": "Consultas",
       "favorites": "Favoritos",
       "interactions": "Interacciones",
-      "views": "Vistas",
-      "inquiries": "Consultas",
-      "interactions": "Interacciones"
+      "views": "Vistas"
     },
     "trends": {
       "title": "Tendencias de Rendimiento",

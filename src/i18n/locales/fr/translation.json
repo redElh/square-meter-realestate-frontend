@@ -466,10 +466,22 @@
       ]
     },
     "stats": [
-      { "number": "98%", "label": "Taux de réussite" },
-      { "number": "45j", "label": "Délai moyen" },
-      { "number": "+25%", "label": "Valorisation" },
-      { "number": "500+", "label": "Propriétés vendues" }
+      {
+        "number": "98%",
+        "label": "Taux de réussite"
+      },
+      {
+        "number": "45j",
+        "label": "Délai moyen"
+      },
+      {
+        "number": "+25%",
+        "label": "Valorisation"
+      },
+      {
+        "number": "500+",
+        "label": "Propriétés vendues"
+      }
     ],
     "management": {
       "title": "Gestion Prestige",
@@ -477,19 +489,31 @@
         {
           "title": "Gestion Locative",
           "description": "Gestion complète de votre bien locatif avec sélection rigoureuse des locataires.",
-          "features": ["Sélection locataire", "Gestion des loyers", "Entretien préventif"],
+          "features": [
+            "Sélection locataire",
+            "Gestion des loyers",
+            "Entretien préventif"
+          ],
           "price": "Sur devis"
         },
         {
           "title": "Location Saisonnière",
           "description": "Optimisation de vos revenus grâce à notre gestion professionnelle des locations saisonnières.",
-          "features": ["Réservation premium", "Check-in/out", "Ménage professionnel"],
+          "features": [
+            "Réservation premium",
+            "Check-in/out",
+            "Ménage professionnel"
+          ],
           "price": "Sur devis"
         },
         {
           "title": "Service Conciergerie",
           "description": "Entretien, ménage et services sur mesure pour préserver l'excellence de votre propriété.",
-          "features": ["Entretien régulier", "Services VIP", "Maintenance 24/7"],
+          "features": [
+            "Entretien régulier",
+            "Services VIP",
+            "Maintenance 24/7"
+          ],
           "price": "Sur devis"
         }
       ],
@@ -498,10 +522,22 @@
     "additionalServices": {
       "title": "Services Additionnels",
       "items": [
-        { "title": "Audit de Rendement", "description": "Analyse détaillée de la performance de votre investissement" },
-        { "title": "Rénovation Prestige", "description": "Coordination de travaux avec des artisans d'exception" },
-        { "title": "Staging Immobilier", "description": "Mise en scène professionnelle pour maximiser l'attractivité" },
-        { "title": "Assurances Premium", "description": "Solutions d'assurance adaptées aux biens d'exception" }
+        {
+          "title": "Audit de Rendement",
+          "description": "Analyse détaillée de la performance de votre investissement"
+        },
+        {
+          "title": "Rénovation Prestige",
+          "description": "Coordination de travaux avec des artisans d'exception"
+        },
+        {
+          "title": "Staging Immobilier",
+          "description": "Mise en scène professionnelle pour maximiser l'attractivité"
+        },
+        {
+          "title": "Assurances Premium",
+          "description": "Solutions d'assurance adaptées aux biens d'exception"
+        }
       ],
       "contactButton": "Contactez notre équipe d'experts"
     }
@@ -529,7 +565,6 @@
     "filters": {
       "title": "Affinez votre recherche avec nos filtres intelligents",
       "all": "Tout",
-
       "allTypes": "Tous les types",
       "buy": "À vendre",
       "toBuy": "À acheter",
@@ -562,9 +597,11 @@
     },
     "listing": {
       "available": "Biens disponibles",
-
+      "availableShort": "Disponibles",
+      "subtitle": "Biens d’exception à Essaouira",
       "results": "résultats",
       "sortBy": "Trier par :",
+      "sortByShort": "Trier",
       "relevance": "Pertinence",
       "priceAsc": "Prix croissant",
       "priceDesc": "Prix décroissant",
@@ -625,8 +662,7 @@
       "land": "Terrain",
       "riad": "Riad",
       "other": "Autre"
-    }
-    ,
+    },
     "mock": {
       "titles": {
         "villaAzure": "Villa Azure",
@@ -662,66 +698,183 @@
     "cancel": "Annuler",
     "success": "Paramètres mis à jour avec succès",
     "languageDesc": "Sélectionnez votre langue d'affichage préférée",
-    "currencyDesc": "Sélectionnez votre devise préférée pour les prix"
+    "currencyDesc": "Sélectionnez votre devise préférée pour les prix",
+    "heroBadgeExclusive": "Exclusif • Privé",
+    "heroBadgeSecure": "Sécurisé & confidentiel",
+    "heroTitle1": "Personnalisez",
+    "heroTitle2": "votre expérience",
+    "heroRegionalPreferences": "Préférences régionales",
+    "heroLivePreview": "Aperçu en direct",
+    "heroStoredEncrypted": "Stocké localement • chiffré",
+    "heroRefined": "— optimisé pour Essaouira, appliqué instantanément à toutes les annonces et évaluations.",
+    "previewLive": "Aperçu en direct",
+    "previewHowPrices": "Aperçu des prix",
+    "previewUpToDate": "• À jour",
+    "previewUnsaved": "• Modifications non enregistrées",
+    "previewVilla": "Essaouira • Villa",
+    "previewAppliedEverywhere": "Appliqué partout",
+    "previewHint": "Les prix se convertissent instantanément avec les taux du marché. La langue met aussi à jour dates et formats.",
+    "previewForProperty": "pour un bien à 2 500 000 MAD",
+    "previewExample": "Exemple",
+    "previewLiveBadge": "Live",
+    "selected": "Sélectionné : {{name}}",
+    "current": "ACTUEL",
+    "tipRtl": "Astuce : choisir العربية active automatiquement la mise en page de droite à gauche sur tout le site. Vous pouvez le changer à tout moment.",
+    "ratesHint": "Taux en direct. Affichage uniquement — les transactions restent dans la devise de l’annonce. Votre choix est enregistré sur cet appareil.",
+    "statusSaved": "Toutes les préférences enregistrées",
+    "statusUnsaved": "Vous avez des modifications non enregistrées",
+    "statusWillApply": "• sera appliqué à la prochaine navigation",
+    "nextCurrency": "Suivant : Devise →",
+    "backLanguage": "← Retour à la langue",
+    "assistanceTitle": "Besoin d’aide ?",
+    "assistanceMultilingualTitle": "Support multilingue",
+    "assistanceMultilingualDesc": "24/7 dans votre langue préférée — chat ou appel",
+    "assistanceRatesTitle": "Taux de change en direct",
+    "assistanceRatesDesc": "Conversion live sur toutes les annonces",
+    "assistanceConcierge": "Conciergerie • Essaouira • +212 7 00 00 06 44",
+    "summaryTitle": "Votre sélection",
+    "summarySubtitle": "Vérifiez avant d’appliquer",
+    "summaryLanguage": "Langue",
+    "summaryCurrency": "Devise",
+    "summaryHint": "Les modifications sont stockées en sécurité sur cet appareil et appliquées aux annonces, cartes et PDFs.",
+    "secureTitle": "Sécurisé & Confidentiel",
+    "secureDesc": "Les préférences sont enregistrées localement et jamais partagées. Changez-les à tout moment — votre navigation reste privée.",
+    "noChanges": "Aucun changement à appliquer — vos préférences sont à jour.",
+    "toastDetail": "Préférences synchronisées • {{lang}} · {{curr}}",
+    "languageSuffix": "— interface, dates et formats.",
+    "currencySuffix": "— taux en direct, appliqué partout.",
+    "languageNames": {
+      "en": "Anglais",
+      "fr": "Français",
+      "ar": "Arabe",
+      "es": "Espagnol",
+      "de": "Allemand",
+      "ru": "Russe"
+    },
+    "currencyNames": {
+      "MAD": "Dirham Marocain",
+      "AED": "Dirham Émirati",
+      "EUR": "Euro",
+      "USD": "Dollar américain",
+      "GBP": "Livre sterling"
+    }
   },
   "auth": {
-    "login": "Connexion",
-    "register": "S'inscrire",
-    "email": "Email",
-    "password": "Mot de passe",
-    "forgotPassword": "Mot de passe oublié?",
-    "noAccount": "Pas encore de compte?",
-    "hasAccount": "Vous avez déjà un compte?",
-    "signIn": "Se connecter",
-    "signUp": "S'inscrire"
-  },
-  "contact": {
-    "title": "Contactez-nous",
-    "subtitle": "Nous sommes là pour vous aider",
-    "name": "Nom",
-    "email": "Email",
-    "phone": "Téléphone",
-    "message": "Message",
-    "send": "Envoyer le message",
-    "success": "Message envoyé avec succès",
-    "error": "Erreur lors de l'envoi du message"
-  },
-  "ai": {
-    "assistant": "Assistant IA",
-    "greeting": "Salut ! 👋",
-    "help": "Comment puis-je t'aider ?",
-    "typing": "L'IA réfléchit...",
-    "placeholder": "Écris ton message...",
-    "voicePlaceholder": "🎤 Je t'écoute...",
-    "suggestions": "Suggestions :",
-    "quickQuestions": "Questions rapides :",
-    "online": "En ligne",
-    "searchProperties": "Rechercher des propriétés",
-    "bookAppointment": "Prendre rendez-vous",
-    "getEstimate": "Obtenir une estimation",
-    "budgetHelp": "Aide au budget",
-    "neighborhoodInfo": "Informations sur le quartier"
-  },
-  "chat": {
-    "title": "Assistant IA",
-    "subtitle": "Toujours là pour vous aider",
-    "betaWarning": "En développement - Peut faire des erreurs",
-    "placeholder": "Écrivez votre message...",
-    "send": "Envoyer",
-    "listening": "Écoute en cours...",
-    "error": "Désolé, une erreur s'est produite. Veuillez réessayer.",
-    "welcome": "Bienvenue ! Comment puis-je vous aider aujourd'hui ?",
-    "typing": "L'IA écrit...",
-    "viewProperty": "Voir la propriété",
-    "bookViewing": "Réserver une visite",
-    "contactAgent": "Contacter l'agent",
-    "searchProperties": "Rechercher des propriétés"
-  },
-  "errors": {
-    "pageNotFound": "Page non trouvée",
-    "somethingWrong": "Quelque chose s'est mal passé",
-    "tryAgain": "Veuillez réessayer",
-    "goHome": "Retour à l'accueil"
+    "login": {
+      "title": "Connexion",
+      "subtitle": "Accédez à votre espace personnel pour gérer vos propriétés et suivre vos projets.",
+      "emailLabel": "Adresse email *",
+      "emailPlaceholder": "votre@email.com",
+      "passwordLabel": "Mot de passe *",
+      "passwordPlaceholder": "••••••••",
+      "rememberMe": "Se souvenir de moi",
+      "forgotPassword": "Mot de passe oublié ?",
+      "submitButton": "Se connecter"
+    },
+    "signup": {
+      "title": "Inscription",
+      "subtitle": "Rejoignez notre communauté exclusive et accédez à des propriétés d'exception.",
+      "firstNameLabel": "Prénom *",
+      "firstNamePlaceholder": "Jean",
+      "lastNameLabel": "Nom *",
+      "lastNamePlaceholder": "Dupont",
+      "emailLabel": "Adresse email *",
+      "emailPlaceholder": "votre@email.com",
+      "accountTypeLabel": "Type de compte *",
+      "buyer": "Acheteur",
+      "owner": "Propriétaire",
+      "seller": "Vendeur",
+      "lessor": "Bailleur",
+      "tenant": "Locataire",
+      "traveler": "Voyageur",
+      "passwordLabel": "Mot de passe *",
+      "passwordPlaceholder": "••••••••",
+      "confirmPasswordLabel": "Confirmer le mot de passe *",
+      "confirmPasswordPlaceholder": "••••••••",
+      "passwordStrength": "Force du mot de passe",
+      "acceptTerms": "J'accepte les",
+      "termsLink": "conditions générales",
+      "and": "et la",
+      "privacyLink": "politique de confidentialité",
+      "submitButton": "Créer un compte"
+    },
+    "tabs": {
+      "login": "Connexion",
+      "signup": "Inscription"
+    },
+    "social": {
+      "divider": "Ou continuer avec",
+      "facebook": "Facebook",
+      "google": "Google"
+    },
+    "security": {
+      "title": "Sécurité Garantie",
+      "description": "Toutes vos informations sont protégées par un chiffrement de niveau bancaire. Nous ne partageons jamais vos données avec des tiers."
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire",
+      "minLength": "Minimum {{min}} caractères requis",
+      "maxLength": "Maximum {{max}} caractères autorisés",
+      "email": "Veuillez entrer une adresse email valide",
+      "phone": "Veuillez entrer un numéro de téléphone valide",
+      "number": "Veuillez entrer un nombre valide",
+      "positive": "Doit être un nombre positif",
+      "integer": "Doit être un nombre entier",
+      "lettersOnly": "Seules les lettres et les espaces sont autorisés",
+      "invalidEmail": "Email invalide",
+      "passwordTooShort": "Mot de passe trop court",
+      "firstNameRequired": "Prénom requis",
+      "lastNameRequired": "Nom requis",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "confirmPassword": "Confirmez le mot de passe",
+      "passwordsMismatch": "Les mots de passe ne correspondent pas",
+      "acceptTermsRequired": "Vous devez accepter les CGU",
+      "selectAccountType": "Veuillez sélectionner un type de compte"
+    },
+    "passwordStrength": {
+      "veryWeak": "Très faible",
+      "weak": "Faible",
+      "medium": "Moyen",
+      "strong": "Fort",
+      "veryStrong": "Très fort"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "emailLabel": "Adresse email",
+      "emailPlaceholder": "votre@email.com",
+      "submitButton": "Envoyer le lien",
+      "sendingButton": "Envoi en cours...",
+      "successMessage": "Lien de réinitialisation envoyé à votre email.",
+      "errorMessage": "Échec de l'envoi du lien. Veuillez réessayer.",
+      "backToLogin": "Retour à la connexion",
+      "securityTitle": "Réinitialisation sécurisée",
+      "securityDescription": "Votre lien de réinitialisation expirera dans 15 minutes. Si vous n'avez pas demandé cette réinitialisation, ignorez cet email."
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "subtitle": "Entrez votre nouveau mot de passe ci-dessous.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "Min. 8 caractères",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Répétez votre mot de passe",
+      "submitButton": "Réinitialiser",
+      "resettingButton": "Réinitialisation...",
+      "successMessage": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+      "errorMessage": "Impossible de réinitialiser le mot de passe. Veuillez réessayer.",
+      "invalidTokenTitle": "Lien invalide",
+      "invalidTokenMessage": "Ce lien de réinitialisation est invalide ou a expiré.",
+      "invalidTokenButton": "Demander un nouveau lien",
+      "securityTitle": "Exigences du mot de passe",
+      "securityDescription1": "Minimum 8 caractères",
+      "securityDescription2": "Utilisez un mélange de lettres, chiffres et symboles",
+      "securityDescription3": "Évitez les mots courants ou les modèles"
+    },
+    "messages": {
+      "loginSuccess": "Connexion réussie !",
+      "signupSuccess": "Compte créé avec succès !",
+      "resetSuccess": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
+    }
   },
   "contact": {
     "hero": {
@@ -885,6 +1038,43 @@
       "guests": "Personnes"
     }
   },
+  "ai": {
+    "assistant": "Assistant IA",
+    "greeting": "Salut ! 👋",
+    "help": "Comment puis-je t'aider ?",
+    "typing": "L'IA réfléchit...",
+    "placeholder": "Écris ton message...",
+    "voicePlaceholder": "🎤 Je t'écoute...",
+    "suggestions": "Suggestions :",
+    "quickQuestions": "Questions rapides :",
+    "online": "En ligne",
+    "searchProperties": "Rechercher des propriétés",
+    "bookAppointment": "Prendre rendez-vous",
+    "getEstimate": "Obtenir une estimation",
+    "budgetHelp": "Aide au budget",
+    "neighborhoodInfo": "Informations sur le quartier"
+  },
+  "chat": {
+    "title": "Assistant IA",
+    "subtitle": "Toujours là pour vous aider",
+    "betaWarning": "En développement - Peut faire des erreurs",
+    "placeholder": "Écrivez votre message...",
+    "send": "Envoyer",
+    "listening": "Écoute en cours...",
+    "error": "Désolé, une erreur s'est produite. Veuillez réessayer.",
+    "welcome": "Bienvenue ! Comment puis-je vous aider aujourd'hui ?",
+    "typing": "L'IA écrit...",
+    "viewProperty": "Voir la propriété",
+    "bookViewing": "Réserver une visite",
+    "contactAgent": "Contacter l'agent",
+    "searchProperties": "Rechercher des propriétés"
+  },
+  "errors": {
+    "pageNotFound": "Page non trouvée",
+    "somethingWrong": "Quelque chose s'est mal passé",
+    "tryAgain": "Veuillez réessayer",
+    "goHome": "Retour à l'accueil"
+  },
   "sellingMultiStep": {
     "hero": {
       "slides": [
@@ -942,19 +1132,56 @@
       "conditionLabel": "État du bien *"
     },
     "propertyTypes": [
-      { "value": "apartment", "label": "Appartement" },
-      { "value": "house", "label": "Maison" },
-      { "value": "villa", "label": "Villa" },
-      { "value": "loft", "label": "Loft" },
-      { "value": "penthouse", "label": "Penthouse" },
-      { "value": "castle", "label": "Château" },
-      { "value": "other", "label": "Autre" }
+      {
+        "value": "apartment",
+        "label": "Appartement"
+      },
+      {
+        "value": "house",
+        "label": "Maison"
+      },
+      {
+        "value": "villa",
+        "label": "Villa"
+      },
+      {
+        "value": "loft",
+        "label": "Loft"
+      },
+      {
+        "value": "penthouse",
+        "label": "Penthouse"
+      },
+      {
+        "value": "castle",
+        "label": "Château"
+      },
+      {
+        "value": "other",
+        "label": "Autre"
+      }
     ],
     "conditions": [
-      { "value": "excellent", "label": "Excellent état", "description": "Rénovation récente, état neuf" },
-      { "value": "very-good", "label": "Très bon état", "description": "Bien entretenu, prêt à vivre" },
-      { "value": "good", "label": "Bon état", "description": "Quelques travaux de rafraîchissement" },
-      { "value": "renovation", "label": "À rénover", "description": "Projet de rénovation nécessaire" }
+      {
+        "value": "excellent",
+        "label": "Excellent état",
+        "description": "Rénovation récente, état neuf"
+      },
+      {
+        "value": "very-good",
+        "label": "Très bon état",
+        "description": "Bien entretenu, prêt à vivre"
+      },
+      {
+        "value": "good",
+        "label": "Bon état",
+        "description": "Quelques travaux de rafraîchissement"
+      },
+      {
+        "value": "renovation",
+        "label": "À rénover",
+        "description": "Projet de rénovation nécessaire"
+      }
     ],
     "step2": {
       "title": "Équipements & Prestations",
@@ -962,18 +1189,54 @@
       "selectedSummary": "Équipements sélectionnés ({{count}})"
     },
     "features": [
-      { "value": "terrace", "label": "Terrasse" },
-      { "value": "balcony", "label": "Balcon" },
-      { "value": "garden", "label": "Jardin" },
-      { "value": "pool", "label": "Piscine" },
-      { "value": "parking", "label": "Parking" },
-      { "value": "elevator", "label": "Ascenseur" },
-      { "value": "fireplace", "label": "Cheminée" },
-      { "value": "ac", "label": "Climatisation" },
-      { "value": "alarm", "label": "Alarme" },
-      { "value": "smart-home", "label": "Domotique" },
-      { "value": "wine-cellar", "label": "Cave à vin" },
-      { "value": "gym", "label": "Salle de sport" }
+      {
+        "value": "terrace",
+        "label": "Terrasse"
+      },
+      {
+        "value": "balcony",
+        "label": "Balcon"
+      },
+      {
+        "value": "garden",
+        "label": "Jardin"
+      },
+      {
+        "value": "pool",
+        "label": "Piscine"
+      },
+      {
+        "value": "parking",
+        "label": "Parking"
+      },
+      {
+        "value": "elevator",
+        "label": "Ascenseur"
+      },
+      {
+        "value": "fireplace",
+        "label": "Cheminée"
+      },
+      {
+        "value": "ac",
+        "label": "Climatisation"
+      },
+      {
+        "value": "alarm",
+        "label": "Alarme"
+      },
+      {
+        "value": "smart-home",
+        "label": "Domotique"
+      },
+      {
+        "value": "wine-cellar",
+        "label": "Cave à vin"
+      },
+      {
+        "value": "gym",
+        "label": "Salle de sport"
+      }
     ],
     "step3": {
       "timelineLabel": "Délai de vente souhaité *",
@@ -985,10 +1248,26 @@
       "motivationPlaceholder": "Décrivez brièvement les raisons de votre projet de vente (déménagement, investissement, succession...)"
     },
     "timelines": [
-      { "value": "urgent", "label": "Urgent (1-3 mois)", "description": "Vente rapide souhaitée" },
-      { "value": "medium", "label": "Moyen (3-6 mois)", "description": "Délai standard" },
-      { "value": "flexible", "label": "Flexible (6+ mois)", "description": "Pas de contrainte de temps" },
-      { "value": "undefined", "label": "À définir", "description": "En fonction du marché" }
+      {
+        "value": "urgent",
+        "label": "Urgent (1-3 mois)",
+        "description": "Vente rapide souhaitée"
+      },
+      {
+        "value": "medium",
+        "label": "Moyen (3-6 mois)",
+        "description": "Délai standard"
+      },
+      {
+        "value": "flexible",
+        "label": "Flexible (6+ mois)",
+        "description": "Pas de contrainte de temps"
+      },
+      {
+        "value": "undefined",
+        "label": "À définir",
+        "description": "En fonction du marché"
+      }
     ],
     "step4": {
       "personalInfoTitle": "Informations personnelles",
@@ -1079,123 +1358,6 @@
       "copyright": "© {{year}} Square Meter. Tous droits réservés.",
       "privacy": "Confidentialité",
       "terms": "Conditions"
-    }
-  },
-  "auth": {
-    "login": {
-      "title": "Connexion",
-      "subtitle": "Accédez à votre espace personnel pour gérer vos propriétés et suivre vos projets.",
-      "emailLabel": "Adresse email *",
-      "emailPlaceholder": "votre@email.com",
-      "passwordLabel": "Mot de passe *",
-      "passwordPlaceholder": "••••••••",
-      "rememberMe": "Se souvenir de moi",
-      "forgotPassword": "Mot de passe oublié ?",
-      "submitButton": "Se connecter"
-    },
-    "signup": {
-      "title": "Inscription",
-      "subtitle": "Rejoignez notre communauté exclusive et accédez à des propriétés d'exception.",
-      "firstNameLabel": "Prénom *",
-      "firstNamePlaceholder": "Jean",
-      "lastNameLabel": "Nom *",
-      "lastNamePlaceholder": "Dupont",
-      "emailLabel": "Adresse email *",
-      "emailPlaceholder": "votre@email.com",
-      "accountTypeLabel": "Type de compte *",
-      "buyer": "Acheteur",
-      "owner": "Propriétaire",
-      "seller": "Vendeur",
-      "lessor": "Bailleur",
-      "tenant": "Locataire",
-      "traveler": "Voyageur",
-      "passwordLabel": "Mot de passe *",
-      "passwordPlaceholder": "••••••••",
-      "confirmPasswordLabel": "Confirmer le mot de passe *",
-      "confirmPasswordPlaceholder": "••••••••",
-      "passwordStrength": "Force du mot de passe",
-      "acceptTerms": "J'accepte les",
-      "termsLink": "conditions générales",
-      "and": "et la",
-      "privacyLink": "politique de confidentialité",
-      "submitButton": "Créer un compte"
-    },
-    "tabs": {
-      "login": "Connexion",
-      "signup": "Inscription"
-    },
-    "social": {
-      "divider": "Ou continuer avec",
-      "facebook": "Facebook",
-      "google": "Google"
-    },
-    "security": {
-      "title": "Sécurité Garantie",
-      "description": "Toutes vos informations sont protégées par un chiffrement de niveau bancaire. Nous ne partageons jamais vos données avec des tiers."
-    },
-    "validation": {
-      "required": "Ce champ est obligatoire",
-      "minLength": "Minimum {{min}} caractères requis",
-      "maxLength": "Maximum {{max}} caractères autorisés",
-      "email": "Veuillez entrer une adresse email valide",
-      "phone": "Veuillez entrer un numéro de téléphone valide",
-      "number": "Veuillez entrer un nombre valide",
-      "positive": "Doit être un nombre positif",
-      "integer": "Doit être un nombre entier",
-      "lettersOnly": "Seules les lettres et les espaces sont autorisés",
-      "invalidEmail": "Email invalide",
-      "passwordTooShort": "Mot de passe trop court",
-      "firstNameRequired": "Prénom requis",
-      "lastNameRequired": "Nom requis",
-      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
-      "confirmPassword": "Confirmez le mot de passe",
-      "passwordsMismatch": "Les mots de passe ne correspondent pas",
-      "acceptTermsRequired": "Vous devez accepter les CGU",
-      "selectAccountType": "Veuillez sélectionner un type de compte"
-    },
-    "passwordStrength": {
-      "veryWeak": "Très faible",
-      "weak": "Faible",
-      "medium": "Moyen",
-      "strong": "Fort",
-      "veryStrong": "Très fort"
-    },
-    "forgotPassword": {
-      "title": "Mot de passe oublié",
-      "subtitle": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
-      "emailLabel": "Adresse email",
-      "emailPlaceholder": "votre@email.com",
-      "submitButton": "Envoyer le lien",
-      "sendingButton": "Envoi en cours...",
-      "successMessage": "Lien de réinitialisation envoyé à votre email.",
-      "errorMessage": "Échec de l'envoi du lien. Veuillez réessayer.",
-      "backToLogin": "Retour à la connexion",
-      "securityTitle": "Réinitialisation sécurisée",
-      "securityDescription": "Votre lien de réinitialisation expirera dans 15 minutes. Si vous n'avez pas demandé cette réinitialisation, ignorez cet email."
-    },
-    "resetPassword": {
-      "title": "Réinitialiser le mot de passe",
-      "subtitle": "Entrez votre nouveau mot de passe ci-dessous.",
-      "newPasswordLabel": "Nouveau mot de passe",
-      "newPasswordPlaceholder": "Min. 8 caractères",
-      "confirmPasswordLabel": "Confirmer le mot de passe",
-      "confirmPasswordPlaceholder": "Répétez votre mot de passe",
-      "submitButton": "Réinitialiser",
-      "resettingButton": "Réinitialisation...",
-      "successMessage": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
-      "errorMessage": "Impossible de réinitialiser le mot de passe. Veuillez réessayer.",
-      "invalidTokenTitle": "Lien invalide",
-      "invalidTokenMessage": "Ce lien de réinitialisation est invalide ou a expiré.",
-      "invalidTokenButton": "Demander un nouveau lien",
-      "securityTitle": "Exigences du mot de passe",
-      "securityDescription1": "Minimum 8 caractères",
-      "securityDescription2": "Utilisez un mélange de lettres, chiffres et symboles",
-      "securityDescription3": "Évitez les mots courants ou les modèles"
-    },
-    "messages": {
-      "loginSuccess": "Connexion réussie !",
-      "signupSuccess": "Compte créé avec succès !",
-      "resetSuccess": "Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter avec votre nouveau mot de passe."
     }
   },
   "validation": {
@@ -1699,6 +1861,8 @@
         "notIncluded": "Non inclus",
         "description": "Description",
         "pricing": "Tarifs",
+        "partenaire": "Partenaire",
+        "gallery": "Galerie",
         "securePayment": "Paiement sécurisé",
         "freeCancellation": "Annulation gratuite jusqu'à 24h avant",
         "assistance247": "Assistance 24/7",
@@ -2522,9 +2686,7 @@
       "inquiries": "Demandes",
       "favorites": "Favoris",
       "interactions": "Interactions",
-      "views": "Vues",
-      "inquiries": "Demandes",
-      "interactions": "Interactions"
+      "views": "Vues"
     },
     "trends": {
       "title": "Tendances de Performance",
