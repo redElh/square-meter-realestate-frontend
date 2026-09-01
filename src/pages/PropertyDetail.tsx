@@ -397,6 +397,7 @@ const PropertyDetail: React.FC = () => {
                   propertyId={property.id} 
                   propertyName={property.title}
                   pricePerDay={property.price || 0}
+                  currency={property.currency || 'EUR'}
                   onReserve={handleReserve}
                 />
               </div>

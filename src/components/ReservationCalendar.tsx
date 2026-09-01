@@ -24,6 +24,7 @@ interface ReservationCalendarProps {
   propertyId: string | number;
   propertyName: string;
   pricePerDay: number;
+  currency?: string;
   onReserve: (range: DateRange | undefined, guests: number) => void;
 }
 
@@ -233,7 +234,7 @@ const CALENDAR_THEME = `
   }
 `;
 
-const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, propertyName, pricePerDay, onReserve }) => {
+const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, propertyName, pricePerDay, currency = 'EUR', onReserve }) => {
   const { t, i18n } = useTranslation();
   const { format: formatPrice } = useCurrency();
 
@@ -633,15 +634,15 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
                     <div key={`${selectedDays}-${pricePerDay}`} className="reservation-fade-slide pt-2.5 mt-1 border-t border-dashed border-gray-300">
                       <div className="flex items-center justify-between text-sm mb-1.5">
                         <span className="text-gray-600">
-                          {formatPrice(pricePerDay || 0)} × {selectedDays}
+                          {formatPrice(pricePerDay || 0, currency as any)} × {selectedDays}
                         </span>
-                        <span className="text-gray-600">{formatPrice(totalPrice)}</span>
+                        <span className="text-gray-600">{formatPrice(totalPrice, currency as any)}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="font-inter font-semibold text-gray-900 uppercase tracking-wide">
                           {t('propertyDetail.reservation.total') || 'Total estimé'}
                         </span>
-                        <span className="font-serif font-bold text-2xl text-[#023927]">{formatPrice(totalPrice)}</span>
+                        <span className="font-serif font-bold text-2xl text-[#023927]">{formatPrice(totalPrice, currency as any)}</span>
                       </div>
                     </div>
                   )}
