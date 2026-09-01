@@ -279,41 +279,24 @@ const PropertyDetail: React.FC = () => {
           <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         </button>
 
-        {/* Carousel Controls - Consistent positioning across all sizes */}
-        <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[200px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+        {/* Carousel Controls - Modernized arrow navigation */}
+        <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[200px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 flex items-center space-x-2 sm:space-x-3">
           <button
             onClick={prevImage}
-            className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
-            style={{ borderRadius: '0' }}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/15 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 hover:scale-105 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-lg shadow-black/20"
+            style={{ borderRadius: '50%' }}
+            aria-label="Image précédente"
           >
-            <ChevronLeftIcon className="w-3 h-3 sm:w-5 sm:h-5" />
+            <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
           <button
             onClick={nextImage}
-            className="w-6 h-6 sm:w-10 sm:h-10 bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/40 transition-colors duration-300 border border-white/30"
-            style={{ borderRadius: '0' }}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/15 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 hover:scale-105 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-lg shadow-black/20"
+            style={{ borderRadius: '50%' }}
+            aria-label="Image suivante"
           >
-            <ChevronRightIcon className="w-3 h-3 sm:w-5 sm:h-5" />
+            <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
-          
-          {/* Slide Indicators */}
-          <div className="flex space-x-1 sm:space-x-2">
-            {property.images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  trackClick();
-                  setActiveImage(index);
-                }}
-                className={`w-1 h-1 sm:w-2 sm:h-2 transition-all duration-300 ${
-                  activeImage === index 
-                    ? 'bg-white scale-125' 
-                    : 'bg-white/60 hover:bg-white/80'
-                }`}
-                style={{ borderRadius: '0' }}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Property Title Overlay - Consistent positioning across all sizes */}
