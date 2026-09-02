@@ -373,7 +373,7 @@ const PropertyDetail: React.FC = () => {
                   </span>
                 )}
                 {property.reference && (
-                  <span className="hidden sm:inline-flex items-center rounded-full bg-black/30 backdrop-blur border border-white/15 px-3 py-1.5 text-white/90 font-inter text-xs">
+                  <span className="inline-flex items-center rounded-full bg-black/30 backdrop-blur border border-white/15 px-3 py-1.5 text-white/90 font-inter text-xs">
                     Ref. {property.reference}
                   </span>
                 )}
