@@ -38,6 +38,9 @@ const PropertyDetail: React.FC = () => {
   const [reservationSaved, setReservationSaved] = useState(false);
   const isPlaying = true;
   const viewTrackedRef = useRef(false);
+  const [heroStatIndex, setHeroStatIndex] = useState(0);
+  const heroStatsTimerRef = useRef<number | null>(null);
+  const heroStatPausedRef = useRef(false);
 
   // Track click interactions
   const trackClick = () => {
@@ -123,6 +126,50 @@ const PropertyDetail: React.FC = () => {
     return () => clearInterval(slideInterval);
   }, [isPlaying, property]);
 
+  // Quick stats loop carousel autoplay (smartphone only)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)');
+    const tick = () => setHeroStatIndex(prev => (prev + 1) % 5);
+    const startTimer = () => {
+      if (heroStatsTimerRef.current) return;
+      heroStatsTimerRef.current = window.setInterval(tick, 3500);
+    };
+    const stopTimer = () => {
+      if (heroStatsTimerRef.current) {
+        window.clearInterval(heroStatsTimerRef.current);
+        heroStatsTimerRef.current = null;
+      }
+    };
+    const apply = () => {
+      if (mq.matches && !heroStatPausedRef.current) startTimer();
+      else {
+        stopTimer();
+        if (!mq.matches) setHeroStatIndex(0);
+      }
+    };
+    apply();
+    const onChange = () => {
+      heroStatPausedRef.current = false;
+      apply();
+    };
+    mq.addEventListener('change', onChange);
+    return () => {
+      stopTimer();
+      mq.removeEventListener('change', onChange);
+    };
+  }, []);
+
+  const heroStatPause = () => {
+    heroStatPausedRef.current = true;
+    if (heroStatsTimerRef.current) {
+      window.clearInterval(heroStatsTimerRef.current);
+      heroStatsTimerRef.current = null;
+    }
+  };
+  const heroStatGo = (index: number) => setHeroStatIndex(index);
+  const heroStatPrev = () => setHeroStatIndex(prev => (prev - 1 + 5) % 5);
+  const heroStatNext = () => setHeroStatIndex(prev => (prev + 1) % 5);
+
   const nextImage = () => {
     if (!property) return;
     trackClick();
@@ -193,6 +240,14 @@ const PropertyDetail: React.FC = () => {
     ? property.description.split(/\r?\n+/).map((p) => p.trim()).filter(Boolean)
     : [];
 
+  const heroStats = [
+    { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
+    { value: property.landSurface ? `${property.landSurface} m²` : '—', label: t('propertyDetail.stats.land') },
+    { value: property.bedrooms ?? 0, label: t('propertyDetail.stats.bedrooms') },
+    { value: property.floors ?? 0, label: t('propertyDetail.stats.floors') },
+    { value: property.yearBuilt || '—', label: t('propertyDetail.stats.year') }
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Reservation Saved Notification */}
@@ -235,22 +290,22 @@ const PropertyDetail: React.FC = () => {
       <div className="h-[70vh] sm:h-screen flex flex-col">
         {/* HERO CAROUSEL */}
         <section className="relative flex-1 overflow-hidden bg-white">
-          {/* Background Carousel */}
-          <div className="absolute inset-0 mt-24 md:mt-28 lg:mt-32">
+          {/* Background Carousel — clears fixed header on all sizes */}
+          <div className="absolute inset-0 mt-20 sm:mt-24 md:mt-28 lg:mt-32">
           {property.images.map((image, index) => (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
+              className={`absolute inset-0 transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                 activeImage === index ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              {/* Blurred background to fill empty space when main image is object-contain */}
+              {/* Blurred background — subtle, neutral, no green tint */}
               <div
-                className="hidden sm:block absolute inset-0 bg-center bg-cover filter blur-xl scale-105 brightness-75 z-0"
+                className="hidden sm:block absolute inset-0 bg-center bg-cover filter blur-[22px] scale-[1.04] brightness-[0.72] z-0"
                 style={{ backgroundImage: `url(${image})` }}
               />
 
-              {/* Main image centered on top */}
+              {/* Main image */}
               <div
                 className="relative z-10 w-full h-full flex items-center justify-center cursor-pointer"
                 onClick={() => openGallery(index)}
@@ -259,106 +314,143 @@ const PropertyDetail: React.FC = () => {
                   src={image}
                   alt={`${property.title} - Vue ${index + 1}`}
                   className="w-full h-full object-cover sm:object-contain object-center"
+                  loading={index === 0 ? 'eager' : 'lazy'}
                 />
               </div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-20"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent z-20"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-transparent z-20 pointer-events-none" />
             </div>
           ))}
         </div>
 
         <button
           onClick={() => openGallery(activeImage)}
-          className="absolute top-[110px] sm:top-[130px] mt-20 right-2 sm:right-4 md:right-6 lg:right-8 z-30 bg-black/65 hover:bg-black/80 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 backdrop-blur-sm transition-colors duration-300 flex items-center gap-1.5 sm:gap-2"
-          style={{ borderRadius: '0' }}
+          className="absolute top-[104px] sm:top-[216px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 bg-white text-[#023927] hover:bg-white/95 px-3 sm:px-4 py-2 rounded-full shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-md transition-all duration-300 flex items-center gap-2 group border border-white/20"
         >
-          <CameraIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          <span className="text-[10px] sm:text-xs uppercase tracking-wide font-medium">
-            {t('properties.listing.view')} {t('properties.listing.photos')} ({property.images.length})
+          <span className="w-6 h-6 rounded-full bg-[#023927] flex items-center justify-center">
+            <CameraIcon className="w-3.5 h-3.5 text-white" />
           </span>
-          <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <span className="text-[11px] sm:text-xs uppercase tracking-widest font-medium">
+            {property.images.length} {t('properties.listing.photos')}
+          </span>
+          <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5 text-[#023927]/40 group-hover:text-[#023927] transition-colors" />
         </button>
 
-        {/* Carousel Controls - Modernized arrow navigation */}
-        <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[200px] right-2 sm:right-4 md:right-6 lg:right-8 z-30 flex items-center space-x-2 sm:space-x-3">
-          <button
-            onClick={prevImage}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/15 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 hover:scale-105 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-lg shadow-black/20"
-            style={{ borderRadius: '50%' }}
-            aria-label="Image précédente"
-          >
-            <ChevronLeftIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-          <button
-            onClick={nextImage}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-white/15 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 hover:scale-105 transition-all duration-300 border border-white/20 hover:border-white/40 shadow-lg shadow-black/20"
-            style={{ borderRadius: '50%' }}
-            aria-label="Image suivante"
-          >
-            <ChevronRightIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
+        {/* Carousel Controls — smartphone: above stats next to price, tablet/desktop as before */}
+        <div className="absolute bottom-[84px] sm:bottom-[140px] md:bottom-[180px] lg:bottom-[200px] right-2 sm:right-4 md:right-6 lg:right-8 z-30">
+          <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-xl border border-white/15 rounded-full p-1.5 shadow-[0_12px_32px_rgba(0,0,0,0.35)]">
+            <button
+              onClick={prevImage}
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-[#023927] hover:bg-white/90 flex items-center justify-center transition-colors active:scale-95"
+              aria-label="Image précédente"
+            >
+              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+            <div className="w-px h-6 bg-white/20" />
+            <button
+              onClick={nextImage}
+              className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-[#023927] hover:bg-white/90 flex items-center justify-center transition-colors active:scale-95"
+              aria-label="Image suivante"
+            >
+              <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
         </div>
 
-        {/* Property Title Overlay - Consistent positioning across all sizes */}
-        <div className="absolute bottom-[140px] md:bottom-[180px] lg:bottom-[140px] left-0 right-0 z-20 p-3 sm:p-8 lg:p-12 pr-20 md:pr-32 lg:pr-8">
+        {/* Property Title Overlay - premium, smartphone bottom row above stats */}
+        <div className="absolute bottom-[84px] sm:bottom-[148px] lg:bottom-[148px] left-0 right-0 z-20 p-2.5 sm:p-8 lg:p-12 pr-[104px] sm:pr-6 lg:pr-8">
           <div className="container mx-auto px-2 sm:px-4">
             <div className="max-w-6xl">
-              {/* Property Type Badge */}
-              <div className="inline-flex items-center gap-2 mb-1 sm:mb-4">
-                <span className={`px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider ${
-                  isSoldStatus(property.status)
-                    ? 'bg-gray-100 text-gray-700 border border-gray-300'
-                    : property.type === 'buy' 
-                    ? 'bg-blue-50 text-blue-800 border border-blue-200' 
-                    : property.type === 'rent'
-                    ? 'bg-green-50 text-green-800 border border-green-200'
-                    : 'bg-purple-50 text-purple-800 border border-purple-200'
-                }`}>
+              {/* Property Type Badge — same position, premium pill */}
+              <div className="flex flex-wrap items-center gap-2 mb-2 sm:mb-4">
+                <span className="px-3 py-1.5 rounded-full bg-white text-[#023927] border border-white/20 font-inter uppercase text-[11px] font-medium tracking-widest shadow-[0_4px_16px_rgba(0,0,0,0.18)]">
                   {isSoldStatus(property.status) ? (property.type === 'buy' ? t('properties.listing.sold') : t('properties.listing.rented')) : property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation')}
                 </span>
                 {isExclusiveProperty && (
-                  <span className="px-2 sm:px-4 py-1 sm:py-2 font-inter uppercase text-[10px] sm:text-xs font-medium tracking-wider bg-[#023927] text-white border border-[#023927]">
+                  <span className="px-3 py-1.5 rounded-full bg-[#023927] text-white border border-white/15 font-inter uppercase text-[11px] font-medium tracking-widest shadow-lg">
                     {t('properties.listing.exclusive')}
+                  </span>
+                )}
+                {property.reference && (
+                  <span className="hidden sm:inline-flex items-center rounded-full bg-black/30 backdrop-blur border border-white/15 px-3 py-1.5 text-white/90 font-inter text-xs">
+                    Ref. {property.reference}
                   </span>
                 )}
               </div>
 
-              <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-inter font-light text-white mb-1 sm:mb-4 leading-tight">
+              <h1 className="font-didont font-light text-white leading-[0.95] tracking-tight text-[22px] sm:text-[34px] lg:text-[44px] drop-shadow-[0_4px_20px_rgba(0,0,0,0.45)] mb-1 sm:mb-3">
                 {property.title}
               </h1>
               
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-white">
-                <div className="flex items-center space-x-1 sm:space-x-2">
-                  <MapPinIcon className="w-3 h-3 sm:w-5 sm:h-5" />
-                  <span className="font-inter text-xs sm:text-base">{property.location}</span>
-                </div>
-                <div className="hidden sm:block w-px h-6 bg-white/30"></div>
-                <div className="text-lg sm:text-2xl lg:text-3xl font-serif font-light text-white">
-                  {property.type === 'seasonal' || property.pricePeriod === 1
-                    ? t('properties.listing.fromPerDay', { price: formatPrice(property.price || 0, property.currency as any || 'EUR') })
-                    : formatPrice(property.price || 0, property.currency as any || 'EUR')}
-                </div>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-1">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur border border-white/15 px-3 py-1.5 text-white">
+                  <MapPinIcon className="w-3.5 h-3.5 text-white/80" />
+                  <span className="font-inter text-xs sm:text-sm">{property.location}</span>
+                </span>
+                <span className="inline-flex items-baseline gap-2 rounded-full bg-white px-4 py-2 shadow-[0_10px_28px_rgba(0,0,0,0.30)]">
+                  <span className="font-didont text-[17px] sm:text-[20px] lg:text-[22px] text-[#023927] leading-none">
+                    {property.type === 'seasonal' || property.pricePeriod === 1
+                      ? t('properties.listing.fromPerDay', { price: formatPrice(property.price || 0, property.currency as any || 'EUR') })
+                      : formatPrice(property.price || 0, property.currency as any || 'EUR')}
+                  </span>
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Quick Stats Bar - Consistent transparent overlay */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 py-2 sm:py-4 md:py-6">
-          <div className="container mx-auto px-2 sm:px-4 md:px-6">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 sm:gap-2 md:gap-3 lg:gap-4 text-center items-center">
-              {[
-                { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
-                { value: property.landSurface ? `${property.landSurface} m²` : '-', label: t('propertyDetail.stats.land') },
-                { value: property.bedrooms || 0, label: t('propertyDetail.stats.bedrooms') },
-                { value: property.floors || 0, label: t('propertyDetail.stats.floors') },
-                { value: property.yearBuilt || '-', label: t('propertyDetail.stats.year') }
-              ].map((stat, index) => (
-                <div key={index} className="text-center border border-white/30 py-1.5 sm:py-2.5 md:py-3 lg:py-4 px-1 sm:px-2 hover:border-white transition-all duration-300">
-                  <div className="text-xs sm:text-base md:text-lg lg:text-2xl font-inter font-medium text-white mb-0.5 sm:mb-1 md:mb-2">
+        {/* Quick Stats — transparent premium; smartphone: auto-loop carousel, tablet/desktop editorial grid */}
+        <div className="absolute bottom-0 inset-x-0 z-20 py-2 sm:py-3.5 border-t border-white/10">
+          <div className="container mx-auto px-2 sm:px-4">
+            {/* Smartphone loop carousel */}
+            <div className="sm:hidden" onPointerDown={heroStatPause} onTouchStart={heroStatPause}>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={heroStatPrev}
+                  aria-label="Statistique précédente"
+                  className="w-7 h-7 rounded-full bg-white/10 backdrop-blur border border-white/25 text-white flex items-center justify-center flex-shrink-0 active:scale-90 transition-transform"
+                >
+                  <ChevronLeftIcon className="w-3.5 h-3.5" />
+                </button>
+                <div key={heroStatIndex} className="flex-1 min-w-0 py-1 text-center animate-in fade-in slide-in-from-right-3 duration-300">
+                  <div className="font-didont font-light text-white text-[17px] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]">
+                    {heroStats[heroStatIndex].value}
+                  </div>
+                  <div className="font-inter text-[9px] tracking-[0.18em] uppercase text-white/70 mt-1 whitespace-nowrap drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)]">
+                    {heroStats[heroStatIndex].label}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={heroStatNext}
+                  aria-label="Statistique suivante"
+                  className="w-7 h-7 rounded-full bg-white/10 backdrop-blur border border-white/25 text-white flex items-center justify-center flex-shrink-0 active:scale-90 transition-transform"
+                >
+                  <ChevronRightIcon className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <div className="flex items-center justify-center gap-1 mt-1">
+                {heroStats.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => heroStatGo(i)}
+                    aria-label={`Statistique ${i + 1}`}
+                    className={`h-1 rounded-full transition-all duration-300 ${i === heroStatIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/40'}`}
+                  />
+                ))}
+              </div>
+            </div>
+            {/* Tablet & desktop editorial grid */}
+            <div className="hidden sm:grid sm:grid-cols-3 lg:grid-cols-5 text-center">
+              {heroStats.map((stat, index) => (
+                <div key={stat.label} className={`py-3 px-3 sm:border-l sm:border-white/15 ${index === 0 ? 'sm:border-l-0' : ''}`}>
+                  <div className="font-didont font-light text-white text-lg lg:text-[22px] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)]">
                     {stat.value}
                   </div>
-                  <div className="text-[8px] sm:text-[10px] md:text-xs text-white/80 uppercase tracking-wide md:tracking-wider">
+                  <div className="font-inter text-[11px] tracking-[0.18em] uppercase text-white/65 mt-1.5 whitespace-nowrap drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)]">
                     {stat.label}
                   </div>
                 </div>
@@ -369,13 +461,13 @@ const PropertyDetail: React.FC = () => {
       </section>
       </div>
 
-      {/* Description & Contact - Redesigned compact layout */}
-      <section className="py-8 sm:py-12 bg-white">
+      {/* Description & Contact — premium */}
+      <section className="py-10 sm:py-14 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             {/* Reservation Calendar for Seasonal Properties */}
             {property.type === 'seasonal' && (
-              <div className="mb-12">
+              <div className="mb-10 sm:mb-14">
                 <ReservationCalendar 
                   propertyId={property.id} 
                   propertyName={property.title}
@@ -386,90 +478,127 @@ const PropertyDetail: React.FC = () => {
               </div>
             )}
 
-            {/* Description - Full width */}
-            <div className="mb-8 sm:mb-10">
-              <h2 className="text-2xl sm:text-3xl font-inter font-light text-gray-900 mb-4 sm:mb-6 pb-3 border-b border-gray-200">
-                {t('propertyDetail.sections.description')}
-              </h2>
-              {descriptionParagraphs.length > 0 ? (
-                descriptionParagraphs.map((paragraph, index) => (
-                  <p key={index} className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4 last:mb-0">
-                    {paragraph}
+            {/* Description — premium card */}
+            <div className="mb-8 sm:mb-10 rounded-[28px] bg-white border border-[#023927]/10 shadow-[0_16px_48px_rgba(2,57,39,0.06)] overflow-hidden">
+              <div className="h-[3px] bg-gradient-to-r from-[#023927] via-[#0a4d3a] to-[#023927]" />
+              <div className="p-6 sm:p-8">
+                <div className="flex items-start justify-between gap-4 mb-5">
+                  <div>
+                    <p className="font-inter text-[11px] tracking-[0.14em] uppercase text-[#023927]/50 font-medium">Exclusivité • Détails</p>
+                    <h2 className="font-didont font-light text-[#023927] text-[26px] sm:text-[30px] leading-none mt-1">
+                      {t('propertyDetail.sections.description')}
+                    </h2>
+                  </div>
+                  <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#023927]/5 border border-[#023927]/10 px-3 py-1.5 text-[#023927]/60 font-inter text-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#023927] animate-pulse" />
+                    {property.surface} m² • {property.bedrooms || 0} ch.
+                  </span>
+                </div>
+                <div className="h-px bg-[#023927]/10 mb-6" />
+                {descriptionParagraphs.length > 0 ? (
+                  descriptionParagraphs.map((paragraph, index) => (
+                    <p key={index} className="font-inter text-[#1f2937] text-[15px] sm:text-[16px] leading-7 mb-4 last:mb-0">
+                      {paragraph}
+                    </p>
+                  ))
+                ) : (
+                  <p className="font-inter text-[#1f2937] text-[15px] sm:text-[16px] leading-7">
+                    {property.description}
                   </p>
-                ))
-              ) : (
-                <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-                  {property.description}
-                </p>
-              )}
+                )}
+              </div>
             </div>
 
-            {/* Contact Section - Horizontal layout */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              {/* Contact Actions */}
-              <div className="space-y-3 sm:space-y-4">
-                <Link
-                  to={`/contact?type=visit&property=${property.reference || property.id}`}
-                  onClick={trackClick}
-                  className="block w-full bg-[#023927] text-white text-center py-4 font-inter hover:bg-[#023927]/90 transition-all duration-300 text-sm sm:text-base"
-                >
-                  <span className="flex items-center justify-center space-x-2">
-                    <CalendarIcon className="w-5 h-5" />
-                    <span>{t('propertyDetail.actions.privateVisit')}</span>
-                  </span>
-                </Link>
-                <Link
-                  to={`/contact?type=info&property=${property.reference || property.id}`}
-                  onClick={trackClick}
-                  className="block w-full border-2 border-[#023927] text-[#023927] text-center py-4 font-inter hover:bg-[#023927] hover:text-white transition-all duration-300 text-sm sm:text-base"
-                >
-                  <span className="flex items-center justify-center space-x-2">
-                    <DocumentTextIcon className="w-5 h-5" />
-                    <span>{t('propertyDetail.actions.completeFile')}</span>
-                  </span>
-                </Link>
+            {/* Contact — premium two-column */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-6 sm:gap-7">
+              {/* Premium Actions */}
+              <div className="rounded-[28px] bg-[#023927] p-6 sm:p-7 shadow-[0_20px_60px_rgba(2,57,39,0.22)] overflow-hidden relative">
+                <div className="absolute -top-14 -right-14 w-48 h-48 rounded-full bg-white/10 blur-2xl" />
+                <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '20px 20px' }} />
+                <div className="relative">
+                  <p className="font-inter text-[11px] tracking-[0.14em] uppercase text-white/60 font-medium">Conciergerie • Privé</p>
+                  <h3 className="font-didont font-light text-white text-[22px] sm:text-[24px] leading-none mt-1">Organisez votre visite</h3>
+                  <p className="font-inter text-sm text-white/70 mt-2 leading-relaxed">Accès prioritaire, réponse sous 2h. Confidentiel.</p>
+                  <div className="mt-6 space-y-3">
+                    <Link
+                      to={`/contact?type=visit&property=${property.reference || property.id}`}
+                      onClick={trackClick}
+                      className="group relative flex items-center justify-center gap-2 w-full bg-white text-[#023927] rounded-full py-4 px-6 font-inter font-semibold text-sm shadow-[0_12px_32px_rgba(0,0,0,0.28)] hover:bg-white/95 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 overflow-hidden"
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-[#023927]/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                      <CalendarIcon className="w-5 h-5" />
+                      <span>{t('propertyDetail.actions.privateVisit')}</span>
+                    </Link>
+                    <Link
+                      to={`/contact?type=info&property=${property.reference || property.id}`}
+                      onClick={trackClick}
+                      className="flex items-center justify-center gap-2 w-full bg-white/10 backdrop-blur border border-white/15 text-white rounded-full py-4 px-6 font-inter font-medium text-sm hover:bg-white hover:text-[#023927] hover:border-white transition-all duration-300"
+                    >
+                      <DocumentTextIcon className="w-5 h-5" />
+                      <span>{t('propertyDetail.actions.completeFile')}</span>
+                    </Link>
+                  </div>
+                  <div className="mt-4 flex items-center justify-center gap-2 text-white/50 font-inter text-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Réponse rapide • Sans engagement
+                  </div>
+                </div>
               </div>
 
-              {/* Agent Profile - Horizontal card */}
+              {/* Agent — premium card */}
               {property.agent && (
-                <div className="bg-gray-50 p-6 border-l-4 border-[#023927]">
-                  <h4 className="font-inter text-gray-900 text-xs uppercase tracking-wider mb-4">
-                    {t('propertyDetail.contact.advisor')}
-                  </h4>
-                  <div className="flex items-center gap-4">
-                    {property.agent.image && (
-                      <img
-                        src={property.agent.image}
-                        alt={property.agent.name}
-                        className="w-20 h-20 sm:w-24 sm:h-24 object-contain flex-shrink-0"
-                      />
-                    )}
-                    <div className="flex-1">
-                      <div className="font-inter text-gray-900 text-lg mb-1">
-                        {property.agent.name}
-                      </div>
-                      <div className="text-[#023927] text-sm mb-3">
-                        {t('propertyDetail.contact.realEstateAdvisor') || 'Conseiller Immobilier'}
-                      </div>
-                      <div className="space-y-1.5">
-                        {property.agent.phone && (
-                          <a href={`tel:${property.agent.phone}`} className="flex items-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors text-sm">
-                            <PhoneIcon className="w-4 h-4" />
-                            <span>{property.agent.phone}</span>
-                          </a>
-                        )}
-                        {property.agent.mobile && (
-                          <a href={`tel:${property.agent.mobile}`} className="flex items-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors text-sm">
-                            <PhoneIcon className="w-4 h-4" />
-                            <span>{property.agent.mobile}</span>
-                          </a>
-                        )}
-                        {property.agent.email && (
-                          <a href={`mailto:${property.agent.email}`} className="flex items-center space-x-2 text-gray-700 hover:text-[#023927] transition-colors text-sm break-all">
-                            <EnvelopeIcon className="w-4 h-4 flex-shrink-0" />
-                            <span className="text-xs sm:text-sm">{property.agent.email}</span>
-                          </a>
-                        )}
+                <div className="rounded-[28px] bg-white border border-[#023927]/10 shadow-[0_20px_60px_rgba(2,57,39,0.08)] overflow-hidden">
+                  <div className="h-[3px] bg-gradient-to-r from-[#023927] via-[#0a4d3a] to-[#023927]" />
+                  <div className="p-6 sm:p-7">
+                    <p className="font-inter text-[11px] tracking-[0.14em] uppercase text-[#023927]/50 font-medium">
+                      {t('propertyDetail.contact.advisor')}
+                    </p>
+                    <div className="mt-4 flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+                      {property.agent.image ? (
+                        <img
+                          src={property.agent.image}
+                          alt={property.agent.name}
+                          className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover flex-shrink-0 ring-4 ring-[#023927]/10 shadow-[0_8px_24px_rgba(2,57,39,0.12)] mx-auto sm:mx-0"
+                        />
+                      ) : (
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#023927] flex items-center justify-center text-white font-didont text-xl flex-shrink-0 mx-auto sm:mx-0">
+                          {property.agent.name.split(' ').map(n=>n[0]).slice(0,2).join('')}
+                        </div>
+                      )}
+                      <div className="min-w-0 flex-1 w-full">
+                        <div className="font-didont font-light text-[#023927] text-[20px] leading-none">
+                          {property.agent.name}
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 rounded-full bg-[#023927]/5 border border-[#023927]/10 px-2.5 py-1 mt-2 text-[#023927] text-xs font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#023927]" />
+                          {t('propertyDetail.contact.realEstateAdvisor') || 'Conseiller Immobilier'}
+                        </div>
+                        <div className="mt-4 grid gap-2 justify-items-center sm:justify-items-start">
+                          {property.agent.phone && (
+                            <a href={`tel:${property.agent.phone}`} className="inline-flex items-center gap-2 rounded-full bg-gray-50 border border-[#023927]/10 px-3 py-2 text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-colors group w-full sm:w-fit max-w-full justify-center sm:justify-start">
+                              <span className="w-7 h-7 rounded-full bg-white border border-[#023927]/10 group-hover:bg-white/15 group-hover:border-white/15 flex items-center justify-center flex-shrink-0">
+                                <PhoneIcon className="w-3.5 h-3.5" />
+                              </span>
+                              <span className="font-inter text-sm font-medium truncate">{property.agent.phone}</span>
+                            </a>
+                          )}
+                          {property.agent.mobile && (
+                            <a href={`tel:${property.agent.mobile}`} className="inline-flex items-center gap-2 rounded-full bg-gray-50 border border-[#023927]/10 px-3 py-2 text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-colors group w-full sm:w-fit max-w-full justify-center sm:justify-start">
+                              <span className="w-7 h-7 rounded-full bg-white border border-[#023927]/10 group-hover:bg-white/15 group-hover:border-white/15 flex items-center justify-center flex-shrink-0">
+                                <PhoneIcon className="w-3.5 h-3.5" />
+                              </span>
+                              <span className="font-inter text-sm font-medium truncate">{property.agent.mobile}</span>
+                            </a>
+                          )}
+                          {property.agent.email && (
+                            <a href={`mailto:${property.agent.email}`} className="flex items-center gap-2 rounded-full bg-gray-50 border border-[#023927]/10 px-3 py-2 text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] transition-colors group w-full sm:w-fit max-w-full justify-center sm:justify-start">
+                              <span className="w-7 h-7 rounded-full bg-white border border-[#023927]/10 group-hover:bg-white/15 group-hover:border-white/15 flex items-center justify-center flex-shrink-0">
+                                <EnvelopeIcon className="w-3.5 h-3.5" />
+                              </span>
+                              <span className="font-inter text-xs font-medium break-all text-center sm:text-left sm:truncate">{property.agent.email}</span>
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>

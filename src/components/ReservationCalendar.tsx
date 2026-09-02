@@ -16,6 +16,8 @@ import {
   ArrowPathIcon,
   CheckIcon,
   MoonIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
 } from '@heroicons/react/24/outline';
 import 'react-day-picker/style.css';
 import { useCurrency } from '../hooks/useCurrency';
@@ -36,58 +38,63 @@ const CALENDAR_THEME = `
     --rdp-day-width: 42px;
     --rdp-day_button-height: 38px;
     --rdp-day_button-width: 38px;
-    --rdp-day_button-border-radius: 10px;
+    --rdp-day_button-border-radius: 12px;
     --rdp-day_button-border: 2px solid transparent;
     --rdp-selected-border: 2px solid #023927;
     --rdp-range_start-date-background-color: #023927;
     --rdp-range_end-date-background-color: #023927;
     --rdp-range_start-color: #ffffff;
     --rdp-range_end-color: #ffffff;
-    --rdp-range_middle-background-color: #e8f3ee;
-    --rdp-range_middle-color: #023927;
+    --rdp-range_middle-background-color: #0a4d3a;
+    --rdp-range_middle-color: #ffffff;
     --rdp-today-color: #023927;
     --rdp-animation_duration: 0.3s;
-    --rdp-animation_timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --rdp-animation_timing: cubic-bezier(0.16, 1, 0.3, 1);
     --rdp-nav_button-height: 2.5rem;
     --rdp-nav_button-width: 2.5rem;
-    --rdp-months-gap: 1.25rem;
+    --rdp-months-gap: 1.5rem;
     --rdp-weekday-opacity: 1;
     --rdp-disabled-opacity: 0.35;
   }
 
   .reservation-calendar .rdp-month_caption {
     justify-content: center;
-    padding: 0.25rem 0 0.75rem;
+    padding: 0.35rem 0 0.85rem;
   }
 
   .reservation-calendar .rdp-caption_label {
     font-family: 'Inter', system-ui, sans-serif;
-    font-size: 1rem;
+    font-size: 1.05rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    color: #111827;
+    letter-spacing: 0.01em;
+    color: #023927;
     text-transform: capitalize;
   }
 
   .reservation-calendar .rdp-nav {
-    gap: 0.25rem;
+    gap: 0.35rem;
   }
 
   .reservation-calendar .rdp-button_previous,
   .reservation-calendar .rdp-button_next {
     color: #023927;
-    border-radius: 8px;
+    border-radius: 10px;
     transition: all 0.2s ease;
+    border: 1px solid rgba(2,57,39,0.08);
+    background: white;
+    box-shadow: 0 2px 8px rgba(2,57,39,0.06);
   }
 
   .reservation-calendar .rdp-button_previous:hover,
   .reservation-calendar .rdp-button_next:hover {
-    background: #e8f3ee;
-    color: #023927;
+    background: #023927;
+    color: white;
+    border-color: #023927;
+    transform: scale(1.04);
   }
 
   .reservation-calendar .rdp-chevron {
-    fill: #023927;
+    fill: currentColor;
   }
 
   .reservation-calendar .rdp-weekday {
@@ -105,74 +112,65 @@ const CALENDAR_THEME = `
   }
 
   .reservation-calendar .rdp-day_button {
-    transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #374151;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #1f2937;
     font-size: 0.875rem;
+    font-weight: 500;
     user-select: none;
     touch-action: manipulation;
   }
 
   .reservation-calendar .rdp-day:not(.rdp-outside):not(.rdp-disabled) .rdp-day_button:hover {
-    background: #e8f3ee;
-    color: #023927;
-    transform: scale(1.08);
+    background: #023927;
+    color: white;
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px rgba(2,57,39,0.18);
   }
 
   .reservation-calendar .rdp-day_today:not(.rdp-outside) .rdp-day_button {
     color: #023927;
     font-weight: 700;
-    box-shadow: inset 0 0 0 2px #023927;
+    background: white;
+    box-shadow: inset 0 0 0 2px #023927, 0 2px 8px rgba(2,57,39,0.08);
   }
 
   .reservation-calendar .rdp-selected .rdp-day_button,
   .reservation-calendar .rdp-range_start .rdp-day_button,
   .reservation-calendar .rdp-range_end .rdp-day_button {
     font-weight: 700;
-    transform: scale(1.08);
+    transform: scale(1.04);
+    color: #ffffff !important;
+    background: #023927 !important;
   }
 
-  .reservation-calendar .rdp-range_start .rdp-day_button,
-  .reservation-calendar .rdp-range_end .rdp-day_button {
+  .reservation-calendar .rdp-range_middle {
+    background: #0a4d3a;
+  }
+
+  .reservation-calendar .rdp-range_middle .rdp-day_button {
     color: #ffffff !important;
+    background: transparent !important;
   }
 
   .reservation-calendar .rdp-range_start .rdp-day_button,
   .reservation-calendar .rdp-range_end .rdp-day_button {
     cursor: grab;
     touch-action: none;
-  }
-
-  .reservation-calendar .rdp-range_start .rdp-day_button:hover,
-  .reservation-calendar .rdp-range_end .rdp-day_button:hover {
-    color: #023927 !important;
-    background-color: #e8f3ee !important;
-  }
-
-  .reservation-calendar .rdp-range_start .rdp-day_button:active,
-  .reservation-calendar .rdp-range_end .rdp-day_button:active {
-    cursor: grabbing;
-    color: #023927 !important;
-    background-color: #dcefe7 !important;
-  }
-
-  .reservation-calendar .rdp-range_middle .rdp-day_button:hover {
-    transform: scale(1.08);
-    background: #dcefe7;
+    box-shadow: 0 4px 14px rgba(2,57,39,0.22);
+    color: #ffffff !important;
   }
 
   .reservation-calendar .rdp-hover-range .rdp-day_button {
     background: #e8f3ee;
     color: #023927;
     border-radius: 0;
-    transform: scale(1.08);
   }
 
   .reservation-calendar .rdp-hover-end .rdp-day_button {
     background: #023927 !important;
     color: #ffffff !important;
     font-weight: 700;
-    border-radius: 10px;
-    transform: scale(1.08);
+    border-radius: 12px;
   }
 
   .reservation-calendar {
@@ -183,54 +181,48 @@ const CALENDAR_THEME = `
 
   .reservation-calendar .rdp-months {
     flex-wrap: nowrap;
+    justify-content: center;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
     .reservation-calendar {
-      --rdp-day-width: 36px;
-      --rdp-day-height: 36px;
-      --rdp-day_button-width: 32px;
-      --rdp-day_button-height: 32px;
-      --rdp-months-gap: 0.5rem;
-      --rdp-weekday-padding: 0.35rem 0rem;
-      padding: 0.5rem !important;
+      --rdp-day-width: 34px;
+      --rdp-day-height: 34px;
+      --rdp-day_button-width: 30px;
+      --rdp-day_button-height: 30px;
+      --rdp-months-gap: 0.75rem;
     }
-
     .reservation-calendar .rdp-day_button {
       font-size: 0.8125rem;
     }
+  }
 
-    .reservation-calendar .rdp-month_caption {
-      padding: 0.15rem 0 0.5rem;
+  @media (max-width: 380px) {
+    .reservation-calendar {
+      --rdp-day-width: 32px;
+      --rdp-day-height: 32px;
+      --rdp-day_button-width: 28px;
+      --rdp-day_button-height: 28px;
+      --rdp-months-gap: 0.5rem;
+    }
+    .reservation-calendar .rdp-day_button {
+      font-size: 0.75rem;
+    }
+    .reservation-calendar .rdp-weekday {
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
     }
   }
 
   @keyframes reservation-fade-slide {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
-  .reservation-fade-slide {
-    animation: reservation-fade-slide 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
-  }
-
-  .reservation-pulse {
-    animation: reservation-pulse 1.6s ease-in-out infinite;
-  }
-
+  .reservation-fade-slide { animation: reservation-fade-slide 0.32s cubic-bezier(0.16,1,0.3,1) both; }
+  .reservation-pulse { animation: reservation-pulse 1.6s ease-in-out infinite; }
   @keyframes reservation-pulse {
-    0%, 100% {
-      box-shadow: 0 0 0 0 rgba(2, 57, 39, 0.22);
-    }
-    50% {
-      box-shadow: 0 0 0 6px rgba(2, 57, 39, 0);
-    }
+    0%,100% { box-shadow: 0 0 0 0 rgba(2, 57, 39, 0.18); }
+    50% { box-shadow: 0 0 0 8px rgba(2, 57, 39, 0); }
   }
 `;
 
@@ -407,152 +399,181 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
     : t('propertyDetail.reservation.pickArrival', { defaultValue: 'Choisissez votre date d’arrivée pour commencer' });
 
   return (
-    <div className="bg-white border-2 border-gray-100 shadow-lg shadow-gray-200/60">
+    <div className="bg-white rounded-[28px] border border-[#023927]/10 shadow-[0_20px_60px_-20px_rgba(2,57,39,0.14)] overflow-hidden">
       <style>{CALENDAR_THEME}</style>
 
-      {/* Header */}
-      <div className="flex items-center justify-between gap-4 bg-gradient-to-r from-[#023927] to-[#0a4d3a] px-6 py-5">
-        <div className="flex items-center gap-4">
-          <div className="w-11 h-11 bg-white/10 border border-white/20 flex items-center justify-center">
-            <CalendarIcon className="w-6 h-6 text-white" />
+      {/* Premium Header — light, modern */}
+      <div className="relative bg-white border-b border-[#023927]/10">
+        <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-[#023927] via-[#0a4d3a] to-[#023927]" />
+        <div className="px-4 sm:px-7 py-5 sm:py-6 flex items-start justify-between gap-3 sm:gap-4">
+          <div className="flex items-start gap-3 min-w-0">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#023927] flex items-center justify-center shadow-[0_8px_20px_rgba(2,57,39,0.18)] flex-shrink-0">
+              <CalendarIcon className="w-5 h-5 text-white" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="font-didont font-light text-[#023927] text-[20px] sm:text-[22px] leading-none">
+                  {t('propertyDetail.reservation.title') || 'Réserver votre séjour'}
+                </h3>
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-[#023927]/5 border border-[#023927]/10 px-2.5 py-1 text-[#023927]/70 text-[11px] tracking-widest uppercase">
+                  <SparklesIcon className="w-3 h-3" />
+                  {t('propertyDetail.reservation.subtitle', { defaultValue: 'Sélectionnez vos dates' })}
+                </span>
+              </div>
+              <p className="sm:hidden font-inter text-xs text-[#023927]/50 mt-1 uppercase tracking-widest">
+                {t('propertyDetail.reservation.subtitle', { defaultValue: 'Sélectionnez vos dates' })}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#023927] text-white px-3 py-1.5 text-xs font-medium shadow-[0_4px_14px_rgba(2,57,39,0.18)]">
+                  <span className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center text-[11px]">€</span>
+                  {formatPrice(pricePerDay || 0, currency as any)} / {t('propertyDetail.reservation.nights', { defaultValue: 'nuit' }) || 'nuit'}
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-[#023927]/5 border border-[#023927]/10 px-3 py-1 text-[#023927]/60 text-xs">
+                  <ShieldCheckIcon className="w-3.5 h-3.5" />
+                  {t('propertyDetail.reservation.noPayment', { defaultValue: 'Aucun paiement maintenant' }).split(' — ')[0].split('—')[0].trim()}
+                </span>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="text-xl sm:text-2xl font-inter font-light text-white tracking-tight">
-              {t('propertyDetail.reservation.title') || 'Réserver votre séjour'}
-            </h3>
-            <p className="text-xs sm:text-sm text-white/70 uppercase tracking-widest mt-0.5">
-              {t('propertyDetail.reservation.subtitle', { defaultValue: 'Sélectionnez vos dates' })}
-            </p>
+
+          <div className="flex flex-col items-end gap-2 flex-shrink-0">
+            {range?.from && (
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex items-center gap-1.5 rounded-full bg-white border border-[#023927]/10 hover:bg-[#023927] hover:text-white hover:border-[#023927] px-3.5 py-1.5 text-[#023927] text-xs font-medium shadow-sm transition-all"
+              >
+                <ArrowPathIcon className="w-3.5 h-3.5" />
+                {t('propertyDetail.reservation.clear', { defaultValue: 'Effacer' })}
+              </button>
+            )}
+            <span className="hidden lg:inline-flex items-center gap-1.5 rounded-full bg-[#023927]/5 border border-[#023927]/10 px-3 py-1.5 text-xs font-semibold text-[#023927]">
+              <MoonIcon className="w-3.5 h-3.5" />
+              {selectedDays > 0 ? `${selectedDays} ${t('propertyDetail.reservation.nights', { defaultValue: 'nuits' })}` : t('propertyDetail.reservation.selectDates', { defaultValue: 'Sélectionnez vos dates' })}
+            </span>
           </div>
         </div>
-
-        {range?.from && (
-          <button
-            type="button"
-            onClick={handleReset}
-            className="hidden sm:flex items-center gap-2 text-white/80 hover:text-white text-sm uppercase tracking-wider transition-colors"
-          >
-            <ArrowPathIcon className="w-4 h-4" />
-            {t('propertyDetail.reservation.clear', { defaultValue: 'Effacer' })}
-          </button>
-        )}
       </div>
 
-      <div className="p-6 sm:p-8">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
+      <div className="p-4 sm:p-6 lg:p-7">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Calendar Column */}
           <div className="flex-1 min-w-0">
-            {/* Step indicator */}
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3 mb-6">
+            {/* Premium Step indicators */}
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-1.5 sm:gap-3 mb-5">
               <div
-                className={`relative px-3 sm:px-4 py-3 border-2 transition-all duration-300 ${
+                className={`relative rounded-2xl px-2 sm:px-4 py-2.5 sm:py-3.5 border transition-all duration-300 ${
                   dragging === 'from'
-                    ? 'border-[#023927] bg-[#023927]/10 ring-2 ring-[#023927]/25 scale-[1.03]'
+                    ? 'border-[#023927] bg-[#023927] text-white shadow-[0_10px_24px_rgba(2,57,39,0.22)] scale-[1.02]'
                     : range?.from
-                    ? 'border-[#023927] bg-[#023927]/5'
-                    : 'border-gray-200 bg-gray-50'
+                    ? 'border-[#023927]/15 bg-[#023927]/5'
+                    : 'border-[#023927]/10 bg-gray-50'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-6 h-6 flex items-center justify-center text-xs font-bold ${
-                      range?.from ? 'bg-[#023927] text-white' : 'bg-gray-300 text-gray-600'
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                      dragging === 'from' ? 'bg-white text-[#023927]' : range?.from ? 'bg-[#023927] text-white' : 'bg-white border border-[#023927]/10 text-[#023927]/50'
                     }`}
                   >
-                    {range?.from ? <CheckIcon className="w-3.5 h-3.5" /> : '1'}
+                    {range?.from ? <CheckIcon className="w-4 h-4" /> : '1'}
                   </div>
-                  <span className="font-inter text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                  <span className={`font-inter text-xs font-semibold uppercase tracking-widest ${dragging === 'from' ? 'text-white' : 'text-[#023927]'}`}>
                     {t('propertyDetail.reservation.checkIn') || 'Arrivée'}
                   </span>
                 </div>
-                <p className="mt-1.5 text-sm text-gray-600 font-medium truncate">
-                  {range?.from ? format(range.from, 'EEE d MMM', { locale: currentLocale }) : '-'}
+                <p className={`mt-1.5 text-xs sm:text-sm font-medium truncate ${dragging === 'from' ? 'text-white/90' : 'text-[#023927]'}`}>
+                  {range?.from ? format(range.from, 'EEE d MMM', { locale: currentLocale }) : '—'}
                 </p>
               </div>
 
-              <ArrowRightIcon className="w-5 h-5 text-[#023927] flex-shrink-0" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#023927] flex items-center justify-center shadow-[0_6px_16px_rgba(2,57,39,0.25)] flex-shrink-0">
+                <ArrowRightIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+              </div>
 
               <div
-                className={`relative px-3 sm:px-4 py-3 border-2 transition-all duration-300 ${
+                className={`relative rounded-2xl px-2 sm:px-4 py-2.5 sm:py-3.5 border transition-all duration-300 ${
                   dragging === 'to'
-                    ? 'border-[#023927] bg-[#023927]/10 ring-2 ring-[#023927]/25 scale-[1.03]'
+                    ? 'border-[#023927] bg-[#023927] text-white shadow-[0_10px_24px_rgba(2,57,39,0.22)] scale-[1.02]'
                     : range?.to
-                    ? 'border-[#023927] bg-[#023927]/5'
+                    ? 'border-[#023927]/15 bg-[#023927]/5'
                     : isPickingDeparture
-                    ? 'border-[#023927]/60 bg-[#023927]/5 reservation-pulse'
-                    : 'border-gray-200 bg-gray-50'
+                    ? 'border-[#023927] bg-white reservation-pulse'
+                    : 'border-[#023927]/10 bg-gray-50'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <div
-                    className={`w-6 h-6 flex items-center justify-center text-xs font-bold ${
-                      range?.to ? 'bg-[#023927] text-white' : 'bg-gray-300 text-gray-600'
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                      dragging === 'to' ? 'bg-white text-[#023927]' : range?.to ? 'bg-[#023927] text-white' : 'bg-white border border-[#023927]/10 text-[#023927]/50'
                     }`}
                   >
-                    {range?.to ? <CheckIcon className="w-3.5 h-3.5" /> : '2'}
+                    {range?.to ? <CheckIcon className="w-4 h-4" /> : '2'}
                   </div>
-                  <span className="font-inter text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wide">
+                  <span className={`font-inter text-xs font-semibold uppercase tracking-widest ${dragging === 'to' ? 'text-white' : 'text-[#023927]'}`}>
                     {t('propertyDetail.reservation.checkOut') || 'Départ'}
                   </span>
                 </div>
-                <p className="mt-1.5 text-sm text-gray-600 font-medium truncate">
-                  {range?.to ? format(range.to, 'EEE d MMM', { locale: currentLocale }) : '-'}
+                <p className={`mt-1.5 text-xs sm:text-sm font-medium truncate ${dragging === 'to' ? 'text-white/90' : 'text-[#023927]'}`}>
+                  {range?.to ? format(range.to, 'EEE d MMM', { locale: currentLocale }) : '—'}
                 </p>
               </div>
             </div>
 
-            <div className="mb-3 flex items-center justify-center gap-2 text-xs sm:text-sm text-[#023927]/80 font-medium">
-              <MoonIcon className="w-4 h-4 flex-shrink-0" />
-              <span>
+            <div className="mb-3 flex items-center gap-2 rounded-xl bg-[#023927]/5 border border-[#023927]/10 px-3 py-2 text-xs text-[#023927] font-medium w-fit max-w-full">
+              <MoonIcon className="w-3.5 h-3.5 flex-shrink-0" />
+              <span className="leading-snug">
                 {t('propertyDetail.reservation.dragHint', {
                   defaultValue: "Astuce : faites glisser les jours d'arrivée et de départ pour ajuster votre sélection",
                 })}
               </span>
             </div>
 
-            <DayPicker
-              mode="range"
-              selected={range}
-              onSelect={(next) => {
-                if (suppressNextSelectRef.current) {
-                  suppressNextSelectRef.current = false;
-                  return;
-                }
-                setRange(next);
-              }}
-              locale={currentLocale}
-              numberOfMonths={isMobile ? 1 : 2}
-              disabled={{ before: today }}
-              onDayMouseEnter={handleDayMouseEnter}
-              onDayMouseLeave={() => setHoveredDate(undefined)}
-              className="reservation-calendar border border-gray-100 rounded-lg p-4 sm:p-5 bg-white shadow-sm mx-auto md:mx-0"
-              components={{ DayButton }}
-              modifiers={{
-                hoverRange: hoverRangeMatcher,
-                hoverEnd: hoverEndMatcher,
-              }}
-              modifiersClassNames={{
-                hoverRange: 'rdp-hover-range',
-                hoverEnd: 'rdp-hover-end',
-              }}
-            />
+            <div className="rounded-2xl border border-[#023927]/10 bg-white shadow-[0_12px_32px_rgba(2,57,39,0.06)] p-2 sm:p-4 overflow-hidden">
+              <DayPicker
+                mode="range"
+                selected={range}
+                onSelect={(next) => {
+                  if (suppressNextSelectRef.current) {
+                    suppressNextSelectRef.current = false;
+                    return;
+                  }
+                  setRange(next);
+                }}
+                locale={currentLocale}
+                numberOfMonths={isMobile ? 1 : 2}
+                disabled={{ before: today }}
+                onDayMouseEnter={handleDayMouseEnter}
+                onDayMouseLeave={() => setHoveredDate(undefined)}
+                className="reservation-calendar mx-auto"
+                components={{ DayButton }}
+                modifiers={{
+                  hoverRange: hoverRangeMatcher,
+                  hoverEnd: hoverEndMatcher,
+                }}
+                modifiersClassNames={{
+                  hoverRange: 'rdp-hover-range',
+                  hoverEnd: 'rdp-hover-end',
+                }}
+              />
+            </div>
 
             {/* Helper text */}
             <div
               key={stepLabel}
-              className="mt-4 flex items-center gap-2 text-sm text-gray-600 reservation-fade-slide"
+              className="mt-4 flex items-center gap-2 rounded-xl bg-gray-50 border border-[#023927]/10 px-3 py-2 text-sm text-[#023927] reservation-fade-slide w-fit max-w-full text-left"
             >
               <span
                 className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                  range?.from && range?.to ? 'bg-[#023927]' : isPickingDeparture ? 'bg-[#0a4d3a] reservation-pulse' : 'bg-gray-300'
+                  range?.from && range?.to ? 'bg-[#023927]' : isPickingDeparture ? 'bg-[#0a4d3a] reservation-pulse' : 'bg-[#023927]/30'
                 }`}
               ></span>
-              {stepLabel}
+              <span className="font-inter text-xs sm:text-sm leading-snug">{stepLabel}</span>
             </div>
 
-            {/* Quick picks */}
+            {/* Quick picks — premium pills */}
             <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium mr-1">
+              <span className="text-xs text-[#023927]/50 uppercase tracking-widest font-medium">
                 {t('propertyDetail.reservation.quickPick', { defaultValue: 'Sélection rapide' })}:
               </span>
               {quickPicks.map((pick) => (
@@ -560,117 +581,132 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
                   key={pick.nights}
                   type="button"
                   onClick={() => applyQuickPick(pick.nights)}
-                  className="px-3 py-1.5 text-xs sm:text-sm font-medium border-2 border-gray-200 text-gray-700 hover:border-[#023927] hover:text-[#023927] hover:bg-[#023927]/5 transition-all duration-300"
+                  className="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white border border-[#023927]/10 text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
                 >
-                  {pick.label}
+                  {pick.label} • {pick.nights} {t('propertyDetail.reservation.nights', { defaultValue: 'nuits' })}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Summary Column */}
-          <div className="w-full lg:w-80 flex-shrink-0">
-            <div className="lg:sticky lg:top-8 space-y-5">
+          {/* Summary Column — premium */}
+          <div className="w-full lg:w-[340px] flex-shrink-0">
+            <div className="lg:sticky lg:top-6 space-y-4">
               {/* Guests */}
-              <div className="border-2 border-gray-100 p-4">
-                <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 uppercase tracking-wide mb-3">
-                  <UsersIcon className="w-4 h-4 text-[#023927]" />
+              <div className="rounded-2xl border border-[#023927]/10 bg-white p-4 shadow-sm">
+                <label className="flex items-center gap-2 text-xs font-semibold text-[#023927] uppercase tracking-widest mb-3">
+                  <span className="w-7 h-7 rounded-full bg-[#023927]/5 border border-[#023927]/10 flex items-center justify-center">
+                    <UsersIcon className="w-3.5 h-3.5 text-[#023927]" />
+                  </span>
                   {t('propertyDetail.reservation.guests') || 'Nombre de personnes'}
                 </label>
-                <div className="flex items-stretch border-2 border-gray-200 focus-within:border-[#023927] transition-colors">
+                <div className="flex items-center gap-2 rounded-full bg-gray-50 border border-[#023927]/10 p-1">
                   <button
                     type="button"
                     onClick={() => setGuests(Math.max(1, guests - 1))}
-                    className="w-11 flex items-center justify-center text-lg text-gray-600 hover:text-[#023927] hover:bg-gray-50 transition-colors border-r-2 border-gray-200"
+                    className="w-10 h-10 rounded-full bg-white border border-[#023927]/10 flex items-center justify-center text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] shadow-sm transition-all active:scale-95"
                   >
                     −
                   </button>
-                  <input
-                    type="number"
-                    value={guests}
-                    onChange={(e) => setGuests(parseInt(e.target.value) || 1)}
-                    className="w-full text-center font-inter font-semibold text-gray-900 focus:outline-none"
-                    min="1"
-                  />
+                  <div className="flex-1 flex items-center justify-center gap-2">
+                    <input
+                      type="number"
+                      value={guests}
+                      onChange={(e) => setGuests(parseInt(e.target.value) || 1)}
+                      className="w-12 text-center bg-transparent font-inter font-semibold text-[#023927] text-lg focus:outline-none"
+                      min="1"
+                    />
+                    <span className="font-inter text-xs text-[#023927]/50 hidden sm:inline">{guests === 1 ? 'invité' : 'invités'}</span>
+                  </div>
                   <button
                     type="button"
                     onClick={() => setGuests(guests + 1)}
-                    className="w-11 flex items-center justify-center text-lg text-gray-600 hover:text-[#023927] hover:bg-gray-50 transition-colors border-l-2 border-gray-200"
+                    className="w-10 h-10 rounded-full bg-[#023927] text-white flex items-center justify-center hover:bg-[#0a4d3a] shadow-[0_6px_16px_rgba(2,57,39,0.22)] transition-all active:scale-95"
                   >
                     +
                   </button>
                 </div>
               </div>
 
-              {/* Price summary */}
-              <div className="bg-gradient-to-br from-[#f7faf9] to-[#eef5f1] border-2 border-gray-100 p-5">
-                <div className="flex items-center justify-between pb-3 border-b border-gray-200 mb-3">
-                  <span className="text-sm text-gray-600 uppercase tracking-wide font-medium">
-                    {t('propertyDetail.reservation.summary', { defaultValue: 'Votre séjour' })}
-                  </span>
-                  {selectedDays > 0 && (
-                    <span className="flex items-center gap-1 text-sm font-semibold text-[#023927]">
-                      <MoonIcon className="w-4 h-4" />
-                      {selectedDays} {t('propertyDetail.reservation.nights', { defaultValue: 'nuits' })}
+              {/* Price summary — premium card */}
+              <div className="rounded-2xl bg-[#023927] text-white p-5 shadow-[0_16px_40px_rgba(2,57,39,0.22)] overflow-hidden relative">
+                <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
+                <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`, backgroundSize: '20px 20px' }} />
+                <div className="relative">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/15 mb-3">
+                    <span className="text-xs text-white/60 uppercase tracking-widest font-medium">
+                      {t('propertyDetail.reservation.summary', { defaultValue: 'Votre séjour' })}
                     </span>
-                  )}
-                </div>
-
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">{t('propertyDetail.reservation.checkIn') || 'Arrivée'}</span>
-                    <span className="font-medium text-gray-900">
-                      {range?.from ? format(range.from, 'EEE d MMM yyyy', { locale: currentLocale }) : '-'}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">{t('propertyDetail.reservation.checkOut') || 'Départ'}</span>
-                    <span className="font-medium text-gray-900">
-                      {range?.to ? format(range.to, 'EEE d MMM yyyy', { locale: currentLocale }) : '-'}
-                    </span>
+                    {selectedDays > 0 ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-white text-[#023927] px-2.5 py-1 text-xs font-semibold shadow-sm">
+                        <MoonIcon className="w-3.5 h-3.5" />
+                        {selectedDays} {t('propertyDetail.reservation.nights', { defaultValue: 'nuits' })}
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-white/10 border border-white/15 px-2.5 py-1 text-xs text-white/70">
+                        {t('propertyDetail.reservation.selectDates') || 'Sélectionnez vos dates'}
+                      </span>
+                    )}
                   </div>
 
-                  {selectedDays > 0 && (
-                    <div key={`${selectedDays}-${pricePerDay}`} className="reservation-fade-slide pt-2.5 mt-1 border-t border-dashed border-gray-300">
-                      <div className="flex items-center justify-between text-sm mb-1.5">
-                        <span className="text-gray-600">
-                          {formatPrice(pricePerDay || 0, currency as any)} × {selectedDays}
-                        </span>
-                        <span className="text-gray-600">{formatPrice(totalPrice, currency as any)}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-inter font-semibold text-gray-900 uppercase tracking-wide">
-                          {t('propertyDetail.reservation.total') || 'Total estimé'}
-                        </span>
-                        <span className="font-serif font-bold text-2xl text-[#023927]">{formatPrice(totalPrice, currency as any)}</span>
-                      </div>
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-white/60">{t('propertyDetail.reservation.checkIn') || 'Arrivée'}</span>
+                      <span className="font-medium text-white">
+                        {range?.from ? format(range.from, 'EEE d MMM yyyy', { locale: currentLocale }) : '—'}
+                      </span>
                     </div>
-                  )}
-                </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-white/60">{t('propertyDetail.reservation.checkOut') || 'Départ'}</span>
+                      <span className="font-medium text-white">
+                        {range?.to ? format(range.to, 'EEE d MMM yyyy', { locale: currentLocale }) : '—'}
+                      </span>
+                    </div>
 
-                {selectedDays === 0 && (
-                  <p className="mt-3 text-xs text-gray-500">
-                    {t('propertyDetail.reservation.selectDates') || 'Sélectionnez vos dates pour calculer le total'}
-                  </p>
-                )}
+                    {selectedDays > 0 ? (
+                      <div key={`${selectedDays}-${pricePerDay}`} className="reservation-fade-slide pt-3 mt-2 border-t border-white/15">
+                        <div className="flex items-center justify-between text-sm mb-2">
+                          <span className="text-white/60">
+                            {formatPrice(pricePerDay || 0, currency as any)} × {selectedDays}
+                          </span>
+                          <span className="text-white/80">{formatPrice(totalPrice, currency as any)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-inter font-semibold text-white uppercase tracking-widest text-xs">
+                            {t('propertyDetail.reservation.total') || 'Total estimé'}
+                          </span>
+                          <span className="font-didont font-light text-2xl text-white">{formatPrice(totalPrice, currency as any)}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="pt-2 text-xs text-white/50 leading-relaxed">
+                        {t('propertyDetail.reservation.selectDates') || 'Sélectionnez vos dates pour calculer le total'}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* CTA */}
+              {/* CTA — premium */}
               <button
                 type="button"
                 onClick={() => onReserve(range, guests)}
                 disabled={!range?.from || !range?.to}
-                className="w-full bg-[#023927] text-white py-4 px-6 font-inter font-medium uppercase tracking-wider hover:bg-[#0a4d3a] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed group"
+                className="group relative w-full overflow-hidden rounded-full bg-[#023927] text-white py-4 px-6 font-inter font-semibold text-sm uppercase tracking-widest hover:bg-[#0a4d3a] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_12px_32px_rgba(2,57,39,0.28)] hover:shadow-[0_16px_40px_rgba(2,57,39,0.35)] hover:scale-[1.01] active:scale-[0.99]"
               >
-                <span className="flex items-center justify-center gap-2">
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                <span className="relative flex items-center justify-center gap-2">
                   {t('propertyDetail.reservation.button') || 'Demander une réservation'}
                   <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </span>
               </button>
 
-              <p className="text-center text-xs text-gray-500">
-                {t('propertyDetail.reservation.noPayment', { defaultValue: 'Aucun paiement maintenant — votre sélection sera envoyée à notre équipe.' })}
-              </p>
+              <div className="flex items-center justify-center gap-2 rounded-full bg-gray-50 border border-[#023927]/10 px-3 py-2">
+                <ShieldCheckIcon className="w-3.5 h-3.5 text-[#023927]/60" />
+                <p className="font-inter text-xs text-[#023927]/60 text-center leading-tight">
+                  {t('propertyDetail.reservation.noPayment', { defaultValue: 'Aucun paiement maintenant — votre sélection sera envoyée à notre équipe.' })}
+                </p>
+              </div>
             </div>
           </div>
         </div>
