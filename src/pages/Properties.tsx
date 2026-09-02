@@ -851,8 +851,8 @@ const Properties: React.FC = () => {
               <h3 className="font-serif text-[19px] sm:text-[21px] lg:text-[23px] leading-[1.02] tracking-[-0.025em] font-light text-gray-900 truncate group-hover:text-[#023927] transition-colors duration-500">{property.title}</h3>
               <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] sm:text-[13px] text-gray-500">
                 <span className="truncate font-light">— {property.location}</span>
-                {property.reference && <span className="hidden sm:inline text-gray-300">•</span>}
-                {property.reference && <span className="hidden sm:inline text-[11px] tracking-wide text-gray-400 font-mono">Réf. {property.reference}</span>}
+                {property.reference && <span className="inline text-gray-300">•</span>}
+                {property.reference && <span className="inline text-[11px] tracking-wide text-gray-400 font-mono">Réf. {property.reference}</span>}
               </div>
               <div className="mt-3.5 flex items-center gap-2.5 sm:gap-3.5 text-[11px] tracking-[0.16em] uppercase font-medium text-gray-500">
                 <span className="inline-flex items-center gap-1.5"><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {property.rooms || 0} ch.</span>
@@ -866,7 +866,7 @@ const Properties: React.FC = () => {
           <div className="flex lg:flex-col items-center lg:items-end justify-between lg:justify-start gap-4 lg:text-right shrink-0 lg:min-w-[190px] border-t lg:border-t-0 border-gray-100 pt-4 lg:pt-0">
             <div>
               <div className="font-serif text-[21px] sm:text-[23px] lg:text-[25px] leading-none tracking-[-0.02em] font-light text-[#023927]">{formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}</div>
-              <div className="text-[10px] tracking-[0.18em] uppercase text-gray-400 mt-1.5 font-medium">{property.type === 'buy' ? 'Prix net vendeur' : property.type === 'rent' ? 'Par mois' : 'Saisonnier'}</div>
+              <div className="text-[10px] tracking-[0.18em] uppercase text-gray-400 mt-1.5 font-medium">{property.type === 'buy' ? 'Prix' : property.type === 'rent' ? 'Par mois' : 'Saisonnier'}</div>
             </div>
             <span className="group/cta inline-flex items-center gap-2.5 sm:gap-3 shrink-0">
               <span className="relative text-[11px] sm:text-xs tracking-[0.18em] uppercase font-semibold text-[#023927]">Voir
