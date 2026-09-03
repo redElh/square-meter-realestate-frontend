@@ -371,7 +371,16 @@
       "noPayment": "لا دفع الآن — سيتم إرسال اختيارك إلى فريقنا.",
       "button": "طلب حجز",
       "savedTitle": "تم حفظ الاختيار!",
-      "savedSubtitle": "جاري التوجيه إلى نموذج الاتصال..."
+      "savedSubtitle": "جاري التوجيه إلى نموذج الاتصال...",
+      "available": "متاح",
+      "selected": "محدد",
+      "reserved": "محجوز",
+      "loadingAvailability": "جارٍ تحميل التوفر…",
+      "allAvailable": "جميع التواريخ متاحة",
+      "blockedCount": "أيام محجوزة",
+      "error": "خطأ",
+      "retry": "إعادة المحاولة",
+      "loadingCalendar": "جارٍ تحميل التقويم…"
     },
     "mock": {
       "property": {

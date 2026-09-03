@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { DayPicker, DateRange, DayButtonProps } from 'react-day-picker';
 import { format, addDays, startOfDay, differenceInCalendarDays, isSameDay } from 'date-fns';
 import { fr } from 'date-fns/locale/fr';
@@ -21,6 +21,11 @@ import {
 } from '@heroicons/react/24/outline';
 import 'react-day-picker/style.css';
 import { useCurrency } from '../hooks/useCurrency';
+import {
+  getReservedDates,
+  isoToDateObjects,
+  isRangeOverlapsReserved,
+} from '../services/vacancesService';
 
 interface ReservationCalendarProps {
   propertyId: string | number;
@@ -224,6 +229,23 @@ const CALENDAR_THEME = `
     0%,100% { box-shadow: 0 0 0 0 rgba(2, 57, 39, 0.18); }
     50% { box-shadow: 0 0 0 8px rgba(2, 57, 39, 0); }
   }
+
+  /* Vacances — reserved / disabled days (from PUBLIC_VACANCES_API) */
+  .reservation-calendar .rdp-disabled .rdp-day_button {
+    text-decoration: line-through;
+    text-decoration-color: rgba(153, 27, 27, 0.35);
+  }
+  .reservation-calendar .rdp-blocked .rdp-day_button {
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+    border: 1px solid #fecaca !important;
+    text-decoration: line-through;
+    text-decoration-thickness: 1.5px;
+    opacity: 1 !important;
+  }
+  .reservation-calendar .rdp-blocked.rdp-disabled {
+    opacity: 1;
+  }
 `;
 
 const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, propertyName, pricePerDay, currency = 'EUR', onReserve }) => {
@@ -242,6 +264,22 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
   );
   const [dragging, setDragging] = useState<'from' | 'to' | null>(null);
 
+  // ── Vacances reserved dates (PUBLIC_VACANCES_API) ────────────────────────
+  const [reservedDates, setReservedDates] = useState<string[]>([]);
+  const [reservedLoading, setReservedLoading] = useState(true);
+  const [reservedError, setReservedError] = useState<string | null>(null);
+  const [overlapWarning, setOverlapWarning] = useState<string | null>(null);
+
+  const reservedSet = useMemo(() => new Set(reservedDates), [reservedDates]);
+  const blockedDates = useMemo(() => isoToDateObjects(reservedDates), [reservedDates]);
+
+  // Debug: log fetched reserved dates
+  useEffect(() => {
+    if (!reservedLoading) {
+      console.log(`[ReservationCalendar] property ${propertyId} reservedDates:`, reservedDates, 'blocked:', blockedDates);
+    }
+  }, [reservedLoading, reservedDates, blockedDates, propertyId]);
+
   const rangeRef = useRef(range);
   const draggingRef = useRef<'from' | 'to' | null>(null);
   const suppressNextSelectRef = useRef(false);
@@ -249,40 +287,6 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
   useEffect(() => {
     rangeRef.current = range;
   }, [range]);
-
-  useEffect(() => {
-    const handleGlobalPointerUp = () => {
-      if (draggingRef.current) {
-        draggingRef.current = null;
-        setDragging(null);
-        window.setTimeout(() => {
-          suppressNextSelectRef.current = false;
-        }, 0);
-      }
-    };
-    window.addEventListener('pointerup', handleGlobalPointerUp);
-    window.addEventListener('pointercancel', handleGlobalPointerUp);
-    return () => {
-      window.removeEventListener('pointerup', handleGlobalPointerUp);
-      window.removeEventListener('pointercancel', handleGlobalPointerUp);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleGlobalPointerMove = (e: PointerEvent) => {
-      if (!draggingRef.current) return;
-      const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-      const dayEl = el?.closest?.('[data-rdp-date]') as HTMLElement | null;
-      if (!dayEl) return;
-      const iso = dayEl.getAttribute('data-rdp-date');
-      if (!iso) return;
-      const [year, month, day] = iso.split('-').map(Number);
-      if (!year || !month || !day) return;
-      updateDraggedEndpoint(new Date(year, month - 1, day));
-    };
-    window.addEventListener('pointermove', handleGlobalPointerMove);
-    return () => window.removeEventListener('pointermove', handleGlobalPointerMove);
-  }, []);
 
   const updateDraggedEndpoint = (hovered: Date) => {
     const current = rangeRef.current;
@@ -292,11 +296,26 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
     if (draggingRef.current === 'from' && current.to) {
       const maxFrom = startOfDay(current.to);
       const newFrom = candidate > maxFrom ? maxFrom : candidate;
+      const testRange: DateRange = { from: newFrom, to: current.to };
+      if (isRangeOverlapsReserved(testRange.from, testRange.to, reservedSet)) {
+        return;
+      }
       setRange({ from: newFrom, to: current.to });
+      setOverlapWarning(null);
     } else if (draggingRef.current === 'to' && current.from) {
       const minTo = startOfDay(current.from);
-      const newTo = candidate < minTo ? minTo : candidate;
+      let newTo = candidate < minTo ? minTo : candidate;
+      const testRange: DateRange = { from: current.from, to: newTo };
+      if (isRangeOverlapsReserved(testRange.from, testRange.to, reservedSet)) {
+        setOverlapWarning(
+          t('propertyDetail.reservation.overlapWarning', {
+            defaultValue: 'Cette période contient des dates déjà réservées — veuillez choisir d’autres dates.',
+          }) as string
+        );
+        return;
+      }
       setRange({ from: current.from, to: newTo });
+      setOverlapWarning(null);
     }
   };
 
@@ -338,14 +357,126 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
           />
         );
       },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  useEffect(() => {
+    const handleGlobalPointerUp = () => {
+      if (draggingRef.current) {
+        draggingRef.current = null;
+        setDragging(null);
+        window.setTimeout(() => {
+          suppressNextSelectRef.current = false;
+        }, 0);
+      }
+    };
+    window.addEventListener('pointerup', handleGlobalPointerUp);
+    window.addEventListener('pointercancel', handleGlobalPointerUp);
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalPointerUp);
+      window.removeEventListener('pointercancel', handleGlobalPointerUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleGlobalPointerMove = (e: PointerEvent) => {
+      if (!draggingRef.current) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+      const dayEl = el?.closest?.('[data-rdp-date]') as HTMLElement | null;
+      if (!dayEl) return;
+      const iso = dayEl.getAttribute('data-rdp-date');
+      if (!iso) return;
+      const [year, month, day] = iso.split('-').map(Number);
+      if (!year || !month || !day) return;
+      updateDraggedEndpoint(new Date(year, month - 1, day));
+    };
+    window.addEventListener('pointermove', handleGlobalPointerMove);
+    return () => window.removeEventListener('pointermove', handleGlobalPointerMove);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reservedSet, t]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // ── Fetch reserved dates from PUBLIC_VACANCES_API ──────────────────────
+  // Auto-refresh: polls every REFRESH_INTERVAL ms and re-fetches when the tab
+  // becomes visible again, so updated reservations show up in real time
+  // without a hard page refresh.
+  const REFRESH_INTERVAL_MS = 30000; // 30s
+
+  const refetchReserved = useCallback(
+    (opts?: { silent?: boolean; force?: boolean }) => {
+      // The loading overlay should only appear on the initial mount / explicit
+      // retry. Background polls and tab-refocus refreshes are "silent" so the
+      // user's calendar is not disrupted.
+      if (!opts?.silent) {
+        setReservedLoading(true);
+        setReservedError(null);
+      } else {
+        setReservedError(null);
+      }
+      console.log(`[ReservationCalendar] fetching reservedDates for property ${propertyId}`);
+      return getReservedDates(propertyId, { force: opts?.force })
+        .then((dates) => {
+          console.log(`[ReservationCalendar] fetched ${dates.length} dates for ${propertyId}:`, dates);
+          setReservedDates(dates);
+          setReservedLoading(false);
+        })
+        .catch((err: any) => {
+          console.error(`[ReservationCalendar] fetch error for ${propertyId}:`, err);
+          if (!opts?.silent) setReservedError(err?.message || 'Erreur de chargement');
+          setReservedLoading(false);
+        });
+    },
+    [propertyId]
+  );
+
+  // Initial fetch + polling
+  useEffect(() => {
+    let active = true;
+    const run = (silent: boolean) => {
+      if (!active) return;
+      refetchReserved({ force: true, silent });
+    };
+
+    run(false); // initial load shows the loading overlay
+
+    const intervalId = window.setInterval(() => {
+      if (document.visibilityState === 'visible') run(true); // silent poll
+    }, REFRESH_INTERVAL_MS);
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') run(true); // silent refresh
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      active = false;
+      window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [refetchReserved, REFRESH_INTERVAL_MS]);
+
+  // If loaded reserved dates overlap current selection, warn (stay nights [from,to) )
+  useEffect(() => {
+    if (!range?.from || !range?.to || reservedSet.size === 0) {
+      setOverlapWarning(null);
+      return;
+    }
+    if (isRangeOverlapsReserved(range.from, range.to, reservedSet)) {
+      setOverlapWarning(
+        t('propertyDetail.reservation.overlapWarning', {
+          defaultValue: 'Cette période contient des dates déjà réservées — veuillez choisir d’autres dates.',
+        }) as string
+      );
+    } else {
+      setOverlapWarning(null);
+    }
+  }, [range, reservedSet, t]);
 
   const dateFnsLocales: Record<string, Locale> = {
     fr,
@@ -379,11 +510,50 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
   const handleReset = () => {
     setRange(undefined);
     setHoveredDate(undefined);
+    setOverlapWarning(null);
+  };
+
+  const handleSelect = (next: DateRange | undefined) => {
+    if (suppressNextSelectRef.current) {
+      suppressNextSelectRef.current = false;
+      return;
+    }
+    if (!next?.from || !next?.to) {
+      setOverlapWarning(null);
+      setRange(next);
+      return;
+    }
+    if (isRangeOverlapsReserved(next.from, next.to, reservedSet)) {
+      setOverlapWarning(
+        t('propertyDetail.reservation.overlapWarning', {
+          defaultValue: 'Cette période contient des dates déjà réservées — veuillez choisir d’autres dates.',
+        }) as string
+      );
+      // keep arrival, clear departure to force re-pick
+      setRange({ from: next.from, to: undefined });
+      return;
+    }
+    setOverlapWarning(null);
+    setRange(next);
+  };
+
+  const handleRetryReserved = () => {
+    refetchReserved({ force: true });
   };
 
   const applyQuickPick = (nights: number) => {
     const base = range?.from || addDays(today, 1);
-    setRange({ from: base, to: addDays(base, nights) });
+    const candidate: DateRange = { from: base, to: addDays(base, nights) };
+    if (isRangeOverlapsReserved(candidate.from, candidate.to, reservedSet)) {
+      setOverlapWarning(
+        t('propertyDetail.reservation.overlapWarning', {
+          defaultValue: 'Cette période contient des dates déjà réservées — veuillez choisir d’autres dates.',
+        }) as string
+      );
+      return;
+    }
+    setOverlapWarning(null);
+    setRange(candidate);
   };
 
   const quickPicks = [
@@ -529,20 +699,59 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
               </span>
             </div>
 
-            <div className="rounded-2xl border border-[#023927]/10 bg-white shadow-[0_12px_32px_rgba(2,57,39,0.06)] p-2 sm:p-4 overflow-hidden">
+            {/* Vacances availability status — PUBLIC_VACANCES_API */}
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-[#023927]/10 px-2.5 py-1">
+                  <span className="w-2.5 h-2.5 rounded-full bg-white border border-[#023927]/20" /> {t('propertyDetail.reservation.available', { defaultValue: 'Disponible' })}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#023927] text-white px-2.5 py-1">
+                  <span className="w-2.5 h-2.5 rounded-full bg-white" /> {t('propertyDetail.reservation.selected', { defaultValue: 'Sélectionné' })}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-200 text-red-700 px-2.5 py-1">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500" /> {t('propertyDetail.reservation.reserved', { defaultValue: 'Réservé' })}
+                </span>
+              </div>
+              {reservedLoading ? (
+                <span className="text-xs text-[#023927]/50 animate-pulse">
+                  {t('propertyDetail.reservation.loadingAvailability', { defaultValue: 'Chargement disponibilités…' })}
+                </span>
+              ) : reservedError ? (
+                <button type="button" onClick={handleRetryReserved} className="text-xs text-red-600 underline hover:text-red-700">
+                  {t('propertyDetail.reservation.retry', { defaultValue: 'réessayer' })} — {t('propertyDetail.reservation.error', { defaultValue: 'Erreur' })}
+                </button>
+              ) : (
+                <span className="text-xs text-[#023927]/60">
+                  {reservedDates.length === 0
+                    ? t('propertyDetail.reservation.allAvailable', { defaultValue: 'Toutes les dates disponibles' }) as string
+                    : `${reservedDates.length} ${t('propertyDetail.reservation.blockedCount', { defaultValue: 'jours réservés' }) as string}`}
+                </span>
+              )}
+            </div>
+
+            {overlapWarning && (
+              <div className="mb-3 rounded-xl bg-red-50 border border-red-200 px-3 py-2.5 text-xs sm:text-sm text-red-800 flex items-start gap-2 reservation-fade-slide">
+                <span className="mt-0.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-[11px] flex-shrink-0">!</span>
+                <span className="leading-snug">{overlapWarning}</span>
+              </div>
+            )}
+
+            <div className="rounded-2xl border border-[#023927]/10 bg-white shadow-[0_12px_32px_rgba(2,57,39,0.06)] p-2 sm:p-4 overflow-hidden relative">
+              {reservedLoading && (
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-[#023927] text-white px-4 py-2 text-xs shadow">
+                    <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    {t('propertyDetail.reservation.loadingCalendar', { defaultValue: 'Chargement du calendrier…' })}
+                  </span>
+                </div>
+              )}
               <DayPicker
                 mode="range"
                 selected={range}
-                onSelect={(next) => {
-                  if (suppressNextSelectRef.current) {
-                    suppressNextSelectRef.current = false;
-                    return;
-                  }
-                  setRange(next);
-                }}
+                onSelect={handleSelect}
                 locale={currentLocale}
                 numberOfMonths={isMobile ? 1 : 2}
-                disabled={{ before: today }}
+                disabled={[{ before: today }, ...blockedDates]}
                 onDayMouseEnter={handleDayMouseEnter}
                 onDayMouseLeave={() => setHoveredDate(undefined)}
                 className="reservation-calendar mx-auto"
@@ -550,10 +759,12 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
                 modifiers={{
                   hoverRange: hoverRangeMatcher,
                   hoverEnd: hoverEndMatcher,
+                  blocked: blockedDates,
                 }}
                 modifiersClassNames={{
                   hoverRange: 'rdp-hover-range',
                   hoverEnd: 'rdp-hover-end',
+                  blocked: 'rdp-blocked',
                 }}
               />
             </div>
@@ -576,16 +787,26 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
               <span className="text-xs text-[#023927]/50 uppercase tracking-widest font-medium">
                 {t('propertyDetail.reservation.quickPick', { defaultValue: 'Sélection rapide' })}:
               </span>
-              {quickPicks.map((pick) => (
-                <button
-                  key={pick.nights}
-                  type="button"
-                  onClick={() => applyQuickPick(pick.nights)}
-                  className="px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white border border-[#023927]/10 text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-200"
-                >
-                  {pick.label} • {pick.nights} {t('propertyDetail.reservation.nights', { defaultValue: 'nuits' })}
-                </button>
-              ))}
+              {quickPicks.map((pick) => {
+                const base = range?.from || addDays(today, 1);
+                const wouldOverlap = isRangeOverlapsReserved(base, addDays(base, pick.nights), reservedSet);
+                return (
+                  <button
+                    key={pick.nights}
+                    type="button"
+                    onClick={() => applyQuickPick(pick.nights)}
+                    disabled={wouldOverlap}
+                    title={wouldOverlap ? (t('propertyDetail.reservation.quickPickBlocked', { defaultValue: 'Indisponible — dates réservées dans cette période' }) as string) : undefined}
+                    className={`px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium border shadow-sm transition-all duration-200 ${
+                      wouldOverlap
+                        ? 'bg-red-50 border-red-200 text-red-400 cursor-not-allowed opacity-60'
+                        : 'bg-white border-[#023927]/10 text-[#023927] hover:bg-[#023927] hover:text-white hover:border-[#023927] hover:shadow-md hover:scale-[1.02]'
+                    }`}
+                  >
+                    {pick.label} • {pick.nights} {t('propertyDetail.reservation.nights', { defaultValue: 'nuits' })}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -687,11 +908,11 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ propertyId, p
                 </div>
               </div>
 
-              {/* CTA — premium */}
+              {/* CTA — premium — disabled if reserved overlap */}
               <button
                 type="button"
                 onClick={() => onReserve(range, guests)}
-                disabled={!range?.from || !range?.to}
+                disabled={!range?.from || !range?.to || !!overlapWarning || (range?.from && range?.to ? isRangeOverlapsReserved(range.from, range.to, reservedSet) : false)}
                 className="group relative w-full overflow-hidden rounded-full bg-[#023927] text-white py-4 px-6 font-inter font-semibold text-sm uppercase tracking-widest hover:bg-[#0a4d3a] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-[0_12px_32px_rgba(2,57,39,0.28)] hover:shadow-[0_16px_40px_rgba(2,57,39,0.35)] hover:scale-[1.01] active:scale-[0.99]"
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />

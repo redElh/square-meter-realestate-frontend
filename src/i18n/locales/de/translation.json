@@ -383,7 +383,16 @@
       "noPayment": "Keine Zahlung jetzt — Ihre Auswahl wird an unser Team gesendet.",
       "button": "Reservierung anfragen",
       "savedTitle": "Auswahl gespeichert!",
-      "savedSubtitle": "Weiterleitung zum Kontaktformular..."
+      "savedSubtitle": "Weiterleitung zum Kontaktformular...",
+      "available": "Verfügbar",
+      "selected": "Ausgewählt",
+      "reserved": "Reserviert",
+      "loadingAvailability": "Verfügbarkeit wird geladen…",
+      "allAvailable": "Alle Daten verfügbar",
+      "blockedCount": "Tage reserviert",
+      "error": "Fehler",
+      "retry": "erneut versuchen",
+      "loadingCalendar": "Kalender wird geladen…"
     },
     "mock": {
       "property": {

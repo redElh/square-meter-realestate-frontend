@@ -15,6 +15,10 @@
     {
       "source": "/api/apimo/:path*",
       "destination": "/api/apimo"
+    },
+    {
+      "source": "/api/public/vacances/:path*",
+      "destination": "/api/public/vacances"
     }
   ],
   "functions": {
@@ -47,6 +51,10 @@
       "memory": 512
     },
     "api/reviews.js": {
+      "maxDuration": 10,
+      "memory": 512
+    },
+    "api/public/vacances.js": {
       "maxDuration": 10,
       "memory": 512
     }

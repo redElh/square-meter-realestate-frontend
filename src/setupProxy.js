@@ -51,6 +51,30 @@ module.exports = function(app) {
     })
   );
 
+  // ─── Vacances Public API — REAL proxy to api.squaremeter.ma ─────────────
+  // In dev, fetch('/api/public/vacances/...') is proxied to https://api.squaremeter.ma
+  // which is the real CRUD backend for Toolbox → Vacances (category:3 APIMO).
+  // This matches production data exactly (mock only via ?mockVacances=1).
+  app.use(
+    '/api/public/vacances',
+    createProxyMiddleware({
+      target: 'https://api.squaremeter.ma',
+      changeOrigin: true,
+      secure: true,
+      logLevel: 'debug',
+      onProxyReq: (proxyReq) => {
+        console.log(`[Vacances Proxy] ${proxyReq.method} ${proxyReq.path} -> https://api.squaremeter.ma${proxyReq.path}`);
+      },
+      onProxyRes: (proxyRes, req) => {
+        console.log(`[Vacances Proxy] response ${proxyRes.statusCode} for ${req.originalUrl}`);
+      },
+      onError: (err, req, res) => {
+        console.error('[Vacances Proxy] error', err.message);
+        if (!res.headersSent) res.status(502).json({ error: 'Vacances proxy error', message: err.message });
+      },
+    })
+  );
+
   // ─── Apimo Proxy ───────────────────────────────────────────────────────────
   app.use(
     '/api/apimo',

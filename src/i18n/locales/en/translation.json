@@ -370,7 +370,16 @@
       "noPayment": "No payment now — your selection will be sent to our team.",
       "button": "Request Reservation",
       "savedTitle": "Selection saved!",
-      "savedSubtitle": "Redirecting to contact form..."
+      "savedSubtitle": "Redirecting to contact form...",
+      "available": "Available",
+      "selected": "Selected",
+      "reserved": "Reserved",
+      "loadingAvailability": "Loading availability…",
+      "allAvailable": "All dates available",
+      "blockedCount": "days reserved",
+      "error": "Error",
+      "retry": "retry",
+      "loadingCalendar": "Loading calendar…"
     },
     "mock": {
       "property": {

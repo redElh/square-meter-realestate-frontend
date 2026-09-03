@@ -373,7 +373,16 @@
       "noPayment": "Sin pago ahora — su selección se enviará a nuestro equipo.",
       "button": "Solicitar reserva",
       "savedTitle": "¡Selección guardada!",
-      "savedSubtitle": "Redirigiendo al formulario de contacto..."
+      "savedSubtitle": "Redirigiendo al formulario de contacto...",
+      "available": "Disponible",
+      "selected": "Seleccionado",
+      "reserved": "Reservado",
+      "loadingAvailability": "Cargando disponibilidad…",
+      "allAvailable": "Todas las fechas disponibles",
+      "blockedCount": "días reservados",
+      "error": "Error",
+      "retry": "reintentar",
+      "loadingCalendar": "Cargando calendario…"
     },
     "mock": {
       "property": {
