@@ -58,7 +58,7 @@ const BuyerDocuments: React.FC = () => {
                 </div>
                 <div>
                   <div className={`text-xl font-bold ${colorClass.split(' ')[0]}`}>{stat.value}</div>
-                  <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
+                  <div className="text-sm text-gray-500 font-medium">{stat.label}</div>
                 </div>
               </div>
             </div>
@@ -69,8 +69,8 @@ const BuyerDocuments: React.FC = () => {
       {/* Documents List */}
       <div className="bg-white border border-gray-200 shadow-sm">
         <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Liste des documents</h3>
-          <button className="px-4 py-2 bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm flex items-center gap-1.5">
+          <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Liste des documents</h3>
+          <button className="px-4 py-2 bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-all shadow-sm flex items-center gap-1.5">
             <ArrowUpTrayIcon className="w-3.5 h-3.5" />
             Ajouter
           </button>
@@ -87,9 +87,9 @@ const BuyerDocuments: React.FC = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-semibold text-gray-900">{doc.name}</h4>
-                      <p className="text-xs text-gray-500 mt-0.5">{doc.date}</p>
+                      <p className="text-sm text-gray-500 mt-0.5">{doc.date}</p>
                     </div>
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold border ${config.class}`}>
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm font-semibold border ${config.class}`}>
                       {config.icon}
                       {doc.status}
                     </span>

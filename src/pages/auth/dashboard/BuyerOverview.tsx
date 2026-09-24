@@ -27,7 +27,7 @@ const ScoreBadge: React.FC<{ score: number }> = ({ score }) => {
     score >= 80 ? 'text-blue-600 bg-blue-50 border-blue-200' :
     'text-amber-600 bg-amber-50 border-amber-200';
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold border ${color}`}>
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-sm font-bold border ${color}`}>
       <SparklesIcon className="w-3 h-3" />
       {score}%
     </span>
@@ -59,7 +59,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
                   <Icon className="w-4 h-4" />
                 </div>
                 <div className="text-2xl font-bold text-gray-900 tracking-tight">{stat.value}</div>
-                <div className="text-xs text-gray-500 mt-0.5 font-medium">{stat.label}</div>
+                <div className="text-sm text-gray-500 mt-0.5 font-medium">{stat.label}</div>
               </div>
             </div>
           );
@@ -75,7 +75,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
               <HomeIcon className="w-4 h-4 text-emerald-600" />
               Derniers biens proposés
             </h3>
-            <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2 py-1">
+            <span className="text-sm text-emerald-600 font-semibold bg-emerald-50 px-2 py-1">
               {buyerSavedProperties.filter(p => p.isNew).length} nouveaux
             </span>
           </div>
@@ -86,7 +86,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
                   <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
                     <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
                     {p.isNew && (
-                      <span className="absolute top-1 left-1 bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 uppercase tracking-wider">
+                      <span className="absolute top-1 left-1 bg-emerald-500 text-white text-xs font-bold px-1.5 py-0.5 uppercase tracking-wider">
                         Nouveau
                       </span>
                     )}
@@ -96,27 +96,27 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
                       <h4 className="font-semibold text-gray-900 text-sm leading-tight">{p.title}</h4>
                       <ScoreBadge score={p.score || 0} />
                     </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                    <div className="flex items-center gap-1 text-sm text-gray-500 mt-0.5">
                       <MapPinIcon className="w-3 h-3 flex-shrink-0" />
                       <span className="truncate">{p.location}</span>
                     </div>
                     <div className="flex items-center justify-between mt-1">
                       <p className="text-emerald-700 font-bold text-sm">{p.price}</p>
-                      <p className="text-[11px] text-gray-400">{p.surface} · {p.bedrooms} ch.</p>
+                      <p className="text-sm text-gray-400">{p.surface} · {p.bedrooms} ch.</p>
                     </div>
                     <div className="flex items-center gap-2 mt-1.5">
-                      <span className="text-[11px] text-gray-400 bg-gray-100 px-1.5 py-0.5">
+                      <span className="text-sm text-gray-400 bg-gray-100 px-1.5 py-0.5">
                         Correspondance : {p.score}%
                       </span>
                     </div>
                     <div className="flex gap-3 mt-1.5">
                       <button
                         onClick={() => onNavigate('properties')}
-                        className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold transition-colors"
+                        className="text-sm text-emerald-600 hover:text-emerald-700 font-semibold transition-colors"
                       >
                         Voir
                       </button>
-                      <button className="text-xs text-gray-400 hover:text-red-500 font-medium transition-colors flex items-center gap-1">
+                      <button className="text-sm text-gray-400 hover:text-red-500 font-medium transition-colors flex items-center gap-1">
                         <HeartIcon className="w-3 h-3" />
                         Sauvegarder
                       </button>
@@ -129,7 +129,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
           <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/50">
             <button
               onClick={() => onNavigate('properties')}
-              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1 group"
+              className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1 group"
             >
               Voir tous les biens proposés
               <ArrowRightIcon className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -144,7 +144,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
               <CalendarIcon className="w-4 h-4 text-emerald-600" />
               Prochains rendez-vous
             </h3>
-            <span className="text-xs text-gray-500 font-medium">
+            <span className="text-sm text-gray-500 font-medium">
               {appointmentsData.filter(a => a.status === 'Confirmé').length} confirmés
             </span>
           </div>
@@ -153,41 +153,41 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
               <div key={appt.id} className="px-5 py-4 hover:bg-gray-50/80 transition-colors">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3">
-                    <div className={`w-10 h-10 flex items-center justify-center text-xs font-bold border flex-shrink-0 mt-0.5 ${
+                    <div className={`w-10 h-10 flex items-center justify-center text-sm font-bold border flex-shrink-0 mt-0.5 ${
                       appt.status === 'Confirmé'
                         ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                         : 'bg-amber-50 text-amber-700 border-amber-200'
                     }`}>
                       <div className="text-center leading-tight">
-                        <div className="text-[11px]">{appt.date.split('/')[0]}</div>
-                        <div className="text-[9px] opacity-70">{appt.date.split('/')[1]}</div>
+                        <div className="text-sm">{appt.date.split('/')[0]}</div>
+                        <div className="text-[11px] opacity-70">{appt.date.split('/')[1]}</div>
                       </div>
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{appt.time} - {appt.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{appt.location}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{appt.advisor}</p>
+                      <p className="text-sm text-gray-500 mt-0.5">{appt.location}</p>
+                      <p className="text-sm text-gray-400 mt-0.5">{appt.advisor}</p>
                       <div className="flex gap-2 mt-1.5">
                         {appt.status === 'Confirmé' ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-medium">
+                          <span className="inline-flex items-center gap-1 text-sm text-emerald-600 font-medium">
                             <CheckIcon className="w-3 h-3" />
                             Confirmé
                           </span>
                         ) : (
-                          <button className="text-xs text-emerald-600 hover:text-emerald-700 font-medium">
+                          <button className="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
                             Confirmer
                           </button>
                         )}
-                        <button className="text-xs text-gray-400 hover:text-gray-600 font-medium">
+                        <button className="text-sm text-gray-400 hover:text-gray-600 font-medium">
                           Modifier
                         </button>
-                        <button className="text-xs text-red-400 hover:text-red-600 font-medium">
+                        <button className="text-sm text-red-400 hover:text-red-600 font-medium">
                           Annuler
                         </button>
                       </div>
                     </div>
                   </div>
-                  <span className={`flex-shrink-0 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                  <span className={`flex-shrink-0 px-2 py-0.5 text-xs font-bold uppercase tracking-wider ${
                     appt.status === 'Confirmé'
                       ? 'bg-emerald-100 text-emerald-800'
                       : 'bg-amber-100 text-amber-800'
@@ -201,7 +201,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
           <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/50">
             <button
               onClick={() => onNavigate('appointments')}
-              className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1 group"
+              className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1 group"
             >
               Voir tous les rendez-vous
               <ArrowRightIcon className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -219,7 +219,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
           </h3>
           <button
             onClick={() => onNavigate('demands')}
-            className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
+            className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors"
           >
             Gérer mes demandes
           </button>
@@ -230,18 +230,18 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
               <div key={demand.id} className="border border-gray-200 p-4 hover:border-emerald-300 hover:shadow-sm transition-all">
                 <div className="flex items-start justify-between mb-2">
                   <h4 className="font-semibold text-gray-900 text-sm">{demand.title}</h4>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 uppercase">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-bold bg-emerald-100 text-emerald-800 uppercase">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     Active
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 mb-2">{demand.priceRange}</p>
-                <p className="text-xs text-gray-600">{demand.details}</p>
+                <p className="text-sm text-gray-500 mb-2">{demand.priceRange}</p>
+                <p className="text-sm text-gray-600">{demand.details}</p>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                  <span className="text-xs text-gray-500">
+                  <span className="text-sm text-gray-500">
                     <span className="font-bold text-emerald-600">{demand.propositions}</span> biens proposés
                   </span>
-                  <button className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold">
+                  <button className="text-sm text-emerald-600 hover:text-emerald-700 font-semibold">
                     Voir les biens
                   </button>
                 </div>
@@ -258,7 +258,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
             <ChatBubbleLeftIcon className="w-4 h-4 text-emerald-600" />
             Derniers messages
           </h3>
-          <span className="text-xs text-gray-500 font-medium">
+          <span className="text-sm text-gray-500 font-medium">
             {messages.filter(m => m.unread).length} non lus
           </span>
         </div>
@@ -266,7 +266,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
           {messages.slice(0, 2).map((msg) => (
             <div key={msg.id} className="px-5 py-4 hover:bg-gray-50/80 transition-colors">
               <div className="flex items-start gap-3">
-                <div className={`w-9 h-9 flex items-center justify-center text-xs font-bold border flex-shrink-0 ${
+                <div className={`w-9 h-9 flex items-center justify-center text-sm font-bold border flex-shrink-0 ${
                   msg.unread ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-50 text-gray-500 border-gray-200'
                 }`}>
                   {msg.sender.split(' ').map(s => s[0]).slice(0, 2).join('')}
@@ -277,15 +277,15 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
                       {msg.sender}
                     </h4>
                     {msg.unread && (
-                      <span className="bg-emerald-500 text-white px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+                      <span className="bg-emerald-500 text-white px-1.5 py-0.5 text-xs font-bold uppercase tracking-wider">
                         Nouveau
                       </span>
                     )}
-                    <span className="ml-auto text-xs text-gray-400 flex-shrink-0">il y a {msg.time}</span>
+                    <span className="ml-auto text-sm text-gray-400 flex-shrink-0">il y a {msg.time}</span>
                   </div>
-                  <p className="text-xs text-gray-500 mt-0.5">{msg.role}</p>
+                  <p className="text-sm text-gray-500 mt-0.5">{msg.role}</p>
                   <p className="text-sm text-gray-700 mt-1 line-clamp-1">{msg.content}</p>
-                  <button className="mt-1 text-xs text-emerald-600 hover:text-emerald-700 font-semibold">
+                  <button className="mt-1 text-sm text-emerald-600 hover:text-emerald-700 font-semibold">
                     Répondre
                   </button>
                 </div>
@@ -296,7 +296,7 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
         <div className="px-5 py-3 border-t border-gray-100 bg-gray-50/50">
           <button
             onClick={() => onNavigate('messages')}
-            className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1 group"
+            className="text-sm font-semibold text-emerald-600 hover:text-emerald-700 transition-colors flex items-center gap-1 group"
           >
             Voir tous les messages
             <ArrowRightIcon className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />

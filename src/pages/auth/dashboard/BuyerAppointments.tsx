@@ -30,16 +30,16 @@ const BuyerAppointments: React.FC = () => {
         </div>
         <div className="bg-white border border-gray-200 shadow-sm p-5 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Objet</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Objet</label>
             <input type="text" placeholder="Ex: Visite appartement" className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Date</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">Date</label>
               <input type="date" className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Heure</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1">Heure</label>
               <input type="time" className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
             </div>
           </div>
@@ -74,7 +74,7 @@ const BuyerAppointments: React.FC = () => {
                 </div>
                 <div>
                   <div className={`text-xl font-bold ${colorClass.split(' ')[0]}`}>{stat.value}</div>
-                  <div className="text-xs text-gray-500 font-medium">{stat.label}</div>
+                  <div className="text-sm text-gray-500 font-medium">{stat.label}</div>
                 </div>
               </div>
             </div>
@@ -97,12 +97,12 @@ const BuyerAppointments: React.FC = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/80">
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Date</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Type</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Bien / Sujet</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Agent</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Statut</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Actions</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Date</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Type</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Bien / Sujet</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Agent</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Statut</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -110,28 +110,28 @@ const BuyerAppointments: React.FC = () => {
                 <tr key={appt.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="py-4 px-5 whitespace-nowrap">
                     <div className="font-semibold text-gray-900 text-sm">{appt.date}</div>
-                    <div className="text-xs text-gray-500">{appt.time}</div>
+                    <div className="text-sm text-gray-500">{appt.time}</div>
                   </td>
                   <td className="py-4 px-5">
-                    <span className="text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1">{appt.type}</span>
+                    <span className="text-sm font-medium text-gray-700 bg-gray-100 px-2 py-1">{appt.type}</span>
                   </td>
                   <td className="py-4 px-5">
                     <div className="text-sm text-gray-900 font-medium">{appt.propertyName || appt.title}</div>
-                    <div className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                    <div className="text-sm text-gray-500 flex items-center gap-1 mt-0.5">
                       <MapPinIcon className="w-3 h-3" />
                       {appt.location}
                     </div>
                   </td>
                   <td className="py-4 px-5">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 bg-gray-100 border border-gray-200 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                      <div className="w-7 h-7 bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
                         {appt.advisor.split(' ').map(s => s[0]).join('')}
                       </div>
                       <span className="text-sm text-gray-700">{appt.advisor}</span>
                     </div>
                   </td>
                   <td className="py-4 px-5">
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm font-bold uppercase tracking-wider ${
                       appt.status === 'Confirmé'
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         : 'bg-amber-50 text-amber-700 border border-amber-200'

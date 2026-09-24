@@ -256,6 +256,85 @@ const refreshAccessToken = async (req, res) => {
   }
 };
 
+const verifyTravelerEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+
+    const pool = require('../config/database');
+    let result;
+    try {
+      result = await pool.query(
+        'SELECT id, email, role, first_name, last_name, original_role, linked_spaces FROM users WHERE LOWER(email) = LOWER($1)',
+        [email]
+      );
+    } catch {
+      // Fallback if columns don't exist yet (pre-migration)
+      result = await pool.query(
+        'SELECT id, email, role, first_name, last_name FROM users WHERE LOWER(email) = LOWER($1)',
+        [email]
+      );
+      if (result.rows.length > 0) {
+        result.rows[0].original_role = null;
+        result.rows[0].linked_spaces = [];
+      }
+    }
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'No traveler account found with this email.' });
+    }
+
+    const user = result.rows[0];
+    const linkedSpaces = user.linked_spaces || [];
+    const isTraveler =
+      user.role === 'traveler' ||
+      user.original_role === 'traveler' ||
+      linkedSpaces.includes('traveler');
+
+    if (!isTraveler) {
+      return res.status(404).json({ error: 'No traveler account found with this email.' });
+    }
+
+    const accessToken = generateAccessToken(user.id);
+    const refreshToken = generateRefreshToken(user.id);
+
+    await pool.query('UPDATE users SET refresh_token = $1 WHERE id = $2', [refreshToken, user.id]);
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: 'traveler',
+        first_name: user.first_name,
+        last_name: user.last_name,
+        original_role: user.original_role,
+        linked_spaces: user.linked_spaces || [],
+      },
+    });
+  } catch (error) {
+    console.error('traveler-access error:', error);
+    res.status(500).json({ error: 'Failed to verify traveler email' });
+  }
+};
+
 const logout = async (req, res) => {
   try {
     const token = req.cookies.accessToken;
@@ -282,4 +361,4 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
-module.exports = { handleOAuthCallback, register, login, forgotPassword, resetPassword, refreshAccessToken, logout, getCurrentUser };
+module.exports = { handleOAuthCallback, register, login, forgotPassword, resetPassword, refreshAccessToken, logout, getCurrentUser, verifyTravelerEmail };

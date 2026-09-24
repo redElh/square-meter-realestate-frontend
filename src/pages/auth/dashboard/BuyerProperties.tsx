@@ -214,7 +214,7 @@ const BuyerProperties: React.FC<BuyerPropertiesProps> = ({ onViewProperty }) => 
               {buyerSavedProperties.map((property) => (
                 <div key={property.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                   <div className="flex gap-4">
-                    <div className="w-32 h-24 bg-gray-200 flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
+                    <div className="w-32 h-24 bg-gray-200 flex items-center justify-center text-gray-400 text-sm flex-shrink-0">
                       Image
                     </div>
                     <div className="flex-1 min-w-0">

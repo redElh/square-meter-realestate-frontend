@@ -22,7 +22,9 @@ import {
   LifebuoyIcon,
   ArrowRightIcon,
   DocumentTextIcon,
+  PhotoIcon,
 } from '@heroicons/react/24/outline';
+import ImageGalleryModal from './ImageGalleryModal';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -38,6 +40,8 @@ interface PricingTier {
 interface Activity {
   name: string;
   category: CategoryKey;
+  partenaire: string;
+  images: string[];
   shortDesc: string;
   description: string;
   duration: string;
@@ -107,6 +111,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Excursion en mer',
     category: 'nautique',
+    partenaire: 'Essaouira Sea Adventures',
+    images: [
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=800&h=600&fit=crop',
+    ],
     shortDesc: "Découverte des côtes d'Essaouira",
     description:
       "Profitez d'une excursion en mer exceptionnelle à la découverte des côtes sauvages d'Essaouira. Observez les oiseaux migrateurs, nagez dans des criques secrètes et dégustez un déjeuner typique à bord.",
@@ -130,6 +140,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Cours de cuisine provençale',
     category: 'gastronomie',
+    partenaire: 'Cuisine & Sens Essaouira',
+    images: [
+      'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&h=600&fit=crop',
+    ],
     shortDesc: 'Atelier culinaire & dégustation',
     description:
       "Plongez dans l'art culinaire provençal avec un chef local. Apprenez à préparer des plats traditionnels et savourez votre création accompagné d'un vin de la région.",
@@ -152,6 +168,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Visite vignoble privé',
     category: 'gastronomie',
+    partenaire: 'Domaine des Étoiles',
+    images: [
+      'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1474722883778-792e7990302f?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&h=600&fit=crop',
+    ],
     shortDesc: 'Découverte des vins & dégustation',
     description:
       "Visitez un vignoble privé aux alentours d'Essaouira. Découvrez le processus de vinification et dégustez une sélection de vins de qualité accompagnés de fromages locaux.",
@@ -175,6 +197,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Massage spa privatif',
     category: 'bien-etre',
+    partenaire: 'Riad Zen Essaouira',
+    images: [
+      'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&h=600&fit=crop',
+    ],
     shortDesc: 'Soins traditionnels & relaxation',
     description:
       "Offrez-vous un moment de détente absolue avec un massage spa privatif. Nos thérapeutes utilisent des huiles essentielles locales pour une expérience de relaxation unique.",
@@ -197,6 +225,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Quad à Diabat',
     category: 'aventure',
+    partenaire: 'Atlas Aventure',
+    images: [
+      'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1547549082-6bc09f2049ae?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop',
+    ],
     shortDesc: 'Aventure en plein air',
     description:
       "Partez à l'aventure sur un quad à travers les paysages spectaculaires de Diabat. Parcourez les dunes, les plages et les forêts de thuya dans une expérience inoubliable.",
@@ -220,6 +254,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Escape Game Essaouira',
     category: 'loisirs',
+    partenaire: 'Médina Games',
+    images: [
+      'https://images.unsplash.com/photo-1511882150382-421056c89033?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1590076215667-875d4ef2d7de?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1609233034262-342e1e4d8119?w=800&h=600&fit=crop',
+    ],
     shortDesc: 'Aventure immersive en équipe',
     description:
       "Affrontez une énigme palpitante dans un escape game immersif au cœur de la médina. Résolvez les indices, cassez les codes et échappez dans les temps !",
@@ -241,6 +281,12 @@ const ACTIVITIES: Activity[] = [
   {
     name: 'Cours de surf',
     category: 'sport',
+    partenaire: 'Essaouira Surf School',
+    images: [
+      'https://images.unsplash.com/photo-1502680390548-2d1a2a3b7e10?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1455729552457-5c322b2e7a64?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1509914398892-963f53e6e2f1?w=800&h=600&fit=crop',
+    ],
     shortDesc: 'Apprenez à surfer en bord de mer',
     description:
       "Initiez-vous au surf avec nos moniteurs certifiés sur les plages idéales d'Essaouira. Matériel inclus, débutants bienvenus.",
@@ -281,6 +327,17 @@ const ActivityConcierge: React.FC = () => {
   const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState<CategoryKey | 'all'>('all');
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryTitle, setGalleryTitle] = useState('');
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
+
+  const openGallery = (images: string[], title: string, index: number) => {
+    setGalleryImages(images);
+    setGalleryTitle(title);
+    setGalleryInitialIndex(index);
+    setGalleryOpen(true);
+  };
 
   const filtered =
     activeFilter === 'all'
@@ -524,10 +581,44 @@ const ActivityConcierge: React.FC = () => {
                           <p className="font-inter text-sm text-gray-500 mt-1">
                             {selectedActivity.shortDesc}
                           </p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className="font-inter text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                              {t('travelerSpace.activities.modal.partenaire')} :
+                            </span>
+                            <span className="font-inter text-sm font-bold text-gray-800">
+                              {selectedActivity.partenaire}
+                            </span>
+                          </div>
                         </div>
 
                         {/* Modal body */}
                         <div className="px-6 py-5 space-y-5 max-h-[60vh] overflow-y-auto">
+                          {/* Gallery */}
+                          <div>
+                            <h4 className="font-inter text-xs font-bold uppercase tracking-widest text-gray-400 mb-3 flex items-center gap-2">
+                              <span className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
+                                <PhotoIcon className="w-3 h-3 text-blue-600" />
+                              </span>
+                              {t('travelerSpace.activities.modal.gallery')}
+                            </h4>
+                            <div className="flex gap-2 overflow-x-auto pb-2">
+                              {selectedActivity.images.map((img, i) => (
+                                <button
+                                  key={i}
+                                  onClick={() => openGallery(selectedActivity.images, selectedActivity.name, i)}
+                                  className="flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden border border-gray-100 hover:ring-2 hover:ring-offset-1 transition-all duration-200"
+                                  style={{ '--tw-ring-color': cfg.color } as React.CSSProperties}
+                                >
+                                  <img
+                                    src={img}
+                                    alt={`${selectedActivity.name} ${i + 1}`}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
                           {/* Activity details */}
                           <div>
                             <h4 className="font-inter text-xs font-bold uppercase tracking-widest text-gray-400 mb-3 flex items-center gap-2">
@@ -722,6 +813,15 @@ const ActivityConcierge: React.FC = () => {
           </div>
         </Dialog>
       </Transition>
+
+      {/* ---- Image Gallery Modal ---- */}
+      <ImageGalleryModal
+        isOpen={galleryOpen}
+        onClose={() => setGalleryOpen(false)}
+        images={galleryImages}
+        propertyTitle={galleryTitle}
+        initialIndex={galleryInitialIndex}
+      />
     </div>
   );
 };

@@ -75,17 +75,17 @@ const BuyerMessages: React.FC = () => {
                   <h4 className={`text-sm ${message.unread ? 'font-bold' : 'font-medium'} text-gray-900 truncate`}>
                     {message.sender}
                   </h4>
-                  <span className="text-xs text-gray-400 flex-shrink-0 ml-2">
+                  <span className="text-sm text-gray-400 flex-shrink-0 ml-2">
                     il y a {message.time}
                   </span>
                 </div>
                 {message.unread && (
-                  <span className="inline-block bg-emerald-600 text-white px-2 py-0.5 text-xs font-semibold mb-1">
+                  <span className="inline-block bg-emerald-600 text-white px-2 py-0.5 text-sm font-semibold mb-1">
                     NOUVEAU
                   </span>
                 )}
-                <p className="text-xs text-gray-500 mb-0.5">{message.role}</p>
-                <p className="text-xs text-gray-600 truncate">{message.content}</p>
+                <p className="text-sm text-gray-500 mb-0.5">{message.role}</p>
+                <p className="text-sm text-gray-600 truncate">{message.content}</p>
               </button>
             ))}
           </div>
@@ -105,7 +105,7 @@ const BuyerMessages: React.FC = () => {
               <div className="flex-1 px-6 py-4 space-y-4 max-h-[400px] overflow-y-auto">
                 <div className="bg-gray-50 p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-gray-400">il y a {selectedMessage.time}</span>
+                    <span className="text-sm text-gray-400">il y a {selectedMessage.time}</span>
                   </div>
                   <p className="text-sm text-gray-700">{selectedMessage.content}</p>
                 </div>

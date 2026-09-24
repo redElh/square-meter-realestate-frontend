@@ -25,7 +25,6 @@ import OAuthError from './pages/auth/OAuthError';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import Dashboard from './pages/auth/Dashboard';
-import ClientsProtectedRoute from './components/ProtectedRoute/ClientsProtectedRoute';
 import AuthProtectedRoute from './components/ProtectedRoute/AuthProtectedRoute';
 import Services from './pages/auth/Services';
 import NotFound from './pages/support/NotFound';
@@ -69,11 +68,7 @@ function App() {
             <Route path="/properties/:id" element={<PropertyDetail />} />
             <Route path="/property-statistics" element={<PropertyStatistics />} />
             <Route path="/owners" element={<Owners />} />
-            <Route path="/traveler" element={(
-              <ClientsProtectedRoute>
-                <TravelerSpace />
-              </ClientsProtectedRoute>
-            )} />
+            <Route path="/traveler" element={<TravelerSpace />} />
             <Route path="/voyageur" element={<TravelerSpace />} />
             <Route path="/agency" element={<Agency />} />
             <Route path="/mag" element={<Mag />} />

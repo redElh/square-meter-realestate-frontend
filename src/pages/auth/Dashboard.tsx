@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { AUTH_USER_CHANGED_EVENT } from '../../utils/auth';
 import {
   ChartBarIcon,
   MagnifyingGlassIcon,
@@ -10,13 +11,14 @@ import {
   DocumentTextIcon,
   UserCircleIcon,
   BellIcon,
-  PlusIcon,
   ShieldCheckIcon,
   ArrowRightOnRectangleIcon,
   UserIcon,
   ArrowTrendingUpIcon,
   KeyIcon,
   GlobeAltIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import BuyerOverview from './dashboard/BuyerOverview';
 import BuyerCrossings from './dashboard/BuyerCrossings';
@@ -51,7 +53,14 @@ import LessorAppointments from './dashboard/LessorAppointments';
 import LessorMessages from './dashboard/LessorMessages';
 import LessorDocuments from './dashboard/LessorDocuments';
 import LessorProfile from './dashboard/LessorProfile';
-import { buyerSavedProperties, ownerProperties } from './dashboard/data';
+import {
+  buyerSavedProperties,
+  ownerProperties,
+  buyerDashboardStats,
+  sellerDashboardStats,
+  tenantDashboardStats,
+  lessorDashboardStats,
+} from './dashboard/data';
 import { Property } from './dashboard/types';
 import UserProfile from '../../components/UserProfile';
 import MySpacesCard from './dashboard/MySpacesCard';
@@ -79,6 +88,30 @@ const Dashboard: React.FC = () => {
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
   const [linkedSpaces, setLinkedSpaces] = useState<string[]>([]);
   const [originalRole, setOriginalRole] = useState<string>('');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isArrowHidden, setIsArrowHidden] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateArrowVisibility = () => {
+      if (window.innerWidth < 1024) {
+        setIsArrowHidden(false);
+        return;
+      }
+      const el = headerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const arrowY = (window.innerHeight + 112) / 2;
+      setIsArrowHidden(rect.top <= arrowY + 20 && rect.bottom >= arrowY - 20);
+    };
+    updateArrowVisibility();
+    window.addEventListener('scroll', updateArrowVisibility, { passive: true });
+    window.addEventListener('resize', updateArrowVisibility);
+    return () => {
+      window.removeEventListener('scroll', updateArrowVisibility);
+      window.removeEventListener('resize', updateArrowVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     if (validRole && urlId) {
@@ -94,6 +127,7 @@ const Dashboard: React.FC = () => {
         originalRole: existingData.originalRole || '',
         linkedSpaces: existingData.linkedSpaces || [],
       }));
+      window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
     }
   }, [urlRole, urlId, validRole]);
 
@@ -124,6 +158,7 @@ const Dashboard: React.FC = () => {
               ex.linkedSpaces = spaces;
               ex.originalRole = origRole;
               localStorage.setItem('auth_user', JSON.stringify(ex));
+              window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
             }
           }
         }
@@ -193,6 +228,7 @@ const Dashboard: React.FC = () => {
         originalRole: existingData.originalRole || pendingRole,
         linkedSpaces: existingData.linkedSpaces || [pendingRole],
       }));
+      window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
       setLinkedSpaces(existingData.linkedSpaces || [pendingRole]);
       setOriginalRole(existingData.originalRole || pendingRole);
       setActiveTab('overview');
@@ -425,6 +461,49 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const roleConfig = (() => {
+    switch (userType) {
+      case 'buyer':
+        return {
+          title: 'Espace Acheteur',
+          greeting: "Bonjour, Jean Dupont ! Voici l'activité de votre projet immobilier",
+          badge: 'Acheteur',
+          icon: UserIcon,
+          stats: buyerDashboardStats,
+        };
+      case 'tenant':
+        return {
+          title: 'Espace Locataire',
+          greeting: "Bonjour ! Voici l'activité de votre recherche locative",
+          badge: 'Locataire',
+          icon: UserIcon,
+          stats: tenantDashboardStats,
+        };
+      case 'lessor':
+        return {
+          title: 'Espace Bailleur',
+          greeting: "Bonjour, Monsieur Benali ! Voici l'activité de vos biens en location",
+          badge: 'Bailleur',
+          icon: KeyIcon,
+          stats: lessorDashboardStats,
+        };
+      default:
+        return {
+          title: 'Espace Vendeur',
+          greeting: "Bonjour, Madame El Fassi ! Voici l'activité de vos biens",
+          badge: 'Vendeur',
+          icon: HomeIcon,
+          stats: sellerDashboardStats,
+        };
+    }
+  })();
+  const today = new Date().toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 pt-8">
       {/* Role Selection Modal */}
@@ -626,105 +705,135 @@ const Dashboard: React.FC = () => {
       )}
 
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
-          <div className="flex flex-col gap-4">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-emerald-800 mb-1">
-                {userType === 'buyer'
-                  ? "Espace Acheteur"
-                  : userType === 'tenant'
-                  ? "Espace Locataire"
-                  : userType === 'lessor'
-                  ? "Espace Bailleur"
-                  : 'Espace Vendeur'}
-              </h1>
-              <p className="text-sm sm:text-base text-gray-600">
-                {userType === 'buyer'
-                  ? "Bonjour, Jean Dupont ! Voici l'activité de votre projet immobilier"
-                  : userType === 'tenant'
-                  ? "Bonjour ! Voici l'activité de votre recherche locative"
-                  : userType === 'lessor'
-                  ? "Bonjour, Monsieur Benali ! Voici l'activité de vos biens en location"
-                  : "Bonjour, Madame El Fassi ! Voici l'activité de vos biens"}
-              </p>
-            </div>
+      <div ref={headerRef} className="relative overflow-hidden bg-gradient-to-r from-[#023927] via-emerald-800 to-[#023927] text-white shadow-lg">
+        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-white/5 blur-2xl"></div>
+        <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-emerald-400/10 blur-3xl"></div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <div className="flex bg-gray-100 p-1 flex-1 sm:flex-initial items-center justify-center px-4">
-                <span className="text-sm font-semibold text-emerald-700">
-                  {userType === 'buyer' ? 'Acheteur' : userType === 'tenant' ? 'Locataire' : userType === 'lessor' ? 'Bailleur' : 'Vendeur'}
-                </span>
+        <div className="relative container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="flex flex-col gap-6">
+            {/* Title row */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <div className="hidden sm:flex w-14 h-14 rounded-xl bg-white/10 border border-white/20 items-center justify-center flex-shrink-0">
+                  <roleConfig.icon className="w-7 h-7" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <h1 className="text-2xl sm:text-3xl font-bold">{roleConfig.title}</h1>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-white/15 border border-white/20 text-xs font-semibold uppercase tracking-wide">
+                      {roleConfig.badge}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm sm:text-base text-emerald-100/90">{roleConfig.greeting}</p>
+                </div>
               </div>
 
-              <div className="flex gap-2 sm:gap-3 ml-auto">
-                <button className="relative p-2 sm:p-3 bg-white border border-gray-200 hover:border-emerald-600 transition-all">
-                  <BellIcon className="w-5 h-5 text-gray-700" />
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="text-right hidden md:block">
+                  <p className="text-sm font-medium text-emerald-100 capitalize">{today}</p>
+                  <p className="text-xs text-emerald-200/80">Square Meter — Gestion client</p>
+                </div>
+                <button className="relative p-2.5 bg-white/10 border border-white/20 hover:bg-white/20 transition-all rounded-lg">
+                  <BellIcon className="w-5 h-5" />
                   {notifications > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs flex items-center justify-center rounded-full">
                       {notifications}
                     </span>
                   )}
                 </button>
-                <Link
-                  to="/contact"
-                  className="bg-emerald-600 text-white px-4 sm:px-6 py-2 text-sm font-medium hover:bg-emerald-700 transition-all flex items-center gap-2"
-                >
-                  <PlusIcon className="w-4 h-4" />
-                  <span>Nouveau</span>
-                </Link>
               </div>
+            </div>
+
+            {/* Quick stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {roleConfig.stats.map((stat) => {
+                const StatIcon = stat.icon;
+                return (
+                  <div key={stat.label} className="bg-white/10 border border-white/15 rounded-lg px-3 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <StatIcon className="w-4 h-4 text-emerald-100" />
+                      <span className="text-lg sm:text-xl font-bold">{stat.value}</span>
+                    </div>
+                    <p className="mt-0.5 text-[11px] sm:text-xs text-emerald-100/80 leading-tight">{stat.label}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1 lg:sticky lg:top-28 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
-            <div className="bg-white border border-gray-200 shadow-sm mt-6">
-              <nav className="py-2">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeTab === item.id && !selectedProperty;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        if (item.id === 'logout') {
-                          document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-                          localStorage.removeItem('auth_user');
-                          navigate('/auth');
-                          return;
-                        }
-                        handleNavigationClick(item.id);
-                      }}
-                      className={`w-full text-left flex items-center gap-3 px-5 py-3 text-sm font-medium transition-all ${
-                        isActive
-                          ? 'bg-emerald-600 text-white shadow-sm'
-                          : (item as any).isDanger
-                          ? 'text-red-500 hover:bg-red-50 border-t border-gray-100 mt-2 pt-4'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      <span>{item.label}</span>
-                      {'count' in item && item.count !== undefined && (
-                        <span className={`ml-auto px-2 py-0.5 text-xs font-semibold ${
-                          isActive
-                            ? 'bg-white/20 text-white'
-                            : 'bg-emerald-100 text-emerald-800'
-                        }`}>
-                          {item.count}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </nav>
-              <div className="border-t border-gray-200">
+      <div className="lg:flex lg:items-start lg:min-h-screen">
+        {/* Sidebar Navigation */}
+        <div className="relative lg:sticky lg:top-28 lg:self-start">
+          <button
+            onClick={() => setIsSidebarCollapsed(true)}
+            title="Replier le menu"
+            aria-label="Replier le menu"
+            className={`group absolute right-3 top-3 lg:fixed lg:right-auto lg:top-[calc((100vh+7rem)/2)] lg:-translate-y-1/2 lg:left-[272px] z-30 w-8 h-8 rounded-full bg-gradient-to-b from-emerald-500 to-[#023927] text-white border border-emerald-300/50 shadow-lg shadow-emerald-900/40 flex items-center justify-center transition-all duration-500 ease-in-out hover:scale-110 hover:shadow-emerald-500/50 active:scale-95 ${isSidebarCollapsed || isArrowHidden ? 'opacity-0 scale-50 pointer-events-none' : 'opacity-100 scale-100'}`}
+          >
+            <ChevronLeftIcon className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-300" />
+          </button>
+
+          <button
+            onClick={() => setIsSidebarCollapsed(false)}
+            title="Ouvrir le menu"
+            aria-label="Ouvrir le menu"
+            className={`group fixed left-2 top-3 lg:top-[calc((100vh+7rem)/2)] lg:-translate-y-1/2 z-30 w-8 h-8 rounded-full bg-gradient-to-b from-emerald-500 to-[#023927] text-white border border-emerald-300/50 shadow-lg shadow-emerald-900/40 flex items-center justify-center transition-all duration-500 ease-in-out hover:scale-110 hover:shadow-emerald-500/50 active:scale-95 ${!isSidebarCollapsed || isArrowHidden ? 'opacity-0 scale-50 pointer-events-none' : 'opacity-100 scale-100'}`}
+          >
+            <ChevronRightIcon className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+          </button>
+
+          <div className={`relative overflow-x-hidden lg:max-h-[calc(100vh-7rem)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transition-[width] duration-500 ease-in-out ${isSidebarCollapsed ? 'lg:w-0 lg:overflow-hidden' : 'lg:w-72 lg:overflow-y-auto'}`}>
+            <div className={`relative transition-all duration-500 ease-in-out ${isSidebarCollapsed ? 'h-0 overflow-hidden opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
+              <div className="relative overflow-hidden bg-gradient-to-b from-[#023927] via-emerald-900 to-[#023927] text-white shadow-sm mt-6">
+                <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-white/5 blur-xl"></div>
+                <div className="absolute -bottom-16 -left-10 w-36 h-36 rounded-full bg-emerald-400/10 blur-2xl"></div>
+
+                <nav className="relative p-3 space-y-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeTab === item.id && !selectedProperty;
+                    const isDanger = (item as any).isDanger;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          if (item.id === 'logout') {
+                            document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                            localStorage.removeItem('auth_user');
+                            navigate('/auth');
+                            return;
+                          }
+                          handleNavigationClick(item.id);
+                        }}
+                        className={`w-full text-left flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-all ${
+                          isDanger
+                            ? 'text-red-400 hover:text-red-300 hover:bg-red-500/15 mt-2 border-t border-white/10 pt-3'
+                            : isActive
+                            ? 'bg-white text-emerald-900 shadow-md'
+                            : 'text-white/75 hover:text-white hover:bg-white/10'
+                        }`}
+                      >
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${isDanger ? '' : isActive ? 'text-emerald-700' : 'text-white/60'}`} />
+                        <span>{item.label}</span>
+                        {'count' in item && item.count !== undefined && (
+                          <span className={`ml-auto px-2 py-0.5 text-xs font-semibold rounded-full ${
+                            isActive
+                              ? 'bg-emerald-600 text-white'
+                              : 'bg-white/10 text-white/80'
+                          }`}>
+                            {item.count}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </nav>
+              </div>
+
+              <div className="mt-4">
                 <MySpacesCard
                   currentRole={urlRole || ''}
                   currentUserId={urlId || ''}
@@ -735,11 +844,11 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Content Area */}
-          <div className="lg:col-span-3">
-            {renderContent()}
-          </div>
+        {/* Content Area */}
+        <div className="flex-1 min-w-0 px-4 sm:px-6 py-4 sm:py-8 lg:pl-8">
+          {renderContent()}
         </div>
       </div>
 

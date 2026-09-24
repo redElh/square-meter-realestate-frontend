@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { AUTH_USER_CHANGED_EVENT } from '../../../utils/auth';
 import {
   UserIcon,
   HomeIcon,
@@ -23,7 +24,6 @@ const ALL_SPACES: SpaceInfo[] = [
   { role: 'seller', label: 'Vendeur', icon: HomeIcon, description: 'Vendre et gérer vos biens' },
   { role: 'lessor', label: 'Bailleur', icon: KeyIcon, description: 'Gérer vos locations' },
   { role: 'tenant', label: 'Locataire', icon: HomeIcon, description: 'Trouver un logement' },
-  { role: 'owner', label: 'Propriétaire', icon: UserIcon, description: 'Gérer votre patrimoine' },
   { role: 'traveler', label: 'Voyageur', icon: GlobeAltIcon, description: 'Voyager et réserver' },
 ];
 
@@ -71,6 +71,15 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
   };
 
   const handleSwitchSpace = (role: string) => {
+    const cached = localStorage.getItem('auth_user');
+    if (cached) {
+      try {
+        const cachedUser = JSON.parse(cached);
+        cachedUser.role = role;
+        localStorage.setItem('auth_user', JSON.stringify(cachedUser));
+        window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
+      } catch { /* ignore */ }
+    }
     navigate(`/dashboard/${role}/${currentUserId}`);
   };
 
@@ -96,6 +105,7 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
         const cachedUser = JSON.parse(cached);
         cachedUser.linkedSpaces = newLinked;
         localStorage.setItem('auth_user', JSON.stringify(cachedUser));
+        window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
       }
       onSpacesChanged?.(newLinked);
     } catch (err: any) {
@@ -126,6 +136,7 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
         const cachedUser = JSON.parse(cached);
         cachedUser.linkedSpaces = newLinked;
         localStorage.setItem('auth_user', JSON.stringify(cachedUser));
+        window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
       }
       onSpacesChanged?.(newLinked);
       // If the deleted space was the active one, redirect to another space
@@ -136,6 +147,14 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
           let userId = '';
           if (cached) {
             try { userId = JSON.parse(cached).id; } catch { /* ignore */ }
+          }
+          if (cached) {
+            try {
+              const cachedUser = JSON.parse(cached);
+              cachedUser.role = nextRole;
+              localStorage.setItem('auth_user', JSON.stringify(cachedUser));
+              window.dispatchEvent(new Event(AUTH_USER_CHANGED_EVENT));
+            } catch { /* ignore */ }
           }
           navigate(`/dashboard/${nextRole}/${userId}`);
         } else {
@@ -149,19 +168,20 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
     }
   }, [linkedSpaces, originalRole, currentRole, navigate, onSpacesChanged]);
 
-  const ownedRoles = linkedSpaces;
+  const ownedRoles = linkedSpaces.filter((role: string) => role !== 'owner');
   const unownedRoles = ALL_SPACES.filter(s => !ownedRoles.includes(s.role));
 
   return (
-    <div className="bg-white border border-gray-200 shadow-sm">
-      <div className="px-5 py-4 border-b border-gray-100">
-        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-          <ArrowRightOnRectangleIcon className="w-4 h-4" />
+    <div className="relative overflow-hidden bg-gradient-to-b from-[#023927] via-emerald-900 to-[#023927] text-white border border-white/10 shadow-sm">
+      <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-white/5 blur-xl"></div>
+      <div className="relative px-5 py-4 border-b border-white/10">
+        <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+          <ArrowRightOnRectangleIcon className="w-4 h-4 text-emerald-300" />
           Mes espaces
         </h3>
       </div>
 
-      <div className="divide-y divide-gray-100">
+      <div className="relative divide-y divide-white/10">
         {ownedRoles.map(role => {
           const Icon = getSpaceIcon(role);
           const isCurrent = role === currentRole;
@@ -169,23 +189,23 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
           const isRemoving = removingRole === role;
 
           return (
-            <div key={role} className={`px-5 py-3 flex items-center gap-3 ${isCurrent ? 'bg-emerald-50' : ''}`}>
-              <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 ${isCurrent ? 'text-emerald-600' : 'text-gray-400'}`}>
+            <div key={role} className={`px-4 py-3 flex items-center gap-3 transition-colors ${isCurrent ? 'bg-white/10' : ''}`}>
+              <div className={`w-8 h-8 flex items-center justify-center flex-shrink-0 ${isCurrent ? 'text-emerald-300' : 'text-white/50'}`}>
                 <Icon className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className={`text-sm font-medium ${isCurrent ? 'text-emerald-700' : 'text-gray-700'}`}>
+                <div className={`text-sm font-medium ${isCurrent ? 'text-white' : 'text-white/80'}`}>
                   {getSpaceLabel(role)}
-                  {isCurrent && <span className="ml-2 text-xs text-emerald-500">(actif)</span>}
-                  {isOriginal && <span className="ml-2 text-xs text-gray-400">(original)</span>}
+                  {isCurrent && <span className="ml-2 text-xs text-emerald-300">(actif)</span>}
+                  {isOriginal && <span className="ml-2 text-xs text-white/40">(original)</span>}
                 </div>
-                <div className="text-xs text-gray-500 truncate">{getSpaceDescription(role)}</div>
+                <div className="text-xs text-white/50 truncate">{getSpaceDescription(role)}</div>
               </div>
               <div className="flex items-center gap-1 flex-shrink-0">
                 {!isCurrent && (
                   <button
                     onClick={() => handleSwitchSpace(role)}
-                    className="px-2.5 py-1 text-xs font-medium text-emerald-600 hover:bg-emerald-50 border border-emerald-200 transition-colors"
+                    className="px-2.5 py-1 text-xs font-medium text-emerald-300 hover:bg-white/10 border border-emerald-400/30 transition-colors"
                   >
                     Switch
                   </button>
@@ -199,7 +219,7 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
                       handleRemoveSpace(role);
                     }}
                     disabled={isRemoving}
-                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="p-1.5 text-white/40 hover:text-red-400 hover:bg-red-500/20 transition-colors"
                     title="Supprimer cet espace"
                   >
                     <TrashIcon className="w-4 h-4" />
@@ -213,8 +233,8 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
 
       {/* Add space section */}
       {unownedRoles.length > 0 && (
-        <div className="px-5 py-3 border-t border-dashed border-gray-200">
-          <p className="text-xs text-gray-500 mb-2 font-medium">Ajouter un espace</p>
+        <div className="relative px-5 py-3 border-t border-dashed border-white/15">
+          <p className="text-xs text-white/60 mb-2 font-medium">Ajouter un espace</p>
           <div className="flex flex-wrap gap-2">
             {unownedRoles.map(space => {
               const Icon = space.icon;
@@ -224,7 +244,7 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
                   key={space.role}
                   onClick={() => handleAddSpace(space.role)}
                   disabled={isAdding}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 border border-gray-200 hover:border-emerald-200 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-white/70 hover:text-white hover:bg-white/10 border border-white/20 hover:border-white/40 transition-colors disabled:opacity-50"
                 >
                   {isAdding ? (
                     <div className="animate-spin rounded-full h-3 w-3 border-b border-current" />
@@ -240,7 +260,7 @@ const MySpacesCard: React.FC<MySpacesCardProps> = ({
       )}
 
       {error && (
-        <div className="px-5 py-2 text-xs text-red-600 bg-red-50">{error}</div>
+        <div className="relative px-5 py-2 text-xs text-red-300 bg-red-500/15">{error}</div>
       )}
     </div>
   );

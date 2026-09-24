@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('../config/passport');
-const { handleOAuthCallback, register, login, forgotPassword, resetPassword, refreshAccessToken, logout, getCurrentUser } = require('../controllers/authController');
+const { handleOAuthCallback, register, login, forgotPassword, resetPassword, refreshAccessToken, logout, getCurrentUser, verifyTravelerEmail } = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
@@ -24,6 +24,9 @@ router.post('/refresh', refreshAccessToken);
 
 // Logout
 router.post('/logout', logout);
+
+// Verify traveler email for Voyageur space access
+router.post('/traveler-access', verifyTravelerEmail);
 
 // Check auth status
 router.get('/check', async (req, res) => {

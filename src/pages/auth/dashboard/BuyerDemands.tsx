@@ -49,7 +49,7 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
           {/* Location */}
           <div className="bg-white border border-gray-200 shadow-sm">
             <div className="px-5 py-3 border-b border-gray-100">
-              <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
                 <MapPinIcon className="w-4 h-4 text-emerald-600" />
                 Localisation
               </h3>
@@ -57,7 +57,7 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
             <div className="px-5 py-4 space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Ville / Région</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Ville / Région</label>
                   <select className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white transition-all">
                     <option>Nice, Côte d'Azur</option>
                     <option>Lyon, Rhône</option>
@@ -66,7 +66,7 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Secteur / Quartier</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Secteur / Quartier</label>
                   <input type="text" placeholder="Centre, Promenade des Anglais..." className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                 </div>
               </div>
@@ -76,14 +76,14 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
           {/* Type & Transaction */}
           <div className="bg-white border border-gray-200 shadow-sm">
             <div className="px-5 py-3 border-b border-gray-100">
-              <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider flex items-center gap-2">
                 <HomeIcon className="w-4 h-4 text-emerald-600" />
                 Type de bien & Transaction
               </h3>
             </div>
             <div className="px-5 py-4 space-y-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-2">Transaction</label>
+                <label className="block text-sm font-medium text-gray-600 mb-2">Transaction</label>
                 <div className="flex gap-4">
                   {['Vente', 'Location', 'Saisonnier'].map((t) => (
                     <label key={t} className="flex items-center gap-2 cursor-pointer">
@@ -94,7 +94,7 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Type de bien</label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Type de bien</label>
                 <select className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white transition-all">
                   <option>Appartement</option>
                   <option>Maison</option>
@@ -108,19 +108,19 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
           {/* Characteristics */}
           <div className="bg-white border border-gray-200 shadow-sm">
             <div className="px-5 py-3 border-b border-gray-100">
-              <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Caractéristiques</h3>
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Caractéristiques</h3>
             </div>
             <div className="px-5 py-4 space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Prix min</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Prix min</label>
                   <div className="flex items-center gap-2">
                     <input type="text" placeholder="800 000" className="flex-1 border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                     <span className="text-sm text-gray-500">€</span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Prix max</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Prix max</label>
                   <div className="flex items-center gap-2">
                     <input type="text" placeholder="1 200 000" className="flex-1 border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                     <span className="text-sm text-gray-500">€</span>
@@ -129,14 +129,14 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Surface min</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Surface min</label>
                   <div className="flex items-center gap-2">
                     <input type="text" placeholder="80" className="flex-1 border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                     <span className="text-sm text-gray-500">m²</span>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Surface max</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Surface max</label>
                   <div className="flex items-center gap-2">
                     <input type="text" placeholder="120" className="flex-1 border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                     <span className="text-sm text-gray-500">m²</span>
@@ -145,15 +145,15 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Pièces</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Pièces</label>
                   <input type="text" placeholder="3" className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Chambres</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Chambres</label>
                   <input type="text" placeholder="2" className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Salles de bain</label>
+                  <label className="block text-sm font-medium text-gray-600 mb-1">Salles de bain</label>
                   <input type="text" placeholder="2" className="w-full border border-gray-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                 </div>
               </div>
@@ -163,14 +163,14 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
           {/* Specific Criteria */}
           <div className="bg-white border border-gray-200 shadow-sm">
             <div className="px-5 py-3 border-b border-gray-100">
-              <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider">Critères spécifiques</h3>
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Critères spécifiques</h3>
             </div>
             <div className="px-5 py-4">
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {['Piscine', 'Jardin', 'Garage', 'Balcon', 'Terrasse', 'Ascenseur', 'Air conditionné', 'Cheminée', 'Fibre optique', 'Vue mer'].map((c) => (
                   <label key={c} className="flex items-center gap-2 cursor-pointer p-2 border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all">
                     <input type="checkbox" className="w-4 h-4 text-emerald-600 focus:ring-emerald-500" />
-                    <span className="text-xs text-gray-700 font-medium">{c}</span>
+                    <span className="text-sm text-gray-700 font-medium">{c}</span>
                   </label>
                 ))}
               </div>
@@ -210,7 +210,7 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
           <div key={i} className={`bg-white border ${stat.color.split(' ').slice(2).join(' ')} shadow-sm`}>
             <div className="p-4">
               <div className={`text-2xl font-bold ${stat.color.split(' ')[0]}`}>{stat.value}</div>
-              <div className="text-xs text-gray-500 font-medium mt-0.5">{stat.label}</div>
+              <div className="text-sm text-gray-500 font-medium mt-0.5">{stat.label}</div>
             </div>
           </div>
         ))}
@@ -231,36 +231,36 @@ const BuyerDemands: React.FC<BuyerDemandsProps> = ({ onNavigate }) => {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/80">
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">#</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Demande</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Biens proposés</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Statut</th>
-                <th className="text-left py-3.5 px-5 text-[11px] text-gray-500 font-bold uppercase tracking-wider">Actions</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">#</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Demande</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Biens proposés</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Statut</th>
+                <th className="text-left py-3.5 px-5 text-sm text-gray-500 font-bold uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
               {buyerDemands.map((demand) => (
                 <tr key={demand.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                   <td className="py-4 px-5">
-                    <span className="text-xs font-bold text-gray-300">#{demand.id}</span>
+                    <span className="text-sm font-bold text-gray-300">#{demand.id}</span>
                   </td>
                   <td className="py-4 px-5">
                     <div className="font-semibold text-gray-900 text-sm">{demand.title}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">{demand.priceRange}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">{demand.details}</div>
+                    <div className="text-sm text-gray-500 mt-0.5">{demand.priceRange}</div>
+                    <div className="text-sm text-gray-400 mt-0.5">{demand.details}</div>
                   </td>
                   <td className="py-4 px-5">
                     {demand.propositions > 0 ? (
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-sm font-semibold border border-emerald-200">
                         <SparklesIcon className="w-3 h-3" />
                         {demand.propositions} biens
                       </span>
                     ) : (
-                      <span className="text-xs text-gray-400">-</span>
+                      <span className="text-sm text-gray-400">-</span>
                     )}
                   </td>
                   <td className="py-4 px-5">
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-sm font-bold uppercase tracking-wider ${
                       demand.status === 'Active'
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         : demand.status === 'En attente'
