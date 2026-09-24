@@ -550,7 +550,7 @@ const Home: React.FC = () => {
                               <div className="mt-3.5 flex items-center gap-2.5 sm:gap-3.5 text-[11px] tracking-[0.16em] uppercase font-medium text-gray-500">
                                 <span className="inline-flex items-center gap-1.5"><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {property.rooms || 0} ch.</span>
                                 <span className="w-px h-3.5 bg-gray-200"></span>
-                                <span className="inline-flex items-center gap-1.5"><Square2StackIcon className="w-3.5 h-3.5 text-gray-400" /> {property.surface.toFixed(0)} m²</span>
+                                <span className="inline-flex items-center gap-1.5"><Square2StackIcon className="w-3.5 h-3.5 text-gray-400" /> {property.surface > 0 ? `${property.surface.toFixed(0)} m²` : '—'}</span>
                                 <span className="w-px h-3.5 bg-gray-200 hidden sm:block"></span>
                                 <span className="hidden sm:inline-flex items-center gap-1.5"><CheckIcon className="w-3.5 h-3.5 text-gray-400" /> {property.floors || 0} ét.</span>
                               </div>

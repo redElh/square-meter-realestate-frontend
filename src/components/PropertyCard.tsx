@@ -130,7 +130,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
               {description}
             </p>
             <div className={`mt-3 flex items-center gap-2 sm:gap-3 text-[11px] tracking-[0.14em] uppercase font-medium text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <span className={`inline-flex items-center gap-1.5 ${isRTL ? 'flex-row-reverse' : ''}`}><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {surface} m²</span>
+              <span className={`inline-flex items-center gap-1.5 ${isRTL ? 'flex-row-reverse' : ''}`}><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {surface > 0 ? `${surface} m²` : '—'}</span>
               <span className="w-px h-3 bg-gray-200"></span>
               <span>{rooms || 0} ch.</span>
               <span className="w-px h-3 bg-gray-200"></span>

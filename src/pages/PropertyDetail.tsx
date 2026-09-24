@@ -241,7 +241,7 @@ const PropertyDetail: React.FC = () => {
     : [];
 
   const heroStats = [
-    { value: `${property.surface} m²`, label: t('propertyDetail.stats.surface') },
+    { value: property.surface > 0 ? `${property.surface} m²` : '—', label: t('propertyDetail.stats.surface') },
     { value: property.landSurface ? `${property.landSurface} m²` : '—', label: t('propertyDetail.stats.land') },
     { value: property.bedrooms ?? 0, label: t('propertyDetail.stats.bedrooms') },
     { value: property.floors ?? 0, label: t('propertyDetail.stats.floors') },
