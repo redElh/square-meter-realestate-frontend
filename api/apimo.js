@@ -55,7 +55,11 @@ export default async function handler(req, res) {
   const token = process.env.APIMO_TOKEN;
   if (!providerId || !token) {
     console.error('❌ Missing APIMO credentials in environment variables');
-    return res.status(200).json({ properties: [], total_items: 0, error: 'API configuration error' });
+    return res.status(500).json({
+      properties: [],
+      total_items: 0,
+      error: 'API configuration error: APIMO_PROVIDER_ID/APIMO_TOKEN are not set',
+    });
   }
   const credentials = `${providerId}:${token}`;
   const base64Credentials = Buffer.from(credentials).toString('base64');
@@ -85,19 +89,30 @@ export default async function handler(req, res) {
     } else {
       const text = await response.text();
       console.error('❌ Apimo returned non-JSON:', response.status, text.substring(0, 200));
-      return res.status(200).json({ properties: [], total_items: 0, error: 'Apimo API returned unexpected response' });
+      return res.status(502).json({
+        properties: [],
+        total_items: 0,
+        error: `Apimo returned an unexpected response (HTTP ${response.status})`,
+      });
     }
 
     if (!response.ok) {
+      // 401/403 here almost always means the credentials are wrong or expired.
       console.error('❌ Apimo API Error:', response.status, data);
-      return res.status(200).json({ properties: [], total_items: 0, error: `Apimo API error: ${response.status}` });
+      return res.status(502).json({
+        properties: [],
+        total_items: 0,
+        error: `Apimo API error: HTTP ${response.status} — ${
+          data.detail || data.title || data.message || 'request rejected'
+        }`,
+      });
     }
 
     console.log('✅ Apimo API Success');
     return res.status(200).json(data);
   } catch (error) {
     console.error('❌ Proxy Error:', error);
-    return res.status(200).json({
+    return res.status(502).json({
       properties: [],
       total_items: 0,
       error: 'Temporary connection error - please try again',

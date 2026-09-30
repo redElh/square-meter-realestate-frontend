@@ -1,10 +1,13 @@
 // Apimo CRM API Service
 // Documentation: https://apimo.net/fr/api/webservice/
 
+import { env } from '../config/env';
+
 const APIMO_CONFIG = {
-  // Use proxy in development and Vercel serverless function in production
-  baseUrl: '/api/apimo',
-  agencyId: '25311',
+  // Same-origin proxy: CRA dev proxy in development, Vercel function in production.
+  // The proxy attaches the Apimo credentials server-side, so no token is exposed.
+  baseUrl: env.apimoBaseUrl,
+  agencyId: env.apimoAgencyId,
 };
 
 // Apimo API Response Types
@@ -230,6 +233,8 @@ export interface ApimoResponse {
   total_items: number;
   timestamp: number;
   properties: ApimoProperty[];
+  /** Set by the proxy when the upstream call failed, so it is never mistaken for an empty result. */
+  error?: string;
 }
 
 // Application Property Interface
@@ -545,14 +550,31 @@ class ApimoService {
 
         console.log('📥 Response status:', response.status, response.statusText);
 
+        const rawBody = await response.text();
+
         if (!response.ok) {
-          const errorText = await response.text();
-          console.error('❌ API Error Response:', errorText);
-          throw new Error(`Apimo API error: ${response.status} ${response.statusText}`);
+          console.error('❌ API Error Response:', rawBody);
+          // The proxy reports upstream/auth failures with a JSON body; surface
+          // its message so a missing APIMO_TOKEN is not mistaken for "no listings".
+          let detail = rawBody;
+          try {
+            const parsed = JSON.parse(rawBody);
+            detail = parsed.error || parsed.detail || parsed.title || rawBody;
+          } catch {
+            // Not JSON — keep the raw text.
+          }
+          throw new Error(`Apimo API error ${response.status}: ${detail}`);
         }
 
         console.log('📦 Parsing response JSON...');
-        const data: ApimoResponse = await response.json();
+        const data: ApimoResponse = JSON.parse(rawBody);
+
+        // A 200 carrying `error` means the proxy swallowed an upstream failure.
+        // Throwing here keeps broken credentials from rendering as an empty page.
+        if (data.error) {
+          throw new Error(`Apimo proxy error: ${data.error}`);
+        }
+
         return { properties: data.properties || [], total_items: data.total_items || 0 };
       }));
 

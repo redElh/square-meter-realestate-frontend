@@ -1,33 +1,22 @@
 // src/pages/Properties.tsx
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { 
-  HeartIcon,
-  CameraIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  HomeIcon,
-  CheckIcon,
-  Square2StackIcon,
-  ArrowTopRightOnSquareIcon,
   MagnifyingGlassIcon,
   XMarkIcon,
   ChevronUpIcon,
   ArrowsPointingOutIcon,
-  BanknotesIcon,
-  PlusIcon,
-  MinusIcon,
-  ArrowRightIcon
+  BanknotesIcon
 } from '@heroicons/react/24/outline';
-import {
-  HeartIcon as HeartIconSolid
-} from '@heroicons/react/24/solid';
 import { apimoService, Property, isSoldStatus } from '../services/apimoService';
 import { useCurrency } from '../hooks/useCurrency';
 import SEO from '../components/SEO/SEO';
 import ImageGalleryModal from '../components/ImageGalleryModal';
+import PropertyListingCard from '../components/PropertyListingCard';
 import FilterDropdown from '../components/FilterDropdown';
 
 const normalizeForSearch = (value: string): string =>
@@ -89,6 +78,7 @@ const Properties: React.FC = () => {
   });
   const [sortBy, setSortBy] = useState(searchParams.get('sort') || 'newest');
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
@@ -97,6 +87,16 @@ const Properties: React.FC = () => {
   const propertiesListRef = useRef<HTMLDivElement>(null);
   const firstPropertyCardRef = useRef<HTMLDivElement>(null);
   const hasInitializedFiltersRef = useRef(false);
+
+  // ─── Sticky filter bar ───────────────────────────────────────────────────
+  // The bar lives just after the hero and is pulled up over it with a negative
+  // margin, so it keeps its original position until the hero scrolls away, then
+  // pins underneath the (fixed, height-changing) site header.
+  const filterBarRef = useRef<HTMLDivElement>(null);
+const heroRef = useRef<HTMLElement>(null);
+  const [filterBarHeight, setFilterBarHeight] = useState(0);
+  const [stickyTop, setStickyTop] = useState(0);
+  const [filterBarStuck, setFilterBarStuck] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const suppressScrollTopRef = useRef(false);
   const propertyTypeCarouselRef = useRef<HTMLDivElement>(null);
@@ -216,6 +216,68 @@ const Properties: React.FC = () => {
     setGalleryOpen(true);
   };
 
+  // Resting offset of the bar from the hero's bottom edge (`bottom-32 sm:bottom-28`).
+  const [heroBottomGap, setHeroBottomGap] = useState(128);
+
+  useLayoutEffect(() => {
+    const bar = filterBarRef.current;
+    if (!bar) return;
+
+    const measure = () => {
+      // Height is unaffected by absolute/fixed positioning, so this stays valid.
+      setFilterBarHeight(bar.getBoundingClientRect().height);
+
+      // The site header is fixed and resizes on scroll, so track its live height.
+      const header = document.querySelector('header');
+      if (header) {
+        setStickyTop(Math.round(header.getBoundingClientRect().height));
+      }
+
+      setHeroBottomGap(window.matchMedia('(min-width: 640px)').matches ? 112 : 128);
+    };
+
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(bar);
+
+    const header = document.querySelector('header');
+    if (header) observer.observe(header);
+
+    window.addEventListener('resize', measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+    // The ResizeObserver covers height changes from the "more filters" / reset
+    // controls appearing; these only re-run the measurement for good measure.
+  }, [showMoreFilters, filter]);
+
+  // Pin the bar once the hero's filter row would have scrolled under the header.
+  // Keyed off the hero rather than the bar: while pinned the bar is `fixed`, so its
+  // own rect.top is pinned and would never report "back in the hero" again.
+  useEffect(() => {
+    const onScroll = () => {
+      const hero = heroRef.current;
+      const bar = filterBarRef.current;
+      if (!hero || !bar) return;
+
+      // Bar's resting offset from the hero bottom is `bottom-32 sm:bottom-28`,
+      // so pin as soon as that whole row clears the header.
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      const engageAt = stickyTop + bar.getBoundingClientRect().height + heroBottomGap;
+      setFilterBarStuck(heroBottom <= engageAt);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [stickyTop, filterBarHeight, heroBottomGap]);
+
 
 
   useEffect(() => {
@@ -226,6 +288,7 @@ const Properties: React.FC = () => {
       console.log(`🌍 Current Language: ${currentLanguage}`);
       console.log('🔍 Starting to fetch properties...');
       setLoading(true);
+      setLoadError(null);
       try {
         // Fetch properties from Apimo CRM API
         console.log('📡 Calling apimoService.getProperties...');
@@ -272,8 +335,10 @@ const Properties: React.FC = () => {
         setProperties(validProperties);
       } catch (error) {
         console.error('❌ Error loading properties from Apimo:', error);
-        // Set empty array to show "no properties" message
         setProperties([]);
+        setLoadError(
+          error instanceof Error ? error.message : 'Unknown error while loading properties'
+        );
       } finally {
         setLoading(false);
         console.log('🏁 Finished loading properties');
@@ -780,109 +845,29 @@ const Properties: React.FC = () => {
       ? (property.type === 'buy' ? t('properties.listing.sold') : t('properties.listing.rented'))
       : property.type === 'buy' ? t('properties.listing.forSale') : property.type === 'rent' ? t('properties.listing.forRent') : t('properties.listing.forVacation');
     return (
-    <Link
-      to={`/properties/${property.id}`}
-      onClick={() => {
-        if (typeof pageContext === 'number') {
-          sessionStorage.setItem('properties:lastViewedId', String(property.id));
-          sessionStorage.setItem('properties:lastViewedPage', String(pageContext));
-        } else {
-          sessionStorage.removeItem('properties:lastViewedId');
-          sessionStorage.removeItem('properties:lastViewedPage');
-        }
-      }}
-      className="group relative block bg-white border border-gray-100 overflow-hidden hover:border-gray-200 hover:shadow-[0_24px_64px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-700"
-    >
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-[#C8A97E]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-      <div className="p-[2px] sm:p-[3px] bg-gray-100/60">
-        <div className="flex flex-col md:flex-row gap-[2px] sm:gap-[3px] bg-gray-100 h-[360px] sm:h-[340px] lg:h-[380px] overflow-hidden">
-          <div className="md:w-[68%] h-[58%] md:h-full relative overflow-hidden bg-gray-50 cursor-pointer" onClick={(e) => { e.preventDefault(); e.stopPropagation(); openGallery(property.images, property.title, 0); }}>
-            <img src={property.images[0]} alt={property.title} className="w-full h-full object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent"></div>
-            <div className="absolute top-3 sm:top-4 left-3 sm:left-4 right-14 flex items-center gap-2 flex-wrap">
-              {isExclusiveProperty(property) && (
-                <span className="inline-flex items-center gap-1.5 bg-white/92 backdrop-blur-xl border border-[#C8A97E]/25 px-2.5 sm:px-3 py-1 text-[10px] tracking-[0.18em] uppercase font-semibold text-[#023927] shadow-sm">
-                  <span className="w-1 h-1 rounded-full bg-[#C8A97E]"></span>
-                  {t('properties.listing.exclusive')}
-                </span>
-              )}
-              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] tracking-[0.14em] uppercase font-medium backdrop-blur-xl border shadow-sm ${sold ? 'bg-gray-900 text-white border-gray-800' : 'bg-white/90 text-gray-700 border-white/60'}`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${sold ? 'bg-gray-400' : 'bg-emerald-500'}`}></span>
-                {statusLabel}
-              </span>
-            </div>
-            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(property.id); }} className="absolute top-3 sm:top-4 right-3 sm:right-4 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 backdrop-blur-xl border border-white/60 shadow-[0_4px_20px_rgba(0,0,0,0.08)] flex items-center justify-center hover:bg-white hover:scale-105 active:scale-95 transition-all duration-300 group/fav">
-              {favorites.includes(property.id) ? <HeartIconSolid className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" /> : <HeartIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 group-hover/fav:text-red-500 transition-colors" />}
-            </button>
-            <div className="absolute bottom-0 left-0 p-3 sm:p-4">
-              <div className="inline-flex items-center gap-1.5 bg-black/30 backdrop-blur-md border border-white/15 text-white px-2.5 py-1 text-[11px] tracking-wide shadow-sm">
-                <CameraIcon className="w-3.5 h-3.5 opacity-80" />
-                <span>{property.images.length} {t('properties.listing.photos')}</span>
-              </div>
-            </div>
-          </div>
-          <div className="md:w-[32%] h-[42%] md:h-full flex flex-row md:flex-col gap-[2px] sm:gap-[3px]">
-            {(property.images.slice(1, 3).length ? property.images.slice(1, 3) : [property.images[0], property.images[0]]).map((img, imgIndex) => (
-              <div key={imgIndex} className="flex-1 relative overflow-hidden bg-gray-50 group/thumb cursor-pointer" onClick={(e) => { e.preventDefault(); e.stopPropagation(); openGallery(property.images, property.title, imgIndex + 1); }}>
-                <img src={img} alt={`${property.title} ${imgIndex + 2}`} className="w-full h-full object-cover transition-transform duration-700 group-hover/thumb:scale-[1.04]" />
-                <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/10 transition-colors duration-300"></div>
-                {imgIndex === 1 && property.images.length > 3 && (
-                  <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] flex flex-col items-center justify-center text-white opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-300">
-                    <ArrowTopRightOnSquareIcon className="w-5 h-5 mb-1" />
-                    <span className="text-xs font-medium tracking-wide">+{property.images.length - 3}</span>
-                  </div>
-                )}
-                {imgIndex === 1 && (
-                  <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-xl border border-white/50 text-gray-900 px-2 py-1 text-[10px] tracking-[0.14em] uppercase font-semibold flex items-center gap-1 shadow-sm">
-                    <Square2StackIcon className="w-3 h-3 text-gray-500" />
-                    Galerie
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="px-5 sm:px-7 lg:px-8 pt-6 sm:pt-7 pb-6 sm:pb-7">
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5 lg:gap-8">
-          <div className="flex gap-3 sm:gap-4 min-w-0 flex-1">
-            <div className="hidden sm:block w-px self-stretch bg-gradient-to-b from-[#C8A97E] via-[#C8A97E]/30 to-transparent shrink-0"></div>
-            <div className="min-w-0 flex-1">
-              <h3 className="font-serif text-[19px] sm:text-[21px] lg:text-[23px] leading-[1.02] tracking-[-0.025em] font-light text-gray-900 truncate group-hover:text-[#023927] transition-colors duration-500">{property.title}</h3>
-              <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[12px] sm:text-[13px] text-gray-500">
-                <span className="truncate font-light">— {property.location}</span>
-                {property.reference && <span className="inline text-gray-300">•</span>}
-                {property.reference && <span className="inline text-[11px] tracking-wide text-gray-400 font-mono">Réf. {property.reference}</span>}
-              </div>
-              <div className="mt-3.5 flex items-center gap-2.5 sm:gap-3.5 text-[11px] tracking-[0.16em] uppercase font-medium text-gray-500">
-                <span className="inline-flex items-center gap-1.5"><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {property.rooms || 0} ch.</span>
-                <span className="w-px h-3.5 bg-gray-200"></span>
-                <span className="inline-flex items-center gap-1.5"><Square2StackIcon className="w-3.5 h-3.5 text-gray-400" /> {property.surface > 0 ? `${property.surface.toFixed(0)} m²` : '—'}</span>
-                <span className="w-px h-3.5 bg-gray-200 hidden sm:block"></span>
-                <span className="hidden sm:inline-flex items-center gap-1.5"><CheckIcon className="w-3.5 h-3.5 text-gray-400" /> {property.floors || 0} ét.</span>
-              </div>
-            </div>
-          </div>
-          <div className="flex lg:flex-col items-center lg:items-end justify-between lg:justify-start gap-4 lg:text-right shrink-0 lg:min-w-[190px] border-t lg:border-t-0 border-gray-100 pt-4 lg:pt-0">
-            <div>
-              <div className="font-serif text-[21px] sm:text-[23px] lg:text-[25px] leading-none tracking-[-0.02em] font-light text-[#023927]">{formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}</div>
-              <div className="text-[10px] tracking-[0.18em] uppercase text-gray-400 mt-1.5 font-medium">{property.type === 'buy' ? 'Prix' : property.type === 'rent' ? 'Par mois' : 'Saisonnier'}</div>
-            </div>
-            <span className="group/cta inline-flex items-center gap-2.5 sm:gap-3 shrink-0">
-              <span className="relative text-[11px] sm:text-xs tracking-[0.18em] uppercase font-semibold text-[#023927]">Voir
-                <span className="absolute left-0 -bottom-1 h-px w-0 bg-[#023927] group-hover:w-full transition-all duration-500 ease-out"></span>
-              </span>
-              <span className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#023927]/15 bg-white flex items-center justify-center text-[#023927] group-hover:bg-[#023927] group-hover:text-white group-hover:border-[#023927] group-hover:scale-105 transition-all duration-300 shadow-sm">
-                <span className="text-[14px] leading-none">→</span>
-              </span>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div className="pointer-events-none absolute inset-0 border border-transparent group-hover:border-[#C8A97E]/10 transition-colors duration-700 hidden lg:block"></div>
-    </Link>
+      <PropertyListingCard
+        property={property}
+        statusLabel={statusLabel}
+        sold={sold}
+        exclusive={isExclusiveProperty(property)}
+        priceLabel={formatPropertyPrice(property.price, property.type, property.currency, property.pricePeriod)}
+        priceCaption={property.type === 'buy' ? 'Prix' : property.type === 'rent' ? 'Par mois' : 'Saisonnier'}
+        isFavorite={favorites.includes(property.id)}
+        onToggleFavorite={toggleFavorite}
+        onOpenGallery={openGallery}
+        onNavigate={() => {
+          if (typeof pageContext === 'number') {
+            sessionStorage.setItem('properties:lastViewedId', String(property.id));
+            sessionStorage.setItem('properties:lastViewedPage', String(pageContext));
+          } else {
+            sessionStorage.removeItem('properties:lastViewedId');
+            sessionStorage.removeItem('properties:lastViewedPage');
+          }
+        }}
+      />
     );
   };
+
 
   const getSEOData = () => {
     const filterType = filter === 'buy' ? 'Vente' : filter === 'rent' ? 'Location' : filter === 'seasonal' ? 'Location Saisonnière' : '';
@@ -947,7 +932,7 @@ const Properties: React.FC = () => {
         url={`${location.pathname}${location.search}`}
       />
       {/* Hero Section with Search Only - Updated with margin */}
-      <section className="relative h-[70vh] sm:h-screen overflow-visible bg-white">
+      <section ref={heroRef} className="relative h-[70vh] sm:h-screen overflow-visible bg-white">
         {/* Background Carousel */}
         <div className="absolute inset-0 overflow-hidden">
           {heroProperties.map((slide, index) => (
@@ -965,115 +950,6 @@ const Properties: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
             </div>
           ))}
-        </div>
-
-        {/* Centered Filter Controls */}
-        <div className="absolute bottom-32 sm:bottom-28 left-0 right-0 z-20">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10">
-            {/* Filter Controls Row */}
-            <div className={`flex flex-col sm:flex-row gap-3 sm:gap-3 lg:gap-4 items-stretch sm:items-end mb-4 ${activeFiltersCount === 0 ? 'sm:justify-center' : ''}`}>
-              <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
-                <FilterDropdown
-                  variant="hero"
-                  value={filter}
-                  onChange={setFilter}
-                  placeholder={t('properties.filters.allTypes')}
-                  options={[
-                    { value: 'all', label: t('properties.filters.allTypes') },
-                    ...propertyTypes.map(({ key, label }) => ({ value: key, label })),
-                  ]}
-                />
-              </div>
-              <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
-                <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
-                  <ArrowsPointingOutIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  {t('properties.filters.surfaceMin')}
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="0"
-                    value={surfaceMin ?? ''}
-                    onChange={(e) => setSurfaceMin(e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder={t('properties.filters.minPlaceholder')}
-                    className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    style={{ borderRadius: '0' }}
-                  />
-                  <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">m²</span>
-                </div>
-              </div>
-              <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
-                <label className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider text-white/80 mb-1.5 font-inter pointer-events-none">
-                  <BanknotesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  {t('properties.filters.budgetMax')}
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    min="0"
-                    value={budgetMax ?? ''}
-                    onChange={(e) => setBudgetMax(e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder={t('properties.filters.maxPlaceholder')}
-                    className="w-full border-2 border-white/60 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none focus:border-white transition-colors duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    style={{ borderRadius: '0' }}
-                  />
-                  <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">{getSymbol()}</span>
-                </div>
-              </div>
-
-              {/* More Filters & Reset — inline on desktop */}
-              <div className="hidden sm:flex w-full sm:w-44 lg:w-52 flex-shrink-0 items-end">
-                <button
-                  onClick={() => setShowMoreFilters(!showMoreFilters)}
-                  className="group relative w-full border-2 border-white text-white px-4 py-2.5 sm:py-3 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base"
-                >
-                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                    {showMoreFilters ? `− ${t('properties.filters.lessFilters')}` : `+ ${t('properties.filters.moreFilters')}`}
-                  </span>
-                </button>
-              </div>
-              {activeFiltersCount > 0 && (
-                <div className="hidden sm:flex w-full sm:w-44 lg:w-52 flex-shrink-0 items-end">
-                  <button
-                    onClick={resetFilters}
-                    className="group relative w-full border-2 border-white text-white px-4 py-3 sm:py-4 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] sm:text-xs whitespace-nowrap"
-                  >
-                    <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                    <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                      {t('properties.filters.resetAll')} ({activeFiltersCount})
-                    </span>
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* More Filters Toggle & Action Buttons — mobile only */}
-            <div className="flex flex-col gap-3 items-stretch mb-4 w-full sm:hidden">
-              <button
-                onClick={() => setShowMoreFilters(!showMoreFilters)}
-                className="group relative flex-1 border-2 border-white text-white px-6 py-2.5 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm"
-              >
-                <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                  {showMoreFilters ? `− ${t('properties.filters.lessFilters')}` : `+ ${t('properties.filters.moreFilters')}`}
-                </span>
-              </button>
-
-              {activeFiltersCount > 0 && (
-                <button
-                  onClick={resetFilters}
-                  className="group relative flex-1 border-2 border-white text-white px-2 py-2 font-inter uppercase tracking-normal transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight whitespace-normal"
-                >
-                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
-                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-500">
-                    {t('properties.filters.resetAll')} ({activeFiltersCount})
-                  </span>
-                </button>
-              )}
-            </div>
-
-          </div>
         </div>
 
         {/* Carousel Controls — unified premium pill (matches Home hero) */}
@@ -1109,9 +985,197 @@ const Properties: React.FC = () => {
           </div>
         </div>
 
+      {/* ─── Filter bar ────────────────────────────────────────────────────
+          Lives inside the hero at its original position (`bottom-32 sm:bottom-28`).
+          Once the hero has been scrolled past it switches to `fixed` and pins
+          under the site header. No margins are used to reposition it. */}
+      <div
+        ref={filterBarRef}
+        className={`left-0 right-0 z-40 transition-colors duration-500 ${
+          filterBarStuck ? 'fixed' : 'absolute bottom-32 sm:bottom-28'
+        } ${
+          filterBarStuck
+            ? 'bg-white/90 backdrop-blur-xl border-b border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.07)]'
+            : 'bg-transparent border-b border-transparent'
+        }`}
+        style={filterBarStuck ? { top: stickyTop } : undefined}
+      >
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 py-3 sm:py-4">
+          {/* Filter Controls Row */}
+          <div
+            className={`flex flex-col sm:flex-row gap-3 sm:gap-3 lg:gap-4 items-stretch sm:items-end ${
+              activeFiltersCount === 0 ? 'sm:justify-center' : ''
+            }`}
+          >
+            <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
+              <FilterDropdown
+                variant="hero"
+                rounded
+                value={filter}
+                onChange={setFilter}
+                placeholder={t('properties.filters.allTypes')}
+                options={[
+                  { value: 'all', label: t('properties.filters.allTypes') },
+                  ...propertyTypes.map(({ key, label }) => ({ value: key, label })),
+                ]}
+              />
+            </div>
+
+            <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
+              <label
+                className={`flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider mb-1.5 font-inter pointer-events-none transition-colors duration-500 ${
+                  filterBarStuck ? 'text-gray-500' : 'text-white/80'
+                }`}
+              >
+                <ArrowsPointingOutIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                {t('properties.filters.surfaceMin')}
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0"
+                  value={surfaceMin ?? ''}
+                  onChange={(e) => setSurfaceMin(e.target.value === '' ? null : Number(e.target.value))}
+                  placeholder={t('properties.filters.minPlaceholder')}
+                  className={`w-full rounded-xl border-2 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none transition-colors duration-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                    filterBarStuck
+                      ? 'border-gray-200 hover:border-gray-300 focus:border-[#023927]'
+                      : 'border-white/60 hover:border-white focus:border-white'
+                  }`}
+                />
+                <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+                  m²
+                </span>
+              </div>
+            </div>
+
+            <div className="w-full sm:w-44 lg:w-52 flex-shrink-0">
+              <label
+                className={`flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-wider mb-1.5 font-inter pointer-events-none transition-colors duration-500 ${
+                  filterBarStuck ? 'text-gray-500' : 'text-white/80'
+                }`}
+              >
+                <BanknotesIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                {t('properties.filters.budgetMax')}
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0"
+                  value={budgetMax ?? ''}
+                  onChange={(e) => setBudgetMax(e.target.value === '' ? null : Number(e.target.value))}
+                  placeholder={t('properties.filters.maxPlaceholder')}
+                  className={`w-full rounded-xl border-2 bg-white/95 backdrop-blur-sm px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 placeholder-gray-400 focus:outline-none transition-colors duration-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                    filterBarStuck
+                      ? 'border-gray-200 hover:border-gray-300 focus:border-[#023927]'
+                      : 'border-white/60 hover:border-white focus:border-white'
+                  }`}
+                />
+                <span className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+                  {getSymbol()}
+                </span>
+              </div>
+            </div>
+
+            {/* More Filters & Reset — inline on desktop */}
+            <div className="hidden sm:flex w-full sm:w-44 lg:w-52 flex-shrink-0 items-end">
+              <button
+                onClick={() => setShowMoreFilters(!showMoreFilters)}
+                className={`group relative w-full rounded-xl border-2 px-4 py-2.5 sm:py-3 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm sm:text-base ${
+                  filterBarStuck
+                    ? 'border-[#023927] text-[#023927] hover:bg-[#023927] hover:text-white'
+                    : 'border-white text-white'
+                }`}
+              >
+                {!filterBarStuck && (
+                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                )}
+                <span
+                  className={`relative z-10 transition-colors duration-500 ${
+                    filterBarStuck ? 'group-hover:text-white' : 'group-hover:text-gray-900'
+                  }`}
+                >
+                  {showMoreFilters
+                    ? `− ${t('properties.filters.lessFilters')}`
+                    : `+ ${t('properties.filters.moreFilters')}`}
+                </span>
+              </button>
+            </div>
+
+            {activeFiltersCount > 0 && (
+              <div className="hidden sm:flex w-full sm:w-44 lg:w-52 flex-shrink-0 items-end">
+                <button
+                  onClick={resetFilters}
+                  className={`group relative w-full rounded-xl border-2 px-4 py-2.5 sm:py-3 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-[10px] sm:text-xs whitespace-nowrap ${
+                    filterBarStuck
+                      ? 'border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50'
+                      : 'border-white text-white'
+                  }`}
+                >
+                  {!filterBarStuck && (
+                    <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                  )}
+                  <span
+                    className={`relative z-10 transition-colors duration-500 ${
+                      filterBarStuck ? '' : 'group-hover:text-gray-900'
+                    }`}
+                  >
+                    {t('properties.filters.resetAll')} ({activeFiltersCount})
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* More Filters Toggle & Action Buttons — mobile only */}
+          <div className="flex sm:hidden gap-3 items-stretch mt-3">
+            <button
+              onClick={() => setShowMoreFilters(!showMoreFilters)}
+              className={`group relative flex-1 rounded-xl border-2 px-6 py-2.5 font-inter uppercase tracking-wider transition-all duration-500 overflow-hidden text-center text-sm ${
+                filterBarStuck
+                  ? 'border-[#023927] text-[#023927] hover:bg-[#023927] hover:text-white'
+                  : 'border-white text-white'
+              }`}
+            >
+              {!filterBarStuck && (
+                <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+              )}
+              <span
+                className={`relative z-10 transition-colors duration-500 ${
+                  filterBarStuck ? 'group-hover:text-white' : 'group-hover:text-gray-900'
+                }`}
+              >
+                {showMoreFilters
+                  ? `− ${t('properties.filters.lessFilters')}`
+                  : `+ ${t('properties.filters.moreFilters')}`}
+              </span>
+            </button>
+
+            {activeFiltersCount > 0 && (
+              <button
+                onClick={resetFilters}
+                className={`group relative flex-1 rounded-xl border-2 px-3 py-2.5 font-inter uppercase tracking-normal transition-all duration-500 overflow-hidden text-center text-[10px] leading-tight whitespace-normal ${
+                  filterBarStuck
+                    ? 'border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-50'
+                    : 'border-white text-white'
+                }`}
+              >
+                {!filterBarStuck && (
+                  <div className="absolute inset-0 bg-white transform translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+                )}
+                <span
+                  className={`relative z-10 transition-colors duration-500 ${
+                    filterBarStuck ? '' : 'group-hover:text-gray-900'
+                  }`}
+                >
+                  {t('properties.filters.resetAll')} ({activeFiltersCount})
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
       </section>
-
-
 
       {/* Property Cards Section - REVOLUTIONARY NEW LAYOUT */}
       <section ref={propertiesListRef} className="py-6 sm:py-12 bg-white">
@@ -1184,7 +1248,28 @@ const Properties: React.FC = () => {
                 <div className="h-px w-full bg-gray-100"></div>
               </div>
 
-              {filteredAndSortedProperties.length === 0 ? (
+              {loadError ? (
+                <div className="text-center py-16 sm:py-32 bg-red-50 border-2 border-red-200 max-w-4xl mx-auto px-4">
+                  <div className="text-5xl sm:text-8xl mb-6 sm:mb-10 opacity-20">⚠️</div>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter text-gray-900 mb-4 sm:mb-6 font-light">
+                    Impossible de charger les propriétés
+                  </h3>
+                  <p className="text-gray-700 mb-4 max-w-2xl mx-auto text-sm sm:text-base break-words">
+                    {loadError}
+                  </p>
+                  <p className="text-gray-500 mb-8 sm:mb-10 max-w-2xl mx-auto text-xs sm:text-sm">
+                    Vérifiez que <code className="font-mono">APIMO_PROVIDER_ID</code> et{' '}
+                    <code className="font-mono">APIMO_TOKEN</code> sont définis, puis
+                    redémarrez le serveur de développement.
+                  </p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-[#023927] text-white px-6 sm:px-10 py-3 sm:py-4 font-inter uppercase tracking-wider text-sm sm:text-lg hover:bg-white hover:text-[#023927] hover:border-2 hover:border-[#023927] transition-all duration-500"
+                  >
+                    Réessayer
+                  </button>
+                </div>
+              ) : filteredAndSortedProperties.length === 0 ? (
                 <div className="text-center py-16 sm:py-32 bg-gray-50 border-2 border-gray-200 max-w-4xl mx-auto">
                   <div className="text-5xl sm:text-8xl mb-6 sm:mb-10 opacity-20">🏠</div>
                   <h3 className="text-xl sm:text-2xl lg:text-3xl font-inter text-gray-900 mb-4 sm:mb-8 font-light px-4">

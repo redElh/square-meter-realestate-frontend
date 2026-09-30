@@ -11,6 +11,104 @@ const fs = require('fs');
 // Your actual Google Maps URL
 const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/M%C2%B2+Square+Meter/@31.4938096,-9.7575766,17z/data=!4m8!3m7!1s0x6b0f78fc73018673:0x9f971ab9cce20129!8m2!3d31.4938051!4d-9.7550017!9m1!1b1!16s%2Fg%2F11wth7gqpg';
 
+const IS_WINDOWS = process.platform === 'win32';
+
+/**
+ * Browsers that can be launched directly, in priority order. The serverless
+ * Lambda binary from @sparticuz/chromium is handled separately because it is
+ * Linux-only.
+ */
+const SYSTEM_BROWSER_PATHS = [
+  // Windows — Chrome, then the Chromium build, then Edge (preinstalled on Win10/11)
+  'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+  'C:\\Program Files\\Chromium\\Application\\chrome.exe',
+  'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+  'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
+  // macOS
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  '/Applications/Chromium.app/Contents/MacOS/Chromium',
+  // Linux (system installs; the serverless path uses @sparticuz instead)
+  '/usr/bin/google-chrome-stable',
+  '/usr/bin/google-chrome',
+  '/usr/bin/chromium-browser',
+  '/usr/bin/chromium',
+];
+
+/**
+ * Resolve a launchable browser, trying each known option in turn.
+ *
+ * On Windows the @sparticuz/chromium binary is deliberately skipped: that
+ * package ships a Linux ELF executable, so on win32 `spawn()` fails with ENOENT
+ * even though the file exists. Locally we use a real Chrome/Edge install; on
+ * Vercel (Linux) the sparticuz binary is the right choice.
+ */
+async function launchBrowser() {
+  const headless = chromium.headless === undefined ? true : chromium.headless;
+  const attempts = [];
+
+  const configuredPath =
+    process.env.CHROMIUM_EXECUTABLE_PATH || process.env.CHROMIUM_PATH || '';
+  if (configuredPath && fs.existsSync(configuredPath)) {
+    attempts.push({
+      label: `CHROMIUM_EXECUTABLE_PATH (${configuredPath})`,
+      options: { executablePath: configuredPath, headless },
+    });
+  }
+
+  for (const p of SYSTEM_BROWSER_PATHS) {
+    if (fs.existsSync(p)) {
+      attempts.push({ label: p, options: { executablePath: p, headless } });
+    }
+  }
+
+  if (IS_WINDOWS) {
+    console.log(
+      'ℹ️ Skipping @sparticuz/chromium — its bundled binary targets Linux and cannot run on Windows.'
+    );
+  } else {
+    try {
+      const p = await chromium.executablePath();
+      if (p && fs.existsSync(p)) {
+        // Only the Lambda binary needs these hardened flags; real Chrome/Edge
+        // should be launched with a clean argument list.
+        attempts.push({
+          label: `@sparticuz/chromium (${p})`,
+          options: { executablePath: p, args: chromium.args || [], headless },
+        });
+      }
+    } catch (e) {
+      console.warn('@sparticuz/chromium.executablePath() failed:', e.message);
+    }
+  }
+
+  if (attempts.length === 0) {
+    throw new Error(
+      'No launchable browser found. Install Chrome or Edge, or set ' +
+        'CHROMIUM_EXECUTABLE_PATH in .env.local to a browser executable.'
+    );
+  }
+
+  let lastError;
+  for (const attempt of attempts) {
+    try {
+      console.log('🔎 Trying browser:', attempt.label);
+      const browser = await playwright.chromium.launch(attempt.options);
+      console.log('✅ Launched browser via', attempt.label);
+      return browser;
+    } catch (err) {
+      console.warn(
+        `⚠️ Launch failed for ${attempt.label}: ${String(err.message).split('\n')[0]}`
+      );
+      lastError = err;
+    }
+  }
+
+  throw new Error(
+    `Could not launch any browser. Last error: ${lastError ? lastError.message : 'unknown'}`
+  );
+}
+
 /**
  * Scrape Google Maps reviews using Playwright
  */
@@ -18,67 +116,9 @@ async function scrapeGoogleReviews() {
   let browser = null;
   
   try {
-    console.log('🚀 Launching Playwright browser (Sparticuz Chromium)...');
+    console.log('🚀 Launching Playwright browser...');
+    browser = await launchBrowser();
 
-    // Resolve executable path with overrides and fallbacks for dev & prod
-    let execPath = process.env.CHROMIUM_EXECUTABLE_PATH || process.env.CHROMIUM_PATH || '';
-
-    if (!execPath) {
-      try {
-        execPath = await chromium.executablePath();
-      } catch (e) {
-        console.warn('@sparticuz/chromium.executablePath() failed:', e.message);
-      }
-    }
-
-    // Common local Chrome/Chromium locations (Windows, macOS, Linux)
-    const commonPaths = [
-      // Windows
-      'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-      'C:\\Program Files\\Chromium\\Application\\chrome.exe',
-      // macOS
-      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-      '/Applications/Chromium.app/Contents/MacOS/Chromium',
-      // Linux
-      '/usr/bin/google-chrome-stable',
-      '/usr/bin/google-chrome',
-      '/usr/bin/chromium-browser',
-      '/usr/bin/chromium'
-    ];
-
-    if (!execPath) {
-      for (const p of commonPaths) {
-        if (fs.existsSync(p)) { execPath = p; break; }
-      }
-    }
-
-    console.log('Chromium candidate executablePath:', execPath || '(none)');
-
-    // Prefer launching system-installed Chrome for local development
-    try {
-      browser = await playwright.chromium.launch({
-        channel: 'chrome',
-        args: chromium.args || [],
-        headless: chromium.headless === undefined ? true : chromium.headless
-      });
-      console.log('Launched system Chrome via Playwright channel.');
-    } catch (sysErr) {
-      console.warn('Launching system Chrome failed:', sysErr.message);
-      // Fall back to sparticuz executable path if available
-      if (!execPath || !fs.existsSync(execPath)) {
-        const msg = `Chromium executable not found. Set env CHROMIUM_EXECUTABLE_PATH or install @sparticuz/chromium/playwright browsers.`;
-        console.error(msg);
-        throw new Error(msg);
-      }
-      browser = await playwright.chromium.launch({
-        args: chromium.args || [],
-        executablePath: execPath,
-        headless: chromium.headless === undefined ? true : chromium.headless
-      });
-      console.log('Launched Sparticuz Chromium at', execPath);
-    }
-    
     const context = await browser.newContext({
       userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       viewport: { width: 1920, height: 1080 }

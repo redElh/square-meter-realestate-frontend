@@ -5,6 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './i18n/config';
 import './autoIndexProperties';
+import { reportMissingClientEnv } from './config/env';
+
+reportMissingClientEnv();
 
 // Strip Facebook's legacy #_=_ fragment
 if (window.location.hash === '#_=_') {

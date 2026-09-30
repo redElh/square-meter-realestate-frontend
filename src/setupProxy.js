@@ -16,13 +16,28 @@ module.exports = function(app) {
   );
 
   // ─── Credentials for Apimo (from environment variables) ──────────────────
+  // Read from .env.local by react-scripts' config/env.js at startup. That module
+  // runs exactly once, so a value added or edited in .env.local is NOT picked up
+  // until the dev server is restarted.
   const providerId = process.env.APIMO_PROVIDER_ID;
   const token = process.env.APIMO_TOKEN;
-  if (!providerId || !token) {
-    console.warn('⚠️ APIMO credentials not set in environment variables');
-  }
   const credentials = providerId && token ? `${providerId}:${token}` : '';
   const base64Credentials = credentials ? Buffer.from(credentials).toString('base64') : '';
+
+  if (base64Credentials) {
+    console.log('🔐 [Apimo proxy] Credentials loaded for provider ' + providerId);
+  } else {
+    console.error(
+      '\n' +
+        '='.repeat(72) + '\n' +
+        '❌ APIMO CREDENTIALS MISSING — property listings will not load.\n' +
+        '   APIMO_PROVIDER_ID and APIMO_TOKEN were not found in the environment.\n' +
+        '   Add them to .env.local, then RESTART the dev server (react-scripts\n' +
+        '   reads .env files once at startup and never reloads them).\n' +
+        '   Without them Apimo answers: {"detail":"Please provide the token"}\n' +
+        '='.repeat(72) + '\n'
+    );
+  }
 
   console.log('🚀 Setting up proxy middleware...');
 
@@ -76,6 +91,22 @@ module.exports = function(app) {
   );
 
   // ─── Apimo Proxy ───────────────────────────────────────────────────────────
+  // Fail fast with a readable message instead of forwarding an empty
+  // `Authorization: Basic` header, which Apimo answers with HTTP 400
+  // "Please provide the token" and which the UI would show as an empty listing.
+  app.use('/api/apimo', (req, res, next) => {
+    if (!base64Credentials) {
+      return res.status(500).json({
+        properties: [],
+        total_items: 0,
+        error:
+          'API configuration error: APIMO_PROVIDER_ID/APIMO_TOKEN are not set. ' +
+          'Add them to .env.local and restart the dev server.',
+      });
+    }
+    next();
+  });
+
   app.use(
     '/api/apimo',
     createProxyMiddleware({
@@ -91,10 +122,22 @@ module.exports = function(app) {
       onProxyReq: (proxyReq, req, res) => {
         console.log('🔐 Proxy: Request intercepted');
         console.log('🔗 Proxy: Path:', req.url);
-        console.log('📋 Proxy: Headers:', proxyReq.getHeaders());
       },
       onProxyRes: (proxyRes, req, res) => {
-        console.log('📥 Proxy: Response status:', proxyRes.statusCode);
+        if (proxyRes.statusCode >= 400) {
+          console.error('📥 Proxy: Upstream error', proxyRes.statusCode, 'for', req.url);
+        }
+      },
+      onError: (err, req, res) => {
+        console.error('❌ Apimo proxy error:', err.message);
+        if (!res.headersSent) {
+          res.status(502).json({
+            properties: [],
+            total_items: 0,
+            error: 'Temporary connection error - please try again',
+            message: err.message,
+          });
+        }
       },
       logLevel: 'debug',
     })
