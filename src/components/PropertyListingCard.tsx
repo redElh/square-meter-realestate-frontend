@@ -73,10 +73,17 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
   const images = useMemo(() => property.images || [], [property.images]);
   const count = images.length;
 
-  const [index, setIndex] = useState(0);
+  // Start on the first photo. Track index 0 is the cloned *last* photo, so a
+  // lazy initialiser is required — deriving it later would flash the last
+  // photo before snapping away from it.
+  const [index, setIndex] = useState(() =>
+    (property.images?.length ?? 0) > 1 ? 1 : 0
+  );
   const [paused, setPaused] = useState(false);
   const [dragDx, setDragDx] = useState(0);
   const [snapping, setSnapping] = useState(false);
+  const [inView, setInView] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
   // Offset from the shared clock, so a card the user paged manually stays in
   // phase instead of drifting back to the global rhythm.
@@ -117,6 +124,26 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
     };
   }, [index, lastIndex, firstReal, lastReal, images.length]);
 
+  // Only advance while the photo is actually on screen. Off-screen cards used
+  // to keep animating, which cost frames nobody could see, and a card scrolled
+  // back into view had silently fallen behind its neighbours.
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   // Anchor to the shared clock so this card starts on its first photo and joins
   // the common rhythm from the next tick onwards.
   useEffect(() => {
@@ -152,7 +179,9 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
       return;
     }
 
-    if (paused) {
+    // Being off screen behaves exactly like being hovered: both freeze the
+    // card and re-anchor it to the shared clock when it comes back.
+    if (paused || !inView) {
       wasPausedRef.current = true;
       return;
     }
@@ -172,7 +201,7 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
       const target = firstReal + ((globalTick + phaseRef.current) % count);
       setIndex((current) => (current === target ? current : target));
     });
-  }, [count, paused, firstReal]);
+  }, [count, paused, inView, firstReal]);
 
   const hasCarousel = count > 1;
 
@@ -227,6 +256,7 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
 
       {/* Single photo area with carousel */}
       <div
+        ref={carouselRef}
         className="relative h-[300px] sm:h-[340px] lg:h-[380px] overflow-hidden bg-gray-50"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
