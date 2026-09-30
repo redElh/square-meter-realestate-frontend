@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -10,8 +10,11 @@ import {
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import type { Property } from '../services/apimoService';
 
-const AUTO_ADVANCE_MS = 4500;
+// Deliberately unhurried: long dwell + long, soft easing reads as premium,
+// where a short interval with a snappy curve reads as a slideshow flicker.
+const AUTO_ADVANCE_MS = 7000;
 const SWIPE_THRESHOLD_PX = 45;
+const SLIDE_DURATION_MS = 900;
 
 interface PropertyListingCardProps {
   property: Property;
@@ -40,25 +43,58 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const images = property.images || [];
+  const images = useMemo(() => property.images || [], [property.images]);
   const count = images.length;
 
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [dragDx, setDragDx] = useState(0);
+  const [snapping, setSnapping] = useState(false);
   const touchStartX = useRef<number | null>(null);
 
-  // Clamp so the carousel can never point past the available images.
-  const safeIndex = count > 0 ? Math.min(index, count - 1) : 0;
+  // Infinite carousel without a rewind: the last photo is cloned in front and
+  // the first is cloned at the end. Landing on a clone jumps silently back to
+  // the real slide, so every move is exactly one photo in one direction.
+  const track = useMemo(() => {
+    if (images.length <= 1) return images;
+    return [images[images.length - 1], ...images, images[0]];
+  }, [images]);
+
+  const firstReal = images.length > 1 ? 1 : 0;
+  const lastReal = images.length > 1 ? images.length : 0;
+  const lastIndex = track.length - 1;
+
+  // Snap to the equivalent real slide without animating when a clone is showing.
+  // The transition must be off *before* the index changes, otherwise the track
+  // would visibly rewind through every photo on the way to the real one.
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    let real = index;
+    if (index === 0) real = lastReal;
+    else if (index === lastIndex) real = firstReal;
+    if (real === index) return;
+
+    setSnapping(true);
+    const frame = window.requestAnimationFrame(() => setIndex(real));
+    const restore = window.requestAnimationFrame(() => setSnapping(false));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(restore);
+    };
+  }, [index, lastIndex, firstReal, lastReal, images.length]);
 
   const step = useCallback(
     (delta: number) => {
-      if (count <= 1) return;
+      if (images.length <= 1) return;
       setIndex((current) => {
-        const base = Math.min(current, count - 1);
-        return ((base + delta) % count + count) % count;
+        const next = current + delta;
+        if (next < 0) return track.length - 1;
+        if (next > track.length - 1) return 0;
+        return next;
       });
     },
-    [count]
+    [images.length, track.length]
   );
 
   // Automatic swipe between photos. Paused on hover/focus and skipped entirely
@@ -72,15 +108,15 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
       return;
     }
     const timer = window.setInterval(() => {
-      setIndex((current) => {
-        const base = Math.min(current, count - 1);
-        return (base + 1) % count;
-      });
+      step(1);
     }, AUTO_ADVANCE_MS);
     return () => window.clearInterval(timer);
-  }, [count, paused]);
+  }, [count, paused, step]);
 
   const hasCarousel = count > 1;
+
+  // Index within the original photo list, used to open the gallery in sync.
+  const safeIndex = Math.max(0, Math.min(index - firstReal, count - 1));
 
   const openGalleryAt = (e: React.MouseEvent, i: number) => {
     e.preventDefault();
@@ -90,16 +126,34 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0]?.clientX ?? null;
+    setDragDx(0);
+  };
+
+  // Track the finger 1:1 so the photo follows the gesture instead of only
+  // reacting at the end of it.
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const start = touchStartX.current;
+    if (start == null) return;
+    setDragDx(e.touches[0]?.clientX - start);
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     const start = touchStartX.current;
     const end = e.changedTouches[0]?.clientX;
     touchStartX.current = null;
-    if (start == null || end == null) return;
-    const delta = end - start;
-    if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
-    step(delta < 0 ? 1 : -1);
+
+    const dx = start == null || end == null ? 0 : end - start;
+    setDragDx(0);
+    if (Math.abs(dx) < SWIPE_THRESHOLD_PX) return;
+    step(dx < 0 ? 1 : -1);
+  };
+
+  // While dragging, the offset is in pixels; otherwise it is a whole slide.
+  const trackStyle: React.CSSProperties = {
+    transform: dragDx
+      ? `translateX(calc(${-index * 100}% + ${dragDx}px))`
+      : `translateX(${-index * 100}%)`,
+    transitionDuration: `${SLIDE_DURATION_MS}ms`,
   };
 
   return (
@@ -118,13 +172,16 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
         onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <div
-          className="absolute inset-0 flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-          style={{ transform: `translateX(-${safeIndex * 100}%)` }}
+          className={`absolute inset-0 flex will-change-transform ${
+            dragDx || snapping ? '' : 'transition-transform ease-[cubic-bezier(0.22,1,0.36,1)]'
+          }`}
+          style={trackStyle}
         >
-          {images.map((img, i) => (
+          {track.map((img, i) => (
             <img
               key={`${img}-${i}`}
               src={img}
