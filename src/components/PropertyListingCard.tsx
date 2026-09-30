@@ -16,6 +16,33 @@ const AUTO_ADVANCE_MS = 7000;
 const SWIPE_THRESHOLD_PX = 45;
 const SLIDE_DURATION_MS = 900;
 
+// One shared clock for every card on the page. Each card used to own a timer
+// started when it mounted, so cards rendered at different moments advanced at
+// different times and the grid looked chaotic. A single interval now drives
+// them all: because React batches the updates from one callback, every card
+// starts its slide transition on the same frame.
+let globalTick = 0;
+let sharedTicker: number | null = null;
+const tickSubscribers = new Set<() => void>();
+
+function subscribeToSharedTicker(onTick: () => void): () => void {
+  tickSubscribers.add(onTick);
+  if (sharedTicker === null) {
+    sharedTicker = window.setInterval(() => {
+      globalTick += 1;
+      tickSubscribers.forEach((notify) => notify());
+    }, AUTO_ADVANCE_MS);
+  }
+
+  return () => {
+    tickSubscribers.delete(onTick);
+    if (tickSubscribers.size === 0 && sharedTicker !== null) {
+      window.clearInterval(sharedTicker);
+      sharedTicker = null;
+    }
+  };
+}
+
 interface PropertyListingCardProps {
   property: Property;
   statusLabel: string;
@@ -51,6 +78,12 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
   const [dragDx, setDragDx] = useState(0);
   const [snapping, setSnapping] = useState(false);
   const touchStartX = useRef<number | null>(null);
+  // Offset from the shared clock, so a card the user paged manually stays in
+  // phase instead of drifting back to the global rhythm.
+  const phaseRef = useRef(0);
+  const indexRef = useRef(0);
+  const wasPausedRef = useRef(false);
+  indexRef.current = index;
 
   // Infinite carousel without a rewind: the last photo is cloned in front and
   // the first is cloned at the end. Landing on a clone jumps silently back to
@@ -84,9 +117,20 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
     };
   }, [index, lastIndex, firstReal, lastReal, images.length]);
 
+  // Anchor to the shared clock so this card starts on its first photo and joins
+  // the common rhythm from the next tick onwards.
+  useEffect(() => {
+    if (count <= 1) return;
+    phaseRef.current = ((-globalTick) % count + count) % count;
+  }, [count]);
+
   const step = useCallback(
     (delta: number) => {
       if (images.length <= 1) return;
+      // Manual paging keeps the card in phase with its neighbours.
+      phaseRef.current =
+        ((phaseRef.current + delta) % images.length + images.length) %
+        images.length;
       setIndex((current) => {
         const next = current + delta;
         if (next < 0) return track.length - 1;
@@ -97,21 +141,38 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
     [images.length, track.length]
   );
 
-  // Automatic swipe between photos. Paused on hover/focus and skipped entirely
-  // for visitors who asked for reduced motion.
+  // Advance on the shared tick rather than on a private timer. Paused on
+  // hover/focus and skipped entirely for visitors who asked for reduced motion.
   useEffect(() => {
-    if (count <= 1 || paused) return;
+    if (count <= 1) return;
     if (
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
     ) {
       return;
     }
-    const timer = window.setInterval(() => {
-      step(1);
-    }, AUTO_ADVANCE_MS);
-    return () => window.clearInterval(timer);
-  }, [count, paused, step]);
+
+    if (paused) {
+      wasPausedRef.current = true;
+      return;
+    }
+
+    if (wasPausedRef.current) {
+      // Re-anchor on the shared clock so the card rejoins in step, keeping the
+      // photo it is currently showing instead of jumping forward.
+      wasPausedRef.current = false;
+      const real = Math.max(
+        0,
+        Math.min(indexRef.current - firstReal, count - 1)
+      );
+      phaseRef.current = ((real - globalTick) % count + count) % count;
+    }
+
+    return subscribeToSharedTicker(() => {
+      const target = firstReal + ((globalTick + phaseRef.current) % count);
+      setIndex((current) => (current === target ? current : target));
+    });
+  }, [count, paused, firstReal]);
 
   const hasCarousel = count > 1;
 
