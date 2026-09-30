@@ -295,8 +295,25 @@ export interface Property {
 export const SOLD_STATUSES = [30, 31, 32];
 export const isSoldStatus = (status?: number): boolean => !!status && SOLD_STATUSES.includes(status);
 
+// Listings whose Apimo category contradicts how they are actually sold.
+// These references are forced to "À vendre" regardless of category/agreement,
+// which is the only safe fix while the source data is inconsistent: category
+// alone misfiles several listings (6 are category 3 with agreement.type 1, and
+// 4 are category 1 with agreement.type 3), so changing the category rule would
+// silently reclassify unrelated properties.
+//
+// Add a reference here when a listing shows up under the wrong tab. Remove it
+// once the record is corrected in Apimo.
+const FORCED_SALE_REFERENCES = new Set<string>(['86919491']);
+
 // Mapping functions
-const getCategoryType = (category: number, subcategory: number): 'buy' | 'rent' | 'seasonal' => {
+const getCategoryType = (
+  category: number,
+  subcategory: number,
+  reference?: string
+): 'buy' | 'rent' | 'seasonal' => {
+  if (reference && FORCED_SALE_REFERENCES.has(String(reference).trim())) return 'buy';
+
   // Category mapping based on APIMO API:
   // 1 = Vente (Sale/Buy) - Tag: "À vendre"
   // 2 = Location (Rental) - Tag: "À louer"
@@ -444,7 +461,11 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     reference: apimoProperty.reference,
     title,
     description,
-    type: getCategoryType(apimoProperty.category, apimoProperty.subcategory),
+    type: getCategoryType(
+      apimoProperty.category,
+      apimoProperty.subcategory,
+      apimoProperty.reference
+    ),
     status: apimoProperty.status,
     category: apimoProperty.type, // APIMO type number for filtering
     subtype: apimoProperty.subtype, // APIMO subtype number
