@@ -8,7 +8,7 @@ import {
   ArrowsRightLeftIcon,
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { buyerSavedProperties } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface BuyerPropertiesProps {
   onViewProperty: (id: number) => void;
@@ -16,6 +16,7 @@ interface BuyerPropertiesProps {
 
 const BuyerProperties: React.FC<BuyerPropertiesProps> = ({ onViewProperty }) => {
   const { t } = useTranslation();
+  const { properties } = useDashboardProperties();
   const [activeTab, setActiveTab] = useState<'search' | 'saved'>('saved');
   const [searchFilters, setSearchFilters] = useState({
     location: '',
@@ -65,7 +66,7 @@ const BuyerProperties: React.FC<BuyerPropertiesProps> = ({ onViewProperty }) => 
           }`}
         >
           <HeartIcon className="w-4 h-4 inline mr-2" />
-          Sauvegardés ({buyerSavedProperties.length})
+          Sauvegardés ({properties.length})
         </button>
       </div>
 
@@ -211,7 +212,7 @@ const BuyerProperties: React.FC<BuyerPropertiesProps> = ({ onViewProperty }) => 
               </h3>
             </div>
             <div className="divide-y divide-gray-100">
-              {buyerSavedProperties.map((property) => (
+              {properties.map((property) => (
                 <div key={property.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                   <div className="flex gap-4">
                     <div className="w-32 h-24 bg-gray-200 flex items-center justify-center text-gray-400 text-sm flex-shrink-0">
@@ -266,7 +267,7 @@ const BuyerProperties: React.FC<BuyerPropertiesProps> = ({ onViewProperty }) => 
       {/* Saved Properties */}
       {activeTab === 'saved' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {buyerSavedProperties.map((property) => (
+          {properties.map((property) => (
             <div key={property.id} className="bg-white border border-gray-200 overflow-hidden hover:border-emerald-600 transition-all">
               <div className="relative">
                 <img src={property.image} alt={property.title} className="w-full h-44 object-cover" />

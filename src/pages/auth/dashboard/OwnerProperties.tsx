@@ -11,10 +11,11 @@ import {
   HeartIcon,
   ChatBubbleLeftIcon,
 } from '@heroicons/react/24/outline';
-import { ownerProperties } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 const OwnerProperties: React.FC = () => {
   const { t } = useTranslation();
+  const { properties } = useDashboardProperties();
 
   const totalStats = [
     { label: 'Total propriétés', value: '2', icon: HomeIcon },
@@ -58,7 +59,7 @@ const OwnerProperties: React.FC = () => {
 
       {/* Properties List */}
       <div className="space-y-4">
-        {ownerProperties.map((property) => (
+        {properties.map((property) => (
           <div key={property.id} className="bg-white border border-gray-200 hover:border-emerald-600 transition-all">
             <div className="flex flex-col sm:flex-row gap-4 p-5">
               <div className="w-full sm:w-32 h-28 bg-gray-200 flex items-center justify-center text-gray-400 text-xs flex-shrink-0">

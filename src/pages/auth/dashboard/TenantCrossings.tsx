@@ -14,7 +14,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { tenantProperties, tenantDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface TenantCrossingsProps {
   onViewProperty: (id: number) => void;
@@ -26,8 +26,10 @@ const TenantCrossings: React.FC<TenantCrossingsProps> = ({ onViewProperty }) => 
   const [savedIds, setSavedIds] = useState<number[]>([1]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { properties } = useDashboardProperties();
+  const rentalProperties = properties.filter(p => p.type === 'rent' || p.type === 'seasonal');
   const filters = ['Tous', 'Nouveaux', 'Score', 'Loyer', 'Surface'];
-  const demandOptions = ['Tous', ...Array.from(new Set(tenantProperties.map(p => p.demandLabel).filter(Boolean)))];
+  const demandOptions = ['Tous', ...Array.from(new Set(rentalProperties.map(p => p.demandLabel).filter(Boolean)))];
 
   const toggleSaved = (id: number) => {
     setSavedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -82,13 +84,13 @@ const TenantCrossings: React.FC<TenantCrossingsProps> = ({ onViewProperty }) => 
             <button className="px-4 py-2 border border-gray-200 text-gray-600 text-xs font-medium hover:border-gray-300 transition-all">
               Réinitialiser
             </button>
-            <span className="text-xs text-gray-400 ml-auto">{tenantProperties.length} biens proposés</span>
+            <span className="text-xs text-gray-400 ml-auto">{rentalProperties.length} biens proposés</span>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {tenantProperties.map((p) => (
+        {rentalProperties.map((p) => (
           <div
             key={p.id}
             className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
@@ -103,7 +105,7 @@ const TenantCrossings: React.FC<TenantCrossingsProps> = ({ onViewProperty }) => 
                     : 'bg-amber-500 text-white'
                 }`}>
                   <SparklesIcon className="w-3 h-3" />
-                  {p.score}%
+{p.score || 0}%
                 </div>
                 <span className="text-[10px] text-gray-400 mt-1 font-medium uppercase">Score</span>
               </div>
@@ -166,7 +168,7 @@ const TenantCrossings: React.FC<TenantCrossingsProps> = ({ onViewProperty }) => 
       </div>
 
       <div className="flex items-center justify-between bg-white border border-gray-200 shadow-sm px-5 py-3">
-        <span className="text-xs text-gray-500">Affichage 1-{tenantProperties.length} sur {tenantProperties.length} biens</span>
+        <span className="text-xs text-gray-500">Affichage 1-{rentalProperties.length} sur {rentalProperties.length} biens</span>
         <div className="flex items-center gap-1">
           <button className="p-1.5 border border-gray-200 text-gray-400 hover:text-gray-600 hover:border-gray-300 transition-all">
             <ChevronLeftIcon className="w-4 h-4" />

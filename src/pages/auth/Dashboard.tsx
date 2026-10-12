@@ -54,13 +54,12 @@ import LessorMessages from './dashboard/LessorMessages';
 import LessorDocuments from './dashboard/LessorDocuments';
 import LessorProfile from './dashboard/LessorProfile';
 import {
-  buyerSavedProperties,
-  ownerProperties,
   buyerDashboardStats,
   sellerDashboardStats,
   tenantDashboardStats,
   lessorDashboardStats,
 } from './dashboard/data';
+import { useDashboardProperties } from './dashboard/useDashboardProperties';
 import { Property } from './dashboard/types';
 import UserProfile from '../../components/UserProfile';
 import MySpacesCard from './dashboard/MySpacesCard';
@@ -69,6 +68,7 @@ type UserRole = 'buyer' | 'seller' | 'lessor' | 'tenant' | 'traveler';
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
+  const { properties } = useDashboardProperties();
   const navigate = useNavigate();
   const { role: urlRole, id: urlId } = useParams<{ role: string; id: string }>();
 
@@ -266,13 +266,13 @@ const Dashboard: React.FC = () => {
   };
 
   const selectedProperty: Property | undefined = selectedPropertyId
-    ? ((userType === 'buyer' || userType === 'tenant') ? buyerSavedProperties : ownerProperties).find(p => p.id === selectedPropertyId)
+    ? properties.find(p => p.id === selectedPropertyId)
     : undefined;
 
   const buyerNavItems = [
     { id: 'overview', label: 'Tableau de bord', icon: ChartBarIcon },
     { id: 'demands', label: 'Mes recherches', icon: MagnifyingGlassIcon },
-    { id: 'properties', label: 'Biens proposés', icon: HomeIcon, count: buyerSavedProperties.length },
+    { id: 'properties', label: 'Biens proposés', icon: HomeIcon, count: properties.length },
     { id: 'appointments', label: 'Rendez-vous', icon: CalendarIcon },
     { id: 'messages', label: 'Messages', icon: ChatBubbleLeftIcon },
     { id: 'documents', label: 'Documents', icon: DocumentTextIcon },

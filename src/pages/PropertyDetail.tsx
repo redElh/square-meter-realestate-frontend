@@ -279,6 +279,7 @@ const PropertyDetail: React.FC = () => {
         property={{
           price: property.price,
           currency: property.currency,
+          rooms: property.rooms,
           bedrooms: property.bedrooms,
           bathrooms: property.bathrooms,
           area: property.surface,
@@ -635,7 +636,6 @@ const PropertyDetail: React.FC = () => {
                     surface={similar.surface || 0}
                     bedrooms={similar.bedrooms || 0}
                     bathrooms={similar.bathrooms || 0}
-                    rooms={similar.rooms}
                     floors={similar.floors}
                     images={similar.images && similar.images.length > 0 ? similar.images : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800']}
                     type={(similar.type as 'buy' | 'rent') || 'buy'}

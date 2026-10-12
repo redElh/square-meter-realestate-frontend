@@ -9,16 +9,18 @@ import {
   DocumentTextIcon,
   EnvelopeIcon,
 } from '@heroicons/react/24/outline';
-import { lessorRentalProperties } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface LessorPropertiesProps {
   onViewProperty?: (id: number) => void;
 }
 
 const LessorProperties: React.FC<LessorPropertiesProps> = ({ onViewProperty }) => {
+  const { properties } = useDashboardProperties();
+  const rentalProperties = properties.filter(p => p.type === 'rent' || p.type === 'seasonal');
   const totalStats = [
-    { label: 'Total', value: String(lessorRentalProperties.length), icon: HomeIcon },
-    { label: 'En location', value: String(lessorRentalProperties.filter(p => p.status === 'En location').length), icon: HomeIcon },
+    { label: 'Total', value: String(rentalProperties.length), icon: HomeIcon },
+    { label: 'En location', value: String(rentalProperties.filter(p => p.type === 'rent' || p.type === 'seasonal').length), icon: HomeIcon },
     { label: 'En attente', value: '0', icon: HomeIcon },
     { label: 'Terminées', value: '0', icon: HomeIcon },
   ];
@@ -61,7 +63,7 @@ const LessorProperties: React.FC<LessorPropertiesProps> = ({ onViewProperty }) =
       </button>
 
       <div className="space-y-4">
-        {lessorRentalProperties.map((property) => (
+        {rentalProperties.map((property) => (
           <div key={property.id} className="bg-white border border-gray-200 hover:border-emerald-600 transition-all">
             <div className="flex flex-col sm:flex-row gap-4 p-5">
               <div className="w-full sm:w-32 h-28 bg-gray-200 flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
@@ -80,7 +82,7 @@ const LessorProperties: React.FC<LessorPropertiesProps> = ({ onViewProperty }) =
                     {property.status}
                   </span>
                 </div>
-                <p className="text-emerald-700 font-bold text-sm">{property.rentAmount}</p>
+                <p className="text-emerald-700 font-bold text-sm">{property.price}</p>
                 <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
                   <span>{property.surface}</span>
                   <span>·</span>
@@ -90,8 +92,8 @@ const LessorProperties: React.FC<LessorPropertiesProps> = ({ onViewProperty }) =
                 </div>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
                   <span>Réf : {property.reference}</span>
-                  <span>Taux occupation : {property.occupancyRate}%</span>
-                  <span>Mandat : {property.mandate}</span>
+                  <span>Taux occupation : {property.occupancyRate ?? '-'}%</span>
+                  <span>Mandat : {property.mandate || '-'}</span>
                   <span>{property.inquiries} demandes</span>
                   {property.tenant && <span>Locataire : {property.tenant}</span>}
                 </div>

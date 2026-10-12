@@ -11,13 +11,16 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { tenantDashboardStats, tenantProperties, appointmentsData, messages, tenantDemands } from './data';
+import { tenantDashboardStats, appointmentsData, messages, tenantDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface TenantOverviewProps {
   onNavigate: (tab: string) => void;
 }
 
 const TenantOverview: React.FC<TenantOverviewProps> = ({ onNavigate }) => {
+  const { properties } = useDashboardProperties();
+  const rentalProperties = properties.filter(p => p.type === 'rent' || p.type === 'seasonal');
   const activeDemands = tenantDemands.filter(d => d.status === 'Active');
 
   return (
@@ -56,11 +59,11 @@ const TenantOverview: React.FC<TenantOverviewProps> = ({ onNavigate }) => {
               Derniers biens proposés
             </h3>
             <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2 py-1">
-              {tenantProperties.filter(p => p.isNew).length} nouveaux
+              {rentalProperties.filter(p => p.isNew).length} nouveaux
             </span>
           </div>
           <div className="divide-y divide-gray-100">
-            {tenantProperties.slice(0, 2).map((p) => (
+            {rentalProperties.slice(0, 2).map((p) => (
               <div key={p.id} className="px-5 py-4 hover:bg-gray-50/80 transition-colors group">
                 <div className="flex gap-3">
                   <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">

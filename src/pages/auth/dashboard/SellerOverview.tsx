@@ -17,7 +17,8 @@ import {
   ShieldCheckIcon,
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
-import { sellerDashboardStats, ownerProperties as sellerProperties, appointmentsData, messages, receivedDemands } from './data';
+import { sellerDashboardStats, appointmentsData, messages, receivedDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface SellerOverviewProps {
   onNavigate: (tab: string) => void;
@@ -25,6 +26,7 @@ interface SellerOverviewProps {
 
 const SellerOverview: React.FC<SellerOverviewProps> = ({ onNavigate }) => {
   const { t } = useTranslation();
+  const { properties } = useDashboardProperties();
 
   return (
     <div className="space-y-6">
@@ -59,7 +61,7 @@ const SellerOverview: React.FC<SellerOverviewProps> = ({ onNavigate }) => {
             </h3>
           </div>
           <div className="divide-y divide-gray-100">
-            {sellerProperties.map((property) => (
+            {properties.map((property) => (
               <div key={property.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                 <div className="flex gap-4">
                   <img
@@ -83,7 +85,7 @@ const SellerOverview: React.FC<SellerOverviewProps> = ({ onNavigate }) => {
                       </span>
                     </div>
                     <p className="text-emerald-700 font-bold text-sm mt-1">{property.price}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{property.mandate}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{property.mandate || '-'}</p>
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => onNavigate('properties')}

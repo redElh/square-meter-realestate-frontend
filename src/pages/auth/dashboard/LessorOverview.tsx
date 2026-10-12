@@ -12,7 +12,8 @@ import {
   ExclamationTriangleIcon,
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
-import { lessorDashboardStats, lessorRentalProperties, appointmentsData, messages, receivedDemands } from './data';
+import { lessorDashboardStats, appointmentsData, messages, receivedDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface LessorOverviewProps {
   onNavigate: (tab: string) => void;
@@ -20,6 +21,8 @@ interface LessorOverviewProps {
 
 const LessorOverview: React.FC<LessorOverviewProps> = ({ onNavigate }) => {
   const { t } = useTranslation();
+  const { properties } = useDashboardProperties();
+  const rentalProperties = properties.filter(p => p.type === 'rent' || p.type === 'seasonal');
 
   return (
     <div className="space-y-6">
@@ -54,7 +57,7 @@ const LessorOverview: React.FC<LessorOverviewProps> = ({ onNavigate }) => {
             </h3>
           </div>
           <div className="divide-y divide-gray-100">
-            {lessorRentalProperties.map((property) => (
+            {rentalProperties.map((property) => (
               <div key={property.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                 <div className="flex gap-4">
                   <div className="w-20 h-20 bg-gray-200 flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
@@ -73,8 +76,8 @@ const LessorOverview: React.FC<LessorOverviewProps> = ({ onNavigate }) => {
                         {property.status}
                       </span>
                     </div>
-                    <p className="text-emerald-700 font-bold text-sm mt-1">{property.rentAmount}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{property.mandate} · J-{property.mandateDaysLeft}</p>
+                    <p className="text-emerald-700 font-bold text-sm mt-1">{property.price}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{property.mandate || '-'} · J-{property.mandateDaysLeft ?? '-'}</p>
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => onNavigate('properties')}

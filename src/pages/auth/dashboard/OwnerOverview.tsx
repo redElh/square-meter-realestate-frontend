@@ -15,7 +15,8 @@ import {
   CurrencyEuroIcon,
   ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
-import { ownerProperties, ownerStats, appointmentsData, messages, receivedDemands } from './data';
+import { ownerStats, appointmentsData, messages, receivedDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface OwnerOverviewProps {
   onNavigate: (tab: string) => void;
@@ -23,6 +24,7 @@ interface OwnerOverviewProps {
 
 const OwnerOverview: React.FC<OwnerOverviewProps> = ({ onNavigate }) => {
   const { t } = useTranslation();
+  const { properties } = useDashboardProperties();
 
   return (
     <div className="space-y-6">
@@ -60,7 +62,7 @@ const OwnerOverview: React.FC<OwnerOverviewProps> = ({ onNavigate }) => {
             </h3>
           </div>
           <div className="divide-y divide-gray-100">
-            {ownerProperties.map((property) => (
+            {properties.map((property) => (
               <div key={property.id} className="px-6 py-4 hover:bg-gray-50 transition-colors">
                 <div className="flex gap-4">
                   <img

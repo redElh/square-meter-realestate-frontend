@@ -29,7 +29,7 @@ const PropertyDetailView: React.FC<PropertyDetailViewProps> = ({ property, onBac
 
   const characteristics = [
     { label: 'Surface', value: property.surface },
-    { label: 'Pièces', value: String(property.bedrooms + 1) },
+    { label: 'Pièces', value: String(property.rooms ?? 0) },
     { label: 'Chambres', value: String(property.bedrooms) },
     { label: 'Salles de bain', value: String(property.bathrooms) },
     { label: 'Terrain', value: property.landSize || '-' },

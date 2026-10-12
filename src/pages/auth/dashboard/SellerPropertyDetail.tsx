@@ -37,7 +37,7 @@ const SellerPropertyDetail: React.FC<SellerPropertyDetailProps> = ({ property, o
   const detailsRows = [
     { label: 'Type', value: property.type === 'buy' ? 'Vente' : property.type === 'rent' ? 'Location' : property.type === 'seasonal' ? 'Saisonnier' : property.type === 'program' ? 'Programme' : 'N/A' },
     { label: 'Surface', value: property.surface },
-    { label: 'Pièces', value: String((property.bedrooms || 0) + 1) },
+    { label: 'Pièces', value: String(property.rooms ?? 0) },
     { label: 'Chambres', value: String(property.bedrooms || 0) },
     { label: 'SDB', value: String(property.bathrooms) },
     { label: 'Terrain', value: property.landSize || '-' },

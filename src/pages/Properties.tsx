@@ -425,7 +425,7 @@ const heroRef = useRef<HTMLElement>(null);
 
     const filtered = sourceProperties.filter((property) => {
       const typeMatch = options.typeFilter === 'all' || property.type === options.typeFilter;
-      const roomsMatch = !options.bedrooms || ((Number(property.rooms) || 0) >= options.bedrooms);
+      const bedroomsMatch = !options.bedrooms || ((Number(property.bedrooms) || 0) >= options.bedrooms);
       const propertyTypeMatch = !options.propertyType || (() => {
         const cat = property.category;
         const sub = property.subtype;
@@ -440,7 +440,8 @@ const heroRef = useRef<HTMLElement>(null);
       const searchMatch = !options.query || (() => {
         const query = normalizeForSearch(options.query);
 
-        const rooms = Number(property.rooms) > 0 ? Number(property.rooms) : (Number(property.bedrooms) > 0 ? Number(property.bedrooms) : 0);
+        const rooms = Number(property.rooms) > 0 ? Number(property.rooms) : 0;
+        const bedrooms = Number(property.bedrooms) > 0 ? Number(property.bedrooms) : 0;
         const bathrooms = Number(property.bathrooms) > 0 ? Number(property.bathrooms) : 0;
         const floors = Number(property.floors) > 0 ? Number(property.floors) : 0;
         const surface = Number(property.surface) > 0 ? Number(property.surface) : 0;
@@ -460,9 +461,20 @@ const heroRef = useRef<HTMLElement>(null);
           rawFields.push(
             String(rooms),
             `${rooms} pieces`,
-            `${rooms} chambres`,
+            `${rooms} piece`,
             `${rooms} rooms`,
-            `${rooms} bedrooms`
+            `${rooms} room`
+          );
+        }
+
+        if (bedrooms > 0) {
+          rawFields.push(
+            String(bedrooms),
+            `${bedrooms} chambres`,
+            `${bedrooms} chambre`,
+            `${bedrooms} bedrooms`,
+            `${bedrooms} bedroom`,
+            `${bedrooms} ch`
           );
         }
 
@@ -514,7 +526,7 @@ const heroRef = useRef<HTMLElement>(null);
         return true;
       })();
 
-      return typeMatch && roomsMatch && propertyTypeMatch && searchMatch && locationMatch && surfaceMatch && budgetMatch;
+      return typeMatch && bedroomsMatch && propertyTypeMatch && searchMatch && locationMatch && surfaceMatch && budgetMatch;
     });
 
     const sorted = [...filtered];

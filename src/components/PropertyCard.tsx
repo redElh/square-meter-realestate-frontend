@@ -23,7 +23,6 @@ interface PropertyCardProps {
   surface: number;
   bedrooms: number;
   bathrooms: number;
-  rooms?: number;
   floors?: number;
   images: string[];
   type: 'buy' | 'rent';
@@ -44,7 +43,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
   surface,
   bedrooms,
   bathrooms,
-  rooms,
   floors,
   images,
   type,
@@ -132,7 +130,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
             <div className={`mt-3 flex items-center gap-2 sm:gap-3 text-[11px] tracking-[0.14em] uppercase font-medium text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <span className={`inline-flex items-center gap-1.5 ${isRTL ? 'flex-row-reverse' : ''}`}><HomeIcon className="w-3.5 h-3.5 text-gray-400" /> {surface > 0 ? `${surface} m²` : '—'}</span>
               <span className="w-px h-3 bg-gray-200"></span>
-              <span>{rooms || 0} ch.</span>
+              <span>{bedrooms || 0} ch.</span>
               <span className="w-px h-3 bg-gray-200"></span>
               <span>{floors || 0} ét.</span>
             </div>

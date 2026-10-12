@@ -10,18 +10,19 @@ import {
   HeartIcon,
   ChatBubbleLeftIcon,
 } from '@heroicons/react/24/outline';
-import { ownerProperties } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface SellerPropertiesProps {
   onViewProperty?: (id: number) => void;
 }
 
 const SellerProperties: React.FC<SellerPropertiesProps> = ({ onViewProperty }) => {
+  const { properties } = useDashboardProperties();
   const totalStats = [
-    { label: 'Total propriétés', value: '2', icon: HomeIcon },
-    { label: 'En vente', value: '1', icon: HomeIcon },
-    { label: 'En location', value: '1', icon: HomeIcon },
-    { label: 'Terminées', value: '0', icon: HomeIcon },
+    { label: 'Total propriétés', value: String(properties.length), icon: HomeIcon },
+    { label: 'En vente', value: String(properties.filter(p => p.status === 'En vente').length), icon: HomeIcon },
+    { label: 'En location', value: String(properties.filter(p => p.type === 'rent' || p.type === 'seasonal').length), icon: HomeIcon },
+    { label: 'Terminées', value: String(properties.filter(p => p.status === 'Vendu').length), icon: HomeIcon },
   ];
 
   return (
@@ -62,7 +63,7 @@ const SellerProperties: React.FC<SellerPropertiesProps> = ({ onViewProperty }) =
       </button>
 
       <div className="space-y-4">
-        {ownerProperties.map((property) => (
+        {properties.map((property) => (
           <div key={property.id} className="bg-white border border-gray-200 hover:border-emerald-600 transition-all">
             <div className="flex flex-col sm:flex-row gap-4 p-5">
               <div className="w-full sm:w-32 h-28 bg-gray-200 flex items-center justify-center text-gray-400 text-xs flex-shrink-0">
@@ -94,7 +95,7 @@ const SellerProperties: React.FC<SellerPropertiesProps> = ({ onViewProperty }) =
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-gray-500">
                   <span>Réf : {property.reference}</span>
                   <span>{property.visitsThisMonth} visites ce mois</span>
-                  <span>Mandat : {property.mandate}</span>
+                  <span>Mandat : {property.mandate || '-'}</span>
                   <span>{property.inquiries} demandes reçues</span>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">

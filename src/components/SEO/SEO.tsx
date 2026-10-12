@@ -20,6 +20,7 @@ interface SEOProps {
   property?: {
     price?: number;
     currency?: string;
+    rooms?: number;
     bedrooms?: number;
     bathrooms?: number;
     area?: number;
@@ -141,8 +142,11 @@ const SEO: React.FC<SEOProps> = ({
               unitCode: 'MTK'
             }
           }),
+          ...(property.rooms && {
+            numberOfRooms: property.rooms
+          }),
           ...(property.bedrooms && {
-            numberOfRooms: property.bedrooms
+            numberOfBedrooms: property.bedrooms
           }),
           ...(property.bathrooms && {
             numberOfBathroomsTotal: property.bathrooms

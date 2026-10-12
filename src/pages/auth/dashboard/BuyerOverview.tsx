@@ -16,7 +16,8 @@ import {
   Squares2X2Icon,
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { buyerSavedProperties, buyerDashboardStats, appointmentsData, messages, buyerDemands } from './data';
+import { buyerDashboardStats, appointmentsData, messages, buyerDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface BuyerOverviewProps {
   onNavigate: (tab: string) => void;
@@ -35,6 +36,7 @@ const ScoreBadge: React.FC<{ score: number }> = ({ score }) => {
 };
 
 const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
+  const { properties } = useDashboardProperties();
   const activeDemands = buyerDemands.filter(d => d.status === 'Active');
 
   return (
@@ -76,11 +78,11 @@ const BuyerOverview: React.FC<BuyerOverviewProps> = ({ onNavigate }) => {
               Derniers biens proposés
             </h3>
             <span className="text-sm text-emerald-600 font-semibold bg-emerald-50 px-2 py-1">
-              {buyerSavedProperties.filter(p => p.isNew).length} nouveaux
+              {properties.filter(p => p.isNew).length} nouveaux
             </span>
           </div>
           <div className="divide-y divide-gray-100">
-            {buyerSavedProperties.slice(0, 2).map((p) => (
+            {properties.slice(0, 2).map((p) => (
               <div key={p.id} className="px-5 py-4 hover:bg-gray-50/80 transition-colors group">
                 <div className="flex gap-3">
                   <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">

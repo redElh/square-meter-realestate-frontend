@@ -277,9 +277,9 @@ export const RAGAssistant: React.FC<RAGAssistantProps> = ({ initialOpen = false 
                                 <span className="text-xs sm:text-sm font-bold text-[#023927]">
                                   €{property.price?.toLocaleString()}
                                 </span>
-                                {property.rooms && (
+                                {property.bedrooms && (
                                   <span className="text-[10px] sm:text-xs text-gray-500">
-                                    • {property.rooms} bedrooms
+                                    • {property.bedrooms} bedrooms
                                   </span>
                                 )}
                               </div>

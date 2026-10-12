@@ -38,7 +38,8 @@ import Careers from './pages/special-pages/Careers';
 import LanguageCurrency from './pages/Settings/LanguageCurrency';
 import PropertyStatistics from './pages/PropertyStatistics';
 import ScrollToTop from './components/ScrollToTop';
-import RAGAssistant from './components/AIAssistant/RAGAssistant';
+// AI chat bubble hidden: restore by uncommenting this import and the <RAGAssistant /> line below
+// import RAGAssistant from './components/AIAssistant/RAGAssistant';
 
 // Create QueryClient outside the component
 const queryClient = new QueryClient();
@@ -104,7 +105,8 @@ function App() {
           </Routes>
             </main>
             <Footer />
-            <RAGAssistant />
+            {/* AI chat bubble hidden: restore by uncommenting the import and this line */}
+            {/* <RAGAssistant /> */}
           </div>
           </ToastProvider>
           </ReviewsProvider>

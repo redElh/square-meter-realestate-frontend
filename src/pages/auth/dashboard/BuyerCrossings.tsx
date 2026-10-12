@@ -14,7 +14,7 @@ import {
   ChevronRightIcon,
 } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
-import { buyerSavedProperties, buyerDemands } from './data';
+import { useDashboardProperties } from './useDashboardProperties';
 
 interface BuyerCrossingsProps {
   onViewProperty: (id: number) => void;
@@ -40,8 +40,9 @@ const BuyerCrossings: React.FC<BuyerCrossingsProps> = ({ onViewProperty }) => {
   const [savedIds, setSavedIds] = useState<number[]>([1]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { properties } = useDashboardProperties();
   const filters = ['Tous', 'Nouveaux', 'Score', 'Prix', 'Surface'];
-  const demandOptions = ['Tous', ...Array.from(new Set(buyerSavedProperties.map(p => p.demandLabel).filter(Boolean)))];
+  const demandOptions = ['Tous', ...Array.from(new Set(properties.map(p => p.demandLabel).filter(Boolean)))];
 
   const toggleSaved = (id: number) => {
     setSavedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
@@ -97,14 +98,14 @@ const BuyerCrossings: React.FC<BuyerCrossingsProps> = ({ onViewProperty }) => {
             <button className="px-4 py-2 border border-gray-200 text-gray-600 text-sm font-medium hover:border-gray-300 transition-all">
               Réinitialiser
             </button>
-            <span className="text-sm text-gray-400 ml-auto">{buyerSavedProperties.length} biens proposés</span>
+            <span className="text-sm text-gray-400 ml-auto">{properties.length} biens proposés</span>
           </div>
         </div>
       </div>
 
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {buyerSavedProperties.map((p) => (
+        {properties.map((p) => (
           <div
             key={p.id}
             className="bg-white border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
@@ -176,7 +177,7 @@ const BuyerCrossings: React.FC<BuyerCrossingsProps> = ({ onViewProperty }) => {
 
       {/* Pagination */}
       <div className="flex items-center justify-between bg-white border border-gray-200 shadow-sm px-5 py-3">
-        <span className="text-sm text-gray-500">Affichage 1-{buyerSavedProperties.length} sur {buyerSavedProperties.length} biens</span>
+        <span className="text-sm text-gray-500">Affichage 1-{properties.length} sur {properties.length} biens</span>
         <div className="flex items-center gap-1">
           <button className="p-1.5 border border-gray-200 text-gray-400 hover:text-gray-600 hover:border-gray-300 transition-all">
             <ChevronLeftIcon className="w-4 h-4" />

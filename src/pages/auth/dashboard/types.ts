@@ -7,6 +7,7 @@ export interface Property {
   surface: string;
   bedrooms: number;
   bathrooms: number;
+  rooms?: number;
   type?: 'buy' | 'rent' | 'seasonal' | 'program';
   status?: string;
   description?: string;

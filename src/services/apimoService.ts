@@ -455,7 +455,19 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     mobile: apimoProperty.user.mobile,
     image: apimoProperty.user.picture,
   } : undefined;
-  
+
+  const roomsRaw = apimoProperty.rooms;
+  const roomsParsed = roomsRaw === undefined || roomsRaw === null || roomsRaw === ''
+    ? NaN
+    : Number(roomsRaw);
+  const bedroomsParsed = apimoProperty.bedrooms === undefined || apimoProperty.bedrooms === null
+    ? NaN
+    : Number(apimoProperty.bedrooms);
+  const roomsCount = Number.isFinite(roomsParsed)
+    ? roomsParsed
+    : 0;
+  const bedroomsCount = Number.isFinite(bedroomsParsed) ? bedroomsParsed : 0;
+
   return {
     id: apimoProperty.id,
     reference: apimoProperty.reference,
@@ -478,8 +490,8 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     country: apimoProperty.country,
     surface: apimoProperty.area?.value || apimoProperty.area?.total || 0,
     landSurface: apimoProperty.area?.total,
-    rooms: Number(apimoProperty.bedrooms) || Number(apimoProperty.rooms) || 0,
-    bedrooms: Number(apimoProperty.bedrooms) || Number(apimoProperty.rooms) || 0,
+    rooms: roomsCount,
+    bedrooms: bedroomsCount,
     bathrooms,
     floors,
     images,
