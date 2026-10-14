@@ -379,7 +379,7 @@ const PropertyListingCard: React.FC<PropertyListingCardProps> = ({
               </div>
 
               <div className="mt-3.5 flex items-center gap-2.5 sm:gap-3.5 text-[11px] tracking-[0.16em] uppercase font-medium text-gray-500">
-                <span>{property.bedrooms || 0} ch.</span>
+                <span>{property.rooms ?? 0} p.</span>
                 <span className="w-px h-3.5 bg-gray-200"></span>
                 <span>{property.surface > 0 ? `${property.surface.toFixed(0)} m²` : '—'}</span>
               </div>

@@ -258,7 +258,7 @@ export interface Property {
   features?: string[];
   reference?: string;
   // Additional fields from Apimo
-  rooms?: number;
+  rooms: number;
   city?: string;
   // Property type fields for filtering
   category?: number; // APIMO category (1=Appartement, 2=Maison, 9=Villa, etc.)
@@ -402,6 +402,21 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
     ['4', '5', '41'].includes(String(area.type)) // bathroom, shower room, toilet
   ) || [];
   const bathrooms = bathroomAreas.reduce((sum, area) => sum + (Number(area.number) || 1), 0);
+
+  // Calculate bedrooms from areas (type 1). The Apimo `bedrooms` field is
+  // missing/0 for many listings even when bedrooms are recorded per area, so
+  // fall back to summing the bedroom areas.
+  const bedroomAreas = apimoProperty.areas?.filter(area =>
+    String(area.type) === '1' // bedroom
+  ) || [];
+  const bedroomsFromAreas = bedroomAreas.reduce((sum, area) => sum + (Number(area.number) || 1), 0);
+
+  // Calculate main rooms from areas (bedroom, living, lounge). Used as a
+  // fallback for the `rooms` count when the API omits it.
+  const mainRoomAreas = apimoProperty.areas?.filter(area =>
+    ['1', '2', '20'].includes(String(area.type)) // bedroom, living, lounge
+  ) || [];
+  const roomsFromAreas = mainRoomAreas.reduce((sum, area) => sum + (Number(area.number) || 1), 0);
   
   // Get number of floors/levels from floor data
   const floors = Number(apimoProperty.floor?.levels || apimoProperty.floor?.floors || 0);
@@ -463,10 +478,27 @@ const mapApimoToProperty = (apimoProperty: ApimoProperty, language: string = 'fr
   const bedroomsParsed = apimoProperty.bedrooms === undefined || apimoProperty.bedrooms === null
     ? NaN
     : Number(apimoProperty.bedrooms);
-  const roomsCount = Number.isFinite(roomsParsed)
-    ? roomsParsed
+  const apiRoomsCount = Number.isFinite(roomsParsed) && roomsParsed > 0 ? roomsParsed : 0;
+  const apiBedroomsCount = Number.isFinite(bedroomsParsed) && bedroomsParsed > 0
+    ? bedroomsParsed
     : 0;
-  const bedroomsCount = Number.isFinite(bedroomsParsed) ? bedroomsParsed : 0;
+  // Resolve bedrooms first (API value, then bedroom areas) without depending on
+  // the rooms count, so the two fallbacks can't reference each other.
+  const resolvedBedrooms = apiBedroomsCount > 0 ? apiBedroomsCount : bedroomsFromAreas;
+  // `rooms` (pièces) must always be a valid, non-null count. Prefer the API
+  // value, then the main-room areas, then one more than the bedrooms.
+  const roomsCount = apiRoomsCount > 0
+    ? apiRoomsCount
+    : roomsFromAreas > 0
+      ? roomsFromAreas
+      : resolvedBedrooms > 0
+        ? resolvedBedrooms + 1
+        : 0;
+  // The API omits `bedrooms` for many listings; fall back to the bedroom areas,
+  // then to rooms minus the living room (min 0).
+  const bedroomsCount = resolvedBedrooms > 0
+    ? resolvedBedrooms
+    : Math.max(0, roomsCount - 1);
 
   return {
     id: apimoProperty.id,

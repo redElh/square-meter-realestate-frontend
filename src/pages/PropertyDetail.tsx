@@ -243,7 +243,7 @@ const PropertyDetail: React.FC = () => {
   const heroStats = [
     { value: property.surface > 0 ? `${property.surface} m²` : '—', label: t('propertyDetail.stats.surface') },
     { value: property.landSurface ? `${property.landSurface} m²` : '—', label: t('propertyDetail.stats.land') },
-    { value: property.bedrooms ?? 0, label: t('propertyDetail.stats.bedrooms') },
+    { value: property.rooms ?? 0, label: t('propertyDetail.stats.rooms') },
     { value: property.floors ?? 0, label: t('propertyDetail.stats.floors') },
     { value: property.yearBuilt || '—', label: t('propertyDetail.stats.year') }
   ];
@@ -271,8 +271,8 @@ const PropertyDetail: React.FC = () => {
 
       <SEO 
         title={property.title}
-        description={`${property.description?.substring(0, 155)}... | ${property.location} - ${property.surface}m² - ${property.bedrooms} chambres`}
-        keywords={`${property.location}, immobilier ${property.location}, ${property.type === 'buy' ? 'vente' : 'location'} ${property.location}, ${property.bedrooms} chambres ${property.location}`}
+        description={`${property.description?.substring(0, 155)}... | ${property.location} - ${property.surface}m² - ${property.rooms ?? 0} pièces`}
+        keywords={`${property.location}, immobilier ${property.location}, ${property.type === 'buy' ? 'vente' : 'location'} ${property.location}, ${property.rooms ?? 0} pièces ${property.location}`}
         image={property.images[0]}
         url={`/properties/${property.id}`}
         type="product"
@@ -492,7 +492,7 @@ const PropertyDetail: React.FC = () => {
                   </div>
                   <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-[#023927]/5 border border-[#023927]/10 px-3 py-1.5 text-[#023927]/60 font-inter text-xs">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#023927] animate-pulse" />
-                    {property.surface} m² • {property.bedrooms || 0} ch.
+                    {property.surface} m² • {property.rooms ?? 0} p.
                   </span>
                 </div>
                 <div className="h-px bg-[#023927]/10 mb-6" />
@@ -634,7 +634,7 @@ const PropertyDetail: React.FC = () => {
                     currency={similar.currency}
                     location={similar.location || ''}
                     surface={similar.surface || 0}
-                    bedrooms={similar.bedrooms || 0}
+                    rooms={similar.rooms ?? 0}
                     bathrooms={similar.bathrooms || 0}
                     floors={similar.floors}
                     images={similar.images && similar.images.length > 0 ? similar.images : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=800']}
