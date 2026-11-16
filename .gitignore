@@ -48,3 +48,4 @@ build-output.txt
 api-test-output.txt
 
 .vercel
+.env*
