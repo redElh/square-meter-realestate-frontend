@@ -146,7 +146,7 @@ const Contact: React.FC = () => {
       title: t('contact.contactMethods.phone.title'),
       details: t('contact.contactMethods.phone.details'),
       description: t('contact.contactMethods.phone.description'),
-      action: 'tel:+212700000644'
+      action: 'tel:+212610895555'
     },
     {
       icon: MapPinIcon,
